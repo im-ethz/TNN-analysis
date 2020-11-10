@@ -18,6 +18,10 @@
 *.svn
 *.toc
 
+*/__pycache__/
+*.pyc
+
+
 /Doc/*.log
 /Doc/*.aux
 /Doc/*.out
