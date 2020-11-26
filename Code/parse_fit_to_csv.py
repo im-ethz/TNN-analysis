@@ -5,15 +5,84 @@ import pandas as pd
 import os
 
 parser = argparse.ArgumentParser()
-parser.add_argument('f')
+parser.add_argument('filename', type=str, help="Name of the fitfile to convert")
+parser.add_argument('-i', '--input', type=str, default='', help="Path to the directory where the fitfile is located")
+parser.add_argument('-o', '--output', type=str, default='', help="Path to the directory where to save the csv")
+parser.add_argument('-v', '--verbose', type=bool, default=False, help="Whether to give strings on progress to the command line")
+args = parser.parse_args()
 
-fname = "2020-09-19-084502-ELEMNT BOLT B385-222-0.fit"
+fname = args.filename.rstrip('.fit')
 
-fitfile = fitparse.FitFile(fname)
 
-message_types = ("record", "device_info", "developer_data_id", "field_description", "event", "power_zone", "hr_zone", "lap", "activity", "sport", "workout", "file_id", "session")
+# ----------------- read data
+if args.verbose:
+	print("Reading in data ...")
+
+fitfile = fitparse.FitFile(args.input + '/' + args.filename)
+
+message_types = []
+for m in fitfile.messages:
+	try:
+		message_types_m = m.mesg_type.name
+	except:
+		message_types_m = m.mesg_type
+	message_types.append(message_types_m)
+message_types = pd.DataFrame(message_types)[0]
+
+data_nans = np.array(fitfile.messages)[message_types.isna()] # extract nan messages
+
+message_types = message_types.unique().tolist()
 
 data = {i: list(fitfile.get_messages(i)) for i in message_types}
+data.update({None:data_nans})
+
+
+# ----------------- info
+if args.verbose:
+	print("Creating info file ...")
+
+df_info = pd.Series()
+
+for message in data['file_id']:
+	for field in message:
+		df_info.loc[field.name] = field.value
+df_info.index = pd.MultiIndex.from_product([["file_id"], df_info.index])
+message_types.remove('file_id')
+
+for message in data['workout']:
+	for field in message:
+		df_info.loc['workout', field.name] = field.value
+message_types.remove('workout')
+
+for message in data['sport']:
+	for field in message:
+		df_info.loc['sport', field.name] = field.value
+message_types.remove('sport')
+
+for message in data['activity']:
+	for field in message:
+		df_info.loc['activity', field.name] = field.value
+message_types.remove('activity')
+
+for message in data['field_description']:
+	df_info.loc['units', message.fields[3].value] = message.fields[4].value
+message_types.remove('field_description')
+
+df_info.loc['hr_zone', data['hr_zone'][0].name+' [%s]'%data['hr_zone'][0].fields[1].units] = [message.fields[1].value for message in data['hr_zone']]
+message_types.remove('hr_zone')
+
+df_info.loc['power_zone', data['power_zone'][0].name+' [%s]'%data['power_zone'][0].fields[1].units] = [message.fields[1].value for message in data['power_zone']]
+message_types.remove('power_zone')
+
+for message in data['session']:
+	for field in message:
+		df_info.loc['session', field.name] = field.value
+message_types.remove('session')
+
+
+# ----------------- data
+if args.verbose:
+	print("Creating data files ...")
 
 def unpack_messages(messages):
 	df = pd.DataFrame()
@@ -22,84 +91,47 @@ def unpack_messages(messages):
 			df.loc[i,field.name] = field.value
 	return df
 
-# header
-#TODO: lap, activity, session
-df_info = {}
-for message in data['file_id']:
-	for field in message:
-		df_info.update({field.name:field.value})
-df_info.update({data['workout'][0].name:data['workout'][0].fields[0].value})
-df_info.update({data['sport'][0].name:data['sport'][0].fields[0].value})
-for message in data['field_description']:
-	df_info.update({message.fields[3].value:message.fields[4].value})
-df_info.update({data['hr_zone'][0].name+' [%s]'%data['hr_zone'][0].fields[1].units:[message.fields[1].value for message in data['hr_zone']]})
-df_info.update({data['power_zone'][0].name+' [%s]'%data['power_zone'][0].fields[1].units:[message.fields[1].value for message in data['power_zone']]})
-for message in data['event']:
-	[[field.value for field in message] for message in data['event']]
-
-
-
-# data
 df_data = unpack_messages(data['record'])
-df.to_csv(fname.rstrip('.fit'))
+message_types.remove('record')
+
+df_nan = unpack_messages(data[None])
+message_types.remove(None)
 
 df_device = unpack_messages(data['device_info'])
+message_types.remove('device_info')
+for i, item in enumerate(df_device.serial_number.dropna().unique()):
+	df_tmp = df_device[df_device.serial_number == item].dropna(axis=1).drop('timestamp', axis=1).drop_duplicates().iloc[0]
+	df_tmp.index = pd.MultiIndex.from_product([["device_%i"%i], df_tmp.index])
+	df_info = df_info.append(df_tmp)
 
 df_startstop = unpack_messages(data['event'])
+message_types.remove('event')
 
 df_laps = pd.DataFrame()
-for i, message in enumerate(messages):
+for i, message in enumerate(data['lap']):
 	for field in message.fields:
-		print(field.name)
 		if type(field.value) != tuple:
 			df_laps.loc[i,field.name] = field.value
 		else:
-			print("field is tuple")
 			try:
-				print("try")
 				df_laps.at[i,field.name] = field.value
 				break
-				break
-				break
 			except:
-				print("except")
 				df_laps[field.name] = df_laps[field.name].astype(object)
 				df_laps.at[i,field.name] = field.value
 				break
 			else:
 				break
-			#print("field is not tuple")
+message_types.remove('lap')
 
-	#		except ValueError:
-#			df_laps[field.name] = df_laps[field.name].astype(object)
-#			df_laps.at[i,field.name] = field.value
+# ----------------- save files
+if args.verbose:
+	print("Saving data ...")
+	print("Message types not processed: ", *tuple(message_types))
 
-
-unpack_messages(data['lap'])
-
-"""
-messages = fitfile.messages
-
-header = {}
-for field in messages[0].fields:
-	header.update({field.name:field.value})
-
-fitfile.close()
-
-types = []
-for m in messages:
-	types.append(m.type)
-types = np.array(types)
-print(np.unique(types))
-
-message_types = []
-for m in messages:
-	try:
-		message_types_m = m.mesg_type.name
-	except:
-		message_types_m = m.mesg_type
-	message_types.append(message_types_m)
-message_types = pd.DataFrame(message_types)
-print(message_types[0].value_counts())
-"""
-
+df_info.to_csv(args.output + '/' + fname + '_info.csv')
+df_data.to_csv(args.output + '/' + fname + '_data.csv')
+df_nan.to_csv(args.output + '/' + fname + '_nan.csv')
+df_device.to_csv(args.output + '/' + fname + '_device.csv')
+df_startstop.to_csv(args.output + '/' + fname + '_startstop.csv')
+df_laps.to_csv(args.output + '/' + fname + '_laps.csv')
