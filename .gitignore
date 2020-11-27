@@ -21,6 +21,8 @@
 */__pycache__/
 *.pyc
 
+/Code/Data/LibreView/RAW/*
+/Code/Data/TrainingPeaks/RAW/*
 
 /Doc/*.log
 /Doc/*.aux
