@@ -1,8 +1,10 @@
 """
 Scrape Trainingpeaks
-Select by: bike and cycling
+Select by:
+- workout type = bike
+- date range = 01/01/2020 until 31/10/2020
 """
-from config import username_TP, password_TP, username_LV, password_LV
+from config import username_TP, password_TP
 
 import pyderman as dr
 from selenium import webdriver

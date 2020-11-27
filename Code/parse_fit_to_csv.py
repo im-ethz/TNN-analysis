@@ -41,7 +41,7 @@ data.update({None:data_nans})
 if args.verbose:
 	print("Creating info file ...")
 
-df_info = pd.Series()
+df_info = pd.Series(dtype=object)
 
 for message in data['file_id']:
 	for field in message:
@@ -68,10 +68,16 @@ for message in data['field_description']:
 	df_info.loc['units', message.fields[3].value] = message.fields[4].value
 message_types.remove('field_description')
 
-df_info.loc['hr_zone', data['hr_zone'][0].name+' [%s]'%data['hr_zone'][0].fields[1].units] = [message.fields[1].value for message in data['hr_zone']]
+for i, field in enumerate(data['hr_zone'][0].fields):
+	if field.name == 'high_bpm':
+		hr_zone_field = i
+df_info.loc['hr_zone', data['hr_zone'][0].name+' [%s]'%data['hr_zone'][0].fields[hr_zone_field].units] = [message.fields[hr_zone_field].value for message in data['hr_zone']]
 message_types.remove('hr_zone')
 
-df_info.loc['power_zone', data['power_zone'][0].name+' [%s]'%data['power_zone'][0].fields[1].units] = [message.fields[1].value for message in data['power_zone']]
+for i, field in enumerate(data['power_zone'][0].fields):
+	if field.name == 'high_value':
+		power_zone_field = i
+df_info.loc['power_zone', data['power_zone'][0].name+' [%s]'%data['power_zone'][0].fields[power_zone_field].units] = [message.fields[power_zone_field].value for message in data['power_zone']]
 message_types.remove('power_zone')
 
 for message in data['session']:
@@ -129,9 +135,14 @@ if args.verbose:
 	print("Saving data ...")
 	print("Message types not processed: ", *tuple(message_types))
 
-df_info.to_csv(args.output + '/' + fname + '_info.csv')
-df_data.to_csv(args.output + '/' + fname + '_data.csv')
-df_nan.to_csv(args.output + '/' + fname + '_nan.csv')
-df_device.to_csv(args.output + '/' + fname + '_device.csv')
-df_startstop.to_csv(args.output + '/' + fname + '_startstop.csv')
-df_laps.to_csv(args.output + '/' + fname + '_laps.csv')
+files = {'info'		: df_info,
+		 'data'		: df_data,
+		 'nan'		: df_nan,
+		 'device'	: df_device,
+		 'startstop': df_startstop,
+		 'laps'		: df_laps}
+
+for name, df in files.items():
+	if not os.path.exists(args.output + '/' + name):
+		os.mkdir(args.output + '/' + name)
+	df.to_csv(args.output + '/' + name + '/' + fname + '_' + name + '.csv')
