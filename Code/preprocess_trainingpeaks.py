@@ -18,5 +18,7 @@ for i in tp_athletes:
 
 		# open all other files and check for missing info
 
+		# check when glucose data is present and when not
+
 		df = df.append(df_tmp, ignore_index=True, verify_integrity=True)
 	df.to_csv(tp_path+'clean/'+str(i)+'_data.csv'
