@@ -43,43 +43,66 @@ if args.verbose:
 
 df_info = pd.Series(dtype=object)
 
+# file id
 for message in data['file_id']:
 	for field in message:
 		df_info.loc[field.name] = field.value
 df_info.index = pd.MultiIndex.from_product([["file_id"], df_info.index])
 message_types.remove('file_id')
 
-for message in data['workout']:
-	for field in message:
-		df_info.loc['workout', field.name] = field.value
-message_types.remove('workout')
+# workout
+try:
+	for message in data['workout']:
+		for field in message:
+			df_info.loc['workout', field.name] = field.value
+	message_types.remove('workout')
+except KeyError:
+	pass
 
-for message in data['sport']:
-	for field in message:
-		df_info.loc['sport', field.name] = field.value
-message_types.remove('sport')
+# sport
+try:
+	for message in data['sport']:
+		for field in message:
+			df_info.loc['sport', field.name] = field.value
+	message_types.remove('sport')
+except KeyError:
+	pass
 
+# activity
 for message in data['activity']:
 	for field in message:
 		df_info.loc['activity', field.name] = field.value
 message_types.remove('activity')
 
-for message in data['field_description']:
-	df_info.loc['units', message.fields[3].value] = message.fields[4].value
-message_types.remove('field_description')
+# field description
+try:
+	for message in data['field_description']:
+		df_info.loc['units', message.fields[3].value] = message.fields[4].value
+	message_types.remove('field_description')
+except KeyError:
+	pass
 
-for i, field in enumerate(data['hr_zone'][0].fields):
-	if field.name == 'high_bpm':
-		hr_zone_field = i
-df_info.loc['hr_zone', data['hr_zone'][0].name+' [%s]'%data['hr_zone'][0].fields[hr_zone_field].units] = [message.fields[hr_zone_field].value for message in data['hr_zone']]
-message_types.remove('hr_zone')
+# hr_zone
+try:
+	for i, field in enumerate(data['hr_zone'][0].fields):
+		if field.name == 'high_bpm':
+			hr_zone_field = i
+	df_info.loc['hr_zone', data['hr_zone'][0].name+' [%s]'%data['hr_zone'][0].fields[hr_zone_field].units] = [message.fields[hr_zone_field].value for message in data['hr_zone']]
+	message_types.remove('hr_zone')
+except KeyError:
+	pass
 
-for i, field in enumerate(data['power_zone'][0].fields):
-	if field.name == 'high_value':
-		power_zone_field = i
-df_info.loc['power_zone', data['power_zone'][0].name+' [%s]'%data['power_zone'][0].fields[power_zone_field].units] = [message.fields[power_zone_field].value for message in data['power_zone']]
-message_types.remove('power_zone')
+# power_zone
+try:
+	for i, field in enumerate(data['power_zone'][0].fields):
+		if field.name == 'high_value':
+			power_zone_field = i
+	df_info.loc['power_zone', data['power_zone'][0].name+' [%s]'%data['power_zone'][0].fields[power_zone_field].units] = [message.fields[power_zone_field].value for message in data['power_zone']]
+	message_types.remove('power_zone')
+except KeyError:
+	pass
 
+# session
 for message in data['session']:
 	for field in message:
 		df_info.loc['session', field.name] = field.value
@@ -97,12 +120,18 @@ def unpack_messages(messages):
 			df.loc[i,field.name] = field.value
 	return df
 
+# record
 df_data = unpack_messages(data['record'])
 message_types.remove('record')
 
-df_nan = unpack_messages(data[None])
-message_types.remove(None)
+# None
+try:
+	df_nan = unpack_messages(data[None])
+	message_types.remove(None)
+except ValueError:
+	pass
 
+# device
 df_device = unpack_messages(data['device_info'])
 message_types.remove('device_info')
 for i, item in enumerate(df_device.serial_number.dropna().unique()):
@@ -110,9 +139,11 @@ for i, item in enumerate(df_device.serial_number.dropna().unique()):
 	df_tmp.index = pd.MultiIndex.from_product([["device_%i"%i], df_tmp.index])
 	df_info = df_info.append(df_tmp)
 
+# event
 df_startstop = unpack_messages(data['event'])
 message_types.remove('event')
 
+# laps
 df_laps = pd.DataFrame()
 for i, message in enumerate(data['lap']):
 	for field in message.fields:
@@ -137,7 +168,6 @@ if args.verbose:
 
 files = {'info'		: df_info,
 		 'data'		: df_data,
-		 'nan'		: df_nan,
 		 'device'	: df_device,
 		 'startstop': df_startstop,
 		 'laps'		: df_laps}
@@ -146,3 +176,10 @@ for name, df in files.items():
 	if not os.path.exists(args.output + '/' + name):
 		os.mkdir(args.output + '/' + name)
 	df.to_csv(args.output + '/' + name + '/' + fname + '_' + name + '.csv')
+
+try:
+	if not os.path.exists(args.output + '/nan'):
+		os.mkdir(args.output + '/nan')	
+	df_nan.to_csv(args.output + '/nan/' + fname + '_nan.csv')
+except NameError:
+	pass
