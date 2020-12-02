@@ -1,5 +1,8 @@
+import numpy as np
+import pandas as pd
 import seaborn as sns
 from matplotlib import pyplot as plt
+from matplotlib import cm
 import matplotlib.dates as mdates
 from mpl_toolkits.axes_grid1 import host_subplot
 import mpl_toolkits.axisartist as AA
@@ -9,14 +12,37 @@ from statsmodels.graphics.tsaplots import plot_acf
 # TODO: ylabel interp plot
 # TODO: legend interp individual plot
 
+def custom_colormap(base, cmin, cmax, n):
+	cmap_base = plt.cm.get_cmap(base)
+	cmap_custom = cmap_base.from_list(base+str(n), cmap_base(np.linspace(cmin, cmax, n)), n)
+	return cmap_custom
+
 class PlotData:
-	def __init__(self, savedir, savetext):
+	def __init__(self, savedir, savetext='', athlete='all'):
 		sns.set()
 		sns.set_context('paper')
 		sns.set_style('white')
 
 		self.savedir = savedir
 		self.savetext = savetext
+		self.athlete = athlete
+
+		#plt.rcParams.update({"text.usetex": True, "text.latex.preamble":[r"\usepackage{amsmath}",r"\usepackage{siunitx}",],})
+
+	def plot_glucose_availability_calendar(self, df, **kwargs):
+		plt.figure(figsize=(15,4))
+		
+		ax = sns.heatmap(df, **kwargs)
+
+		cbar = ax.collections[0].colorbar
+		cbar.set_ticks([-1,0,1])
+		cbar.set_ticklabels(['False', 'NA', 'True'])
+
+		plt.yticks(rotation=0)
+		plt.xlabel('Day')
+		plt.ylabel('Month')
+		plt.title("Glucose availability TrainingPeaks")
+		plt.savefig(self.savedir+str(self.athlete)+'_glucose_availaibility.pdf')
 
 	def plot_feature_distr_subplots(self, df, feature_array, figsize, savetext=''):
 		fig, axs = plt.subplots(*feature_array.shape)
