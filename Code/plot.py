@@ -29,20 +29,25 @@ class PlotData:
 
 		#plt.rcParams.update({"text.usetex": True, "text.latex.preamble":[r"\usepackage{amsmath}",r"\usepackage{siunitx}",],})
 
-	def plot_glucose_availability_calendar(self, df, **kwargs):
+	def plot_glucose_availability_calendar(self, df, cbarticks, dtype='TrainingPeaks', **kwargs):
 		plt.figure(figsize=(15,4))
 		
 		ax = sns.heatmap(df, **kwargs)
 
 		cbar = ax.collections[0].colorbar
-		cbar.set_ticks([-1,0,1])
-		cbar.set_ticklabels(['False', 'NA', 'True'])
+		cbar.set_ticks(list(cbarticks.values()))
+		cbar.set_ticklabels(list(cbarticks.keys()))
+
+		for text in ax.texts:
+			if text.get_text() == '0':
+				text.set_visible(False)
 
 		plt.yticks(rotation=0)
 		plt.xlabel('Day')
 		plt.ylabel('Month')
-		plt.title("Glucose availability TrainingPeaks")
-		plt.savefig(self.savedir+str(self.athlete)+'_glucose_availaibility.pdf')
+		plt.title("Glucose availability %s - Athlete %s"%(dtype, self.athlete))
+		plt.savefig(self.savedir+str(self.athlete)+'_glucose_availaibility.pdf', bbox_inches='tight')
+		plt.close()
 
 	def plot_feature_distr_subplots(self, df, feature_array, figsize, savetext=''):
 		fig, axs = plt.subplots(*feature_array.shape)
