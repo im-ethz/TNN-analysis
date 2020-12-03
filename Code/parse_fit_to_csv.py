@@ -18,7 +18,7 @@ Uses the following message types:
 The following message types are ignored:
 - file creator - doesn't contain anything interesting it seems
 - device_settings - nothing relevant
-- user_profile - (we already know this stuff from trainingpeaks)
+- user_profile - we already know this stuff from trainingpeaks
 - zones_target - contains threshold  power, threshold heart rate and max heartrate
 """
 import fitparse
@@ -172,10 +172,15 @@ except ValueError:
 				df_device.loc[i,field.name] = field.value
 			except ValueError:
 				continue
-for i, item in enumerate(df_device.serial_number.dropna().unique()):
-	df_tmp = df_device[df_device.serial_number == item].dropna(axis=1).drop('timestamp', axis=1).drop_duplicates().iloc[0]
-	df_tmp.index = pd.MultiIndex.from_product([["device_%i"%i], df_tmp.index])
-	df_info = df_info.append(df_tmp)
+if "serial_number" in df_device.columns:
+	for i, item in enumerate(df_device.serial_number.dropna().unique()):
+		df_tmp = df_device[df_device.serial_number == item].dropna(axis=1).drop('timestamp', axis=1).drop_duplicates().iloc[0]
+		df_tmp.index = pd.MultiIndex.from_product([["device_%i"%i], df_tmp.index])
+		df_info = df_info.append(df_tmp)
+else:
+	for i, item in df_device.iterrows():
+		item.index = pd.MultiIndex.from_product([["device_0"], item.index])
+		df_info = df_info.append(item)
 message_types.remove('device_info')
 
 # event
