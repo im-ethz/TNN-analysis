@@ -327,33 +327,11 @@ FileNotFoundError: [Errno 2] No such file or directory: 'Data/TrainingPeaks/fit/
 2020-10-28-080807-ELEMNT BOLT 3C50-43-0
 2020-10-29-072311-ELEMNT BOLT 3C50-44-0
 bkool_a15436806
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
 zwift-activity-565927648460586400
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
 zwift-activity-594022272951365072
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
 zwift-activity-594718798711184352
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
 zwift-activity-594728322256058640
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-evanweenen@mtec-mis-502:~/bicyclediabetes/Code$ ./parse_fit_to_csv.sh 
-mkdir: cannot create directory ‘Data/TrainingPeaks/fit/’: File exists
-mkdir: cannot create directory ‘Data/TrainingPeaks/csv/’: File exists
+
 Processing athlete 2
 2020-01-01-083816-ELEMNT BOLT 2213-177-0
 2020-01-02-095002-ELEMNT BOLT 2213-178-0
@@ -623,8 +601,7 @@ Processing athlete 2
 2020-10-11-074002-ELEMNT BOLT EF37-70-0
 2020-10-26-075836-ELEMNT BOLT EF37-71-0
 2020-10-27-081734-ELEMNT BOLT EF37-72-0
-mkdir: cannot create directory ‘Data/TrainingPeaks/fit/’: File exists
-mkdir: cannot create directory ‘Data/TrainingPeaks/csv/’: File exists
+
 Processing athlete 3
 2020-01-01-104041-ELEMNT BOLT 6355-85-0
 2020-01-02-093353-ELEMNT BOLT 6355-86-0
@@ -683,10 +660,6 @@ Processing athlete 3
 2020-03-02-081417-ELEMNT BOLT 6355-146-0
 2020-03-03-080550-ELEMNT BOLT 6355-147-0
 2020-03-04-080338-ELEMNT BOLT 6355-148-0
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
 2020-03-04-133654-ELEMNT BOLT 6355-150-0
 2020-03-05-092238-ELEMNT BOLT 6355-151-0
 2020-03-06-090142-ELEMNT BOLT 6355-152-0
@@ -704,23 +677,11 @@ KeyError: 'workout'
 2020-03-14-083224-ELEMNT BOLT 6355-166-0
 2020-03-16-094639-ELEMNT BOLT 6355-168-61
 2020-03-17-09-53-43
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
 2020-03-22-104447-ELEMNT BOLT 6355-172-12
 2020-03-22-110928-ELEMNT BOLT 6355-174-12
 2020-03-22-172329-ELEMNT BOLT 6355-176-12
 2020-03-23-10-52-52
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
 2020-04-30-09-43-33
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
 2020-05-02-044602-ELEMNT BOLT 6355-178-0
 2020-05-03-044953-ELEMNT BOLT 6355-179-0
 2020-05-07-072104-ELEMNT BOLT 6355-180-0
@@ -864,392 +825,161 @@ KeyError: 'workout'
 2020-10-27-081812-ELEMNT BOLT 86FC-123-0
 2020-10-28-080805-ELEMNT BOLT 86FC-124-0
 activity_7098183_2020-10-17_11_00_00
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
 fitfiletools-4
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
 StClancy.2020-05-25-10-08-41-382Z.GarminPush.56765132558
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-05-25-15-01-22-370Z.GarminPush.56783119283
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-09-07-17-26-35-408Z.GarminPush.66768779466
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-09-08-13-04-08-989Z.GarminPush.66845116014
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-09-10-10-23-36-096Z.GarminPush.67024560947
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-09-11-14-10-20-629Z.GarminPush.67134029074
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-09-15-12-59-07-845Z.GarminPush.67515681460
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-09-18-10-28-49-348Z.GarminPush.67791932161
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-09-25-10-49-32-177Z.GarminPush.68453715152
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-09-30-13-50-18-075Z.GarminPush.68924392703
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-09-30-13-50-24-091Z.GarminPush.68924398474
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-06-11-54-42-159Z.GarminPush.69464892874
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-14-00-46-640Z.GarminPush.69746066715
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-06-53-798Z.GarminPush.69766666992
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-06-56-843Z.GarminPush.69766669489
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-07-00-676Z.GarminPush.69766672690
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-07-04-651Z.GarminPush.69766676652
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-07-05-794Z.GarminPush.69766678542
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-07-08-142Z.GarminPush.69766680578
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
 StClancy.2020-10-09-19-07-12-852Z.GarminPush.69766684761
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-07-14-438Z.GarminPush.69766686800
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-07-15-131Z.GarminPush.69766687717
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-07-17-859Z.GarminPush.69766689679
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-07-18-898Z.GarminPush.69766691332
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-07-25-630Z.GarminPush.69766696078
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-07-36-334Z.GarminPush.69766706621
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-07-37-904Z.GarminPush.69766709832
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-07-43-152Z.GarminPush.69766713978
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-07-44-613Z.GarminPush.69766716066
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-07-46-354Z.GarminPush.69766717656
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-07-50-984Z.GarminPush.69766721250
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-07-53-708Z.GarminPush.69766724287
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-07-55-625Z.GarminPush.69766725922
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-07-56-535Z.GarminPush.69766727284
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-08-02-083Z.GarminPush.69766731426
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-08-07-500Z.GarminPush.69766736701
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-08-11-660Z.GarminPush.69766741196
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-08-13-064Z.GarminPush.69766743240
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
 StClancy.2020-10-09-19-08-18-158Z.GarminPush.69766748053
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-08-23-465Z.GarminPush.69766752382
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-08-25-067Z.GarminPush.69766754955
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-08-26-016Z.GarminPush.69766755877
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-08-31-942Z.GarminPush.69766760262
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-08-33-553Z.GarminPush.69766762874
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-08-36-968Z.GarminPush.69766765554
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-08-42-251Z.GarminPush.69766770566
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-08-53-260Z.GarminPush.69766779933
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-08-57-221Z.GarminPush.69766784717
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-08-57-809Z.GarminPush.69766786051
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-09-00-971Z.GarminPush.69766788098
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-09-05-317Z.GarminPush.69766792263
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-09-10-130Z.GarminPush.69766796999
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-09-13-100Z.GarminPush.69766800330
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-09-19-049Z.GarminPush.69766805390
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-09-21-714Z.GarminPush.69766808349
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-09-24-941Z.GarminPush.69766811110
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-StClancy.2020-10-09-19-09-29-504Z.GarminPush.69766815290
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
 StClancy.2020-10-09-19-09-32-834Z.GarminPush.69766818337
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
+StClancy.2020-05-25-15-01-22-370Z.GarminPush.56783119283
+StClancy.2020-10-09-19-07-14-438Z.GarminPush.69766686800
+StClancy.2020-10-09-19-08-23-465Z.GarminPush.69766752382
 StClancy.2020-10-09-19-09-38-652Z.GarminPush.69766823746
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
+StClancy.2020-09-07-17-26-35-408Z.GarminPush.66768779466
+StClancy.2020-10-09-19-07-15-131Z.GarminPush.69766687717
+StClancy.2020-10-09-19-08-25-067Z.GarminPush.69766754955
 StClancy.2020-10-09-19-09-42-257Z.GarminPush.69766827128
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
+StClancy.2020-09-08-13-04-08-989Z.GarminPush.66845116014
+StClancy.2020-10-09-19-07-17-859Z.GarminPush.69766689679
+StClancy.2020-10-09-19-08-26-016Z.GarminPush.69766755877
 StClancy.2020-10-09-19-09-45-914Z.GarminPush.69766830290
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
+StClancy.2020-09-10-10-23-36-096Z.GarminPush.67024560947
+StClancy.2020-10-09-19-07-18-898Z.GarminPush.69766691332
+StClancy.2020-10-09-19-08-31-942Z.GarminPush.69766760262
 StClancy.2020-10-09-19-09-48-483Z.GarminPush.69766832972
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
+StClancy.2020-09-11-14-10-20-629Z.GarminPush.67134029074
+StClancy.2020-10-09-19-07-25-630Z.GarminPush.69766696078
+StClancy.2020-10-09-19-08-33-553Z.GarminPush.69766762874
 StClancy.2020-10-09-19-09-54-890Z.GarminPush.69766838240
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
+StClancy.2020-09-15-12-59-07-845Z.GarminPush.67515681460
+StClancy.2020-10-09-19-07-36-334Z.GarminPush.69766706621
+StClancy.2020-10-09-19-08-36-968Z.GarminPush.69766765554
 StClancy.2020-10-09-19-09-56-983Z.GarminPush.69766841024
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
+StClancy.2020-09-18-10-28-49-348Z.GarminPush.67791932161
+StClancy.2020-10-09-19-07-37-904Z.GarminPush.69766709832
+StClancy.2020-10-09-19-08-42-251Z.GarminPush.69766770566
 StClancy.2020-10-09-19-10-01-349Z.GarminPush.69766844382
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
+StClancy.2020-09-25-10-49-32-177Z.GarminPush.68453715152
+StClancy.2020-10-09-19-07-43-152Z.GarminPush.69766713978
+StClancy.2020-10-09-19-08-53-260Z.GarminPush.69766779933
 StClancy.2020-10-09-19-10-04-487Z.GarminPush.69766847664
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
+StClancy.2020-09-30-13-50-18-075Z.GarminPush.68924392703
+StClancy.2020-10-09-19-07-44-613Z.GarminPush.69766716066
+StClancy.2020-10-09-19-08-57-221Z.GarminPush.69766784717
 StClancy.2020-10-09-19-10-07-553Z.GarminPush.69766850804
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
+StClancy.2020-09-30-13-50-24-091Z.GarminPush.68924398474
+StClancy.2020-10-09-19-07-46-354Z.GarminPush.69766717656
+StClancy.2020-10-09-19-08-57-809Z.GarminPush.69766786051
 StClancy.2020-10-09-19-10-16-010Z.GarminPush.69766857590
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
+StClancy.2020-10-06-11-54-42-159Z.GarminPush.69464892874
+StClancy.2020-10-09-19-07-50-984Z.GarminPush.69766721250
+StClancy.2020-10-09-19-09-00-971Z.GarminPush.69766788098
 StClancy.2020-10-09-19-10-23-166Z.GarminPush.69766864353
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
+StClancy.2020-10-09-14-00-46-640Z.GarminPush.69746066715
+StClancy.2020-10-09-19-07-53-708Z.GarminPush.69766724287
+StClancy.2020-10-09-19-09-05-317Z.GarminPush.69766792263
 StClancy.2020-10-11-12-12-30-901Z.GarminPush.69922486116
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 67, in <module>
-    for message in data['field_description']:
-KeyError: 'field_description'
+StClancy.2020-10-09-19-06-53-798Z.GarminPush.69766666992
+StClancy.2020-10-09-19-07-55-625Z.GarminPush.69766725922
+StClancy.2020-10-09-19-09-10-130Z.GarminPush.69766796999
 StClancy.2020-10-11-16-30-20-715Z.GarminPush.69942154934
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
+StClancy.2020-10-09-19-06-56-843Z.GarminPush.69766669489
+StClancy.2020-10-09-19-07-56-535Z.GarminPush.69766727284
+StClancy.2020-10-09-19-09-13-100Z.GarminPush.69766800330
 StClancy.2020-10-12-10-43-37-558Z.GarminPush.70007859063
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
+StClancy.2020-10-09-19-07-00-676Z.GarminPush.69766672690
+StClancy.2020-10-09-19-08-02-083Z.GarminPush.69766731426
+StClancy.2020-10-09-19-09-19-049Z.GarminPush.69766805390
 StClancy.2020-10-15-14-19-40-396Z.GarminPush.70289207258
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
+StClancy.2020-10-09-19-07-04-651Z.GarminPush.69766676652
+StClancy.2020-10-09-19-08-07-500Z.GarminPush.69766736701
+StClancy.2020-10-09-19-09-21-714Z.GarminPush.69766808349
 StClancy.2020-10-16-13-33-58-200Z.GarminPush.70373649676
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
+StClancy.2020-10-09-19-07-05-794Z.GarminPush.69766678542
+StClancy.2020-10-09-19-08-11-660Z.GarminPush.69766741196
+StClancy.2020-10-09-19-09-24-941Z.GarminPush.69766811110
 StClancy.2020-10-18-14-32-51-759Z.GarminPush.70555929265
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 52, in <module>
-    for message in data['workout']:
-KeyError: 'workout'
-mkdir: cannot create directory ‘Data/TrainingPeaks/fit/’: File exists
-mkdir: cannot create directory ‘Data/TrainingPeaks/csv/’: File exists
+StClancy.2020-10-09-19-07-08-142Z.GarminPush.69766680578
+StClancy.2020-10-09-19-08-13-064Z.GarminPush.69766743240
+StClancy.2020-10-09-19-09-29-504Z.GarminPush.69766815290
+zwift-activity-459317534504616544
+zwift-activity-512783026976045728
+zwift-activity-516444239651504496
+zwift-activity-520782503153874784
+zwift-activity-525129095928914928
+zwift-activity-530899208047570496
+zwift-activity-536728000724350240
+zwift-activity-508497718767879648
+zwift-activity-512831076258685936
+zwift-activity-516467850780478960
+zwift-activity-520794565630514576
+zwift-activity-525131464214077104
+zwift-activity-531624363238196176
+zwift-activity-537425701092037424
+zwift-activity-509196912003258784
+zwift-activity-512859596796829104
+zwift-activity-517157366072969280
+zwift-activity-521480530563913808
+zwift-activity-525156769445315632
+zwift-activity-531631292208422160
+zwift-activity-537662451517339328
+zwift-activity-509213389854998752
+zwift-activity-513556592629758976
+zwift-activity-517190872738968848
+zwift-activity-521484646704884448
+zwift-activity-525825228844675216
+zwift-activity-533316237416861008
+zwift-activity-538157111288899408
+zwift-activity-509239190686303648
+zwift-activity-514232695902832880
+zwift-activity-517838851184629328
+zwift-activity-522187184739856912
+zwift-activity-527278419089598752
+zwift-activity-533345585565939600
+zwift-activity-540376634146299280
+zwift-activity-509246818281718480
+zwift-activity-514259738113915376
+zwift-activity-517882885529240704
+zwift-activity-522268929883708208
+zwift-activity-527355299711516848
+zwift-activity-533853847858226304
+zwift-activity-574622411891258608
+zwift-activity-509878741861545472
+zwift-activity-514286101666052688
+zwift-activity-519324257317949280
+zwift-activity-522279641067656576
+zwift-activity-528021422404407424
+zwift-activity-534609331199520992
+zwift-activity-510599343246519232
+zwift-activity-514322879530249232
+zwift-activity-519348353854486640
+zwift-activity-522967719328397216
+zwift-activity-528060492701006016
+zwift-activity-535278854652848608
+zwift-activity-510605143193977728
+zwift-activity-514982979731292464
+zwift-activity-519355638707502624
+zwift-activity-523007502664467696
+zwift-activity-528239760934812480
+zwift-activity-535304189968663200
+zwift-activity-510646031193578512
+zwift-activity-515722400596333968
+zwift-activity-519369127015529840
+zwift-activity-524363669568586224
+zwift-activity-529494570090738272
+zwift-activity-535965639331686832
+zwift-activity-511360207806315424
+zwift-activity-515776759980932288
+zwift-activity-520067645222818736
+zwift-activity-524426859763223552
+zwift-activity-530218840575553072
+zwift-activity-535972200498736448
+zwift-activity-512051320912459072
+zwift-activity-516403586830276816
+zwift-activity-520082867267677408
+zwift-activity-524648115981923888
+zwift-activity-530265304871246896
+zwift-activity-536695381502767040
+
 Processing athlete 4
 2020-01-02-202106-ELEMNT 5F6E-223-0
 2020-01-03-191502-ELEMNT 5F6E-224-0
@@ -1428,8 +1158,6 @@ fitparse.utils.FitCRCError: CRC Mismatch [computed: 0x0000, read: 0x0040]
 2020-09-27-085111-ELEMNT 5F6E-379-0
 2020-09-28-083942-ELEMNT 5F6E-380-0
 2020-09-29-100723-ELEMNT 5F6E-381-0
-2020-09-30-074648-ELEMNT BOLT 31CC-50-0 (2)
-2020-09-30-074648-ELEMNT BOLT 31CC-50-0 (3)
 2020-09-30-074648-ELEMNT BOLT 31CC-50-0
 2020-10-01-075554-ELEMNT 5F6E-382-0
 2020-10-02-072217-ELEMNT BOLT 31CC-51-0
@@ -1459,26 +1187,43 @@ fitparse.utils.FitCRCError: CRC Mismatch [computed: 0x0000, read: 0x0040]
 2020-10-27-080639-ELEMNT 5F6E-405-0
 2020-10-28-080759-ELEMNT 5F6E-406-0
 dec113.2020-02-04-00-27-58-108Z.GarminPush.48732989354
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 171, in <module>
-    'nan'   : df_nan,
-NameError: name 'df_nan' is not defined
 dec113.2020-02-12-22-38-03-651Z.GarminPush.49323591428
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 171, in <module>
-    'nan'   : df_nan,
-NameError: name 'df_nan' is not defined
 dec113.2020-02-17-20-32-23-064Z.GarminPush.49650629603
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 171, in <module>
-    'nan'   : df_nan,
-NameError: name 'df_nan' is not defined
 dec113.2020-04-18-00-25-12-838Z.GarminPush.53707741792
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 171, in <module>
-    'nan'   : df_nan,
-NameError: name 'df_nan' is not defined
-mkdir: cannot create directory ‘Data/TrainingPeaks/csv/’: File exists
+zwift-activity-510998503066998144
+zwift-activity-512458299002162832
+zwift-activity-514706068221234016
+zwift-activity-516810860517762096
+zwift-activity-518262191976194000
+zwift-activity-537111017343558992
+zwift-activity-552370010865404528
+zwift-activity-511028718474245728
+zwift-activity-512473295659864224
+zwift-activity-514915734199582480
+zwift-activity-516816413213460080
+zwift-activity-518278684991328048
+zwift-activity-537398204450612000
+zwift-activity-554529034990631120
+zwift-activity-511680859649192336
+zwift-activity-513169223799380992
+zwift-activity-514926838205678688
+zwift-activity-516850310999572944
+zwift-activity-518295974491236352
+zwift-activity-540745156273243840
+zwift-activity-555264325555987600
+zwift-activity-512012115617287664
+zwift-activity-513936659919714080
+zwift-activity-515619146050410592
+zwift-activity-517540663197806352
+zwift-activity-518964293330310128
+zwift-activity-550314447469946800
+zwift-activity-512025362346935120
+zwift-activity-514655712432753072
+zwift-activity-516077589945222000
+zwift-activity-517815166822363152
+zwift-activity-520608003879153824
+zwift-activity-552353906149836096
+
 Processing athlete 5
 2020-01-04-090913-ELEMNT BOLT 4BE0-285-0
 2020-01-04-093304-ELEMNT BOLT 4BE0-286-0
@@ -1558,8 +1303,13 @@ Processing athlete 5
 2020-05-05-072855-ELEMNT ROAM DD80-29-0
 2020-05-06-072449-ELEMNT ROAM DD80-30-0
 2020-05-07-055601-ELEMNT ROAM DD80-31-0
-mkdir: cannot create directory ‘Data/TrainingPeaks/fit/’: File exists
-mkdir: cannot create directory ‘Data/TrainingPeaks/csv/’: File exists
+zwift-activity-467161361303045712
+zwift-activity-575218358073011456
+zwift-activity-579703982775707776
+zwift-activity-594028298837797744
+zwift-activity-594730896963124928
+zwift-activity-623829654822756112
+
 Processing athlete 6
 2020-01-01-193726-ELEMNT BOLT 170E-189-0
 2020-01-02-184731-ELEMNT BOLT 170E-190-0
@@ -1849,6 +1599,14 @@ Processing athlete 6
 2020-10-27-073746-ELEMNT BOLT 1D35-28-0
 2020-10-28-070305-ELEMNT BOLT 1D35-29-0
 2020-10-31-085603-ELEMNT BOLT 1D35-30-0
+zwift-activity-554849204157655808
+zwift-activity-559918591459236544
+zwift-activity-564993934946841264
+zwift-activity-570640777474577504
+zwift-activity-554877281911276960
+zwift-activity-563248027793402288
+zwift-activity-570068841569301936
+zwift-activity-571962983467029584
 
 Processing athlete 7
 2020-01-02-112023-ELEMNT BOLT 1CBB-334-0
@@ -1879,7 +1637,6 @@ Processing athlete 7
 2020-01-27-094304-ELEMNT BOLT 1CBB-359-0
 2020-01-29-075632-ELEMNT BOLT 1CBB-361-0
 2020-01-30-080716-ELEMNT BOLT 1CBB-362-0
-2020-01-31-103651-ELEMNT BOLT 1CBB-363-0 (2)
 2020-01-31-103651-ELEMNT BOLT 1CBB-363-0
 2020-02-01-080848-ELEMNT BOLT 1CBB-364-0
 2020-02-02-074145-ELEMNT BOLT 1CBB-365-0
@@ -2062,7 +1819,6 @@ Processing athlete 7
 2020-08-23-085304-ELEMNT BOLT 18D2-63-0
 2020-08-25-060359-ELEMNT BOLT 18D2-64-0
 2020-08-28-081425-ELEMNT BOLT 18D2-65-0
-2020-08-31-085153-ELEMNT BOLT 18D2-66-0 (2)
 2020-08-31-085153-ELEMNT BOLT 18D2-66-0
 2020-09-01-085413-ELEMNT BOLT 18D2-67-0
 2020-09-03-083328-ELEMNT BOLT 18D2-69-0
@@ -2080,9 +1836,8 @@ Processing athlete 7
 2020-10-27-082025-ELEMNT BOLT 3D36-16-0
 2020-10-28-085343-ELEMNT BOLT 3D36-17-0
 
-mkdir: cannot create directory ‘Data/TrainingPeaks/fit/8’: File exists
-mkdir: cannot create directory ‘Data/TrainingPeaks/csv/8’: File exists
-Processing athlete 82019-12-31-214633-ELEMNT BOLT 62CF-399-0
+Processing athlete 8
+2019-12-31-214633-ELEMNT BOLT 62CF-399-0
 2020-01-01-202443-ELEMNT BOLT 62CF-400-0
 2020-01-02-205621-ELEMNT BOLT 62CF-401-0
 2020-01-03-191316-ELEMNT BOLT 62CF-402-0
@@ -2235,7 +1990,6 @@ fitparse.utils.FitEOFError: Tried to read 2 bytes from .FIT file but got 0
 2020-05-27-221032-ELEMNT BOLT 62CF-543-0
 2020-05-28-214826-ELEMNT BOLT 62CF-544-0
 2020-05-29-214040-ELEMNT BOLT 62CF-545-0
-2020-05-30-224604-ELEMNT BOLT 62CF-546-0 (2)
 2020-05-30-224604-ELEMNT BOLT 62CF-546-0
 2020-06-01-013541-ELEMNT BOLT 62CF-547-0
 2020-06-01-232309-ELEMNT BOLT 62CF-548-0
@@ -2385,14 +2139,41 @@ fitparse.utils.FitParseError: No such dev_data_index=1 found when looking up fie
 2020-10-27-072642-ELEMNT BOLT 62CF-680-0
 2020-10-28-073825-ELEMNT BOLT 62CF-681-0
 activity_export_fit_7098114
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 137, in <module>
-    for i, item in enumerate(df_device.serial_number.dropna().unique()):
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/generic.py", line 5139, in __getattr__
-    return object.__getattribute__(self, name)
-AttributeError: 'DataFrame' object has no attribute 'serial_number'
-mkdir: cannot create directory ‘Data/TrainingPeaks/fit/9’: File exists
-mkdir: cannot create directory ‘Data/TrainingPeaks/csv/9’: File exists
+zwift-activity-529867010173077776
+zwift-activity-531983696741317984
+zwift-activity-535682685454797920
+zwift-activity-543597975806455968
+zwift-activity-558812289149192896
+zwift-activity-579336552501575696
+zwift-activity-642253972102033840
+zwift-activity-529884967838968992
+zwift-activity-533439117119818512
+zwift-activity-537119243682552336
+zwift-activity-545053318282239504
+zwift-activity-558881934760057360
+zwift-activity-589512193555862912
+zwift-activity-645993269109498224
+zwift-activity-530608360488286960
+zwift-activity-534232119437562528
+zwift-activity-539250293504502448
+zwift-activity-549382008369609952
+zwift-activity-564666886407162608
+zwift-activity-595151885606674896
+zwift-activity-646556055991065824
+zwift-activity-530627558042898432
+zwift-activity-534259003833750112
+zwift-activity-542156011474093536
+zwift-activity-553031265918493664
+zwift-activity-567542266424038576
+zwift-activity-623433083306741760
+zwift-activity-655212551033433952
+zwift-activity-530693031154262256
+zwift-activity-534908708447163744
+zwift-activity-542231922878746048
+zwift-activity-557363814244694400
+zwift-activity-568944408071809744
+zwift-activity-640800249865680432
+
 Processing athlete 9
 2020-01-02-105225-ELEMNT BOLT C25F-78-0
 2020-01-03-110128-ELEMNT BOLT C25F-79-0
@@ -2943,8 +2724,12 @@ fitparse.utils.FitParseError: No such dev_data_index=1 found when looking up fie
 2020-10-27-081845-ELEMNT BOLT B385-265-0
 2020-10-28-080811-ELEMNT BOLT B385-266-0
 2020-10-29-072321-ELEMNT BOLT B385-268-0
-mkdir: cannot create directory ‘Data/TrainingPeaks/fit/11’: File exists
-mkdir: cannot create directory ‘Data/TrainingPeaks/csv/11’: File exists
+zwift-activity-521643201465710880
+zwift-activity-523006063465836064
+zwift-activity-560861138772584928
+zwift-activity-593505058096264688
+zwift-activity-594157646859769824
+
 Processing athlete 11
 2020-01-01-104325-ELEMNT BOLT 7815-292-0
 2020-01-02-103750-ELEMNT BOLT 7815-293-0
@@ -3148,8 +2933,18 @@ Processing athlete 11
 2020-10-24-115237-ELEMNT BOLT 7815-520-0
 2020-10-27-091541-ELEMNT BOLT 7815-521-0
 2020-10-28-081930-ELEMNT BOLT 7815-522-0
-mkdir: cannot create directory ‘Data/TrainingPeaks/fit/12’: File exists
-mkdir: cannot create directory ‘Data/TrainingPeaks/csv/12’: File exists
+zwift-activity-514506163560226880
+zwift-activity-515119900332693712
+zwift-activity-515837418628820064
+zwift-activity-516506737387279520
+zwift-activity-517191572794223744
+zwift-activity-517929821216323792
+zwift-activity-514529179509819488
+zwift-activity-515151513607243200
+zwift-activity-516488220300411136
+zwift-activity-516524187725177968
+zwift-activity-517329028097612256
+
 Processing athlete 12
 2020-01-02-112023-ELEMNT BOLT 1CBB-334-0
 2020-01-03-111751-ELEMNT BOLT 1CBB-335-0
@@ -3455,668 +3250,56 @@ Processing athlete 12
 2020-10-27-081756-ELEMNT BOLT 1CBB-583-0
 2020-10-28-085846-ELEMNT BOLT 1CBB-584-0
 DLozanonovo.2020-06-15-10-20-03-147Z.GarminPush.58599537743
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-06-15-10-20-06-196Z.GarminPush.58599540764
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-06-15-10-20-09-079Z.GarminPush.58599543722
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-06-15-10-20-12-301Z.GarminPush.58599547042
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-06-15-10-20-15-557Z.GarminPush.58599550226
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-06-15-10-20-18-407Z.GarminPush.58599553231
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-06-15-10-20-21-959Z.GarminPush.58599556651
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-06-15-12-06-42-168Z.GarminPush.58606257867
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-06-15-14-02-22-506Z.GarminPush.58613759537
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-06-18-12-31-48-590Z.GarminPush.58875751338
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-06-20-12-39-36-804Z.GarminPush.59052534717
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-06-21-08-51-59-462Z.GarminPush.59127225805
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-06-22-13-53-56-880Z.GarminPush.59238613550
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-06-23-12-39-47-845Z.GarminPush.59324695795
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-06-25-12-51-53-426Z.GarminPush.59507106463
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-06-26-11-49-34-196Z.GarminPush.59592509007
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-06-27-12-00-43-425Z.GarminPush.59681848245
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-06-28-10-25-23-814Z.GarminPush.59765653801
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-06-29-07-12-28-660Z.GarminPush.59845503739
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-06-29-12-19-14-006Z.GarminPush.59863607438
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-06-30-11-31-55-890Z.GarminPush.59948889988
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-07-01-17-38-32-418Z.GarminPush.60063807988
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-07-02-13-46-47-230Z.GarminPush.60138559687
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-07-03-11-12-35-379Z.GarminPush.60217951583
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-07-06-08-16-53-971Z.GarminPush.60480650588
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-07-06-08-17-05-227Z.GarminPush.60480662541
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-07-06-13-37-44-158Z.GarminPush.60500438588
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-07-07-09-30-43-428Z.GarminPush.60575656194
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-07-08-12-17-05-016Z.GarminPush.60678044896
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-07-09-10-54-45-539Z.GarminPush.60762541260
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-07-10-10-59-32-791Z.GarminPush.60854257397
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-07-11-17-40-38-899Z.GarminPush.60972153775
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-07-12-12-02-48-925Z.GarminPush.61039262664
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-07-14-11-03-02-154Z.GarminPush.61221208929
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-07-14-17-03-13-038Z.GarminPush.61246920489
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-07-15-10-18-56-447Z.GarminPush.61311350717
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-07-15-17-40-41-373Z.GarminPush.61341740307
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-07-16-11-35-36-644Z.GarminPush.61407056834
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-07-17-12-13-44-494Z.GarminPush.61499981937
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-07-18-10-47-25-199Z.GarminPush.61584704433
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-07-19-11-24-44-093Z.GarminPush.61681666377
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-07-20-12-05-09-891Z.GarminPush.61777612469
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-07-21-10-48-19-886Z.GarminPush.61865664962
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-07-22-11-21-28-429Z.GarminPush.61961780494
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-07-31-07-26-50-785Z.GarminPush.62751161265
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-07-31-07-27-25-968Z.GarminPush.62751258296
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-07-31-07-28-05-164Z.GarminPush.62751366895
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-07-31-07-28-51-914Z.GarminPush.62751490534
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-07-31-07-29-28-676Z.GarminPush.62751587669
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-07-31-07-29-52-370Z.GarminPush.62751653910
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 DLozanonovo.2020-08-02-07-06-32-539Z.GarminPush.63202771791
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 Karoo-2020-03-10-1229
 Karoo-2020-05-02-0953
 Karoo-2020-05-04-1415
@@ -4187,8 +3370,36 @@ Karoo-Jan-16-2020-091610
 Karoo-Jan-17-2020-100316
 Karoo-Jan-18-2020-081747
 Karoo-Jan-20-2020-094132
-mkdir: cannot create directory ‘Data/TrainingPeaks/fit/13’: File exists
-mkdir: cannot create directory ‘Data/TrainingPeaks/csv/13’: File exists
+zwift-activity-520746348517079264
+zwift-activity-523671111845948256
+zwift-activity-526575885167985072
+zwift-activity-530384087691323008
+zwift-activity-533804078758660640
+zwift-activity-538152335250957680
+zwift-activity-522229567981202608
+zwift-activity-523734896005352096
+zwift-activity-526581307086583088
+zwift-activity-530917525109486912
+zwift-activity-534525076204553424
+zwift-activity-538880673001285472
+zwift-activity-522412433103397808
+zwift-activity-524405747765328160
+zwift-activity-527287035593603600
+zwift-activity-531672367368001472
+zwift-activity-535257124358087616
+zwift-activity-539595203767481696
+zwift-activity-522972411289241056
+zwift-activity-525164472478072944
+zwift-activity-529660324387863584
+zwift-activity-532360625956889424
+zwift-activity-535979540807040192
+zwift-activity-540347209955260000
+zwift-activity-523114395749877520
+zwift-activity-525902064064768032
+zwift-activity-530213038368864592
+zwift-activity-533085750648485600
+zwift-activity-537435650793540320
+
 Processing athlete 13
 2020-01-02-092608-ELEMNT BOLT 2CC5-329-0
 2020-01-03-123604-ELEMNT BOLT 2CC5-330-0
@@ -4435,8 +3646,7 @@ kusztorpeter.2020-06-28-10-51-44-052Z.GarminPush.59767650920
 kusztorpeter.2020-07-14-13-12-27-493Z.GarminPush.61230443627
 kusztorpeter.2020-08-25-06-54-36-865Z.GarminPush.65490727911
 kusztorpeter.2020-09-08-11-16-43-604Z.GarminPush.66837518894
-mkdir: cannot create directory ‘Data/TrainingPeaks/fit/14’: File exists
-mkdir: cannot create directory ‘Data/TrainingPeaks/csv/14’: File exists
+
 Processing athlete 14
 2020-01-02-104450-ELEMNT BOLT 2A50-361-0
 2020-01-03-090930-ELEMNT BOLT 2A50-365-0
@@ -4701,302 +3911,37 @@ FileNotFoundError: [Errno 2] No such file or directory: 'Data/TrainingPeaks/fit/
 2020-10-23-150154-ELEMNT BOLT 1D06-106-0
 2020-10-24-114547-ELEMNT BOLT 1D06-107-0
 JHenttala.2020-03-06-13-24-44-789Z.GarminPush.50833949242
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 JHenttala.2020-03-08-14-04-24-905Z.GarminPush.50973541230
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 JHenttala.2020-03-09-12-20-43-078Z.GarminPush.51039765061
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 JHenttala.2020-03-18-15-34-44-725Z.GarminPush.51626224111
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 JHenttala.2020-03-18-15-34-47-823Z.GarminPush.51626229575
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 JHenttala.2020-03-19-13-53-25-850Z.GarminPush.51684846409
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 JHenttala.2020-03-20-10-45-41-929Z.GarminPush.51739787468
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 JHenttala.2020-03-21-14-09-34-060Z.GarminPush.51810619883
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 JHenttala.2020-03-22-16-58-31-477Z.GarminPush.51884082647
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 JHenttala.2020-03-23-15-09-55-503Z.GarminPush.51939292490
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 JHenttala.2020-03-24-15-32-01-265Z.GarminPush.52001706463
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 JHenttala.2020-03-25-13-23-34-188Z.GarminPush.52059258716
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 JHenttala.2020-03-26-18-38-46-124Z.GarminPush.52138654770
 JHenttala.2020-03-27-13-50-37-756Z.GarminPush.52186852087
 JHenttala.2020-03-28-13-09-20-358Z.GarminPush.52249011390
 JHenttala.2020-03-29-14-34-45-411Z.GarminPush.52325014703
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 JHenttala.2020-03-31-09-38-17-959Z.GarminPush.52439806073
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 JHenttala.2020-04-02-13-05-25-443Z.GarminPush.52580529443
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 JHenttala.2020-04-03-14-34-22-590Z.GarminPush.52651826686
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 JHenttala.2020-04-08-13-52-29-606Z.GarminPush.53010752119
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 JHenttala.2020-04-13-16-19-05-757Z.GarminPush.53387462306
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 JHenttala.2020-04-25-09-45-19-065Z.GarminPush.54276261330
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 JHenttala.2020-06-20-08-23-07-411Z.GarminPush.59034435317
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 JHenttala.2020-06-20-15-25-20-096Z.GarminPush.59065041571
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 JHenttala.2020-06-25-10-54-37-587Z.GarminPush.59499425659
-Traceback (most recent call last):
-  File "parse_fit_to_csv.py", line 135, in <module>
-    df_device = unpack_messages(data['device_info'])
-  File "parse_fit_to_csv.py", line 120, in unpack_messages
-    df.loc[i,field.name] = field.value
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 670, in __setitem__
-    iloc._setitem_with_indexer(indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1601, in _setitem_with_indexer
-    self._setitem_with_indexer(new_indexer, value)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/indexing.py", line 1667, in _setitem_with_indexer
-    "cannot set using a multi-index "
-ValueError: cannot set using a multi-index selection indexer with a different length than the value
 JHenttala.2020-07-08-13-07-27-304Z.GarminPush.60681501504
 JHenttala.2020-07-09-13-33-09-693Z.GarminPush.60774027649
 JHenttala.2020-07-10-12-16-08-321Z.GarminPush.60859379032
 JHenttala.2020-07-11-11-06-45-869Z.GarminPush.60943158958
 JHenttala.2020-07-12-09-19-24-480Z.GarminPush.61026121241
 JHenttala.2020-07-12-11-39-58-972Z.GarminPush.61037488784
-mkdir: cannot create directory ‘Data/TrainingPeaks/fit/15’: File exists
-mkdir: cannot create directory ‘Data/TrainingPeaks/csv/15’: File exists
+
 Processing athlete 15
 2020-01-02-105708-ELEMNT BOLT 5DD8-85-0
 2020-01-03-100959-ELEMNT BOLT 5DD8-86-0
