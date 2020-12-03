@@ -1,3 +1,26 @@
+"""
+Parse Garmin FIT files to CSV
+Makes use of the library https://github.com/dtcooper/python-fitparse
+Uses the following message types:
+- file_id
+- workout
+- sport
+- activity
+- field_description
+- hr_zone
+- power_zone
+- session
+- training_file
+- record
+- device_info
+- event
+- lap
+The following message types are ignored:
+- file creator - doesn't contain anything interesting it seems
+- device_settings - nothing relevant
+- user_profile - (we already know this stuff from trainingpeaks)
+- zones_target - contains threshold  power, threshold heart rate and max heartrate
+"""
 import fitparse
 import argparse
 import numpy as np
@@ -35,7 +58,6 @@ message_types = message_types.unique().tolist()
 
 data = {i: list(fitfile.get_messages(i)) for i in message_types}
 data.update({None:data_nans})
-
 
 # ----------------- info
 if args.verbose:
@@ -108,6 +130,14 @@ for message in data['session']:
 		df_info.loc['session', field.name] = field.value
 message_types.remove('session')
 
+# training file
+try:
+	for message in data['training_file']:
+		for field in message:
+			df_info.loc['training_file', field.name] = field.value
+	message_types.remove('training_file')
+except KeyError:
+	pass
 
 # ----------------- data
 if args.verbose:
@@ -132,12 +162,21 @@ except ValueError:
 	pass
 
 # device
-df_device = unpack_messages(data['device_info'])
-message_types.remove('device_info')
+try:
+	df_device = unpack_messages(data['device_info'])
+except ValueError:
+	df_device = pd.DataFrame()
+	for i, message in enumerate(data['device_info']):
+		for field in message.fields:
+			try:
+				df_device.loc[i,field.name] = field.value
+			except ValueError:
+				continue
 for i, item in enumerate(df_device.serial_number.dropna().unique()):
 	df_tmp = df_device[df_device.serial_number == item].dropna(axis=1).drop('timestamp', axis=1).drop_duplicates().iloc[0]
 	df_tmp.index = pd.MultiIndex.from_product([["device_%i"%i], df_tmp.index])
 	df_info = df_info.append(df_tmp)
+message_types.remove('device_info')
 
 # event
 df_startstop = unpack_messages(data['event'])
