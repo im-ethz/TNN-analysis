@@ -91,10 +91,13 @@ except KeyError:
 	pass
 
 # activity
-for message in data['activity']:
-	for field in message:
-		df_info.loc['activity', field.name] = field.value
-message_types.remove('activity')
+try:
+	for message in data['activity']:
+		for field in message:
+			df_info.loc['activity', field.name] = field.value
+	message_types.remove('activity')
+except KeyError:
+	pass
 
 # field description
 try:
