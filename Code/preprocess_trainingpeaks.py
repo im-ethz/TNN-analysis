@@ -15,6 +15,9 @@ athletes = sorted([int(i.rstrip('.csv')) for i in os.listdir(path+'csv/')])
 
 for i in athletes:
 	print(i)
+	if not os.path.exists(path+'clean/'+str(i)):
+		os.mkdir(path+'clean/'+str(i))
+
 	filename_date = {}
 
 	df = pd.DataFrame()
@@ -80,9 +83,9 @@ for i in athletes:
 	date_filename = pd.DataFrame.from_dict(filename_date, orient='index').stack().reset_index()\
 		.rename(columns={'level_0':'file', 0:'date'}).drop('level_1', axis=1)\
 		.groupby('date').apply(lambda x:np.unique(x))
-	date_filename.to_csv(path+'clean/'+str(i)+'_datefilename.csv')
+	date_filename.to_csv(path+'clean/'+str(i)+'/'+str(i)+'_datefilename.csv')
 
 
 
 	# save df to file
-	df.to_csv(path+'clean/'+str(i)+'_data.csv', index_label=False)
+	df.to_csv(path+'clean/'+str(i)+'/'+str(i)+'_data.csv', index_label=False)

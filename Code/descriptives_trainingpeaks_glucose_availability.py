@@ -27,7 +27,7 @@ for i in athletes:
 
 	# make a list similar to the one from libreview with all glucose entries
 	df_glucose_list = df_glucose[~df_glucose['glucose'].isna()]
-	df_glucose_list.to_csv(path+'clean/'+str(i)+'_data_glucose.csv', index_label=False)
+	df_glucose_list.to_csv(path+'clean/'+str(i)+'/'+str(i)+'_data_glucose.csv', index_label=False)
 
 	# check if there are duplicated entries in the glucose file that are not nan
 	if not df_glucose[(df_glucose.duplicated(keep=False)) & (~df_glucose.glucose.isna())].empty:
@@ -61,7 +61,7 @@ for i in athletes:
 	df_glucose_calendar = df_glucose_calendar.applymap(lambda x:binary_mapping[x])
 
 	# TODO: include number of measurements in each square
-	plot = PlotData(savedir=path+'clean/', athlete=i)
+	plot = PlotData(savedir=path+'clean/'+str(i)+'/', athlete=i)
 	if not no_glucose:
 		plot.plot_glucose_availability_calendar(df_glucose_calendar, dtype='TrainingPeaks', 
 			cbarticks=binary_mapping, cmap=custom_colormap('PiYG', 0.1, 0.9, 3), linewidth=.5,

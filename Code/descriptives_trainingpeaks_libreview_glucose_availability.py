@@ -115,7 +115,7 @@ for i in lv_athletes:
 							'LV no-gl ; TP cy gl (ALARM)':2, #green
 							'LV gl ; TP cy gl (good)':3} #greenl
 
-	plot = PlotData(savedir=lv_path, athlete=i, savetext='_comparison_tplv')
+	plot = PlotData(savedir=lv_path+str(i)+'/', athlete=i, savetext='_comparison_tplv')
 	plot.plot_glucose_availability_calendar(df_combinations_calendar, dtype='TrainingPeaks + LibreView\n',
 		cbarticks=combinations_mapping, cmap=cmap, linewidth=.5)
 		#annot=df_glucose_calendar_measurements, fmt="d", annot_kws={'size':8})
