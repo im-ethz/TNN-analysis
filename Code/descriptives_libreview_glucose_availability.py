@@ -7,7 +7,7 @@ from plot import *
 from helper import *
 
 path = 'Data/LibreView/'
-files = sorted([int(i.rstrip('.csv')) for i in os.listdir(path+'raw_anonymous/')])
+files = sorted([int(i.rstrip('.csv')) for i in os.listdir(path+'clean/') if i.endswith('.csv')])
 
 dict_files = {}
 for i in files:
@@ -36,11 +36,6 @@ for i in files:
 	# plot calendar with glucose availaibility
 	df_glucose_calendar = create_calendar_array(df_glucose.copy(), 'glucose_present')
 	df_glucose_calendar_measurements = create_calendar_array(df_glucose_measurements.copy(), 'glucose_present')
-
-	month_mapping = {1:'january', 2:'february', 3:'march', 4:'april', 5:'may', 6:'june', 7:'july',
-					 8:'august', 9:'september', 10:'october', 11:'november', 12:'december'}
-	df_glucose_calendar.index = df_glucose_calendar.index.map(month_mapping)
-	df_glucose_calendar_measurements.index = df_glucose_calendar_measurements.index.map(month_mapping)
 
 	binary_mapping = {np.nan:0, True:1}
 	df_glucose_calendar = df_glucose_calendar.applymap(lambda x:binary_mapping[x])

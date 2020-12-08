@@ -11,9 +11,11 @@ athletes = sorted([int(i.rstrip('.csv')) for i in os.listdir(path+'csv/')])
 
 dict_files = {}
 for i in athletes:
+	print('\n')
+	print(i)
 	no_glucose=False
 
-	df.read_csv(path+'clean/'+str(i)+'_data.csv', index_label=False)
+	df = pd.read_csv(path+'clean/'+str(i)+'_data.csv')
 
 	# check when glucose data is present and when not
 	try:
@@ -28,19 +30,24 @@ for i in athletes:
 	df_glucose_list.to_csv(path+'clean/'+str(i)+'_data_glucose.csv', index_label=False)
 
 	# check if there are duplicated entries in the glucose file that are not nan
-	print("duplicate entries not nan glucose", df_glucose[(df_glucose.duplicated(keep=False)) & (~df_glucose.glucose.isna())])
+	if not df_glucose[(df_glucose.duplicated(keep=False)) & (~df_glucose.glucose.isna())].empty:
+		print("WARNING: There are duplicate entries that have not nan glucose\n", 
+			df_glucose[(df_glucose.duplicated(keep=False)) & (~df_glucose.glucose.isna())])
 	df_glucose.drop_duplicates(ignore_index=True, inplace=True)
 
 	# check if there are duplicate entries for the same timestamp
-	print("duplicate timestamps", df_glucose[df_glucose.duplicated(subset='timestamp')])
+	if not df_glucose[df_glucose.duplicated(subset='timestamp')].empty:
+		print("WARNING: There are still duplicate timestamps with different glucose entries\n", 
+			df_glucose[df_glucose.duplicated(subset='timestamp', keep=False)])
 	# TODO!!!!!
+
+	df_glucose['glucose_present'] = ~df_glucose['glucose'].isna()
+	df_glucose.drop('glucose', axis=1, inplace=True)
 
 	# create an array with dates and whether the glucose is present in the file
 	df_glucose['date'] = pd.to_datetime(df_glucose['timestamp']).dt.date
 	df_glucose.drop(['timestamp'], axis=1, inplace=True)
-	df_glucose['glucose_present'] = ~df_glucose['glucose'].isna()
 	df_glucose = df_glucose.groupby(['date']).sum()
-	df_glucose.drop('glucose', axis=1, inplace=True)
 	df_glucose_measurements = df_glucose.copy()
 	df_glucose['glucose_present'] = df_glucose['glucose_present'].astype(bool)
 
@@ -49,11 +56,6 @@ for i in athletes:
 	# plot calendar with glucose availaibility
 	df_glucose_calendar = create_calendar_array(df_glucose.copy(), 'glucose_present')
 	df_glucose_calendar_measurements = create_calendar_array(df_glucose_measurements.copy(), 'glucose_present')
-
-	month_mapping = {1:'january', 2:'february', 3:'march', 4:'april', 5:'may', 6:'june', 7:'july',
-					 8:'august', 9:'september', 10:'october', 11:'november', 12:'december'}
-	df_glucose_calendar.index = df_glucose_calendar.index.map(month_mapping)
-	df_glucose_calendar_measurements.index = df_glucose_calendar_measurements.index.map(month_mapping)
 
 	binary_mapping = {False:-1, np.nan:0, True:1}
 	df_glucose_calendar = df_glucose_calendar.applymap(lambda x:binary_mapping[x])
