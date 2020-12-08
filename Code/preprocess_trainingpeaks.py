@@ -14,6 +14,7 @@ athletes = sorted([int(i.rstrip('.csv')) for i in os.listdir(path+'csv/')])
 
 dict_files = {}
 for i in athletes:
+	print(i)
 	no_glucose=False
 	df = pd.DataFrame()
 
@@ -27,15 +28,17 @@ for i in athletes:
 
 	df['Zwift'] = False
 
-	files_virtual = sorted(os.listdir(path+'csv/'+str(i)+'/Zwift/data'))
-	for f in files_virtual:
-		df_tmp = pd.read_csv(path+'csv/'+str(i)+'/Zwift/data/'+f)
+	# if zwift files
+	if os.path.exists(path+'csv/'+str(i)+'/Zwift/data'):
+		files_virtual = sorted(os.listdir(path+'csv/'+str(i)+'/Zwift/data'))
+		for f in files_virtual:
+			df_tmp = pd.read_csv(path+'csv/'+str(i)+'/Zwift/data/'+f)
 
-		# open all other files and check for missing info
+			# open all other files and check for missing info
 
-		df = df.append(df_tmp, ignore_index=True, verify_integrity=True)
+			df = df.append(df_tmp, ignore_index=True, verify_integrity=True)
 
-	df['Zwift'].fillna(True, inplace=True)
+		df['Zwift'].fillna(True, inplace=True)
 
 	# save df to file
 	df.to_csv(path+'clean/'+str(i)+'_data.csv', index_label=False)

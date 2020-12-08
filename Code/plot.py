@@ -46,7 +46,7 @@ class PlotData:
 		plt.xlabel('Day')
 		plt.ylabel('Month')
 		plt.title("Glucose availability %s - Athlete %s"%(dtype, self.athlete))
-		plt.savefig(self.savedir+str(self.athlete)+'_glucose_availaibility.pdf', bbox_inches='tight')
+		plt.savefig(self.savedir+str(self.athlete)+self.savetext+'_glucose_availaibility.pdf', bbox_inches='tight')
 		plt.close()
 
 	def plot_feature_distr_subplots(self, df, feature_array, figsize, savetext=''):
