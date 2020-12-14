@@ -13,7 +13,7 @@
 *.idx
 *.ilg
 *.ind
-*.out
+#*.out
 *.url
 *.svn
 *.toc
