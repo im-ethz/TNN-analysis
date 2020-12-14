@@ -13,15 +13,15 @@ dict_files = {}
 for i in athletes:
 	print('\n')
 	print(i)
-	no_glucose=False
 
-	df = pd.read_csv(path+'clean/'+str(i)+'_data.csv')
+	df = pd.read_csv(path+'clean/'+str(i)+'/'+str(i)+'_data.csv')
 
 	# check when glucose data is present and when not
 	try:
+		no_glucose = False
 		df_glucose = df[['timestamp', 'glucose']]
 	except KeyError:
-		no_glucose=True
+		no_glucose = True
 		df['glucose'] = np.nan
 		df_glucose = df[['timestamp', 'glucose']]
 
@@ -30,16 +30,25 @@ for i in athletes:
 	df_glucose_list.to_csv(path+'clean/'+str(i)+'/'+str(i)+'_data_glucose.csv', index_label=False)
 
 	# check if there are duplicated entries in the glucose file that are not nan
-	if not df_glucose[(df_glucose.duplicated(keep=False)) & (~df_glucose.glucose.isna())].empty:
+	if not df_glucose_list[df_glucose_list.duplicated(keep=False)].empty:
 		print("WARNING: There are duplicate entries that have not nan glucose\n", 
-			df_glucose[(df_glucose.duplicated(keep=False)) & (~df_glucose.glucose.isna())])
-	df_glucose.drop_duplicates(ignore_index=True, inplace=True)
+			df_glucose_list[df_glucose_list.duplicated(keep=False)])
+	df_glucose.drop_duplicates(ignore_index=True, inplace=True) #TODO: check, maybe we don't need to do this anymore
 
-	# check if there are duplicate entries for the same timestamp
+	# check if there are multiple glucose entries for the same timestamp
 	if not df_glucose[df_glucose.duplicated(subset='timestamp')].empty:
-		print("WARNING: There are still duplicate timestamps with different glucose entries\n", 
-			df_glucose[df_glucose.duplicated(subset='timestamp', keep=False)])
-	# TODO!!!!!
+		print("WARNING: There are timestamps with multiple different glucose entries (incl. nans): ", 
+			len(df_glucose[df_glucose.duplicated(subset='timestamp', keep=False)].sort_values('timestamp')))
+
+	# check if there are multiple glucose entries for the same timestamp that are not nan
+	if not df_glucose_list[df_glucose_list.duplicated(subset='timestamp')].empty:
+		print("WARNING: There are timestamps with multiple different glucose entries (excl. nans)\n", 
+			df_glucose_list[df_glucose_list.duplicated(subset='timestamp', keep=False)].sort_values('timestamp'))
+		print("These are the dates for which this happened:\n",
+			*tuple(pd.to_datetime(df_glucose_list[df_glucose_list.duplicated(subset='timestamp', keep=False)]['timestamp']).dt.date.unique()))
+	else:
+		print("GOOD: There are no timestamps with multiple different glucose entries (excl. nans)")
+	# TODO !!!
 
 	df_glucose['glucose_present'] = ~df_glucose['glucose'].isna()
 	df_glucose.drop('glucose', axis=1, inplace=True)
@@ -79,7 +88,7 @@ df_all_glucose_calendar = df_all_glucose_calendar.applymap(lambda x:binary_mappi
 dates = pd.to_datetime(df_all_glucose_calendar.columns)
 # TODO: to function
 plt.figure(figsize=(15,4))
-ax = sns.heatmap(df_all_glucose_calendar, cbar=False, cmap=custom_colormap('PiYG', 0.1, 0.9, 3), linewidth=.5)
+ax = sns.heatmap(df_all_glucose_calendar, cbar=False, cmap=custom_colormap('PiYG', 0.1, 0.9, 3))
 ax.set_xticks(np.arange(len(dates))[1::7])
 ax.set_xticklabels(dates.strftime('%d-%b')[1::7], rotation=45)
 plt.yticks(rotation=0)
