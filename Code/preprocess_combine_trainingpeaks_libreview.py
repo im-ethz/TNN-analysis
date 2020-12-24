@@ -3,6 +3,7 @@ import pandas as pd
 import datetime
 import os
 import gc
+import matplotlib
 
 from plot import *
 from helper import *
@@ -25,13 +26,14 @@ if not os.path.exists(merge_path+'clean/'):
 lv_athletes = sorted([int(i.rstrip('.csv')) for i in os.listdir(lv_path) if i.endswith('.csv')])
 
 for i in lv_athletes:
+	print(i)
 	# -------------------- Libreview
 	df_lv = pd.read_csv(lv_path+str(i)+'.csv')
 
 	df_lv['Device Timestamp'] = pd.to_datetime(df_lv['Device Timestamp'], dayfirst=True)
 	df_lv.sort_values('Device Timestamp', inplace=True)
 
-	df_lv.rename(columns={'Device':'device_glucose'}, inplace=True)
+	df_lv.rename(columns={'Device':'device_glucose', 'Serial Number':'device_glucose_serial_number'}, inplace=True)
 
 	first_date_libre = df_lv['Device Timestamp'].min()
 
@@ -82,6 +84,9 @@ for i in lv_athletes:
 
 	# -------------------- Resample
 
+	# already get nancols before resampling
+	cols_nan = list(set(df_merge.columns) - set(df_merge.dropna(axis=1, how='all').columns))	
+
 	# clean data first for weird zeros at places
 	# possibly make extra features without zeros
 
@@ -117,11 +122,11 @@ for i in lv_athletes:
 				'compressed_speed_distance'			: 'mean',
 				'cycle_length'						: 'mean',
 				'resistance'						: 'mean',
-				'calories'							: 'mean',
-				'ascent'							: 'mean',
+				'calories'							: 'mean', # sum??
+				'ascent'							: 'mean', # sum??
 				'zwift'								: 'first', # check
 				'device_glucose'					: 'first',
-				'Serial Number'						: 'first',
+				'device_glucose_serial_number'		: 'first',
 				'Historic Glucose mg/dL'			: 'mean',
 				'Scan Glucose mg/dL'				: 'mean',
 				'Non-numeric Rapid-Acting Insulin'	: 'sum',
@@ -138,7 +143,7 @@ for i in lv_athletes:
 				'Correction Insulin (units)'		: 'sum',
 				'User Change Insulin (units)'		: 'sum'}
 	
-	print("Columns that are not included in the aggregation: ",
+	print("Columns that are not included in the aggregation (and that are thus dropped): ",
 		*tuple(set(df_merge.columns) - set(agg_dict.keys())))
 
 	# timestamps that should be in df_merge after resampling to minute
@@ -152,9 +157,8 @@ for i in lv_athletes:
 	df_merge = df_merge[df_merge.index.isin(df_merge_ts)]
 
 	# drop columns that are nan
-	print("Columns that are nan and will be dropped: ",
-		*tuple(set(df_merge.columns) - set(df_merge.dropna(axis=1, how='all').columns)))
-	df_merge.dropna(axis=1, how='all', inplace=True)
+	print("Columns that are nan and will be dropped: ", cols_nan)
+	df_merge.drop(cols_nan, axis=1, inplace=True)
 
 	df_merge.to_csv(merge_path+'raw_resampled/'+str(i)+'.csv')
 
@@ -200,22 +204,147 @@ for i in lv_athletes:
 	else:
 		print("WARNING: enhanced_speed does not equal altitude %s times"%eq_speed)
 
+	# TODO check if altitude is the same as ascent
+	# cross-correlation
+	[df_merge.altitude.corr(df_merge.ascent.shift(lag)) for lag in np.arange(-10,10,1)]
+	[df_merge.altitude.diff().corr(df_merge.ascent.shift(lag)) for lag in np.arange(-10,10,1)]
+	[df_merge.altitude.corr(df_merge.ascent.diff().shift(lag)) for lag in np.arange(-10,10,1)]
+	# answer: no??
+
+	# TODO: use distance to create new training
+	# create column with training number
+	# identify based on difference between timestamps (larger than 1 minute)
+	timediff = 1 # TODO: check if the timediff should be longer
+	df_merge['diff_timestamp (min)'] = pd.Series(df_merge.index, index=df_merge.index).diff().astype('timedelta64[m]')
+	df_merge['diff_distance'] = df_merge['distance'].diff()
+	df_merge['index_training'] = np.nan
+	index_training_bool = (df_merge['diff_timestamp (min)'] > timediff) & (df_merge['diff_distance'] < 0)
+	df_merge.loc[index_training_bool, 'index_training'] = np.arange(index_training_bool.sum())+1
+	df_merge.loc[df_merge.index.min(), 'index_training'] = 0
+	df_merge.index_training.ffill(inplace=True)
+	df_merge.drop('diff_timestamp (min)', axis=1, inplace=True)
+
+	# create column date and time in training
+	df_merge['date'] = df_merge.index.date
+	start_timestamps = df_merge[~df_merge.index_training.duplicated()]['index_training']
+	df_merge['time_training (min)'] = np.nan
+	for ts, idx in start_timestamps.iteritems():
+		ts_mask = df_merge.index_training == idx
+		df_merge.loc[ts_mask, 'time_training (min)'] = (df_merge.index - ts)[ts_mask]
+	df_merge['time_training (min)'] = df_merge['time_training (min)'].astype('timedelta64[s]').astype('timedelta64[m]')
+
+	# TODO: distance is negative 235 times even though timediff is only 1 min, why??
+
+
+	# TODO check where speed was zero (remove from file?), remove first entries before having measurements
+
+	# TODO: check where battery level was 0 or gps accuracy was 0
+
+	# TODO: filter out other devices
+
+
+	df_merge.to_csv(merge_path+'clean/'+str(i)+'.csv')
+	#df_merge = pd.read_csv(merge_path+'clean/'+str(i)+'.csv')
+	#df_merge['timestamp'] = pd.to_datetime(df_merge['timestamp'])
+	#df_merge.set_index('timestamp', drop=True, inplace=True)
+
+	# -------------------- Feature engineering
+
+	# -------------------- Impute
+	# TODO: different type of interpolation?
+	# IDEA: don't use interpolation but GP/HMM to find true value of data
 	# missing values
 	print("Missing values:")
 	for col in df_merge.columns:
 		print(col, ": ", df_merge[col].isna().sum())
 
-	# create column date and time in training
-	df_merge['date'] = df_merge.index.date
-	start_timestamps = df_merge.index[~df_merge.date.duplicated()]
-	df_merge['time_training'] = np.nan
-	for ts in start_timestamps:
-		ts_mask = df_merge.index.date == ts.date()
-		df_merge.loc[ts_mask, 'time_training'] = (df_merge.index - ts)[ts_mask]
-		# (df_merge.index - pd.Timedelta(hours=ts.time().hour, minutes=ts.time().minute)).time
+	# features that we should not interpolate
+	# because they contain info about when there was missing data,
+	# or because they are too sparse (contain too many missing values)
+	cols_noimpute = set(['date', 'index_training', 'time_training (min)', 
+		'device_glucose', 'device_glucose_serial_number', 
+		'time_from_course', 'zwift', 'calories', 'ascent'])
+
+	# TODO: find out how to interpolate digitized signal (for temperature, battery_soc, gps_accuracy)
+	interp_dict = {	'position_lat'				: 'time',
+					'position_long'				: 'time',
+					'gps_accuracy'				: 'time',
+					'distance'					: 'time',
+					'heart_rate'				: 'akima', #akima? (looks fine)
+					'cadence'					: 'akima', #akima?
+					'speed'						: 'akima', #akima?
+					'power'						: 'akima', #akima?
+					'altitude'					: 'time', #slinear?
+					'grade'						: 'akima', #akima?
+					'battery_soc'				: 'time',
+					'left_right_balance'		: 'time', #mean? #TODO: fix zeros
+					'left_pedal_smoothness'		: 'time', #mean?
+					'right_pedal_smoothness'	: 'time', #mean?
+					'left_torque_effectiveness'	: 'time', #mean?
+					'right_torque_effectiveness': 'time', #mean?
+					'temperature'				: 'time', #TODO
+					'glucose (mg/dL)'			: 'pchip'}
+
+	# interpolate features
+	# TODO: do it on second basis
+	# only within a day!! (probably also works with groupby)
+	# now: can only fill forward, and cannot extrapolate (so nans should always be surrounded by valid numbers)
+	for col in set(df_merge.columns) - cols_noimpute:
+		print(col)
+		df_merge[col+'_interp'] = np.nan
+		for idx in df_merge.index_training.unique():
+			try:
+				df_merge.loc[df_merge.index_training == idx, col+'_interp'] = \
+				df_merge.loc[df_merge.index_training == idx, col]\
+				.interpolate(method=interp_dict[col], limit_direction='forward')
+			except ValueError as e:
+				if str(e) == "The number of derivatives at boundaries does not match: expected 1, got 0+0"\
+					or str(e) == "The number of derivatives at boundaries does not match: expected 2, got 0+0":
+					print("Removing %s rows on %s due to too few %s values"\
+						%((df_merge.index_training == idx).sum(), 
+							np.unique(df_merge[df_merge.index_training == idx].date)[0].strftime("%d-%m-%Y"),col))
+					#df_merge = df_merge[df_merge.date != date] # remove all data from this date
+					# TODO: fix, do we even want to remove this?? 
+					#df_merge = df_merge[df_merge.index_training != idx] # remove all data from this date
+					df_merge.loc[df_merge.index_training == idx, col+'_interp'] = \
+					df_merge.loc[df_merge.index_training == idx, col]
+				else:
+					print("Error not caught for %s"%np.unique(df_merge[df_merge.index_training == idx].date)[0].strftime("%d-%m-%Y"))
+					break
+
+		# plot features for each training session
+		pfirst = 10#len(df_merge.index_training.unique())#200
+		cmap = matplotlib.cm.get_cmap('viridis', len(df_merge.index_training.unique()[:pfirst]))
+		ax = plt.subplot()
+		for c, idx in enumerate(df_merge.index_training.unique()[:pfirst]): #for date in df_merge.date.unique():
+			#df_merge[df_merge.date == date].plot(ax=ax, x='time_training (min)', y=col+'_interp_ONLY',
+			df_merge[df_merge.index_training == idx].plot(ax=ax, x='time_training (min)', y=col+'_interp',
+				color=cmap(c), legend=False, alpha=.5)
+			#df_merge[df_merge.date == date].plot(ax=ax, x='time_training (min)', y=col,
+			df_merge[df_merge.index_training == idx].plot(ax=ax, x='time_training (min)', y=col,
+				color=cmap(c), legend=False, alpha=.5, kind='scatter', s=10.)
+		plt.ylabel(col)
+		plt.show()
+		plt.close()
+		
+		df_merge[col+'_interp_ONLY'] = df_merge.loc[df_merge[col].isna(), col+'_interp']
+		ax = plt.subplot()
+		for c, idx in enumerate(df_merge.index_training.unique()[:pfirst]): #for date in df_merge.date.unique():
+			#df_merge[df_merge.date == date].plot(ax=ax, x='time_training (min)', y=col+'_interp_ONLY',
+			df_merge[df_merge.index_training == idx].plot(ax=ax, x='time_training (min)', y=col+'_interp_ONLY',
+				color=cmap(c), legend=False, alpha=.5, kind='scatter', s=15.)
+			#df_merge[df_merge.date == date].plot(ax=ax, x='time_training (min)', y=col,
+			df_merge[df_merge.index_training == idx].plot(ax=ax, x='time_training (min)', y=col,
+				color=cmap(c), legend=False, alpha=.5)
+		plt.ylabel(col)
+		plt.show()
+		plt.close()
+		
 	# todo: plot features for each day so that we can see how to impute missing values
 
 """
+.interpolate(method='', limit_direction='forward', axis=1)
+
 # Impute glucose data
 # not working: 'nearest', 'zero', 'barycentric', 'krogh'
 interp_list = ('time', 'slinear', 'quadratic', 'cubic', 'spline', 'polynomial', 'pchip', 'akima')
