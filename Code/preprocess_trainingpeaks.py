@@ -1,5 +1,6 @@
 # TODO: include units in column names
 # remove first index col
+# keep training identifyer in file
 import numpy as np
 import pandas as pd
 import datetime

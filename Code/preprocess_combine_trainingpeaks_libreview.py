@@ -1,3 +1,18 @@
+# List of TODOS - overview
+# - Can we include other athletes that are not in LibreView? -> No because they don't have the Libre?
+# - Can we use the data from the BUBBLE? How do we know that it is data from bubble? I.e. after 7 may and in TP?
+# - Does BUBBLE include a 15 min lag from blood glucose to interstitial glucose
+# - Why is ascent not the same as altitude (or altitude.diff)?
+# - Find out what happened when there are large gaps in the data
+# - Find out what happened when there are small gaps in the data
+# - Why does the distance decrease sometimes? (Even though it is within the same training)
+# - Check GPS accuracy and battery level
+# - Possibly remove first entries if the speed = 0
+# - Filter out data from other devices. Later: check if we can combine it
+# - Feature engineering: include min, max, mean, std, iqr, per minute and per time interval
+# - Imputation
+# - Model with and without imputation
+# - Put data from different athletes in one file
 import numpy as np
 import pandas as pd
 import datetime
@@ -211,7 +226,6 @@ for i in lv_athletes:
 	[df_merge.altitude.corr(df_merge.ascent.diff().shift(lag)) for lag in np.arange(-10,10,1)]
 	# answer: no??
 
-	# TODO: use distance to create new training
 	# create column with training number
 	# identify based on difference between timestamps (larger than 1 minute)
 	timediff = 1 # TODO: check if the timediff should be longer
@@ -233,11 +247,128 @@ for i in lv_athletes:
 		df_merge.loc[ts_mask, 'time_training (min)'] = (df_merge.index - ts)[ts_mask]
 	df_merge['time_training (min)'] = df_merge['time_training (min)'].astype('timedelta64[s]').astype('timedelta64[m]')
 
-	# TODO: distance is negative 235 times even though timediff is only 1 min, why??
+	# length training
+	length_training = df_merge.groupby('index_training').count().max(axis=1)
+	print("Max training length (min):\n",
+		length_training)
+	length_training.hist(bins=20)
+	plt.xlabel('length_training (min)')
+	plt.show()
+	print("Number of trainings that last shorter than 10 min: ",
+		(length_training <= 10).sum())
+	print("Number of trainings that last shorter than 20 min: ",
+		(length_training <= 20).sum())
+
+	# find out where missing data is located: per training
+	print("Data per training:\n",
+		df_merge.groupby('index_training').count())
+	data_completion = df_merge.groupby('index_training').count().div(df_merge.groupby('index_training').count().max(axis=1), axis=0)
+	print("Data per training as a fraction of training length:\n",
+		data_completion)
+	ax = sns.heatmap(data_completion, cmap="YlGnBu_r", cbar_kws={'label': 'Fraction complete'})
+	ax.set_xticks(np.arange(df_merge.shape[1]))
+	ax.set_xticklabels(df_merge.columns, rotation='vertical')
+	ax.xaxis.set_ticks_position('top')
+	plt.title('Data completion')
+	plt.show()
+
+	# find out where missing data is located: per minute in training
+	print("Data per minute in training:\n",
+		df_merge.groupby('time_training (min)').count())
+	# TODO: check if fraction is calculated correctly
+	data_completion_min = df_merge.groupby('time_training (min)').count().div(df_merge.groupby('time_training (min)').count().max(axis=1), axis=0)
+	print("Data per training as a fraction of training length:\n",
+		data_completion_min)
+	ax1 = plt.subplot(111)
+	sns.heatmap(data_completion_min, ax=ax1, cmap="YlGnBu_r", cbar_kws={'label': 'Fraction complete'})
+	ax1.set_xticks(np.arange(df_merge.shape[1]))
+	ax1.set_xticklabels(df_merge.columns, rotation='vertical')
+	ax1.xaxis.set_ticks_position('top')
+	#ax2 = plt.subplot(155, sharey=ax1)
+	#df_merge.groupby('time_training (min)').count().max(axis=1).hist(ax=ax2, orientation='horizontal')
+	plt.title('Data completion')
+	plt.show()
+	# Conclusion: delete the following features:
+	# - time_from_course
+	# - ascent?
+
+	"""
+	print("Data completion in the first minutes,")
+	first_x = 5
+	start_timestamps_first = np.array([df_merge.index[df_merge.index.get_loc(ts):df_merge.index.get_loc(ts)+first_x].values for ts in start_timestamps.index]).flatten()
+	data_completion_first = df_merge.loc[start_timestamps_first].groupby('index_training').count()\
+		.div(df_merge.loc[start_timestamps_first].groupby('index_training').count().max(axis=1), axis=0)
+	ax = sns.heatmap(data_completion_first, cmap="YlGnBu_r", cbar_kws={'label': 'Fraction complete'})
+	ax.set_xticks(np.arange(df_merge.shape[1]))
+	ax.set_xticklabels(df_merge.columns, rotation='vertical')
+	ax.xaxis.set_ticks_position('top')	plt.title('Data completion in first %s timestamps of each training'%first_x)
+	plt.show()
+	data_completion_nfirst = df_merge.loc[~df_merge.index.isin(start_timestamps_first)].groupby('index_training').count()\
+		.div(df_merge.loc[~df_merge.index.isin(start_timestamps_first)].groupby('index_training').count().max(axis=1), axis=0)
+	ax = sns.heatmap(data_completion_nfirst, cmap="YlGnBu_r", cbar_kws={'label': 'Fraction complete'})
+	ax.set_xticks(np.arange(df_merge.shape[1]))
+	ax.set_xticklabels(df_merge.columns, rotation='vertical')
+	ax.xaxis.set_ticks_position('top')
+	plt.title('Data completion removing first %s timestamps of each training'%first_x)
+	plt.show()
+	"""
+
+	# TODO: find out what happened when there are large gaps in the data
+	# i.e. is the battery level low? 
+	# is the GPS accuracy low?
+
+	# interpolate battery level
+	for idx in df_merge.index_training.unique():
+		df_merge.loc[df_merge.index_training == idx, 'battery_soc_ilin'] = \
+		df_merge.loc[df_merge.index_training == idx, 'battery_soc']\
+		.interpolate(method='time', limit_direction='forward')
+
+	pfirst = 10#len(df_merge.index_training.unique())#200
+	cmap = matplotlib.cm.get_cmap('viridis', len(df_merge.index_training.unique()[:pfirst]))
+	ax = plt.subplot()
+	for c, idx in enumerate(df_merge.index_training.unique()[:pfirst]): #for date in df_merge.date.unique():
+		df_merge[df_merge.index_training == idx].plot(ax=ax, x='time_training (min)', y='battery_soc_ilin',
+			color=cmap(c), legend=False, alpha=.5, kind='scatter', s=10.)
+		df_merge[df_merge.index_training == idx].plot(ax=ax, x='time_training (min)', y='battery_soc',
+			color=cmap(c), legend=False, alpha=.5)
+	plt.ylabel(col)
+	plt.show()
+	plt.close()
+
+	# check if position long and lat are missing at the same time or not 
+	print("Number of missing values position_lat: ", df_merge['position_lat'].isna().sum())
+	print("Number of missing values position_long: ", df_merge['position_long'].isna().sum())
+	print("Number of times both position_lat and position_long missing: ", 
+		((df_merge['position_lat'].isna()) & (df_merge['position_long'].isna())).sum())
+
+	# position missing and speed missing
+
+
+	# position missing and speed zero
+
+	# plot difference in GPS levels when position is missing
 
 
 	# TODO check where speed was zero (remove from file?), remove first entries before having measurements
+	# check where speed is zero
+	print("Speed zero at %s timestamps"%(df_merge['speed'] == 0).sum())
+	print("Speed zero and first timestamp of training: ",
+		((df_merge.index.isin(start_timestamps.index)) & (df_merge['speed'] == 0)).sum())
+	print("Speed zero and second timestamp of training: ",
+		((np.concatenate(([False], df_merge.index.isin(start_timestamps.index)[:-1]))) & (df_merge['speed'] == 0)).sum())
+	
+	# plot difference in GPS levels when speed is zero, and when 
 
+	# check if speed is zero and position missing
+
+
+	# TODO: distance is negative 235 times even though timediff is only 1 min, why??
+	print("Negative distance diffs: ", 
+		((df_merge['diff_timestamp (min)'] <= 1) & (df_merge['diff_distance'] < 0)).sum())
+	# could it be that I make a mistake in identifying new trainings?
+
+
+	print("First entries of file: speed zero and (not) start_timestamps")
 	# TODO: check where battery level was 0 or gps accuracy was 0
 
 	# TODO: filter out other devices
@@ -342,27 +473,7 @@ for i in lv_athletes:
 		
 	# todo: plot features for each day so that we can see how to impute missing values
 
-"""
-.interpolate(method='', limit_direction='forward', axis=1)
 
-# Impute glucose data
-# not working: 'nearest', 'zero', 'barycentric', 'krogh'
-interp_list = ('time', 'slinear', 'quadratic', 'cubic', 'spline', 'polynomial', 'pchip', 'akima')
-for i in interp_list:
-	df_xls['glucose_'+i] = df_xls['@glucose'].interpolate(method=i, order=2)
-
-p.plot_interp_allinone(df_xls, 'glucose', interp_list, 'xls')
-p.plot_interp_subplots(df_xls, 'glucose', interp_list, (2,4), 'xls')
-for i in range(2):
-	for j in range(4):
-		p.plot_interp_individual(df_xls, 'glucose', interp_list[4*i+j])
-# conclusion:
-# not good: linear, slinear
-# medium: pchip, akima, 2nd order spline
-# good: quadratic, cubic, 2nd order polynomial
-df_xls.drop(['glucose_' + i for i in (set(interp_list) - {'polynomial'})], axis=1, inplace=True)
-df_xls.rename(columns={'glucose_polynomial':'glucose'}, inplace=True)
-"""
 
 """
 # Calculate derivatives
