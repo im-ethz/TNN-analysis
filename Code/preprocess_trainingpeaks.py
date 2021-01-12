@@ -2,6 +2,7 @@
 # TODO: remove duplicate timestamps
 # TODO: keep in mind that with filling the glucose values, we still have some duplicate timestamps in there
 # TODO: instead of deleting data for which both local timestamps are not incorrect, try finding out which one is the right one (if you overlap it with Libre)
+# TODO: there is something wrong with df['duplicate_timestamp']!!! Because it's not actually equal to df.local_timestamp.duplicated()
 import numpy as np
 import pandas as pd
 
@@ -16,10 +17,12 @@ from plot import *
 from helper import *
 
 path = 'Data/TrainingPeaks/'
-if not os.path.exists(path+'clean/'):
-	os.mkdir(path+'clean/')
 if not os.path.exists(path+'combine/'):
 	os.mkdir(path+'combine/')
+if not os.path.exists(path+'clean/'):
+	os.mkdir(path+'clean/')
+if not os.path.exists(path+'clean2/'):
+	os.mkdir(path+'clean2/')
 
 verbose = 1
 
@@ -86,7 +89,7 @@ def print_times_dates(text, df, df_mask, ts='timestamp'):
 athletes = sorted([int(i.rstrip('.csv')) for i in os.listdir(path+'csv/')])
 
 for i in athletes:
-	print(i)
+	print("\n------------------------------- Athlete ", i)
 	if not os.path.exists(path+'clean/'+str(i)):
 		os.mkdir(path+'clean/'+str(i))
 	if not os.path.exists(path+'combine/'+str(i)):
@@ -209,7 +212,7 @@ for i in athletes:
 
 	df.to_csv(path+'combine/'+str(i)+'/'+str(i)+'_data.csv', index_label=False)
 
-# include second stage, so we don't have to run the entire code again if sth goes wrong here
+# Clean df
 for i in athletes:
 	print("\n------------------------------- Athlete ", i)
 	df = pd.read_csv(path+'combine/'+str(i)+'/'+str(i)+'_data.csv', index_col=0)
@@ -353,6 +356,8 @@ for i in athletes:
 	print(df[dupl_timestamp_both & df['keep_devices']].sort_values('local_timestamp'))
 	# Answer: no, not at all, much different altitude for example. Maybe find way to select faulty values and remove them
 	# For now, keep identifyer in them so that we know we should do something with it
+	
+	# TODO: there is something wrong with this!!! Because it's not actually equal to df.local_timestamp.duplicated()
 	df['duplicate_timestamp'] = dupl_timestamp_both
 	print("Fraction of times with duplicate timestamps remaining after device selection: ", 
 		(df['duplicate_timestamp'] & df['keep_devices']).sum()/df['keep_devices'].sum())
@@ -361,101 +366,120 @@ for i in athletes:
 
 	# save df to file
 	df.to_csv(path+'clean/'+str(i)+'/'+str(i)+'_data.csv', index_label=False)
-	del df
+	del df, df_information
+
+# Second stage cleaning
+for i in athletes:
+	print("\n------------------------------- Athlete ", i)
+
+	if not os.path.exists(path+'clean2/'+str(i)):
+		os.mkdir(path+'clean2/'+str(i))
+
+	df = pd.read_csv(path+'clean/'+str(i)+'/'+str(i)+'_data.csv', index_col=0)
+
+	df['timestamp'] = pd.to_datetime(df['timestamp'])
+	df['local_timestamp'] = pd.to_datetime(df['local_timestamp'])
+
+	df = df.sort_values('local_timestamp')
+
+	# fix duplicated timestamps
+	print_times_dates("duplicated local timestamps TrainingPeaks", df, df.local_timestamp.duplicated())
+
+	# select device
+	print_times_dates("drop devices used simultaneously", df, ~df['keep_devices'])
+	df = df[df['keep_devices']]
+	df.drop('keep_devices', axis=1, inplace=True)
+	# remove cols of devices not used
+	for dev in ['device_garmin', 'device_Rouvy', 'device_bkool', 'device_ELEMNT', 'device_hammerhead Karoo']:
+		try:
+			df.drop(dev, axis=1, inplace=True)
+		except KeyError:
+			continue
+	print("\ndata left\ntimes: ", df.shape[0], "\ndays: ", len(df.local_timestamp.dt.date.unique()))
+	print_times_dates("duplicated local timestamps", df, df.local_timestamp.duplicated())
+
+	df.drop('duplicate_timestamp', axis=1, inplace=True) # This was supposed to be a good indicator but there is something wrong with it TODO
+
+	# drop trainings that have remaining duplicate timestamps
+	# TODO: decide what to do if there are actually duplicate timestamps left in there? Remove both?
+	if df.local_timestamp.duplicated().sum() > 0:
+		dupl_fileid = df[df.local_timestamp.duplicated(keep=False)].file_id.unique()
+		df = df[~df.file_id.isin(dupl_fileid)]
+	print("DROPPED: duplicate timestamps")
+	print("\ndata left\ntimes: ", df.shape[0], "\ndays: ", len(df.local_timestamp.dt.date.unique()))
+	print_times_dates("duplicated local timestamps", df, df.local_timestamp.duplicated())
 
 	"""
-	OLD: use this when we don't remove nans for local timestamps, or when we don't combine both timestamps
-	nan_ts = df['timestamp'].notna()
-	nan_lts = df['local_timestamp'].notna()
-	nan_ltsl = df['local_timestamp_loc'].notna()
-
-	print_times_dates("duplicated timestamps", 
-		df[nan_ts], df[nan_ts]['timestamp'].duplicated())
-	print_times_dates("duplicated local timestamps", 
-		df[nan_lts], df[nan_lts]['local_timestamp'].duplicated(), ts='local_timestamp')
-	print_times_dates("duplicated local timestamps from location", 
-		df[nan_ltsl], df[nan_ltsl]['local_timestamp_loc'].duplicated(), ts='local_timestamp_loc')
-
-	dupl_timestamp = df[nan_ts][df[nan_ts]['timestamp'].duplicated()]
-	dupl_timestamp_first = df[nan_ts]['timestamp'].duplicated(keep='first')
-	dupl_timestamp_last = df[nan_ts]['timestamp'].duplicated(keep='last')
-	dupl_timestamps_keep = df[nan_ts][df[nan_ts]['timestamp'].duplicated(keep=False)].sort_values('timestamp')
-
-	# TODO: find out a way to combine this info. 
-	print("Are there glucose values in the duplicate data that is not dropped? ",
-		not df[nan_ts][df[nan_ts]['timestamp'].duplicated(keep=False)].sort_values('timestamp').glucose.dropna().empty)
-	print("Are there glucose values in the duplicate that that will be dropped? ",
-		not df[nan_ts][df[nan_ts]['timestamp'].duplicated()].sort_values('timestamp').glucose.dropna().empty)
-
-	dupl_devices = []
-	for dev in devices:
-		print("Duplicate timestamps in %s: "%dev, df[nan_ts][dupl_timestamp_first][dev].sum())
-		if df[nan_ts][dupl_timestamp_first][dev].sum() != 0:
-			dupl_devices.append(dev)
-	# TODO: make sure that this happens in the right order, and that not the original duplicate is removed
-	# TODO: find out why garmin is double and if data is the same then (latter: not)
-
-	df['drop_dupl_timestamp'] = df[dupl_devices].sum(axis=1).astype(bool)
-	"""
-
-	"""
-	print("\n----------------- SELECT: device_0 == ELEMNT")
-	print_times_dates("duplicated timestamps", 
-		df[nan_ts & df['device_ELEMNTBOLT']], 
-		df[nan_ts & df['device_ELEMNTBOLT']]['timestamp'].duplicated())
-	print_times_dates("duplicated local timestamps", 
-		df[nan_lts & df['device_ELEMNTBOLT']], 
-		df[nan_lts & df['device_ELEMNTBOLT']]['local_timestamp'].duplicated(), ts='local_timestamp')
-	print_times_dates("duplicated local timestamps from location", 
-		df[nan_ltsl & df['device_ELEMNTBOLT']], 
-		df[nan_ltsl & df['device_ELEMNTBOLT']]['local_timestamp_loc'].duplicated(), ts='local_timestamp_loc')
-	# TODO: check if duplicated local timestamps were in error_timestamps_fileid
-
-	print("\n----------------- SELECT: device_0 == ELEMNT BOLT or zwift")
-	print_times_dates("duplicated timestamps", 
-		df[nan_ts & (df['device_ELEMNTBOLT'] | df['device_zwift'])], 
-		df[nan_ts & (df['device_ELEMNTBOLT'] | df['device_zwift'])]['timestamp'].duplicated())
-	print_times_dates("duplicated local timestamps", 
-		df[nan_lts & (df['device_ELEMNTBOLT'] | df['device_zwift'])], 
-		df[nan_lts & (df['device_ELEMNTBOLT'] | df['device_zwift'])]['local_timestamp'].duplicated(), ts='local_timestamp')
-	print_times_dates("duplicated local timestamps from location", 
-		df[nan_ltsl & (df['device_ELEMNTBOLT'] | df['device_zwift'])], 
-		df[nan_ltsl | (df['device_ELEMNTBOLT'] | df['device_zwift'])]['local_timestamp_loc'].duplicated(), ts='local_timestamp_loc')
-	
-	print("\n----------------- SELECT: device_0 == ELEMNT BOLT or zwift or Rouvy")
-	print_times_dates("duplicated timestamps", 
-		df[nan_ts & (df['device_ELEMNTBOLT'] | df['device_zwift'] | df['device_Rouvy'])], 
-		df[nan_ts & (df['device_ELEMNTBOLT'] | df['device_zwift'] | df['device_Rouvy'])]['timestamp'].duplicated())
-	print_times_dates("duplicated local timestamps", 
-		df[nan_lts & (df['device_ELEMNTBOLT'] | df['device_zwift'] | df['device_Rouvy'])], 
-		df[nan_lts & (df['device_ELEMNTBOLT'] | df['device_zwift'] | df['device_Rouvy'])]['local_timestamp'].duplicated(), ts='local_timestamp')
-	print_times_dates("duplicated local timestamps from location", 
-		df[nan_ltsl & (df['device_ELEMNTBOLT'] | df['device_zwift'] | df['device_Rouvy'])], 
-		df[nan_ltsl & (df['device_ELEMNTBOLT'] | df['device_zwift'] | df['device_Rouvy'])]['local_timestamp_loc'].duplicated(), ts='local_timestamp_loc')
-
-	print("\n----------------- SELECT: device_0 == ELEMNT BOLT or zwift or Rouvy or Garmin")
-	print_times_dates("duplicated timestamps", 
-		df[nan_ts & (df['device_ELEMNTBOLT'] | df['device_zwift'] | df['device_Rouvy'] | df['device_garmin'])], 
-		df[nan_ts & (df['device_ELEMNTBOLT'] | df['device_zwift'] | df['device_Rouvy'] | df['device_garmin'])]['timestamp'].duplicated())
-	print_times_dates("duplicated local timestamps", 
-		df[nan_lts & (df['device_ELEMNTBOLT'] | df['device_zwift'] | df['device_Rouvy'] | df['device_garmin'])], 
-		df[nan_lts & (df['device_ELEMNTBOLT'] | df['device_zwift'] | df['device_Rouvy'] | df['device_garmin'])]['local_timestamp'].duplicated(), ts='local_timestamp')
-	print_times_dates("duplicated local timestamps from location", 
-		df[nan_ltsl & (df['device_ELEMNTBOLT'] | df['device_zwift'] | df['device_Rouvy'] | df['device_garmin'])], 
-		df[nan_ltsl & (df['device_ELEMNTBOLT'] | df['device_zwift'] | df['device_Rouvy'] | df['device_garmin'])]['local_timestamp_loc'].duplicated(), ts='local_timestamp_loc')
+	OLD - for now just use fileid as training identifyer
+	# create column with training number
+	# identify different trainings based on difference between timestamps 
+	# AND (negative distances (if Zwift == True) OR no other constraints (if Zwift == False))
+	timediff = 600 # TODO: check if the timediff should be longer
+	df['training_id'] = np.nan
+	#training_id_bool = ((df.local_timestamp.diff().astype('timedelta64[s]') > timediff) & (~df['device_zwift']) & (df['distance'].diff() < 0))\
+	#				 | ((df.local_timestamp.diff().astype('timedelta64[s]') > timediff) & (df['device_zwift']))
+	training_id_bool = df.local_timestamp.diff().astype('timedelta64[s]') > timediff
+	df.loc[training_id_bool, 'training_id'] = np.arange(training_id_bool.sum())+1
+	df.loc[df.local_timestamp == df.local_timestamp.min(), 'training_id'] = 0
+	df.training_id.ffill(inplace=True)
 	"""
 
 	"""
-	df_dupl = df[df['timestamp'].duplicated(keep=False)]
-	if not df_dupl.empty:
-		df_dupl['date'] = df_dupl['timestamp'].dt.date
-		df_dupl[df_dupl['timestamp'] == df_dupl.iloc[0]['timestamp']]
-
-		print("Dates with multiple files but not duplicate timestamps:\n",
-			*tuple(set(pd.to_datetime(date_filename[date_filename['N'] > 1].index).date.tolist()) 
-				- set(df_dupl['date'].unique())))
-		print("Dates with duplicate timestamps but not multiple files:\n",
-			*tuple(set(df_dupl['date'].unique()) 
-				- set(pd.to_datetime(date_filename[date_filename['N'] > 1].index).date.tolist())))
-		# conclusion: duplicate timestamps must be because there are duplicate files
+	TODO: fix later, leave it for now
+	# check if there are trainings that should be put together
+	timediff_trainings = df.local_timestamp.diff().astype('timedelta64[s]')[~df.file_id.duplicated()]
+	print((timediff_trainings < 60).sum())
+	del timediff_trainings
 	"""
+
+	# create column date and time in training
+	df['time_training'] = np.nan
+	for fid in df.file_id.unique():
+		df.loc[df.file_id == fid, 'time_training'] = df[df.file_id == fid].local_timestamp - df[df.file_id == fid].local_timestamp.min()
+	df['time_training'] = df['time_training'] / np.timedelta64(1,'s')
+
+	# length training
+	length_training = df.groupby('file_id').count().max(axis=1)
+	print("Max training length (s):\n", length_training)
+	length_training.hist(bins=40)
+	plt.xlabel('length_training (min)')
+	#plt.show()
+	print("Number of trainings that last shorter than 10 min: ",
+		(length_training <= 10*60).sum())
+	print("Number of trainings that last shorter than 20 min: ",
+		(length_training <= 20*60).sum())
+	del length_training
+	# TODO: look into this at some point
+
+	# check for negative distances
+	print("Negative distance diffs: ", 
+		((df.time_training.diff() == 1) & (df['distance'].diff() < 0)).sum())
+
+	# ------------------- cleaning features
+	# check if enhanced_altitude equals altitude
+	eq_altitude = ((df['enhanced_altitude'] != df['altitude']) & 
+    	(df['enhanced_altitude'].notna()) & (df['altitude'].notna())).sum()
+	if eq_altitude == 0:
+		print("GOOD: enhanced_altitude equals altitude")
+		df.drop('enhanced_altitude', axis=1, inplace=True)
+	else:
+		print("WARNING: enhanced_altitude does not equal altitude %s times"%eq_altitude)
+
+	# check if enhanced_speed equals speed
+	eq_speed = ((df['enhanced_speed'] != df['speed']) & 
+    	(df['enhanced_speed'].notna()) & (df['speed'].notna())).sum()
+	if eq_speed == 0:
+		print("GOOD: enhanced_speed equals speed")
+		df.drop('enhanced_speed', axis=1, inplace=True)
+	else:
+		print("WARNING: enhanced_speed does not equal altitude %s times"%eq_speed)
+
+	"""
+	# TODO check if altitude is the same as ascent
+	# cross-correlation
+	[df.altitude.corr(df.ascent.shift(lag)) for lag in np.arange(-10,10,1)]
+	[df.altitude.diff().corr(df.ascent.shift(lag)) for lag in np.arange(-10,10,1)]
+	[df.altitude.corr(df.ascent.diff().shift(lag)) for lag in np.arange(-10,10,1)]
+	# answer: no??
+	"""
+	df.to_csv(path+'clean2/'+str(i)+'/'+str(i)+'_data.csv', index_label=False)
