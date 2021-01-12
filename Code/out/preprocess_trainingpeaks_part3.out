@@ -1,0 +1,695 @@
+------------------------------- Athlete  1
+
+ duplicated local timestamps TrainingPeaks
+times:  76961
+days:  17
+
+ drop devices used simultaneously
+times:  1878
+days:  1
+
+data left
+times:  3073674 
+days:  241
+
+ duplicated local timestamps
+times:  76960
+days:  16
+DROPPED: duplicate timestamps
+
+data left
+times:  2719948 
+days:  227
+
+ duplicated local timestamps
+times:  0
+days:  0
+Max training length (s):
+ file_id
+0      12668
+2      18417
+3      10343
+4      16069
+5      16228
+       ...  
+290     6918
+291     6808
+294     3830
+295     1115
+296     2718
+Length: 260, dtype: int64
+Number of trainings that last shorter than 10 min:  1
+Number of trainings that last shorter than 20 min:  3
+Negative distance diffs:  0
+GOOD: enhanced_altitude equals altitude
+GOOD: enhanced_speed equals speed
+
+------------------------------- Athlete  2
+
+ duplicated local timestamps TrainingPeaks
+times:  0
+days:  0
+
+ drop devices used simultaneously
+times:  0
+days:  0
+
+data left
+times:  2900718 
+days:  246
+
+ duplicated local timestamps
+times:  0
+days:  0
+DROPPED: duplicate timestamps
+
+data left
+times:  2900718 
+days:  246
+
+ duplicated local timestamps
+times:  0
+days:  0
+Max training length (s):
+ file_id
+0      15156
+1       7241
+2      18004
+3       9002
+4      15610
+       ...  
+261     6923
+262    13868
+263    10002
+264     6478
+265    19067
+Length: 264, dtype: int64
+Number of trainings that last shorter than 10 min:  1
+Number of trainings that last shorter than 20 min:  1
+Negative distance diffs:  0
+GOOD: enhanced_altitude equals altitude
+GOOD: enhanced_speed equals speed
+
+------------------------------- Athlete  3
+
+ duplicated local timestamps TrainingPeaks
+times:  145595
+days:  37
+
+ drop devices used simultaneously
+times:  344094
+days:  67
+
+data left
+times:  2404440 
+days:  231
+
+ duplicated local timestamps
+times:  0
+days:  0
+DROPPED: duplicate timestamps
+
+data left
+times:  2404440 
+days:  231
+
+ duplicated local timestamps
+times:  0
+days:  0
+Max training length (s):
+ file_id
+0       3322
+1      14570
+2        913
+3      14527
+4      21641
+       ...  
+371     2727
+372     5143
+373     1865
+374     2873
+375     3620
+Length: 290, dtype: int64
+Number of trainings that last shorter than 10 min:  4
+Number of trainings that last shorter than 20 min:  16
+Negative distance diffs:  0
+GOOD: enhanced_altitude equals altitude
+GOOD: enhanced_speed equals speed
+
+------------------------------- Athlete  4
+/local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (16) have mixed types.Specify dtype option on import or set low_memory=False.
+  interactivity=interactivity, compiler=compiler, result=result)
+
+ duplicated local timestamps TrainingPeaks
+times:  10941
+days:  1
+
+ drop devices used simultaneously
+times:  1372500
+days:  137
+
+data left
+times:  700418 
+days:  70
+
+ duplicated local timestamps
+times:  0
+days:  0
+DROPPED: duplicate timestamps
+
+data left
+times:  700418 
+days:  70
+
+ duplicated local timestamps
+times:  0
+days:  0
+Max training length (s):
+ file_id
+14     10996
+32     22091
+33      3600
+35     18008
+36     16325
+       ...  
+221     4515
+223     3763
+224     3615
+225     1891
+227     3721
+Length: 87, dtype: int64
+Number of trainings that last shorter than 10 min:  3
+Number of trainings that last shorter than 20 min:  4
+Negative distance diffs:  0
+GOOD: enhanced_altitude equals altitude
+GOOD: enhanced_speed equals speed
+
+------------------------------- Athlete  5
+
+ duplicated local timestamps TrainingPeaks
+times:  0
+days:  0
+
+ drop devices used simultaneously
+times:  0
+days:  0
+
+data left
+times:  2415707 
+days:  212
+
+ duplicated local timestamps
+times:  0
+days:  0
+DROPPED: duplicate timestamps
+
+data left
+times:  2415707 
+days:  212
+
+ duplicated local timestamps
+times:  0
+days:  0
+Max training length (s):
+ file_id
+0        336
+1      15996
+2      17720
+3      10928
+4      10669
+       ...  
+220     2753
+221     4424
+222     3613
+223     3617
+224     5412
+Length: 223, dtype: int64
+Number of trainings that last shorter than 10 min:  4
+Number of trainings that last shorter than 20 min:  7
+Negative distance diffs:  0
+GOOD: enhanced_altitude equals altitude
+GOOD: enhanced_speed equals speed
+
+------------------------------- Athlete  6
+
+ duplicated local timestamps TrainingPeaks
+times:  4813
+days:  2
+
+ drop devices used simultaneously
+times:  0
+days:  0
+
+data left
+times:  2474211 
+days:  214
+
+ duplicated local timestamps
+times:  4813
+days:  2
+DROPPED: duplicate timestamps
+
+data left
+times:  2450770 
+days:  214
+
+ duplicated local timestamps
+times:  0
+days:  0
+Max training length (s):
+ file_id
+4      8131
+5      7380
+6      7224
+7      7357
+8      7755
+       ... 
+288    2385
+289     880
+290    2796
+291    4059
+294    3671
+Length: 274, dtype: int64
+Number of trainings that last shorter than 10 min:  6
+Number of trainings that last shorter than 20 min:  16
+Negative distance diffs:  0
+GOOD: enhanced_altitude equals altitude
+GOOD: enhanced_speed equals speed
+
+------------------------------- Athlete  7
+
+ duplicated local timestamps TrainingPeaks
+times:  0
+days:  0
+
+ drop devices used simultaneously
+times:  0
+days:  0
+
+data left
+times:  2245462 
+days:  198
+
+ duplicated local timestamps
+times:  0
+days:  0
+DROPPED: duplicate timestamps
+
+data left
+times:  2245462 
+days:  198
+
+ duplicated local timestamps
+times:  0
+days:  0
+Max training length (s):
+ file_id
+0       7165
+1       5873
+2      16721
+3      16491
+4       5354
+       ...  
+220     9036
+222     7706
+223     7573
+224     5985
+225     9801
+Length: 223, dtype: int64
+Number of trainings that last shorter than 10 min:  7
+Number of trainings that last shorter than 20 min:  10
+Negative distance diffs:  0
+GOOD: enhanced_altitude equals altitude
+GOOD: enhanced_speed equals speed
+
+------------------------------- Athlete  8
+
+ duplicated local timestamps TrainingPeaks
+times:  23616
+days:  14
+
+ drop devices used simultaneously
+times:  0
+days:  0
+
+data left
+times:  2535671 
+days:  245
+
+ duplicated local timestamps
+times:  23616
+days:  14
+DROPPED: duplicate timestamps
+
+data left
+times:  2419964 
+days:  240
+
+ duplicated local timestamps
+times:  0
+days:  0
+Max training length (s):
+ file_id
+0       5400
+1      10854
+2       7038
+3      17374
+4       9007
+       ...  
+281     5417
+282     7256
+284     3638
+285     7227
+286     5410
+Length: 259, dtype: int64
+Number of trainings that last shorter than 10 min:  1
+Number of trainings that last shorter than 20 min:  4
+Negative distance diffs:  0
+GOOD: enhanced_altitude equals altitude
+GOOD: enhanced_speed equals speed
+
+------------------------------- Athlete  9
+
+ duplicated local timestamps TrainingPeaks
+times:  0
+days:  0
+
+ drop devices used simultaneously
+times:  0
+days:  0
+
+data left
+times:  1716499 
+days:  176
+
+ duplicated local timestamps
+times:  0
+days:  0
+DROPPED: duplicate timestamps
+
+data left
+times:  1716499 
+days:  176
+
+ duplicated local timestamps
+times:  0
+days:  0
+Max training length (s):
+ file_id
+0      12003
+1      19213
+2      21789
+3      12666
+4       9020
+       ...  
+182     6616
+183     9054
+184     6489
+185    18951
+186     6869
+Length: 187, dtype: int64
+Number of trainings that last shorter than 10 min:  3
+Number of trainings that last shorter than 20 min:  4
+Negative distance diffs:  0
+GOOD: enhanced_altitude equals altitude
+GOOD: enhanced_speed equals speed
+
+------------------------------- Athlete  10
+
+ duplicated local timestamps TrainingPeaks
+times:  4405
+days:  2
+
+ drop devices used simultaneously
+times:  0
+days:  0
+
+data left
+times:  2994791 
+days:  282
+
+ duplicated local timestamps
+times:  4405
+days:  2
+DROPPED: duplicate timestamps
+
+data left
+times:  2982560 
+days:  281
+
+ duplicated local timestamps
+times:  0
+days:  0
+Max training length (s):
+ file_id
+0       9468
+1      10929
+2      16208
+4      23322
+5      10810
+       ...  
+342     6834
+343     6902
+344     6851
+345     5537
+349     3912
+Length: 339, dtype: int64
+Number of trainings that last shorter than 10 min:  7
+Number of trainings that last shorter than 20 min:  12
+Negative distance diffs:  2
+GOOD: enhanced_altitude equals altitude
+GOOD: enhanced_speed equals speed
+
+------------------------------- Athlete  11
+
+ duplicated local timestamps TrainingPeaks
+times:  246
+days:  1
+
+ drop devices used simultaneously
+times:  0
+days:  0
+
+data left
+times:  1753164 
+days:  192
+
+ duplicated local timestamps
+times:  246
+days:  1
+DROPPED: duplicate timestamps
+
+data left
+times:  1751240 
+days:  192
+
+ duplicated local timestamps
+times:  0
+days:  0
+Max training length (s):
+ file_id
+0       9043
+1       9971
+2       5512
+3       8731
+4      18175
+       ...  
+208     1758
+209     2799
+210     4386
+211     3884
+212     7294
+Length: 208, dtype: int64
+Number of trainings that last shorter than 10 min:  1
+Number of trainings that last shorter than 20 min:  1
+Negative distance diffs:  0
+GOOD: enhanced_altitude equals altitude
+GOOD: enhanced_speed equals speed
+
+------------------------------- Athlete  12
+/local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (16) have mixed types.Specify dtype option on import or set low_memory=False.
+  interactivity=interactivity, compiler=compiler, result=result)
+
+ duplicated local timestamps TrainingPeaks
+times:  720503
+days:  89
+
+ drop devices used simultaneously
+times:  1347889
+days:  99
+
+data left
+times:  3218840 
+days:  220
+
+ duplicated local timestamps
+times:  325067
+days:  40
+DROPPED: duplicate timestamps
+
+data left
+times:  2248772 
+days:  187
+
+ duplicated local timestamps
+times:  0
+days:  0
+Max training length (s):
+ file_id
+0       7165
+1       5873
+2      16721
+3      16491
+4       5354
+       ...  
+448    10808
+449     7216
+450    11814
+451    10891
+452     5970
+Length: 242, dtype: int64
+Number of trainings that last shorter than 10 min:  4
+Number of trainings that last shorter than 20 min:  10
+Negative distance diffs:  0
+GOOD: enhanced_altitude equals altitude
+GOOD: enhanced_speed equals speed
+
+------------------------------- Athlete  13
+
+ duplicated local timestamps TrainingPeaks
+times:  0
+days:  0
+
+ drop devices used simultaneously
+times:  1921
+days:  4
+
+data left
+times:  2472314 
+days:  227
+
+ duplicated local timestamps
+times:  0
+days:  0
+DROPPED: duplicate timestamps
+
+data left
+times:  2472314 
+days:  227
+
+ duplicated local timestamps
+times:  0
+days:  0
+Max training length (s):
+ file_id
+0       8996
+1       7125
+2      12998
+3       6056
+4      14278
+       ...  
+236    12987
+237    12860
+238     8633
+239    13453
+240     6792
+Length: 239, dtype: int64
+Number of trainings that last shorter than 10 min:  5
+Number of trainings that last shorter than 20 min:  5
+Negative distance diffs:  0
+GOOD: enhanced_altitude equals altitude
+GOOD: enhanced_speed equals speed
+
+------------------------------- Athlete  14
+/local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (10) have mixed types.Specify dtype option on import or set low_memory=False.
+  interactivity=interactivity, compiler=compiler, result=result)
+
+ duplicated local timestamps TrainingPeaks
+times:  0
+days:  0
+
+ drop devices used simultaneously
+times:  302226
+days:  29
+
+data left
+times:  2198268 
+days:  208
+
+ duplicated local timestamps
+times:  0
+days:  0
+DROPPED: duplicate timestamps
+
+data left
+times:  2198268 
+days:  208
+
+ duplicated local timestamps
+times:  0
+days:  0
+Max training length (s):
+ file_id
+0      14543
+1      11145
+2      11554
+3      18394
+4       1939
+       ...  
+237     6193
+238    19318
+239     3334
+240     1499
+241      356
+Length: 233, dtype: int64
+Number of trainings that last shorter than 10 min:  8
+Number of trainings that last shorter than 20 min:  10
+Negative distance diffs:  0
+GOOD: enhanced_altitude equals altitude
+GOOD: enhanced_speed equals speed
+
+------------------------------- Athlete  15
+
+ duplicated local timestamps TrainingPeaks
+times:  0
+days:  0
+
+ drop devices used simultaneously
+times:  0
+days:  0
+
+data left
+times:  1768303 
+days:  173
+
+ duplicated local timestamps
+times:  0
+days:  0
+DROPPED: duplicate timestamps
+
+data left
+times:  1768303 
+days:  173
+
+ duplicated local timestamps
+times:  0
+days:  0
+Max training length (s):
+ file_id
+0       9423
+1      12969
+2      18267
+3      22267
+4       4841
+       ...  
+180    18494
+181    11424
+182     3081
+183     6792
+184     7008
+Length: 183, dtype: int64
+Number of trainings that last shorter than 10 min:  2
+Number of trainings that last shorter than 20 min:  3
+Negative distance diffs:  0
+GOOD: enhanced_altitude equals altitude
+GOOD: enhanced_speed equals speed
