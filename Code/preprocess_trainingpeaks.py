@@ -211,6 +211,7 @@ for i in athletes:
 
 # include second stage, so we don't have to run the entire code again if sth goes wrong here
 for i in athletes:
+	print("\n------------------------------- Athlete ", i)
 	df = pd.read_csv(path+'combine/'+str(i)+'/'+str(i)+'_data.csv', index_col=0)
 	df_information = pd.read_csv(path+'clean/'+str(i)+'/'+str(i)+'_info.csv', header=[0,1], index_col=0)
 	fileid_filename = pd.read_csv(path+'clean/'+str(i)+'/'+str(i)+'_fileid_filename.csv', index_col=0)
@@ -244,6 +245,8 @@ for i in athletes:
 	df = pd.concat([df, pd.get_dummies(df['device_0'], prefix='device', dtype=bool)], axis=1)
 	df.rename(columns={'device_virtualtraining Rouvy':'device_Rouvy', 
 					   'device_wahoo_fitness ELEMNT BOLT':'device_ELEMNTBOLT',
+					   'device_wahoo_fitness ELEMNT':'device_ELEMNT',
+					   'device_wahoo_fitness ELEMNT ROAM':'device_ELEMNTROAM',
 					   'device_bkool BKOOL Website':'device_bkool'}, inplace=True)
 
 	# check if df['Zwift'] equals df['device_0'] == 'zwift'
@@ -322,14 +325,27 @@ for i in athletes:
 		print_times_dates(str(ser), df, dupl_timestamp_first & (df['device_0_serialnumber'] == ser), ts='local_timestamp')
 
 	# select devices to keep: ELEMNT BOLT and zwift
-	df['keep_devices'] = df['device_ELEMNTBOLT'] | df['device_zwift']
+	keep_devices = ['device_ELEMNTBOLT', 'device_ELEMNTROAM', 'device_zwift']
+	df['keep_devices'] = False
+	drop_devices = []
+	for k in keep_devices:
+		try:
+			df['keep_devices'] |= df[k]
+		except KeyError:
+			drop_devices.append(k)
+			continue
+	keep_devices = list(set(keep_devices) - set(drop_devices))
+	
 	print("Fraction of data dropped with device selection: ", 
 		(~df['keep_devices']).sum()/df.shape[0])
-	print("Are there glucose values in the data that will be dropped with the device selection? ",
-		not df[~df['keep_devices']].glucose.dropna().empty)
-	
+	try:
+		print("Are there glucose values in the data that will be dropped with the device selection? ",
+			not df[~df['keep_devices']]['glucose'].dropna().empty)
+	except KeyError:
+		pass
+
 	print("Duplicate timestamps after dropping devices: ")
-	for dev in ['device_ELEMNTBOLT', 'device_zwift']:
+	for dev in keep_devices:
 		print_times_dates(dev, df, dupl_timestamp_first & df[dev] & df['keep_devices'], ts='local_timestamp')
 		#print(df[dupl_timestamp_first & df[dev]].file_id.unique())
 
