@@ -34,10 +34,10 @@ if not os.path.exists(merge_path):
 	os.mkdir(merge_path)
 if not os.path.exists(merge_path+'raw/'):
 	os.mkdir(merge_path+'raw/')
-if not os.path.exists(merge_path+'raw_resampled/'):
-	os.mkdir(merge_path+'raw_resampled/')
-if not os.path.exists(merge_path+'clean/'):
-	os.mkdir(merge_path+'clean/')
+if not os.path.exists(merge_path+'1sec/'):
+	os.mkdir(merge_path+'1sec/')
+if not os.path.exists(merge_path+'1min/'):
+	os.mkdir(merge_path+'1min/')
 
 def print_times_dates(text, df, df_mask, ts='timestamp'):
 	print("\n", text)
@@ -50,6 +50,7 @@ def print_times_dates(text, df, df_mask, ts='timestamp'):
 
 lv_athletes = sorted([int(i.rstrip('.csv')) for i in os.listdir(lv_path) if i.endswith('.csv')])
 
+# Merge
 for i in lv_athletes:
 	print("\n------------------------------- Athlete ", i)
 	# -------------------- Libreview
@@ -83,9 +84,18 @@ for i in lv_athletes:
 	df.set_index('local_timestamp', drop=True, inplace=True)
 	df.drop('Device Timestamp', axis=1, inplace=True)
 
-	df.to_csv(merge_path+'raw/'+str(i)+'.csv')
+	if not df.empty:
+		df.to_csv(merge_path+'raw/'+str(i)+'.csv')
 
+athletes = sorted([int(i.rstrip('.csv')) for i in os.listdir(merge_path+'raw/') if i.endswith('.csv')])
+
+# Clean
+for i in athletes:
 	# -------------------- Clean LibreView (glucose)
+	df = pd.read_csv(merge_path+'raw/'+str(i)+'.csv', index_col=0)
+
+	# convert index to datetime
+	df.index = pd.to_datetime(df.index)
 
 	# Fill 15 min before Historic Glucose with same glucose value
 	# create list with values that we want to fill df with
@@ -95,133 +105,140 @@ for i in lv_athletes:
 	glucose_hist_range = glucose_hist_range[~glucose_hist_range.index.duplicated()]
 
 	df = pd.merge(df, glucose_hist_range, how='left', left_index=True, right_index=True, validate='one_to_one')
+	del glucose_hist_range ; gc.collect()
 
-
-	# -------------------- Clean TrainingPeaks (training data)
+	# -------------------- Zeros
 
 	# TODO: clean data first for weird zeros at places
 	# possibly make extra features without zeros
 
-	# TODO: apply some smoothing to temperature? (because of binned values)
-	# smooth temperature (with centering implemented manually)
+	# -------------------- Time training
+	# check where time training > 1 and there is no change in file_id
+
+	# TODO: find out what happened when there are large gaps in the data
+
+
+	# -------------------- Temperature
+	# smooth temperature (because of binned values) (with centering implemented manually)
+	# rolling mean of {temp_window} seconds, centered
 	temp_window = 200 #in seconds
 	df_temperature_smooth = df['temperature']\
 		.rolling('%ss'%temp_window, min_periods=1).mean()\
 		.shift(-temp_window/2, freq='s').rename('temperature_smooth')
-	df = pd.merge(df, df_temperature_smooth, on='timestamp', how='left')
+	df = pd.merge(df, df_temperature_smooth, on='local_timestamp', how='left')
 	del df_temperature_smooth ; gc.collect()
 
 	print("Fraction of rows for which difference between original temperature and smoothed temperature is larger than 0.5: ",
 		((df['temperature_smooth'] - df['temperature']).abs() > .5).sum() / df.shape[0])
 
-	pfirst = 5#len(df.index_training.unique())#200
-	cmap = matplotlib.cm.get_cmap('viridis', len(df.index_training.unique()[:pfirst]))
+	pfirst = 5#len(df.file_id.unique())#200
+	cmap = matplotlib.cm.get_cmap('viridis', len(df.file_id.unique()[:pfirst]))
 	ax = plt.subplot()
-	for c, idx in enumerate(df.index_training.unique()[:pfirst]): #for date in df.date.unique():
-		df[df.index_training == idx].plot(ax=ax, x='time_training', y='temperature_smooth',
+	for c, idx in enumerate(df.file_id.unique()[:pfirst]): #for date in df.date.unique():
+		df[df.file_id == idx].plot(ax=ax, x='time_training', y='temperature_smooth',
 			color=cmap(c), legend=False)
-		df[df.index_training == idx].plot(ax=ax, x='time_training', y='temperature',
+		df[df.file_id == idx].plot(ax=ax, x='time_training', y='temperature',
 			color=cmap(c), legend=False, alpha=.5, linewidth=2)
 	plt.ylabel('temperature')
-	plt.show()
+	#plt.show()
 	plt.close()
 
+	# -------------------- Battery level
 	# find out if/when battery level is not monotonically decreasing
 	# TODO: why does this happen?
 	battery_monotonic = pd.Series()
-	for idx in df.index_training.unique():
-		battery_monotonic.loc[idx] = (df.loc[df.index_training == idx, 'battery_soc'].dropna().diff().fillna(0) <= 0).all()
+	for idx in df.file_id.unique():
+		battery_monotonic.loc[idx] = (df.loc[df.file_id == idx, 'battery_soc'].dropna().diff().fillna(0) <= 0).all()
 
-	print("Number of trainings for which battery level is not monotonically decreasing: ",
-		(~battery_monotonic).sum())
-	battery_notmonotonic_index = df.index_training.unique()[~battery_monotonic]
+	if (~battery_monotonic).sum() > 0:
+		print("WARNINGNumber of trainings for which battery level is not monotonically decreasing: ",
+			(~battery_monotonic).sum())
+		battery_notmonotonic_index = df.file_id.unique()[~battery_monotonic]
 	
-	# plot battery levels
-	cmap = matplotlib.cm.get_cmap('viridis', len(battery_notmonotonic_index))
-	ax = plt.subplot()
-	for c, idx in enumerate(battery_notmonotonic_index): #for date in df.date.unique():
-		df[df.index_training == idx].plot(ax=ax, x='time_training', y='battery_soc_ilin',
-			color=cmap(c), legend=False, alpha=.5)
-		df[df.index_training == idx].plot(ax=ax, x='time_training', y='battery_soc',
-			color=cmap(c), legend=False, alpha=.5, kind='scatter', s=10.)
-	plt.ylabel('battery_soc')
-	plt.show()
-	plt.close()
+		# plot battery levels
+		cmap = matplotlib.cm.get_cmap('viridis', len(battery_notmonotonic_index))
+		ax = plt.subplot()
+		for c, idx in enumerate(battery_notmonotonic_index): #for date in df.date.unique():
+			df[df.file_id == idx].plot(ax=ax, x='time_training', y='battery_soc',
+				color=cmap(c), legend=False, alpha=.5, kind='scatter', s=10.)
+		plt.ylabel('battery_soc')
+		#plt.show()
+		plt.close()
 
-	# linearly interpolate battery level
-	for idx in df.index_training.unique():
-		df.loc[df.index_training == idx, 'battery_soc_ilin'] = \
-		df.loc[df.index_training == idx, 'battery_soc']\
+	# linearly interpolate battery level (with only backwards direction)
+	for idx in df.file_id.unique():
+		df.loc[df.file_id == idx, 'battery_soc_ilin'] = \
+		df.loc[df.file_id == idx, 'battery_soc']\
 		.interpolate(method='time', limit_direction='forward')
 
-	pfirst = 5#len(df.index_training.unique())#200
-	cmap = matplotlib.cm.get_cmap('viridis', len(df.index_training.unique()[:pfirst]))
+	pfirst = 5#len(df.file_id.unique())#200
+	cmap = matplotlib.cm.get_cmap('viridis', len(df.file_id.unique()[:pfirst]))
 	ax = plt.subplot()
-	for c, idx in enumerate(df.index_training.unique()[:pfirst]): #for date in df.date.unique():
-		df[df.index_training == idx].plot(ax=ax, x='time_training', y='battery_soc_ilin',
+	for c, idx in enumerate(df.file_id.unique()[:pfirst]): #for date in df.date.unique():
+		df[df.file_id == idx].plot(ax=ax, x='time_training', y='battery_soc_ilin',
 			color=cmap(c), legend=False, alpha=.5)
-		df[df.index_training == idx].plot(ax=ax, x='time_training', y='battery_soc',
+		df[df.file_id == idx].plot(ax=ax, x='time_training', y='battery_soc',
 			color=cmap(c), legend=False, alpha=.5, kind='scatter', s=10.)
 	plt.ylabel('battery_soc')
-	plt.show()
+	#plt.show()
 	plt.close()
 
-	# TODO: clean GPS
-	# only for athlete 10 two negative distance diffs
-
-	# TODO: distance is negative 235 times even though timediff is only 1 min, why??
+	# -------------------- Distance
+	# negative distance diffs (meaning that the athletes is moving backwards)
 	print("Negative distance diffs: ", 
 		((df.time_training.diff() == 1) & (df['distance'].diff() < 0)).sum())
-	# could it be that I make a mistake in identifying new trainings?
-	# why is time training so often < 1 and also why is it larger than 1
+	# only for athlete 10 there are two negative distance diffs
 
-	# TODO: check if there are timestamps for which there is 0 difference
+	df['distance_diff'] = np.nan
+	for f in df.file_id.unique():
+		df.loc[df.file_id == f, 'distance_diff'] = df.loc[df.file_id == f, 'distance'].diff()
+	df.rename(columns={'distance':'distance_cum', 'distance_diff':'distance'}, inplace=True)
 
-	# TODO: find out what happened when there are large gaps in the data
-	# i.e. is the battery level low? 
-	# is the GPS accuracy low?
-
+	# -------------------- Position
 	# check if position long and lat are missing at the same time or not 
 	print("Number of missing values position_lat: ", df['position_lat'].isna().sum())
 	print("Number of missing values position_long: ", df['position_long'].isna().sum())
 	print("Number of times both position_lat and position_long missing: ", 
-		((df['position_lat'].isna()) & (df['position_long'].isna())).sum())
+		(df['position_lat'].isna() & df['position_long'].isna()).sum())
+	# not really relevant because we're not going to do anything with it anymore
+
+	# check if associated with zwift
+
+	# -------------------- Speed
+	"""
+	def correlation_variables(df_mask1, text1, df_mask2, text2):
+		print("Number of ", text1, ": ", df_mask1.sum())
+		print("Number of ", text2, ": ", df_mask2.sum())
+		print("Number of ", text1, " and ", text2, ": ", (df_mask1 & df_mask2).sum())
+		if df_mask1.sum() == df_mask2.sum() and df_mask1.sum() == (df_mask1 & df_mask2).sum():
+			print(text1, " happens when ", text2, " and vice versa.")
+		if 
+			# df_mask2.sum() is not restrictive
+		if 
 
 	# speed missing and position missing
 	print("Number of missing values speed: ", df['speed'].isna().sum())
 	print("Number of missing values speed and position_lat: ",
-		(((df['speed'].isna()) & df['position_lat'].isna())).sum())
+		(df['speed'].isna() & df['position_lat'].isna()).sum())
+	print("Number of missing values speed and missing GPS accuracy: ",
+		(df['speed'].isna() & df['gps_accuracy'].isna()).sum())
+	print("Number of missing values speed and GPS accuracy one: ",
+		(df['speed'].isna() & (df['gps_accuracy'] == 1)).sum())
 	# conclusion: if both are equal then when speed is missing, position_lat is missing as well
 	
-	# gps_accuracy missing and ( position missing or speed missing or speed zero or distance decreasing)
-	print("Number of missing values gps_accuracy: ", df['gps_accuracy'].isna().sum())
-	print("Number of missing values gps_accuracy and position_lat: ",
-		((df['gps_accuracy'].isna()) & (df['position_lat'].isna())).sum())
-	print("Number of missing values gps_accuracy and speed: ",
-		((df['gps_accuracy'].isna()) & (df['speed'].isna())).sum())
-	print("Number of missing values gps_accuracy and speed zero: ",
-		((df['gps_accuracy'].isna()) & (df['speed'] == 0)).sum())
-	print("Number of missing values gps_accuracy and decreasing distance: ",
-		((df['gps_accuracy'].isna()) & (df['distance'].diff() < 0)).sum())
-
-
-	# conclusion: all moments when position
-	# cannot plot difference in GPS levels because gps accuracy is also nan when the rest is nan
-
-	# plot difference in GPS levels when position is missing
-
-
-	# plot difference in GPS levels when speed is missing
-
-
-
 	# speed zero
+	print("Number of zero speed: ", (df['speed'] == 0).sum())
+	print("Number of zero speed and position_lat: ",
+		((df['speed'] == 0) & df['position_lat'].isna()).sum())
+	print("Number of zero speed and missing GPS accuracy: ",
+		((df['speed'] == 0) & df['gps_accuracy'].isna()).sum())
+	print("Number of zero speed and GPS accuracy one: ",
+		((df['speed'] == 0) & (df['gps_accuracy'] == 1)).sum())
+
 	print("Is zero speed associated with missing values position?")
 	print("Number of zero speed and missing values position_lat: ", 
 		((df['position_lat'].isna()) & (df['speed'] == 0)).sum())
 	# position missing and speed zero
-
-
 
 	# TODO check where speed was zero (remove from file?), remove first entries before having measurements
 	# check where speed is zero
@@ -235,85 +252,102 @@ for i in lv_athletes:
 
 	# check if speed is zero and position missing
 
+	# -------------------- GPS accuracy
+	# gps_accuracy missing and ( position missing or speed missing or speed zero or distance decreasing)
+	print("Number of missing values gps_accuracy: ", df['gps_accuracy'].isna().sum())
+	print("Number of missing values gps_accuracy and position_lat: ",
+		((df['gps_accuracy'].isna()) & (df['position_lat'].isna())).sum())
+	print("Number of missing values gps_accuracy and speed: ",
+		((df['gps_accuracy'].isna()) & (df['speed'].isna()) & (df.time_training.diff() == 1)).sum())
+	print("Number of missing values gps_accuracy and speed zero: ",
+		((df['gps_accuracy'].isna()) & (df['speed'] == 0)).sum() & (df.time_training.diff() == 1))
+	print("Number of missing values gps_accuracy and decreasing distance: ",
+		((df['gps_accuracy'].isna()) & (df['distance'].diff() < 0) & (df.time_training.diff() == 1)).sum())
 
-	# TODO: distance is negative 235 times even though timediff is only 1 min, why??
-	print("Negative distance diffs: ", 
-		((df['diff_timestamp (min)'] <= 1) & (df['distance'].diff() < 0)).sum())
-	# could it be that I make a mistake in identifying new trainings?
 
+	# conclusion: all moments when position
+	# cannot plot difference in GPS levels because gps accuracy is also nan when the rest is nan
+
+	# plot difference in GPS levels when position is missing
+
+	# plot difference in GPS levels when speed is missing
 
 	print("First entries of file: speed zero and (not) start_timestamps")
 	# TODO: check where battery level was 0 or gps accuracy was 0
 
 	# TODO: filter out other devices
 
-
 	# TODO: move
 	# gaps in timestamps in one training (incl. first training)
 	print("Number of gaps in timestamps in one training: ", 
 	((df.index.to_series().diff().astype('timedelta64[s]').shift(-1) != 1) & ~df.file_id.duplicated()).sum() - 1)
+	"""
 
+	# -------------------- Save
+	df.to_csv(merge_path+'1sec/'+str(i)+'.csv')
 
+# Resampling
+for i in athletes:
+	df = pd.read_csv(merge_path+'1sec/'+str(i)+'.csv', index_col=0)
+	df.index = pd.to_datetime(df.index)
 
-	# -------------------- Resample
-	# already get nancols before resampling
-	cols_nan = list(set(df.columns) - set(df.dropna(axis=1, how='all').columns))	
+	# get nancols before resampling
+	cols_nan = list(set(df.columns) - set(df.dropna(axis=1, how='all').columns))
 
 	# TODO: check if there are more measurements from libreview in one minute. 
 	# in that case it's best not to take the mean twice, but mean over all types of measurements
 
+	# -------------------- Resampling
+	# feature engineering for selected columns
+	cols_feature_eng = ['distance', 'heart_rate', 'cadence', 'speed', 'power', 'ascent',
+						'altitude', 'grade', 'temperature', 'temperature_smooth',
+						'left_right_balance', 'left_pedal_smoothness', 'right_pedal_smoothness', 
+						'left_torque_effectiveness', 'right_torque_effectiveness']
 	def minmax(x):
 		return np.max(x) - np.min(x)
 
-	feature_stats = {'mean'		: 'mean',
-					 'median'	: np.median,
-					 'std'		: 'std',
-					 'range'	: minmax,
-					 'iqr'		: sp.stats.iqr,
-					 'entropy'	: sp.stats.entropy}
-
-	feature_eng_cols = ['distance', 'heart_rate', 'cadence', 'speed', 'power', 
-						'altitude', 'grade', 'temperature', 'left_right_balance',
-						'left_pedal_smoothness', 'right_pedal_smoothness', 
-						'left_torque_effectiveness', 'right_torque_effectiveness']
-
 	agg_dict = {}
-	for col in feature_eng_cols:
-		agg_dict.update({col+'_'+name : (col, func) for name, func in feature_stats.items()})
+	for col in cols_feature_eng:
+		agg_dict.update({col: [np.sum, np.mean, np.median, np.std, minmax, sp.stats.iqr, sp.stats.entropy]})
 
-	# resample to 1 min
-	agg_dict = agg_dict.update({'position_lat'						: 'first', 
-								'position_long'						: 'first',
-								'gps_accuracy'						: 'mean',
-								'battery_soc'						: 'mean',
-								'glucose_BUBBLE'						: 'mean',
-								'time_from_course'					: 'mean', #??? first?
-								'compressed_speed_distance'			: 'mean',
-								'cycle_length'						: 'mean',
-								'resistance'						: 'mean',
-								'calories'							: 'mean', # sum?? TODO: feature eng?
-								'ascent'							: 'mean', # sum?? TODO: feature eng?
-								'zwift'								: 'first', # check
-								'device_glucose'					: 'first',
-								'device_glucose_serial_number'		: 'first',
-								'Historic Glucose mg/dL'			: 'mean',
-								'Scan Glucose mg/dL'				: 'mean',
-								'Non-numeric Rapid-Acting Insulin'	: 'sum',
-								'Rapid-Acting Insulin (units)'		: 'sum',
-								'Non-numeric Food'					: 'sum',
-								'Carbohydrates (grams)'				: 'sum',
-								'Carbohydrates (servings)'			: 'sum',
-								'Non-numeric Long-Acting Insulin'	: 'sum',
-								'Long-Acting Insulin Value (units)'	: 'sum',
-								'Notes'								: 'first',
-								'Strip Glucose mg/dL'				: 'mean',
-								'Ketone mmol/L'						: 'sum',
-								'Meal Insulin (units)'				: 'sum',
-								'Correction Insulin (units)'		: 'sum',
-								'User Change Insulin (units)'		: 'sum'})
+	# no feature engineering for remaining columns
+	agg_dict.update({'file_id'							: 'first',
+					'time_training'						: 'first', # check
+					'position_lat'						: 'first', 
+					'position_long'						: 'first',
+					'gps_accuracy'						: 'mean',
+					'battery_soc'						: 'mean',
+					'battery_soc_ilin'					: 'mean',
+					'glucose_BUBBLE'					: 'mean',
+					'time_from_course'					: 'mean', #??? first?
+					'compressed_speed_distance'			: 'mean',
+					'cycle_length'						: 'mean',
+					'resistance'						: 'mean',
+					'calories'							: 'mean', # sum?? TODO: feature eng?
+					'zwift'								: 'first',
+					'device_ELEMNTBOLT'					: 'first',
+					'device_zwift'						: 'first',
+					'device_glucose'					: 'first',
+					'device_glucose_serial_number'		: 'first',
+					'Historic Glucose mg/dL'			: 'mean',
+					'Historic Glucose mg/dL (filled)'	: 'mean',
+					'Scan Glucose mg/dL'				: 'mean',
+					'Non-numeric Rapid-Acting Insulin'	: 'sum',
+					'Rapid-Acting Insulin (units)'		: 'sum',
+					'Non-numeric Food'					: 'sum',
+					'Carbohydrates (grams)'				: 'sum',
+					'Carbohydrates (servings)'			: 'sum',
+					'Non-numeric Long-Acting Insulin'	: 'sum',
+					'Long-Acting Insulin Value (units)'	: 'sum',
+					'Notes'								: 'first',
+					'Strip Glucose mg/dL'				: 'mean',
+					'Ketone mmol/L'						: 'sum',
+					'Meal Insulin (units)'				: 'sum',
+					'Correction Insulin (units)'		: 'sum',
+					'User Change Insulin (units)'		: 'sum'})
 	
 	print("Columns that are not included in the aggregation (and that are thus dropped): ",
-		*tuple(set(df.columns) - set(agg_dict.keys())))
+		*tuple(set(df.columns) - set(agg_dict.keys()) - set(cols_feature_eng)))
 
 	# timestamps that should be in df after resampling to minute
 	df_ts = df.index.floor('min').unique()
@@ -328,72 +362,22 @@ for i in lv_athletes:
 	# drop columns that are nan
 	print("Columns that are nan and will be dropped: ", cols_nan)
 	df.drop(cols_nan, axis=1, inplace=True)
+	# TODO: check if they are actually dropped (because after resampling columns are multiindex)
 
-	df.to_csv(merge_path+'raw_resampled/'+str(i)+'.csv')
+	df.to_csv(merge_path+'1min/'+str(i)+'.csv')
+
+# Cleaning after resampling
+for i in athletes:
+	df = pd.read_csv(merge_path+'1min/'+str(i)+'.csv', index_col=0)
+	df.index = pd.to_datetime(df.index)
+
 
 	# -------------------- Clean
-	# print duplicate columns
-	print("List of duplicated columns: ",
-		df.T.duplicated(keep=False))
-
-	"""
-	# UPDATE: they're not the same measurements, so don't combine them in this way
-	# merge scan glucose and historic glucose
-	try:
-		df['glucose (mg/dL)'] = df[['Scan Glucose mg/dL', 'Historic Glucose mg/dL', 'Strip Glucose mg/dL']].mean(axis=1)
-		df.drop(['Scan Glucose mg/dL', 'Historic Glucose mg/dL', 'Strip Glucose mg/dL'], axis=1, inplace=True)
-	except KeyError:
-		df['glucose (mg/dL)'] = df[['Scan Glucose mg/dL', 'Historic Glucose mg/dL']].mean(axis=1)
-		df.drop(['Scan Glucose mg/dL', 'Historic Glucose mg/dL'], axis=1, inplace=True)
-	"""
-	df['glucose (mg/dL)'] = df[['Historic Glucose mg/dL']]
-	#df.drop(['Scan Glucose mg/dL', 'Historic Glucose mg/dL', 'Strip Glucose mg/dL'], axis=1, inplace=True)
-
-	# compare glucose TP (BUBBLE) and glucose LV
-	print("Number of timestamps for which there is glucose data in TP and in LV: ",
-		((df['glucose (mg/dL)'].notna()) & (df['glucose_BUBBLE'].notna())).sum())
-	print("Overlap TP and LV:\n",
-		df[(df['glucose (mg/dL)'].notna()) & (df['glucose_BUBBLE'].notna())][['glucose (mg/dL)', 'glucose_BUBBLE']])
-	# TODO: does BUBBLE include a 15 min lag from blood glucose to interstitial glucose
-	# for now just take the mean
-	# TODO: Figure out what the difference is between LibreView glucose and glucose from BUBBLE
-
-	"""	
-	# UPDATE: they're not the same measurements, so don't combine them in this way
-	# merge LV glucose and TP glucose (BUBBLE)
-	df['glucose (mg/dL)'] = df[['glucose (mg/dL)', 'glucose_BUBBLE']].mean(axis=1)
-	df.drop('glucose_BUBBLE', axis=1, inplace=True)
-	"""
-
-	"""
-	UPDATE: moved upwards
-	# create column with training number
-	# identify different trainings based on 
-	# - difference between timestamps (larger than 1 minute (=timediff)), and
-	# - negative distances
-	timediff = 1 # TODO: check if the timediff should be longer
-	df['diff_timestamp (min)'] = pd.Series(df.index, index=df.index).diff().astype('timedelta64[m]')
-	df['index_training'] = np.nan
-	index_training_bool = (df['diff_timestamp (min)'] > timediff) & (df['distance'].diff() < 0)
-	df.loc[index_training_bool, 'index_training'] = np.arange(index_training_bool.sum())+1
-	df.loc[df.index.min(), 'index_training'] = 0
-	df.index_training.ffill(inplace=True)
-	df.drop('diff_timestamp (min)', axis=1, inplace=True)
-
-	# create column date and time in training
-	df['date'] = df.index.date
-	start_timestamps = df[~df.index_training.duplicated()]['index_training']
-	df['time_training (min)'] = np.nan
-	for ts, idx in start_timestamps.iteritems():
-		ts_mask = df.index_training == idx
-		df.loc[ts_mask, 'time_training (min)'] = (df.index - ts)[ts_mask]
-	df['time_training (min)'] = df['time_training (min)'].astype('timedelta64[s]').astype('timedelta64[m]')
-	"""
 
 	# find out where missing data is located: per training
 	print("Data per training:\n",
-		df.groupby('index_training').count())
-	data_completion = df.groupby('index_training').count().div(df.groupby('index_training').count().max(axis=1), axis=0)
+		df.groupby('file_id').count())
+	data_completion = df.groupby('file_id').count().div(df.groupby('file_id').count().max(axis=1), axis=0)
 	print("Data per training as a fraction of training length:\n",
 		data_completion)
 	ax = sns.heatmap(data_completion, cmap="YlGnBu_r", cbar_kws={'label': 'Fraction complete'})
@@ -427,16 +411,16 @@ for i in lv_athletes:
 	print("Data completion in the first minutes,")
 	first_x = 5
 	start_timestamps_first = np.array([df.index[df.index.get_loc(ts):df.index.get_loc(ts)+first_x].values for ts in start_timestamps.index]).flatten()
-	data_completion_first = df.loc[start_timestamps_first].groupby('index_training').count()\
-		.div(df.loc[start_timestamps_first].groupby('index_training').count().max(axis=1), axis=0)
+	data_completion_first = df.loc[start_timestamps_first].groupby('file_id').count()\
+		.div(df.loc[start_timestamps_first].groupby('file_id').count().max(axis=1), axis=0)
 	ax = sns.heatmap(data_completion_first, cmap="YlGnBu_r", cbar_kws={'label': 'Fraction complete'})
 	ax.set_xticks(np.arange(df.shape[1]))
 	ax.set_xticklabels(df.columns, rotation='vertical')
 	ax.xaxis.set_ticks_position('top')
 	plt.title('Data completion in first %s timestamps of each training'%first_x)
 	plt.show()
-	data_completion_nfirst = df.loc[~df.index.isin(start_timestamps_first)].groupby('index_training').count()\
-		.div(df.loc[~df.index.isin(start_timestamps_first)].groupby('index_training').count().max(axis=1), axis=0)
+	data_completion_nfirst = df.loc[~df.index.isin(start_timestamps_first)].groupby('file_id').count()\
+		.div(df.loc[~df.index.isin(start_timestamps_first)].groupby('file_id').count().max(axis=1), axis=0)
 	ax = sns.heatmap(data_completion_nfirst, cmap="YlGnBu_r", cbar_kws={'label': 'Fraction complete'})
 	ax.set_xticks(np.arange(df.shape[1]))
 	ax.set_xticklabels(df.columns, rotation='vertical')
@@ -449,81 +433,6 @@ for i in lv_athletes:
 	# i.e. is the battery level low? 
 	# is the GPS accuracy low?
 
-
-	# check if position long and lat are missing at the same time or not 
-	print("Number of missing values position_lat: ", df['position_lat'].isna().sum())
-	print("Number of missing values position_long: ", df['position_long'].isna().sum())
-	print("Number of times both position_lat and position_long missing: ", 
-		((df['position_lat'].isna()) & (df['position_long'].isna())).sum())
-
-	# speed missing and position missing
-	print("Number of missing values speed: ", df['speed'].isna().sum())
-	print("Number of missing values speed and position_lat: ",
-		(((df['speed'].isna()) & df['position_lat'].isna())).sum())
-	# conclusion: if both are equal then when speed is missing, position_lat is missing as well
-	
-	# gps_accuracy missing and ( position missing or speed missing or speed zero or distance decreasing)
-	print("Number of missing values gps_accuracy: ", df['gps_accuracy'].isna().sum())
-	print("Number of missing values gps_accuracy and position_lat: ",
-		((df['gps_accuracy'].isna()) & (df['position_lat'].isna())).sum())
-	print("Number of missing values gps_accuracy and speed: ",
-		((df['gps_accuracy'].isna()) & (df['speed'].isna())).sum())
-	print("Number of missing values gps_accuracy and speed zero: ",
-		((df['gps_accuracy'].isna()) & (df['speed'] == 0)).sum())
-	print("Number of missing values gps_accuracy and decreasing distance: ",
-		((df['gps_accuracy'].isna()) & (df['distance'].diff() < 0)).sum())
-
-
-	# conclusion: all moments when position
-	# cannot plot difference in GPS levels because gps accuracy is also nan when the rest is nan
-
-	# plot difference in GPS levels when position is missing
-
-
-	# plot difference in GPS levels when speed is missing
-
-
-
-	# speed zero
-	print("Is zero speed associated with missing values position?")
-	print("Number of zero speed and missing values position_lat: ", 
-		((df['position_lat'].isna()) & (df['speed'] == 0)).sum())
-	# position missing and speed zero
-
-
-
-	# TODO check where speed was zero (remove from file?), remove first entries before having measurements
-	# check where speed is zero
-	print("Speed zero at %s timestamps"%(df['speed'] == 0).sum())
-	print("Speed zero and first timestamp of training: ",
-		((df.index.isin(start_timestamps.index)) & (df['speed'] == 0)).sum())
-	print("Speed zero and second timestamp of training: ",
-		((np.concatenate(([False], df.index.isin(start_timestamps.index)[:-1]))) & (df['speed'] == 0)).sum())
-	
-	# plot difference in GPS levels when speed is zero, and when 
-
-	# check if speed is zero and position missing
-
-
-	# TODO: distance is negative 235 times even though timediff is only 1 min, why??
-	print("Negative distance diffs: ", 
-		((df['diff_timestamp (min)'] <= 1) & (df['distance'].diff() < 0)).sum())
-	# could it be that I make a mistake in identifying new trainings?
-
-
-	print("First entries of file: speed zero and (not) start_timestamps")
-	# TODO: check where battery level was 0 or gps accuracy was 0
-
-	# TODO: filter out other devices
-
-
-	df.to_csv(merge_path+'clean/'+str(i)+'.csv')
-	#df = pd.read_csv(merge_path+'clean/'+str(i)+'.csv')
-	#df['timestamp'] = pd.to_datetime(df['timestamp'])
-	#df.set_index('timestamp', drop=True, inplace=True)
-
-	# -------------------- Feature engineering
-
 	# -------------------- Impute
 	# TODO: different type of interpolation?
 	# IDEA: don't use interpolation but GP/HMM to find true value of data
@@ -535,7 +444,7 @@ for i in lv_athletes:
 	# features that we should not interpolate
 	# because they contain info about when there was missing data,
 	# or because they are too sparse (contain too many missing values)
-	cols_noimpute = set(['date', 'index_training', 'time_training (min)', 
+	cols_noimpute = set(['date', 'file_id', 'time_training (min)', 
 		'device_glucose', 'device_glucose_serial_number', 
 		'time_from_course', 'zwift', 'calories', 'ascent'])
 
@@ -566,36 +475,36 @@ for i in lv_athletes:
 	for col in set(df.columns) - cols_noimpute:
 		print(col)
 		df[col+'_interp'] = np.nan
-		for idx in df.index_training.unique():
+		for idx in df.file_id.unique():
 			try:
-				df.loc[df.index_training == idx, col+'_interp'] = \
-				df.loc[df.index_training == idx, col]\
+				df.loc[df.file_id == idx, col+'_interp'] = \
+				df.loc[df.file_id == idx, col]\
 				.interpolate(method=interp_dict[col], limit_direction='forward')
 			except ValueError as e:
 				if str(e) == "The number of derivatives at boundaries does not match: expected 1, got 0+0"\
 					or str(e) == "The number of derivatives at boundaries does not match: expected 2, got 0+0":
 					print("Removing %s rows on %s due to too few %s values"\
-						%((df.index_training == idx).sum(), 
-							np.unique(df[df.index_training == idx].date)[0].strftime("%d-%m-%Y"),col))
+						%((df.file_id == idx).sum(), 
+							np.unique(df[df.file_id == idx].date)[0].strftime("%d-%m-%Y"),col))
 					#df = df[df.date != date] # remove all data from this date
 					# TODO: fix, do we even want to remove this?? 
-					#df = df[df.index_training != idx] # remove all data from this date
-					df.loc[df.index_training == idx, col+'_interp'] = \
-					df.loc[df.index_training == idx, col]
+					#df = df[df.file_id != idx] # remove all data from this date
+					df.loc[df.file_id == idx, col+'_interp'] = \
+					df.loc[df.file_id == idx, col]
 				else:
-					print("Error not caught for %s"%np.unique(df[df.index_training == idx].date)[0].strftime("%d-%m-%Y"))
+					print("Error not caught for %s"%np.unique(df[df.file_id == idx].date)[0].strftime("%d-%m-%Y"))
 					break
 
 		# plot features for each training session
-		pfirst = 10#len(df.index_training.unique())#200
-		cmap = matplotlib.cm.get_cmap('viridis', len(df.index_training.unique()[:pfirst]))
+		pfirst = 10#len(df.file_id.unique())#200
+		cmap = matplotlib.cm.get_cmap('viridis', len(df.file_id.unique()[:pfirst]))
 		ax = plt.subplot()
-		for c, idx in enumerate(df.index_training.unique()[:pfirst]): #for date in df.date.unique():
+		for c, idx in enumerate(df.file_id.unique()[:pfirst]): #for date in df.date.unique():
 			#df[df.date == date].plot(ax=ax, x='time_training (min)', y=col+'_interp_ONLY',
-			df[df.index_training == idx].plot(ax=ax, x='time_training (min)', y=col+'_interp',
+			df[df.file_id == idx].plot(ax=ax, x='time_training (min)', y=col+'_interp',
 				color=cmap(c), legend=False, alpha=.5)
 			#df[df.date == date].plot(ax=ax, x='time_training (min)', y=col,
-			df[df.index_training == idx].plot(ax=ax, x='time_training (min)', y=col,
+			df[df.file_id == idx].plot(ax=ax, x='time_training (min)', y=col,
 				color=cmap(c), legend=False, alpha=.5, kind='scatter', s=10.)
 		plt.ylabel(col)
 		plt.show()
@@ -603,12 +512,12 @@ for i in lv_athletes:
 		
 		df[col+'_interp_ONLY'] = df.loc[df[col].isna(), col+'_interp']
 		ax = plt.subplot()
-		for c, idx in enumerate(df.index_training.unique()[:pfirst]): #for date in df.date.unique():
+		for c, idx in enumerate(df.file_id.unique()[:pfirst]): #for date in df.date.unique():
 			#df[df.date == date].plot(ax=ax, x='time_training (min)', y=col+'_interp_ONLY',
-			df[df.index_training == idx].plot(ax=ax, x='time_training (min)', y=col+'_interp_ONLY',
+			df[df.file_id == idx].plot(ax=ax, x='time_training (min)', y=col+'_interp_ONLY',
 				color=cmap(c), legend=False, alpha=.5, kind='scatter', s=15.)
 			#df[df.date == date].plot(ax=ax, x='time_training (min)', y=col,
-			df[df.index_training == idx].plot(ax=ax, x='time_training (min)', y=col,
+			df[df.file_id == idx].plot(ax=ax, x='time_training (min)', y=col,
 				color=cmap(c), legend=False, alpha=.5)
 		plt.ylabel(col)
 		plt.show()
