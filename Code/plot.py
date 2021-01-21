@@ -49,17 +49,42 @@ class PlotData:
 		plt.savefig(self.savedir+str(self.athlete)+self.savetext+'_glucose_availaibility.pdf', bbox_inches='tight')
 		plt.close()
 
-	def plot_feature_distr_subplots(self, df, feature_array, figsize, savetext=''):
-		fig, axs = plt.subplots(*feature_array.shape)
-		for i in range(feature_array.shape[0]):
-			for j in range(feature_array.shape[1]):
-				df[feature_array.flatten()].hist(column = feature_array[i,j], ax=axs[i,j], figsize=figsize)
-				#ax[i,j].set_title('')
-				#ax[i,j].set_xlabel(feature_array[i,j])
-		plt.tight_layout()
-		plt.savefig(self.savedir+'feature_hist_'+savetext+'.pdf', bbox_inches='tight')
-		plt.savefig(self.savedir+'feature_hist_'+savetext+'.png', bbox_inches='tight')
+	def plot_feature_distr_subplots(self, df, i, cols, figsize, savetext=''):
+		axs = df[cols].hist(grid=False, figsize=figsize)
+		for ax in axs.flatten():
+			ax.set_yticks([])
+		plt.savefig(self.savedir+'hist_'+str(i)+'.pdf', bbox_inches='tight')
+		plt.savefig(self.savedir+'hist_'+str(i)+'.png', bbox_inches='tight')
 		plt.show()
+		plt.close()
+
+	def plot_feature_correlation(self, df, i, cols, ticks=None, ticklocs=None):
+		if ticks is None:
+			ticks = cols
+		corr = df[cols].corr()
+		ax = sns.heatmap(corr, vmin=-1, vmax=1, center=0, #mask=np.triu(np.ones_like(corr, dtype=bool)),
+			linewidths=.5, cmap=sns.diverging_palette(230,20,as_cmap=True), square=True)
+		if ticklocs is not None:
+			plt.xticks(ticklocs+0.5, ticks)
+			plt.yticks(ticklocs+0.5, ticks)
+		plt.savefig(self.savedir+'corr_'+str(i)+'.pdf', bbox_inches='tight')
+		plt.savefig(self.savedir+'corr_'+str(i)+'.png', bbox_inches='tight')
+		plt.show()
+		plt.close()
+
+	def plot_feature_clustermap(self, df, i, cols, ticks=None, ticklocs=None):
+		if ticks is None:
+			ticks = cols
+		corr = df[cols].corr()
+		sns.clustermap(corr, vmin=-1, vmax=1, center=0, row_cluster=False, cbar_pos=(0.05, .35, .02, .4), #mask=np.triu(np.ones_like(corr, dtype=bool)),
+			linewidths=.5, cmap=sns.diverging_palette(230,20,as_cmap=True), square=True)
+		if ticklocs is not None:
+			plt.xticks(ticklocs+0.5, ticks)
+			plt.yticks(ticklocs+0.5, ticks)
+		plt.savefig(self.savedir+'corrcluster_'+str(i)+'.pdf', bbox_inches='tight')
+		plt.savefig(self.savedir+'corrcluster_'+str(i)+'.png', bbox_inches='tight')
+		plt.show()
+		plt.close()
 
 	def plot_feature_timeseries_subplots(self, df, feature_array, figsize, savetext='', scatter=False):
 		if scatter:
@@ -82,6 +107,112 @@ class PlotData:
 		plt.savefig(self.savedir+'feature_'+pname+'_'+savetext+'.pdf', bbox_inches='tight')
 		plt.savefig(self.savedir+'feature_'+pname+'_'+savetext+'.png', bbox_inches='tight')
 		plt.show()
+
+
+	def plot_feature_timeseries_parasite(self, df, i, cols, ylabels, ylims, axlocs, lws, alphas, figsize=(15,4),
+		colors = [(0.6, 0.6, 0.6)] + sns.color_palette("colorblind"), legend=True):
+		axlocs = ['left' if x == 'l' else 'right' for x in axlocs]
+		plt.figure(figsize=figsize)
+		ax = []
+		ax.append(host_subplot(111, axes_class=AA.Axes))
+		plt.subplots_adjust(right=0.75)
+
+		# set up parasite axes
+		lr_count = {'left':0, 'right':0}
+		for i in range(1, len(cols)):
+			ax.append(ax[0].twinx())
+			if i > 1:
+				offset = (lr_count[axlocs[i]]+1)*60
+				if axlocs[i] == 'left':
+					offset *= -1
+					ax[i].axis['right'].toggle(all=False)
+				new_fixed_axis = ax[i].get_grid_helper().new_fixed_axis
+				ax[i].axis[axlocs[i]] = new_fixed_axis(loc=axlocs[i], axes=ax[i], offset=(offset, 0))
+				lr_count[axlocs[i]] += 1
+			ax[i].axis[axlocs[i]].toggle(all=True)
+		
+		# plot
+		for i, c in enumerate(cols):
+			px, = ax[i].plot(df[c], label=c, lw=lws[i], c=colors[i], alpha=alphas[i])
+			# plot altitude
+			if c[:8] == 'altitude':
+				try:
+					px, = ax[i].fill_between(pd.Series(df.index).values, df[c].values, 
+						label=c, lw=.5, color='gray', alpha=.1)
+				except TypeError:
+					pass
+			# plot imputed glucose
+			if c[:18] == 'Scan Glucose mg/dL':
+				ax[i].scatter(df.index, df[c], color=px.get_color(), alpha=alphas[i])
+			ax[i].axis[axlocs[i]].label.set_color(px.get_color())
+			ax[i].set_ylim(ylims[i])
+			ax[i].set_ylabel(ylabels[i])
+			ax[i].axis[axlocs[i]].major_ticklabels.set_color(px.get_color())
+
+		ax[0].set_xlim((df.index.min(), df.index.max()))
+
+		ax[0].xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+		ax[0].set_xlabel("Time (h:m)")
+		if legend: ax[0].legend()
+
+		plt.savefig(self.savedir+'feature_timeseries_'+str(i)+'.pdf', bbox_inches='tight')
+		plt.savefig(self.savedir+'feature_timeseries_'+str(i)+'.png', bbox_inches='tight')
+		plt.show()
+		plt.close()
+
+	def plot_feature_timeseries_agg_parasite(self, df, i, cols, ylabels, ylims, axlocs, lws, alphas, figsize=(15,4),
+		colors = [(0.6, 0.6, 0.6)] + sns.color_palette("colorblind"), legend=True):
+		axlocs = ['left' if x == 'l' else 'right' for x in axlocs]
+		plt.figure(figsize=figsize)
+		ax = []
+		ax.append(host_subplot(111, axes_class=AA.Axes))
+		plt.subplots_adjust(right=0.75)
+
+		# set up parasite axes
+		lr_count = {'left':0, 'right':0}
+		for i in range(1, len(cols)):
+			ax.append(ax[0].twinx())
+			if i > 1:
+				offset = (lr_count[axlocs[i]]+1)*60
+				if axlocs[i] == 'left':
+					offset *= -1
+					ax[i].axis['right'].toggle(all=False)
+				new_fixed_axis = ax[i].get_grid_helper().new_fixed_axis
+				ax[i].axis[axlocs[i]] = new_fixed_axis(loc=axlocs[i], axes=ax[i], offset=(offset, 0))
+				lr_count[axlocs[i]] += 1
+			ax[i].axis[axlocs[i]].toggle(all=True)
+		
+		# plot
+		for i, c in enumerate(cols):
+			px, = ax[i].plot(df[(c, 'mean')], label=c, lw=lws[i], c=colors[i], alpha=alphas[i])
+			ax[i].fill_between(df[(c, 'mean')].values - df[(c, 'std')].values, df[(c, 'mean')].values + df[(c, 'std')].values, 
+				label=c, lw=.5, color=colors[i], alpha=alphas[i]-0.3)
+
+			# plot altitude
+			if c[:8] == 'altitude':
+				try:
+					px, = ax[i].fill_between(pd.Series(df.index).values, df[(c, 'mean')].values, 
+						label=c, lw=.5, color='gray', alpha=.1)
+				except TypeError:
+					pass
+			# plot imputed glucose
+			if c[:18] == 'Scan Glucose mg/dL':
+				ax[i].scatter(df.index, df[(c, 'mean')], color=px.get_color(), alpha=alphas[i])
+			ax[i].axis[axlocs[i]].label.set_color(px.get_color())
+			ax[i].set_ylim(ylims[i])
+			ax[i].set_ylabel(ylabels[i])
+			ax[i].axis[axlocs[i]].major_ticklabels.set_color(px.get_color())
+
+		ax[0].set_xlim((df.index.min(), 30000))
+
+		#ax[0].xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+		ax[0].set_xlabel("Time (s)")
+		if legend: ax[0].legend()
+
+		plt.savefig(self.savedir+'feature_timeseries_'+str(i)+'.pdf', bbox_inches='tight')
+		plt.savefig(self.savedir+'feature_timeseries_'+str(i)+'.png', bbox_inches='tight')
+		plt.show()
+		plt.close()
 
 	def plot_interp_allinone(self, df, feature, interp_list, savetext=''):
 		plt.figure()
@@ -135,60 +266,4 @@ class PlotData:
 		plt.tight_layout()
 		plt.savefig(self.savedir+'smooth_'+savetext+'.pdf', bbox_inches='tight')
 		plt.savefig(self.savedir+'smooth_'+savetext+'.png', bbox_inches='tight')
-		plt.show()
-
-	def plot_timeseries_parasite(df, cols, ylabels, ylims, axlocs, lws, alphas, figsize=(15,4),
-		colors = [(0.6, 0.6, 0.6)] + sns.color_palette("colorblind"), savetext='', legend=True):
-		plt.figure(figsize=figsize)
-		ax = []
-		ax.append(host_subplot(111, axes_class=AA.Axes))
-		plt.subplots_adjust(right=0.75)
-
-		# set up parasite axes
-		lr_count = {'left':0, 'right':0}
-		for i in range(1, len(cols)):
-			ax.append(ax[0].twinx())
-			if i > 1:
-				offset = (lr_count[axlocs[i]]+1)*60
-				if axlocs[i] == 'left':
-					offset *= -1
-					ax[i].axis['right'].toggle(all=False)
-				new_fixed_axis = ax[i].get_grid_helper().new_fixed_axis
-				ax[i].axis[axlocs[i]] = new_fixed_axis(loc=axlocs[i], axes=ax[i], offset=(offset, 0))
-				lr_count[axlocs[i]] += 1
-			ax[i].axis[axlocs[i]].toggle(all=True)
-		
-		# plot
-		for i, c in enumerate(cols):
-			# plot data
-			#px, = ax[i].plot(df[c], label=c, lw=lws[i], c=colors[i], alpha=alphas[i])
-			# plot smoothed line (ewm)
-			try:
-				ax[i].plot(df[c+'_ewm'], label=c+'_ewm', lw=lws[i], c=colors[i], alpha=.7)
-				px, = ax[i].plot(df[c], label=c, c=colors[i], alpha=alphas[i], marker='o', markersize=.5, lw=0.)
-			except:
-				px, = ax[i].plot(df[c], label=c, lw=lws[i], c=colors[i], alpha=alphas[i])
-				pass
-			# plot elevation
-			if i == 0:
-				try:
-					px, = ax[i].fill_between(pd.Series(df.index).values, df[c].values, 
-						label=c, lw=.5, color='gray', alpha=.3)
-				except TypeError:
-					pass
-			# plot imputed glucose
-			if c == 'glucose':
-				ax[i].scatter(df.index, df['@'+c], color=px.get_color(), alpha=alphas[i])
-			ax[i].axis[axlocs[i]].label.set_color(px.get_color())
-			ax[i].set_ylim(ylims[i])
-			ax[i].set_ylabel(ylabels[i])
-		
-		ax[0].set_xlim((df.index.min(), df.index.max()))
-
-		ax[0].xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
-		ax[0].set_xlabel("Time (h:m)")
-		if legend: ax[0].legend()
-
-		plt.savefig(self.savedir+'feature_timeseries_'+savetext+'.pdf', bbox_inches='tight')
-		plt.savefig(self.savedir+'feature_timeseries_'+savetext+'.png', bbox_inches='tight')
 		plt.show()
