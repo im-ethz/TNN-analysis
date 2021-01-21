@@ -2,17 +2,16 @@
 # - Can we include other athletes that are not in LibreView? -> No because they don't have the Libre?
 # - Can we use the data from the BUBBLE? How do we know that it is data from bubble? I.e. after 7 may and in TP?
 # - Does BUBBLE include a 15 min lag from blood glucose to interstitial glucose
-# - Why is ascent not the same as altitude (or altitude.diff)?
 # - Find out what happened when there are large gaps in the data
 # - Find out what happened when there are small gaps in the data
-# - Why does the distance decrease sometimes? (Even though it is within the same training)
 # - Check GPS accuracy and battery level
 # - Possibly remove first entries if the speed = 0
 # - Later: check if we can combine data from other devices
-# - Feature engineering: include min, max, mean, std, iqr, per minute and per time interval
 # - Imputation
 # - Model with and without imputation
 # - Put data from different athletes in one file
+# - Is there a way that I can have missed data from Libre if there are timestamps missing in TP?
+# - IDEA: smooth instead of resampling for more data
 import numpy as np
 import scipy as sp
 import pandas as pd
@@ -189,11 +188,6 @@ for i in athletes:
 		((df.time_training.diff() == 1) & (df['distance'].diff() < 0)).sum())
 	# only for athlete 10 there are two negative distance diffs
 
-	df['distance_diff'] = np.nan
-	for f in df.file_id.unique():
-		df.loc[df.file_id == f, 'distance_diff'] = df.loc[df.file_id == f, 'distance'].diff()
-	df.rename(columns={'distance':'distance_cum', 'distance_diff':'distance'}, inplace=True)
-
 	# -------------------- Position
 	# check if position long and lat are missing at the same time or not 
 	print("Number of missing values position_lat: ", df['position_lat'].isna().sum())
@@ -202,9 +196,12 @@ for i in athletes:
 		(df['position_lat'].isna() & df['position_long'].isna()).sum())
 	# not really relevant because we're not going to do anything with it anymore
 
-	# check if associated with zwift
-
 	# -------------------- Speed
+	# TODO: create acceleration column with df.speed.diff()
+	df['acceleration'] = np.nan
+	for f in df.file_id.unique():
+		df.loc[df.file_id == f, 'acceleration'] = df.loc[df.file_id == f, 'speed'].diff()
+
 	"""
 	def correlation_variables(df_mask1, text1, df_mask2, text2):
 		print("Number of ", text1, ": ", df_mask1.sum())
@@ -290,17 +287,18 @@ for i in athletes:
 for i in athletes:
 	df = pd.read_csv(merge_path+'1sec/'+str(i)+'.csv', index_col=0)
 	df.index = pd.to_datetime(df.index)
-
-	# get nancols before resampling
-	cols_nan = list(set(df.columns) - set(df.dropna(axis=1, how='all').columns))
-
 	# TODO: check if there are more measurements from libreview in one minute. 
 	# in that case it's best not to take the mean twice, but mean over all types of measurements
 
+	# get nancols before resampling
+	cols_nan = list(set(df.columns) - set(df.dropna(axis=1, how='all').columns))
+	print("Columns that are nan and will be dropped: ", cols_nan)
+	df.drop(cols_nan, axis=1, inplace=True)
+
 	# -------------------- Resampling
 	# feature engineering for selected columns
-	cols_feature_eng = ['distance', 'heart_rate', 'cadence', 'speed', 'power', 'ascent',
-						'altitude', 'grade', 'temperature', 'temperature_smooth',
+	cols_feature_eng = ['distance', 'heart_rate', 'cadence', 'speed', 'acceleration', 'power', 
+						'ascent', 'altitude', 'grade', 'temperature', 'temperature_smooth',
 						'left_right_balance', 'left_pedal_smoothness', 'right_pedal_smoothness', 
 						'left_torque_effectiveness', 'right_torque_effectiveness']
 	def minmax(x):
@@ -321,12 +319,21 @@ for i in athletes:
 					'glucose_BUBBLE'					: 'mean',
 					'time_from_course'					: 'mean', #??? first?
 					'compressed_speed_distance'			: 'mean',
+					'combined_pedal_smoothness'			: 'mean',
+					'fractional_cadence'				: 'mean',
+					'accumulated_power'					: 'mean',
 					'cycle_length'						: 'mean',
 					'resistance'						: 'mean',
 					'calories'							: 'mean', # sum?? TODO: feature eng?
 					'zwift'								: 'first',
 					'device_ELEMNTBOLT'					: 'first',
+					'device_ELEMNTROAM'					: 'first',
 					'device_zwift'						: 'first',
+					'Basal'								: 'first',
+					'Nightscout'						: 'first',
+					'Bloodglucose'						: 'mean',
+					'CarbonBoard'						: 'sum',
+					'InsulinOnBoard'					: 'sum,',
 					'device_glucose'					: 'first',
 					'device_glucose_serial_number'		: 'first',
 					'Historic Glucose mg/dL'			: 'mean',
@@ -346,8 +353,12 @@ for i in athletes:
 					'Correction Insulin (units)'		: 'sum',
 					'User Change Insulin (units)'		: 'sum'})
 	
-	print("Columns that are not included in the aggregation (and that are thus dropped): ",
-		*tuple(set(df.columns) - set(agg_dict.keys()) - set(cols_feature_eng)))
+	print("\nColumns that are in df and not included in the aggregation (and that are thus dropped): ",
+		*tuple(set(df.columns) - set(agg_dict.keys())))
+	print("Columns that are included in the aggregation but not in df (-> remove them from the aggregation list): ",
+		*tuple(set(agg_dict.keys()) - set(df.columns)))
+	for key in set(agg_dict.keys()) - set(df.columns):
+		del agg_dict[key]
 
 	# timestamps that should be in df after resampling to minute
 	df_ts = df.index.floor('min').unique()
@@ -358,11 +369,6 @@ for i in athletes:
 	# keep only timestamps that were in original TP file
 	# (due to some weird issue with resampling)
 	df = df[df.index.isin(df_ts)]
-
-	# drop columns that are nan
-	print("Columns that are nan and will be dropped: ", cols_nan)
-	df.drop(cols_nan, axis=1, inplace=True)
-	# TODO: check if they are actually dropped (because after resampling columns are multiindex)
 
 	df.to_csv(merge_path+'1min/'+str(i)+'.csv')
 
