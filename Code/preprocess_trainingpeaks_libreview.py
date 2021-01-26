@@ -37,6 +37,8 @@ if not os.path.exists(merge_path+'1sec/'):
 	os.mkdir(merge_path+'1sec/')
 if not os.path.exists(merge_path+'1min/'):
 	os.mkdir(merge_path+'1min/')
+if not os.path.exists(merge_path+'1min/dropna/'):
+	os.mkdir(merge_path+'1min/dropna/')
 
 def print_times_dates(text, df, df_mask, ts='timestamp'):
 	print("\n", text)
@@ -283,6 +285,8 @@ for i in athletes:
 	# -------------------- Save
 	df.to_csv(merge_path+'1sec/'+str(i)+'.csv')
 
+athletes = sorted([int(i.rstrip('.csv')) for i in os.listdir(merge_path+'raw/') if i.endswith('.csv')])
+
 # Resampling
 for i in athletes:
 	df = pd.read_csv(merge_path+'1sec/'+str(i)+'.csv', index_col=0)
@@ -304,9 +308,11 @@ for i in athletes:
 	def minmax(x):
 		return np.max(x) - np.min(x)
 
+	# note: we are not using entropy because difficult to calculate
+	# other possibilities include: skewness and kurtosis, but don't know if this is relevant
 	agg_dict = {}
 	for col in cols_feature_eng:
-		agg_dict.update({col: [np.sum, np.mean, np.median, np.std, minmax, sp.stats.iqr, sp.stats.entropy]})
+		agg_dict.update({col: [np.sum, np.mean, np.median, np.std, minmax, sp.stats.iqr]})
 
 	# no feature engineering for remaining columns
 	agg_dict.update({'file_id'							: 'first',
@@ -370,13 +376,63 @@ for i in athletes:
 	# (due to some weird issue with resampling)
 	df = df[df.index.isin(df_ts)]
 
+	# recalculate time_training
+	df[('time_training', 'first')] = np.nan
+	for f in df[('file_id', 'first')].unique():
+		df.loc[df[('file_id', 'first')] == f, ('time_training', 'first')] = df[df[('file_id', 'first')] == f].index - df[df[('file_id', 'first')] == f].index.min()
+	df[('time_training', 'first')] = df[('time_training', 'first')] / np.timedelta64(1,'m')
+
 	df.to_csv(merge_path+'1min/'+str(i)+'.csv')
+
+athletes = sorted([int(i.rstrip('.csv')) for i in os.listdir(merge_path+'raw/') if i.endswith('.csv')])
 
 # Cleaning after resampling
 for i in athletes:
-	df = pd.read_csv(merge_path+'1min/'+str(i)+'.csv', index_col=0)
+	df = pd.read_csv(merge_path+'1min/'+str(i)+'.csv', header=[0,1], index_col=0)
 	df.index = pd.to_datetime(df.index)
 
+	cols_feature = ['acceleration', 'altitude', 'cadence', 'distance', #'ascent',
+					'heart_rate', 'left_pedal_smoothness', 'right_pedal_smoothness',
+					'left_torque_effectiveness', 'right_torque_effectiveness', 'left_right_balance',
+					'power', 'speed', 'temperature']
+
+	# for now delete entropy column until the previous code is run again
+	df.drop(df.columns[df.columns.get_level_values(1) == 'entropy'], axis=1, inplace=True)
+
+	# --------------------- Infs
+	# UPDATE: not necessary anymore if we don't include entropy
+	# set inf to nan
+	# df.replace({np.inf:np.nan, -np.inf:np.nan}, inplace=True)
+
+	# --------------------- Nans
+	print("Number of nans \n", df.isna().sum().unstack())
+	# TODO: obs: for temperature smooth, there are more nans than for temperature
+
+	print("Max number of nans per col type: \n", 
+		df.isna().sum().unstack().max(axis=1).sort_values())
+
+	# save file where all nans are dropped
+	# don't consider ascent as it has too many nan values
+	df_dropna = df.dropna(how='any', subset=[(c,x) for c in cols_feature for x in ['iqr', 'mean', 'median', 'minmax', 'std', 'sum']])
+	df_dropna.to_csv(merge_path+'1min/dropna/'+str(i)+'.csv')
+
+	# TODO: drop if nanvalue is first of file
+	# TODO: when do we want to delete the entire row? Also if sth like iqr is missing?
+	for f in df[('file_id', 'first')]:
+		if df.loc[df[('file_id', 'first')] == f].iloc[0][cols_feature].isna().sum() != 0:
+
+
+	# TODO: find out how large the gaps are. Only impute for small gaps, else remove
+	for f in df[('file_id', 'first')]:
+		gap_ts = pd.Series(df[df[('file_id', 'first')] == f].index, index=df[df[('file_id', 'first')] == f].index).diff().astype('timedelta64[m]') > 1
+
+
+	for c in cols_feature:
+		for x in ['iqr', 'mean', 'median', 'minmax', 'std', 'sum']:
+			for f in df[('file_id', 'first')]:
+				df.loc[df[('file_id', 'first')] == f, (c,x)].isna()
+
+	# use linear/spline imputation if there is no seasonality and a trend
 
 	# -------------------- Clean
 
