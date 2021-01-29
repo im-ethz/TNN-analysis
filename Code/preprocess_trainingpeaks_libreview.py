@@ -9,7 +9,6 @@
 # - Later: check if we can combine data from other devices
 # - Imputation
 # - Model with and without imputation
-# - Put data from different athletes in one file
 # - Is there a way that I can have missed data from Libre if there are timestamps missing in TP?
 # - IDEA: smooth instead of resampling for more data
 import numpy as np
@@ -29,6 +28,9 @@ lv_path = 'Data/LibreView/clean/'
 tp_path = 'Data/TrainingPeaks/clean2/'
 merge_path = 'Data/TrainingPeaks+LibreView/'
 
+shift_historic = [15, 30, 45, 60]
+shift_scan = [3, 5, 10, 15]
+
 if not os.path.exists(merge_path):
 	os.mkdir(merge_path)
 if not os.path.exists(merge_path+'raw/'):
@@ -39,13 +41,6 @@ if not os.path.exists(merge_path+'1min/'):
 	os.mkdir(merge_path+'1min/')
 if not os.path.exists(merge_path+'1min/dropna/'):
 	os.mkdir(merge_path+'1min/dropna/')
-
-def print_times_dates(text, df, df_mask, ts='timestamp'):
-	print("\n", text)
-	print("times: ", df_mask.sum())
-	print("days: ", len(df[df_mask][ts].dt.date.unique()))
-	if verbose == 2:
-		print("file ids: ", df[df_mask].file_id.unique())
 
 # FOR NOW: ONLY SELECT ATHLETES THAT ARE IN LIBREVIEW
 
@@ -66,7 +61,6 @@ for i in lv_athletes:
 
 	print("Number of duplicated timestamps LibreView: ", df_lv['Device Timestamp'].duplicated().sum())
 
-
 	# -------------------- TrainingPeaks
 	df_tp = pd.read_csv(tp_path+str(i)+'/'+str(i)+'_data.csv', index_col=0)
 
@@ -76,17 +70,31 @@ for i in lv_athletes:
 	df_tp['local_timestamp'] = pd.to_datetime(df_tp['local_timestamp'])
 
 	# Remove data before Libre was used
-	df_tp = df_tp[df_tp.local_timestamp >= first_date_libre]
-
+	df_tp = df_tp[df_tp.local_timestamp >= first_date_libre \
+		- datetime.timedelta(hours = first_date_libre.time().hour,
+							 minutes = first_date_libre.time().minute,
+							 seconds=first_date_libre.time().second)]
+	del first_date_libre ; gc.collect()
 
 	# -------------------- Merge
 	df = pd.merge(df_tp, df_lv, how='left', left_on='local_timestamp', right_on='Device Timestamp')
+	df.drop('Device Timestamp', axis=1, inplace=True)
+
+	del df_tp ; gc.collect()
+
+	# -------------------- Shift glucose values
+	for s in shift_historic:
+		df = shift_glucose(df, df_lv, 'Historic Glucose mg/dL', s)
+
+	for s in shift_scan:
+		df = shift_glucose(df, df_lv, 'Scan Glucose mg/dL', s)
 
 	df.set_index('local_timestamp', drop=True, inplace=True)
-	df.drop('Device Timestamp', axis=1, inplace=True)
 
 	if not df.empty:
 		df.to_csv(merge_path+'raw/'+str(i)+'.csv')
+
+	del df, df_lv; gc.collect()
 
 athletes = sorted([int(i.rstrip('.csv')) for i in os.listdir(merge_path+'raw/') if i.endswith('.csv')])
 
@@ -94,19 +102,12 @@ athletes = sorted([int(i.rstrip('.csv')) for i in os.listdir(merge_path+'raw/') 
 for i in athletes:
 	# -------------------- Clean LibreView (glucose)
 	df = pd.read_csv(merge_path+'raw/'+str(i)+'.csv', index_col=0)
-
-	# convert index to datetime
 	df.index = pd.to_datetime(df.index)
 
-	# Fill 15 min before Historic Glucose with same glucose value
-	# create list with values that we want to fill df with
-	glucose_hist_range = pd.Series(name='Historic Glucose mg/dL (filled)')
-	for t, gl in df['Historic Glucose mg/dL'].dropna().sort_index().iteritems():
-		glucose_hist_range = pd.concat([glucose_hist_range, pd.Series(data=gl, index=pd.date_range(end=t, periods=15*60, freq='s'), name='Historic Glucose mg/dL (filled)')])
-	glucose_hist_range = glucose_hist_range[~glucose_hist_range.index.duplicated()]
-
-	df = pd.merge(df, glucose_hist_range, how='left', left_index=True, right_index=True, validate='one_to_one')
-	del glucose_hist_range ; gc.collect()
+	# -------------------- Backwards-fill glucose values
+	df = fill_glucose(df)
+	for s in shift_historic:
+		df = fill_glucose(df, s)
 
 	# -------------------- Zeros
 
@@ -285,7 +286,8 @@ for i in athletes:
 	# -------------------- Save
 	df.to_csv(merge_path+'1sec/'+str(i)+'.csv')
 
-athletes = sorted([int(i.rstrip('.csv')) for i in os.listdir(merge_path+'raw/') if i.endswith('.csv')])
+
+athletes = sorted([int(i.rstrip('.csv')) for i in os.listdir(merge_path+'1sec/') if i.endswith('.csv')])
 
 # Resampling
 for i in athletes:
@@ -313,6 +315,14 @@ for i in athletes:
 	agg_dict = {}
 	for col in cols_feature_eng:
 		agg_dict.update({col: [np.sum, np.mean, np.median, np.std, minmax, sp.stats.iqr]})
+
+	# glucose
+	agg_dict.update({'Historic Glucose mg/dL'						: 'mean',
+					 'Historic Glucose mg/dL (filled)'				: 'mean',
+					 'Scan Glucose mg/dL'							: 'mean'})
+	agg_dict.update({'Historic Glucose mg/dL (shift-%s)'%s 			: 'mean' for s in shift_historic})
+	agg_dict.update({'Historic Glucose mg/dL (shift-%s) (filled)'%s : 'mean' for s in shift_historic})
+	agg_dict.update({'Scan Glucose mg/dL (shift-%s)'%s 				: 'mean' for s in shift_scan})
 
 	# no feature engineering for remaining columns
 	agg_dict.update({'file_id'							: 'first',
@@ -342,9 +352,6 @@ for i in athletes:
 					'InsulinOnBoard'					: 'sum,',
 					'device_glucose'					: 'first',
 					'device_glucose_serial_number'		: 'first',
-					'Historic Glucose mg/dL'			: 'mean',
-					'Historic Glucose mg/dL (filled)'	: 'mean',
-					'Scan Glucose mg/dL'				: 'mean',
 					'Non-numeric Rapid-Acting Insulin'	: 'sum',
 					'Rapid-Acting Insulin (units)'		: 'sum',
 					'Non-numeric Food'					: 'sum',
@@ -376,35 +383,33 @@ for i in athletes:
 	# (due to some weird issue with resampling)
 	df = df[df.index.isin(df_ts)]
 
-	# recalculate time_training
-	df[('time_training', 'first')] = np.nan
-	for f in df[('file_id', 'first')].unique():
-		df.loc[df[('file_id', 'first')] == f, ('time_training', 'first')] = df[df[('file_id', 'first')] == f].index - df[df[('file_id', 'first')] == f].index.min()
-	df[('time_training', 'first')] = df[('time_training', 'first')] / np.timedelta64(1,'m')
-
 	df.to_csv(merge_path+'1min/'+str(i)+'.csv')
 
-athletes = sorted([int(i.rstrip('.csv')) for i in os.listdir(merge_path+'raw/') if i.endswith('.csv')])
+athletes = sorted([int(i.rstrip('.csv')) for i in os.listdir(merge_path+'1min/') if i.endswith('.csv')])
 
 # Cleaning after resampling
 for i in athletes:
 	df = pd.read_csv(merge_path+'1min/'+str(i)+'.csv', header=[0,1], index_col=0)
 	df.index = pd.to_datetime(df.index)
 
+	# --------------------- Clean and recalculate some features
+	# recalculate time_training
+	df[('time_training', 'first')] = np.nan
+	for f in df[('file_id', 'first')].unique():
+		df.loc[df[('file_id', 'first')] == f, ('time_training', 'first')] = df[df[('file_id', 'first')] == f].index - df[df[('file_id', 'first')] == f].index.min()
+	df[('time_training', 'first')] = df[('time_training', 'first')] / np.timedelta64(1,'m')
+
+	# create glucose id
+	df = id_glucose(df)
+	for s in shift_historic:
+		df = id_glucose(df, s)
+
+	# --------------------- Nans
 	cols_feature = ['acceleration', 'altitude', 'cadence', 'distance', #'ascent',
 					'heart_rate', 'left_pedal_smoothness', 'right_pedal_smoothness',
 					'left_torque_effectiveness', 'right_torque_effectiveness', 'left_right_balance',
 					'power', 'speed', 'temperature']
 
-	# for now delete entropy column until the previous code is run again
-	df.drop(df.columns[df.columns.get_level_values(1) == 'entropy'], axis=1, inplace=True)
-
-	# --------------------- Infs
-	# UPDATE: not necessary anymore if we don't include entropy
-	# set inf to nan
-	# df.replace({np.inf:np.nan, -np.inf:np.nan}, inplace=True)
-
-	# --------------------- Nans
 	print("Number of nans \n", df.isna().sum().unstack())
 	# TODO: obs: for temperature smooth, there are more nans than for temperature
 
