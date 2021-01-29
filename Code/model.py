@@ -43,6 +43,8 @@ verbose = 1
 
 K = 5
 
+window_size_features = 15
+
 path = 'Data/TrainingPeaks+LibreView/'
 savedir = 'Results/'
 
@@ -57,10 +59,21 @@ for i in athletes:
 	# rename some columns
 	df_i.rename(columns={'first':''}, inplace=True)
 
-	cols_glucose = [('Historic Glucose mg/dL (filled)', 'mean'),
-					('Scan Glucose mg/dL', 'mean')]
+	cols_glucose_h = [('Historic Glucose mg/dL (filled)', 'mean'),
+					('Historic Glucose mg/dL (shift-15) (filled)', 'mean'),
+					('Historic Glucose mg/dL (shift-30) (filled)', 'mean'),
+					('Historic Glucose mg/dL (shift-45) (filled)', 'mean'),
+					('Historic Glucose mg/dL (shift-60) (filled)', 'mean')]
+	cols_glucose_s = [#('Scan Glucose mg/dL', 'mean'),
+					#('Scan Glucose mg/dL (shift-3)', 'mean'),
+					#('Scan Glucose mg/dL (shift-5)', 'mean'),
+					#('Scan Glucose mg/dL (shift-10)', 'mean'),
+					#('Scan Glucose mg/dL (shift-15)', 'mean')
+					]
 
-	cols_info 	 = [('time_training', ''), ('file_id', ''), ('glucose_id', ''), ('athlete', '')]
+	cols_info 	 = [('time_training', ''), ('file_id', ''), ('athlete', ''),
+					('glucose_id', ''), ('glucose_id (shift-15)', ''), ('glucose_id (shift-30)', ''), 
+					('glucose_id (shift-45)', ''), ('glucose_id (shift-60)', '')]
 
 	cols_device	 = [('device_ELEMNTBOLT', ''), ('device_zwift', '')] # TODO: add elemntroam
 
@@ -68,7 +81,7 @@ for i in athletes:
 					'heart_rate', 'left_pedal_smoothness', 'right_pedal_smoothness',
 					'left_torque_effectiveness', 'right_torque_effectiveness', 'left_right_balance',
 					'power', 'speed', 'temperature']
-	cols_other = set(df_i.columns) - set(cols_info) - set(cols_glucose) - set(cols_device) \
+	cols_other = set(df_i.columns) - set(cols_info) - set(cols_glucose_h) - set(cols_glucose_s) - set(cols_device) \
 	- set([(c,x) for c in cols_feature for x in ['iqr', 'mean', 'median', 'minmax', 'std', 'sum']])
 
 	# drop irrelevant cols
@@ -77,7 +90,7 @@ for i in athletes:
 	# drop nan glucose
 	# if glucose columns not in data, then remove data from that athlete
 	try:
-		df_i.dropna(how='all', subset=cols_glucose, inplace=True)
+		df_i.dropna(how='all', subset=set(cols_glucose_h) ^ set(cols_glucose_s), inplace=True)
 	except KeyError as e:
 		print("KeyError: ", e)
 		continue
@@ -91,22 +104,54 @@ for i in athletes:
 
 	# smooth historic glucose
 
-	print(i, len(df_i))
+	# Apply sliding window approach (for each athlete for each training)
+	df_i.columns = pd.MultiIndex.from_arrays([df_i.columns.get_level_values(0), df_i.columns.get_level_values(1), df_i.shape[1] * ['t']])
+	for t in range(1,window_size_features+1):
+		df_shift = df_i[cols_feature].xs('mean', axis=1, level=1, drop_level=False)\
+			.xs('t', axis=1, level=2, drop_level=False).shift(periods=-t, freq='min')
+		df_shift.rename(columns = {'t':'t-%s'%t}, inplace=True)
+
+		df_i = pd.merge(df_i, df_shift, how='left', left_index=True, right_index=True, validate='one_to_one')
+
+	# TODO: ideally we want to know of the times before the window size how variable it was
+	# also: a lot of data is dropped with a window size of 15
+	# also: do we want to know of other features besides mean what they were in the 15 min before?
+	df_i.dropna(subset=df_i[cols_feature].columns, how='any', inplace=True)
+
+	# drop any item with no glucose
+	df_i.dropna(subset=df_i[[x[0] for x in cols_glucose_h]].columns, how='any', inplace=True)
+
 	# add an athlete identifier
 	df_i['athlete'] = i
+
+	print(i, len(df_i))
 	df = pd.concat([df, df_i])
 
-df['training_id'] = df[[('athlete', ''), ('file_id', '')]]\
+df['training_id'] = df[[('athlete', '', ''), ('file_id', '', 't')]]\
 	.apply(lambda x: str(int(x[0])) + '_' + str(int(x[1])), axis=1)
-df.loc[df.glucose_id.notna(), 'glucose_id_str'] = df.loc[df.glucose_id.notna(), [('athlete', ''), ('file_id', ''), ('glucose_id', '')]]\
-.apply(lambda x: str(int(x[0])) + '_' + str(int(x[1])) + '_' + str(int(x[2])), axis=1)
+#df.loc[df.glucose_id.notna(), 'glucose_id_str'] = df.loc[df.glucose_id.notna(), [('athlete', ''), ('file_id', ''), ('glucose_id', '')]]\
+#.apply(lambda x: str(int(x[0])) + '_' + str(int(x[1])) + '_' + str(int(x[2])), axis=1)
 
 # select athlete
-df = df[df['athlete'] == 11]
+#df = df[df['athlete'] == 11]
 # TODO: make model hierarchical?
 
+df.columns = pd.MultiIndex.from_tuples([(x[0][:22]+' (filled)', x[1], x[2]+x[0][29:32]) if x[0][:30] == 'Historic Glucose mg/dL (shift-' else x for x in df.columns])
+
+# TODO: we can also change this to shift-15
+# Because there is a lag in the interstitial glucose (so interstitial glucose(t) ~ blood glucose(t-15))
+# we are predicting in the glucose of the past if we predict the historic glucose at t
+# Q: How long does it take before physical activity affects the blood glucose levels?
+# Is there also some kind of lag in that?
+df[('Y', 'mean', 't')] = df[('Historic Glucose mg/dL (filled)', 'mean', 't')] - df[('Historic Glucose mg/dL (filled)', 'mean', 't-15')]
+cols_Y = [('Y', 'mean', 't')]
+cols_X = df[cols_feature].columns.append(pd.MultiIndex.from_product([['Historic Glucose mg/dL (filled)'], ['mean'], ['t-15', 't-30', 't-45', 't-60']]))
+
+df.reset_index(inplace=True)
+
+
 # ----------------------------- Non-timeseries models
-class TDNN: # time-delay neural network
+class NN: # time-delay neural network
 	def __init__(self, n_input, n_output, n_hidden, act_hidden, 
 		optimizer='Adam', loss='mse'):
 		self.n_input = n_input
@@ -157,9 +202,9 @@ class LSTM:
 def glucose_avg(Yh_pred, perm):
 	# average the predicted glucose id over the last 15 measurements,
 	# as done in the LibreView Historic Glucose
-	Yh_avg = df.loc[perm.values(), 'glucose_id_str'].to_frame()
+	Yh_avg = df.loc[perm.values(), ['athlete', 'file_id', 'glucose_id']].to_frame()
 	Yh_avg['Yh_pred'] = Yh_pred
-	Yh_map = Yh_avg.groupby('glucose_id_str').mean().to_dict()['Yh_pred']
+	Yh_map = Yh_avg.groupby(['athlete', 'file_id', 'glucose_id']).mean().to_dict()['Yh_pred']
 	return Yh_avg.apply(lambda x: Yh_map[x[0]], axis=1)
 
 def plot_history(history, metric):
@@ -170,8 +215,6 @@ def plot_history(history, metric):
 	plt.legend()
 	plt.show()
 	plt.close()
-
-df.reset_index(inplace=True)
 
 # train test split
 # split up different file_ids, since we want to be able to predict for a new training
@@ -188,43 +231,43 @@ for k in range(K):
 	df_train = df.loc[idx_train[k]]
 	df_test = df.loc[idx_test[k]]
 
-	X_train = df_train[[(c,x) for c in cols_feature for x in ['iqr', 'mean', 'median', 'minmax', 'std', 'sum']]]
-	X_test = df_test[[(c,x) for c in cols_feature for x in ['iqr', 'mean', 'median', 'minmax', 'std', 'sum']]]
+	X_train = df_train[cols_X]
+	X_test = df_test[cols_X]
 
-	Yh_train = df_train[('Historic Glucose mg/dL (filled)', 'mean')]
-	Yh_test = df_test[('Historic Glucose mg/dL (filled)', 'mean')]
-	Ys_train = df_train[('Scan Glucose mg/dL', 'mean')]
-	Ys_test = df_test[('Scan Glucose mg/dL', 'mean')]
+	Yh_train = df_train[cols_Y]
+	Yh_test = df_test[cols_Y]
+	#Ys_train = df_train[('Scan Glucose mg/dL', 'mean')]
+	#Ys_test = df_test[('Scan Glucose mg/dL', 'mean')]
 
-	Xh_train = X_train[Yh_train.notna()]
-	Xs_train = X_train[Ys_train.notna()]
-	Xh_test = X_test[Yh_test.notna()]
-	Xs_test = X_test[Ys_test.notna()]
+	Xh_train = X_train[Yh_train.notna().values]
+	#Xs_train = X_train[Ys_train.notna().values]
+	Xh_test = X_test[Yh_test.notna().values]
+	#Xs_test = X_test[Ys_test.notna().values]
 
-	Yh_train = Yh_train.dropna().to_frame()
-	Ys_train = Ys_train.dropna().to_frame()
-	Yh_test = Yh_test.dropna().to_frame()
-	Ys_test = Ys_test.dropna().to_frame()
+	Yh_train = Yh_train.dropna()
+	#Ys_train = Ys_train.dropna()
+	Yh_test = Yh_test.dropna()
+	#Ys_test = Ys_test.dropna()
 
 	perm_h_train = pd.DataFrame(Yh_train.index).to_dict()[0]
-	perm_s_train = pd.DataFrame(Ys_train.index).to_dict()[0]
+	#perm_s_train = pd.DataFrame(Ys_train.index).to_dict()[0]
 	perm_h_test = pd.DataFrame(Yh_test.index).to_dict()[0]
-	perm_s_test = pd.DataFrame(Ys_test.index).to_dict()[0]
+	#perm_s_test = pd.DataFrame(Ys_test.index).to_dict()[0]
 
 	# standardize data
 	#px = PowerTransformer(method='yeo-johnson', standardize=True).fit(X_train)
 	px = StandardScaler().fit(Xh_train)
 	Xh_train = px.transform(Xh_train)
 	Xh_test = px.transform(Xh_test)
-	Xs_train = px.transform(Xs_train)
-	Xs_test = px.transform(Xs_test)
+	#Xs_train = px.transform(Xs_train)
+	#Xs_test = px.transform(Xs_test)
 
 	#py = PowerTransformer(method='yeo-johnson', standardize=True).fit(Yh_train)
 	py = StandardScaler().fit(Yh_train)
 	Yh_train = py.transform(Yh_train).ravel()
 	Yh_test = py.transform(Yh_test).ravel()
-	Ys_train = py.transform(Ys_train).ravel()
-	Ys_test = py.transform(Ys_test).ravel()
+	#Ys_train = py.transform(Ys_train).ravel()
+	#Ys_test = py.transform(Ys_test).ravel()
 	# TODO: check if we just standardize
 
 	# todo: include feature selection
@@ -234,6 +277,8 @@ for k in range(K):
 	# TODO: fix cross-validation
 	# TODO: error per time in training (maybe error is worse in beginning of training)
 	# TODO: add training time as variable
+	# TODO: use validation set
+	# TODO: imputation
 
 	M = {'LinearRegression': LinearRegression(),
 		 'Lasso': Lasso(alpha=1.), 
@@ -246,23 +291,26 @@ for k in range(K):
 		 #'GradientBoost': GradientBoostingRegressor()
 		 }
 
-	score = pd.DataFrame(columns=['mse_h_train', 'mse_h_avg_train', 'mse_s_train', 'mse_h_test' , 'mse_h_avg_test', 'mse_s_test', 
-								  'r2_h_train', 'r2_h_avg_train', 'r2_s_train', 'r2_h_test', 'r2_h_avg_test', 'r2_s_test'])
+	#score = pd.DataFrame(columns=['mse_h_train', 'mse_h_avg_train', 'mse_s_train', 'mse_h_test' , 'mse_h_avg_test', 'mse_s_test', 
+	#							  'r2_h_train', 'r2_h_avg_train', 'r2_s_train', 'r2_h_test', 'r2_h_avg_test', 'r2_s_test'])
+	score = pd.DataFrame(columns=['mse_h_train', 'mse_h_avg_train', 'mse_h_test' , 'mse_h_avg_test',
+								  'r2_h_train', 'r2_h_avg_train', 'r2_h_test', 'r2_h_avg_test'])
+
 	for m in M.keys():
 		print(m)
 		M[m].fit(Xh_train, Yh_train)
 
 		# mse for historic and scan glucose
 		score.loc[m, 'mse_h_train'] = mean_squared_error(Yh_train, M[m].predict(Xh_train))
-		score.loc[m, 'mse_s_train'] = mean_squared_error(Ys_train, M[m].predict(Xs_train))
+		#score.loc[m, 'mse_s_train'] = mean_squared_error(Ys_train, M[m].predict(Xs_train))
 		score.loc[m, 'mse_h_test'] = mean_squared_error(Yh_test, M[m].predict(Xh_test))
-		score.loc[m, 'mse_s_test'] = mean_squared_error(Ys_test, M[m].predict(Xs_test))
+		#score.loc[m, 'mse_s_test'] = mean_squared_error(Ys_test, M[m].predict(Xs_test))
 
 		# r2 for historic and scan glucose
 		score.loc[m, 'r2_h_train'] = r2_score(Yh_train, M[m].predict(Xh_train))
-		score.loc[m, 'r2_s_train'] = r2_score(Ys_train, M[m].predict(Xs_train))
+		#score.loc[m, 'r2_s_train'] = r2_score(Ys_train, M[m].predict(Xs_train))
 		score.loc[m, 'r2_h_test'] = r2_score(Yh_test, M[m].predict(Xh_test))
-		score.loc[m, 'r2_s_test'] = r2_score(Ys_test, M[m].predict(Xs_test))
+		#score.loc[m, 'r2_s_test'] = r2_score(Ys_test, M[m].predict(Xs_test))
 
 		# mse and r2 for averaged historic glucose
 		score.loc[m, 'mse_h_avg_train'] = mean_squared_error(Yh_train, glucose_avg(M[m].predict(Xh_train), perm_h_train))
