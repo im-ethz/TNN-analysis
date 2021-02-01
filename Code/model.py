@@ -1,6 +1,5 @@
 # TOOD (shortterm):
-# - have validation set
-# - make all functions work (also with avg_glucose)
+# - include scan glucose
 # - once solid model, start summarizing data steps
 # - include more data?
 # - shift glucose values that we are predicting 5-15 minutes back in time
@@ -10,7 +9,7 @@
 # TODOS (mid)
 # - include dexcom data?
 # - Error per time in training (maybe the error is worse in the beginning of training)
-# - Visualize train-test split
+# - Error per athlete
 # - Use past cycling data in prediction (summary of all features up until t)
 # - Besides mean, use other statistics in prediction with sliding window
 # - Figure out the cause of the similarity in performance between the linear and non-linear models
@@ -64,6 +63,11 @@ from helper import *
 
 verbose = 1
 
+sns.set()
+sns.set_context('paper')
+sns.set_style('white')
+
+
 K = 5
 
 window_size_features = 15
@@ -87,7 +91,7 @@ for i in athletes:
 					('Historic Glucose mg/dL (shift-30) (filled)', 'mean'),
 					('Historic Glucose mg/dL (shift-45) (filled)', 'mean'),
 					('Historic Glucose mg/dL (shift-60) (filled)', 'mean')]
-	cols_glucose_s = [#('Scan Glucose mg/dL', 'mean'),
+	cols_glucose_s = [('Scan Glucose mg/dL', 'mean'),
 					#('Scan Glucose mg/dL (shift-3)', 'mean'),
 					#('Scan Glucose mg/dL (shift-5)', 'mean'),
 					#('Scan Glucose mg/dL (shift-10)', 'mean'),
@@ -113,7 +117,7 @@ for i in athletes:
 	# drop nan glucose
 	# if glucose columns not in data, then remove data from that athlete
 	try:
-		df_i.dropna(how='all', subset=set(cols_glucose_h) ^ set(cols_glucose_s), inplace=True)
+		df_i.dropna(how='all', subset=set(cols_glucose_h) | set(cols_glucose_s), inplace=True)
 	except KeyError as e:
 		print("KeyError: ", e)
 		continue
@@ -122,8 +126,6 @@ for i in athletes:
 	if ('device_zwift', '') in df_i.columns:
 		df_i = df_i[df_i[('device_zwift', '')] == 0]
 		df_i.drop(cols_device, axis=1, inplace=True)
-
-	# obtain 
 
 	# smooth historic glucose
 
@@ -172,6 +174,9 @@ cols_X = df[cols_feature].columns.append(pd.MultiIndex.from_product([['Historic 
 
 df.reset_index(inplace=True)
 
+sns.histplot(df[('Historic Glucose mg/dL (filled)', 'mean', 't')], kde=True)
+sns.histplot(df[('Scan Glucose mg/dL')])
+plt.show()
 
 # ----------------------------- Models
 class NN: # time-delay neural network
@@ -249,78 +254,77 @@ class LSTM:
 		model.compile(optimizer=self.optimizer, loss = self.loss, metrics = RSquare(y_shape=(self.n_output,)))
 		return self.model
 
-def get_data(df, cols_X, cols_Y, k, idx_train, idx_test):
+def get_data(df, cols_X, cols_Y, k, idx_train, idx_val):
 	df_train = df.loc[idx_train[k]]
-	df_test = df.loc[idx_test[k]]
+	df_val = df.loc[idx_val[k]]
 
 	X_train = df_train[cols_X]
-	X_test = df_test[cols_X]
+	X_val = df_val[cols_X]
 
 	Yh_train = df_train[cols_Y]
-	Yh_test = df_test[cols_Y]
+	Yh_val = df_val[cols_Y]
 	#Ys_train = df_train[('Scan Glucose mg/dL', 'mean')]
-	#Ys_test = df_test[('Scan Glucose mg/dL', 'mean')]
+	#Ys_val = df_val[('Scan Glucose mg/dL', 'mean')]
 
 	Xh_train = X_train[Yh_train.notna().values]
 	#Xs_train = X_train[Ys_train.notna().values]
-	Xh_test = X_test[Yh_test.notna().values]
-	#Xs_test = X_test[Ys_test.notna().values]
+	Xh_val = X_val[Yh_val.notna().values]
+	#Xs_val = X_val[Ys_val.notna().values]
 
 	Yh_train = Yh_train.dropna()
 	#Ys_train = Ys_train.dropna()
-	Yh_test = Yh_test.dropna()
-	#Ys_test = Ys_test.dropna()
+	Yh_val = Yh_val.dropna()
+	#Ys_val = Ys_val.dropna()
 
 	perm_h_train = pd.DataFrame(Yh_train.index).to_dict()[0]
 	#perm_s_train = pd.DataFrame(Ys_train.index).to_dict()[0]
-	perm_h_test = pd.DataFrame(Yh_test.index).to_dict()[0]
-	#perm_s_test = pd.DataFrame(Ys_test.index).to_dict()[0]
+	perm_h_val = pd.DataFrame(Yh_val.index).to_dict()[0]
+	#perm_s_val = pd.DataFrame(Ys_val.index).to_dict()[0]
 
 	# standardize data
 	#px = PowerTransformer(method='yeo-johnson', standardize=True).fit(X_train)
 	px = StandardScaler().fit(Xh_train)
 	Xh_train = px.transform(Xh_train)
-	Xh_test = px.transform(Xh_test)
+	Xh_val = px.transform(Xh_val)
 	#Xs_train = px.transform(Xs_train)
-	#Xs_test = px.transform(Xs_test)
+	#Xs_val = px.transform(Xs_val)
 
 	#py = PowerTransformer(method='yeo-johnson', standardize=True).fit(Yh_train)
 	py = StandardScaler().fit(Yh_train)
 	Yh_train = py.transform(Yh_train).ravel()
-	Yh_test = py.transform(Yh_test).ravel()
+	Yh_val = py.transform(Yh_val).ravel()
 	#Ys_train = py.transform(Ys_train).ravel()
-	#Ys_test = py.transform(Ys_test).ravel()
+	#Ys_val = py.transform(Ys_val).ravel()
 	# TODO: check if we just standardize
-	return Xh_train, Yh_train, Xh_test, Yh_test, perm_h_train, perm_h_test
+	return Xh_train, Yh_train, Xh_val, Yh_val, perm_h_train, perm_h_val
 
 def glucose_avg(Yh_pred, perm):
 	# average the predicted glucose id over the last 15 measurements,
 	# as done in the LibreView Historic Glucose
-	Yh_avg = df.loc[perm.values(), ['athlete', 'file_id', 'glucose_id']].to_frame()
+	Yh_avg = df.loc[perm.values(), ['athlete', 'file_id', 'glucose_id']]
+	Yh_avg.columns = Yh_avg.columns.get_level_values(0)
 	Yh_avg['Yh_pred'] = Yh_pred
 	Yh_map = Yh_avg.groupby(['athlete', 'file_id', 'glucose_id']).mean().to_dict()['Yh_pred']
-	return Yh_avg.apply(lambda x: Yh_map[x[0]], axis=1)
+	return Yh_avg.apply(lambda x: Yh_map[(x[0], x[1], x[2])], axis=1)
+
+def calc_score(model, X, Y, historic=False, perm=None):
+	mse = mean_squared_error(Y, model.predict(X))
+	r2 = r2_score(Y, model.predict(X))
+	if not historic:
+		return mse, r2
+	else:
+		mse_avg = mean_squared_error(Y, glucose_avg(model.predict(X), perm))
+		r2_avg = r2_score(Y, glucose_avg(model.predict(X), perm))
+		return mse, r2, mse_avg, r2_avg
 
 def evaluate(model):
-	s = pd.Series(dtype=float)
-	
-	# mse for historic and scan glucose
-	s['mse_h_train'] = mean_squared_error(Yh_train, model.predict(Xh_train))
-	#s['mse_s_train'] = mean_squared_error(Ys_train, model.predict(Xs_train))
-	s['mse_h_test'] = mean_squared_error(Yh_test, model.predict(Xh_test))
-	#s['mse_s_test'] = mean_squared_error(Ys_test, model.predict(Xs_test))
-
-	# r2 for historic and scan glucose
-	s['r2_h_train'] = r2_score(Yh_train, model.predict(Xh_train))
-	#s['r2_s_train'] = r2_score(Ys_train, model.predict(Xs_train))
-	s['r2_h_test'] = r2_score(Yh_test, model.predict(Xh_test))
-	#s['r2_s_test'] = r2_score(Ys_test, model.predict(Xs_test))
-
-	# mse and r2 for averaged historic glucose
-	#s['mse_h_avg_train'] = mean_squared_error(Yh_train, glucose_avg(model.predict(Xh_train), perm_h_train))
-	#s['mse_h_avg_test'] = mean_squared_error(Yh_test, glucose_avg(model.predict(Xh_test), perm_h_test))
-	#s['r2_h_avg_train'] = r2_score(Yh_train, glucose_avg(model.predict(Xh_train), perm_h_train))
-	#s['r2_h_avg_test'] = r2_score(Yh_test, glucose_avg(model.predict(Xh_test), perm_h_test))
+	s = pd.Series(index=pd.MultiIndex.from_product([['mse', 'r2'], ['hist', 'scan'], ['train', 'val']]), dtype=float)
+	s[('mse', 'hist', 'train')], s[('r2', 'hist', 'train')],\
+	s[('mse', 'havg', 'train')], s[('r2', 'havg', 'train')] = calc_score(model, Xh_train, Yh_train, historic=True, perm=perm_h_train)
+	s[('mse', 'hist', 'val')], s[('r2', 'hist', 'val')],\
+	s[('mse', 'havg', 'val')], s[('r2', 'havg', 'val')] = calc_score(model, Xh_val, Yh_val, historic=True, perm=perm_h_val)
+	#s[('mse', 'scan', 'train')], s[('r2', 'scan', 'train')] = calc_score(model, Xs_train, Ys_train, historic=False)#, perm=perm_s_train)
+	#s[('mse', 'scan', 'val')], s[('r2', 'scan', 'val')] = calc_score(model, Xs_val, Ys_val, historic=False)#, perm=perm_s_val)
 	return s
 
 def plot_history(history, metric):
@@ -341,47 +345,64 @@ def plot_avg_history(history, metric):
 	plt.show()
 	plt.close()
 
-# train test split
-# split up different file_ids, since we want to be able to predict for a new training
+# train-val-test split
+# split up grouping on different file_ids, since we want to be able to predict for a new training
 # this means that one file_id stays within one group (either train or test)
 # this also means that the 15 outcomes of historic glucose stay within one group (train or test)
 # and are not split between the two
 # TODO: stratify by athlete
 # TODO: also group athletes, so some athletes are completely out-of-sample
-idx_train, idx_test = [], []
-for idx in GroupKFold(n_splits = K).split(df, groups = df['training_id']):
-	idx_train.append(shuffle(idx[0]))
-	idx_test.append(shuffle(idx[1]))
+# TODO: outer-fold cv
+idx_trainval, idx_test = list(GroupShuffleSplit(n_splits=1, train_size=.8).split(df, groups=df['training_id']))[0]
 
+idx_train, idx_val = [], []
+for idx in GroupKFold(n_splits = K).split(df.loc[idx_trainval], groups = df.loc[idx_trainval, 'training_id']):
+	idx_train.append(shuffle(idx_trainval[idx[0]]))
+	idx_val.append(shuffle(idx_trainval[idx[1]]))
+
+# visualize data split
+for k in range(K):
+	df.loc[idx_val[k], ('split', '', '')] = k
+df.loc[idx_test, ('split', '', '')] = K+1
+
+df_split = df.groupby('training_id').first()
+df_split = df_split[['local_timestamp', 'athlete', 'file_id', 'split']]
+df_split.columns = df_split.columns.get_level_values(0)
+df_split.sort_values(['athlete', 'file_id'])
+for i in athletes:
+	df_split.loc[df_split.athlete == i, 'file_id'] = np.arange(len(df_split[df_split.athlete == i]))
+df_split = df_split.set_index(['athlete', 'file_id']).unstack()['split']
+sns.heatmap(df_split, cmap=sns.color_palette('Greens', K+1))
 
 # ------------------ Linear
-M = {'LinearRegression': [LinearRegression() for _ in range(K)],
-	 'Lasso': [Lasso(alpha=1e-3) for _ in range(K)], 
-	 'ElasticNet': [ElasticNet(alpha=1e-3, l1_ratio=.5) for _ in range(K)], 
-	 #'SVR': [SVR() for _ in range(K)], 
-	 #'DecisionTree': [DecisionTreeRegressor(max_depth=30, min_samples_split=0.2) for _ in range(K)], 
-	 #'RandomForest': [RandomForestRegressor() for _ in range(K)], 
-	 #'ExtraTrees': [ExtraTreesRegressor() for _ in range(K)], 
-	 #'AdaBoost': [AdaBoostRegressor() for _ in range(K)], 
-	 #'GradientBoost': [GradientBoostingRegressor() for _ in range(K)]
+M = {'LinearRegression': [LinearRegression() for _ in range(K+1)],
+	 #'Lasso': [Lasso(alpha=1e-3) for _ in range(K+1)], 
+	 #'ElasticNet': [ElasticNet(alpha=1e-3, l1_ratio=.5) for _ in range(K+1)], 
+	 #'SVR': [SVR() for _ in range(K+1)], 
+	 #'DecisionTree': [DecisionTreeRegressor(max_depth=30, min_samples_split=0.2) for _ in range(K+1)], 
+	 #'RandomForest': [RandomForestRegressor() for _ in range(K+1)], 
+	 #'ExtraTrees': [ExtraTreesRegressor() for _ in range(K+1)], 
+	 #'AdaBoost': [AdaBoostRegressor() for _ in range(K+1)], 
+	 #'GradientBoost': [GradientBoostingRegressor() for _ in range(K+1)]
 	 }
 
-#score = pd.DataFrame(columns=['mse_h_train', 'mse_h_avg_train', 'mse_s_train', 'mse_h_test' , 'mse_h_avg_test', 'mse_s_test', 
-#							  'r2_h_train', 'r2_h_avg_train', 'r2_s_train', 'r2_h_test', 'r2_h_avg_test', 'r2_s_test'])
-score = {m: pd.DataFrame(columns=['mse_h_train', 'mse_h_avg_train', 'mse_h_test' , 'mse_h_avg_test',
-							  	  'r2_h_train', 'r2_h_avg_train', 'r2_h_test', 'r2_h_avg_test']) for m in M.keys()}
+cv_score = {m: pd.DataFrame(columns=pd.MultiIndex.from_product([['mse', 'r2'], ['hist', 'havg', 'scan'], ['train', 'val']])) for m in M.keys()}
+score = pd.DataFrame(columns=pd.MultiIndex.from_product([['mse', 'r2'], ['hist', 'havg', 'scan'], ['test']]))
 for m in M.keys():
 	print(m)
 	for k in range(K):
 		print(k)
-		Xh_train, Yh_train, Xh_test, Yh_test, perm_h_train, perm_h_test = get_data(df, cols_X, cols_Y, k, idx_train, idx_test)
+		Xh_train, Yh_train, Xh_val, Yh_val, perm_h_train, perm_h_val = get_data(df, cols_X, cols_Y, k, idx_train, idx_val)
 
 		M[m][k].fit(Xh_train, Yh_train)
 
-		score[m].loc[k] = evaluate(M[m][k])
+		cv_score[m].loc[k] = evaluate(M[m][k])
 
-	print(score[m].mean())
+	print(cv_score[m].mean())
 
+	M[m][k+1].fit(np.concatenate([Xh_train, Xh_val]), np.concatenate([Yh_train, Yh_val]))
+	score.loc[m, ('mse', 'hist', 'test')], score.loc[m, ('r2', 'hist', 'test')] = calc_score(M[m][k+1], Xh_test, Yh_test)
+	print(score)
 """
 try:
 	coef = pd.DataFrame(M[m].coef_, index=cols_X)
@@ -398,17 +419,17 @@ plt.show()
 """
 
 # ------------------ Neural network
-N = {'NeuralNetwork': [NN(Xh_train.shape[1], 1, n_hidden = [50], act_hidden = ['relu'], do_hidden=[0.5, 0.5], optimizer=Adam(learning_rate=1e-3)).model for _ in range(K)]}
+N = {'NeuralNetwork': [NN(Xh_train.shape[1], 1, n_hidden = [50], act_hidden = ['relu'], do_hidden=[0.5, 0.5], optimizer=Adam(learning_rate=1e-3)).model for _ in range(K+1)]}
 
-score = {n: pd.DataFrame(columns=['mse_h_train', 'mse_h_avg_train', 'mse_h_test' , 'mse_h_avg_test',
-							  	  'r2_h_train', 'r2_h_avg_train', 'r2_h_test', 'r2_h_avg_test']) for n in N.keys()}
+cv_score.update({n: pd.DataFrame(columns=pd.MultiIndex.from_product([['mse', 'r2'], ['hist', 'havg', 'scan'], ['train', 'val']])) for n in N.keys()})
+#score = pd.DataFrame(columns=pd.MultiIndex.from_product([['mse', 'r2'], ['hist', 'scan'], ['test']]))
 history = pd.DataFrame()
 
 for n in N.keys():
 	print(n)
 	for k in range(K):
 		print(k)
-		Xh_train, Yh_train, Xh_test, Yh_test, perm_h_train, perm_h_test = get_data(df, cols_X, cols_Y, k, idx_train, idx_test)
+		Xh_train, Yh_train, Xh_val, Yh_val, perm_h_train, perm_h_val = get_data(df, cols_X, cols_Y, k, idx_train, idx_val)
 
 		# TODO: batch size
 		callbacks = [CSVLogger(savedir+'nn/history.log', separator=',', append=False),
@@ -419,21 +440,40 @@ for n in N.keys():
 			epochs = 200,
 			verbose = 1,
 			callbacks = callbacks,
-			validation_data = (Xh_test, Yh_test))
+			validation_data = (Xh_val, Yh_val))
 
 		N[n][k].load_weights(savedir+'nn/weights.hdf5')
 		hist = pd.read_csv(savedir+'nn/history.log', sep=',', engine='python')
 		hist['k'] = k
 		history = pd.concat([history, hist])
 
-		score[n].loc[k] = evaluate(N[n][k])
+		cv_score[n].loc[k] = evaluate(N[n][k])
 
 		#plot_history(history[history['k'] == k], 'loss')
 		#plot_history(history[history['k'] == k], 'r_square')
-	print(score[n].mean())
+	print(cv_score[n].mean())
 
 	plot_avg_history(history, 'loss')
 	plot_avg_history(history, 'r_square')
+
+	# TODO: there's definitely something wrong here as test is better than trainval
+	# Maybe it has to do with the splitting? That some athletes in general are bad?
+	N[n][k+1].fit(np.concatenate([Xh_train, Xh_val]), np.concatenate([Yh_train, Yh_val]),
+		epochs = 200,
+		verbose = 1,
+		callbacks = callbacks,
+		validation_data = (Xh_test, Yh_test))
+
+	N[n][k+1].load_weights(savedir+'nn/weights.hdf5')
+	hist = pd.read_csv(savedir+'nn/history.log', sep=',', engine='python')
+	hist['k'] = k+1
+	history = pd.concat([history, hist])
+
+	score.loc[n, ('mse', 'hist', 'test')], score.loc[n, ('r2', 'hist', 'test')] = calc_score(N[n][k+1], Xh_test, Yh_test)
+
+	plot_history(history[history['k'] == k+1], 'loss')
+	plot_history(history[history['k'] == k+1], 'r_square')
+
 
 """
 	# lstm
@@ -444,13 +484,13 @@ for n in N.keys():
 			epochs = epochs,
 			verbose = 1,
 			callbacks = callbacks,
-			validation_data = (Xh_test, Yh_test))
+			validation_data = (Xh_val, Yh_val))
 
 best_m = score['r2'].argmax()
 
 plt.figure()
-plt.plot(np.unique(Y_test), np.unique(Y_test)*np.corrcoef(Y_pred, Y_test)[0,1])
-plt.scatter(Y_test, Y_pred, s=.1, alpha=.7)
+plt.plot(np.unique(Y_val), np.unique(Y_val)*np.corrcoef(Y_pred, Y_val)[0,1])
+plt.scatter(Y_val, Y_pred, s=.1, alpha=.7)
 plt.xlabel('True '+cols_glucose[0][0])
 plt.ylabel('Predicted '+cols_glucose[0][0])
 plt.show()
