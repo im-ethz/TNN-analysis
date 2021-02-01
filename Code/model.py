@@ -23,14 +23,15 @@ from sklearn.linear_model import LinearRegression, Lasso, ElasticNet
 from sklearn.svm import SVR
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import RandomForestRegressor, ExtraTreesRegressor, AdaBoostRegressor, GradientBoostingRegressor
-
 from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.base import clone
 
 import keras
 from keras.layers import Input, Dense, Concatenate, Dropout, Lambda, LSTM
 from keras.models import Model
+from keras.optimizers import Adam
 from keras import backend as K
-from keras.callbacks import ModelCheckpoint, EarlyStopping
+from keras.callbacks import ModelCheckpoint, EarlyStopping, CSVLogger
 
 import tensorflow as tf
 import tensorflow_addons as tfa
@@ -150,13 +151,14 @@ cols_X = df[cols_feature].columns.append(pd.MultiIndex.from_product([['Historic 
 df.reset_index(inplace=True)
 
 
-# ----------------------------- Non-timeseries models
+# ----------------------------- Models
 class NN: # time-delay neural network
-	def __init__(self, n_input, n_output, n_hidden, act_hidden, 
+	def __init__(self, n_input, n_output, n_hidden, act_hidden, do_hidden,
 		optimizer='Adam', loss='mse'):
 		self.n_input = n_input
 		self.n_hidden = n_hidden
 		self.act_hidden = act_hidden
+		self.do_hidden = do_hidden
 		self.n_output = n_output
 
 		self.optimizer = optimizer
@@ -167,8 +169,10 @@ class NN: # time-delay neural network
 		inp = Input(shape = (self.n_input,))
 
 		hid = Dense(self.n_hidden[0], activation = self.act_hidden[0])(inp)
+		hid = Dropout(self.do_hidden[0])(hid)
 		for h in range(1,len(self.n_hidden)):
 			hid = Dense(self.n_hidden[h], activation = self.act_hidden[h])(hid)
+			hid = Dropout(self.do_hidden[h])(hid)
 
 		out = Dense(self.n_output, activation = 'linear')(hid)
 
@@ -177,10 +181,13 @@ class NN: # time-delay neural network
 		return self.model
 
 class LSTM:
-	def __init__(self, n_timesteps, n_features, n_output, n_hidden, act_hidden,
+	def __init__(self, n_input, n_output, n_hidden, act_hidden, n_timesteps_p, n_features_p, n_timesteps_g, n_features_g, 
 		optimizer='Adam', loss='mse'):
-		self.n_timesteps = n_timesteps # window size
-		self.n_features = n_features # features (so n_cols = n_timesteps * n_features)
+		self.n_timesteps_p = n_timesteps_p # window size
+		self.n_features_p = n_features_p # features (so n_cols = n_timesteps * n_features)
+
+		self.n_timesteps_g = n_timesteps_g # window size
+		self.n_features_g = n_features_g # features (so n_cols = n_timesteps * n_features)
 		
 		self.n_output = n_output
 		self.n_hidden = n_hidden
@@ -191,43 +198,36 @@ class LSTM:
 		self.model = lstm()
 
 	def lstm(self):
-		model = Sequential()
-		model.add(LSTM(h_hidden[0], input_shape=(n_timesteps, n_features)))
-		model.add(Dropout(0.5))
-		model.add(Dense(100, activation='relu'))
-		model.add(Dense(n_output, activation='linear'))
+		inp_s = Input(shape = (self.n_input,))
+		inp_p = Input(input_shape=(self.n_timesteps_p, self.n_features_p))
+		inp_g = Input(input_shape=(self.n_timesteps_g, self.n_features_g))
+
+		s = Dense(self.n_hidden[0], activation = self.act_hidden[0])(inp_s)
+		s = Dropout(self.do_hidden[0])(s)
+		for h in range(1,len(self.n_hidden)):
+			s = Dense(self.n_hidden[h], activation = self.act_hidden[h])(s)
+			s = Dropout(self.do_hidden[h])(s)
+		s = Dense(10, activation = 'linear')(s)
+
+		p = LSTM(10)(inp_p)
+		#p = Dropout(self.do_hidden[0])(p)
+		#p = Dense(100, activation='relu')(p)
+		p = Dense(10, activation='linear')(p)
+
+		g = LSTM(3)(inp_g)
+		#g = Dropout(self.do_hidden[0])(g)
+		#p = Dense(100, activation='relu')(g)
+		g = Dense(3, activation='linear')(g)
+
+		comb = Concatenate([s, p, g])
+		comb = Dense(20, activation='relu')(comb)
+		out = Dense(self.n_output, activation='linear')(comb)
+
+		model = Model(inputs=[inp_s, inp_p, inp_g], outputs=out)
 		model.compile(optimizer=self.optimizer, loss = self.loss, metrics = RSquare(y_shape=(self.n_output,)))
 		return self.model
 
-def glucose_avg(Yh_pred, perm):
-	# average the predicted glucose id over the last 15 measurements,
-	# as done in the LibreView Historic Glucose
-	Yh_avg = df.loc[perm.values(), ['athlete', 'file_id', 'glucose_id']].to_frame()
-	Yh_avg['Yh_pred'] = Yh_pred
-	Yh_map = Yh_avg.groupby(['athlete', 'file_id', 'glucose_id']).mean().to_dict()['Yh_pred']
-	return Yh_avg.apply(lambda x: Yh_map[x[0]], axis=1)
-
-def plot_history(history, metric):
-	plt.plot(history.history[metric], label='loss')
-	plt.plot(history.history['val_'+metric], label='val_loss')
-	plt.xlabel('Epoch')
-	plt.ylabel(metric)
-	plt.legend()
-	plt.show()
-	plt.close()
-
-# train test split
-# split up different file_ids, since we want to be able to predict for a new training
-# this means that one file_id stays within one group (either train or test)
-# this also means that the 15 outcomes of historic glucose stay within one group (train or test)
-# and are not split between the two
-# TODO: stratify by athlete
-idx_train, idx_test = [], []
-for idx in GroupKFold(n_splits = K).split(df, groups = df['training_id']):
-	idx_train.append(shuffle(idx[0]))
-	idx_test.append(shuffle(idx[1]))
-
-for k in range(K):
+def get_data(df, cols_X, cols_Y, k, idx_train, idx_test):
 	df_train = df.loc[idx_train[k]]
 	df_test = df.loc[idx_test[k]]
 
@@ -269,74 +269,164 @@ for k in range(K):
 	#Ys_train = py.transform(Ys_train).ravel()
 	#Ys_test = py.transform(Ys_test).ravel()
 	# TODO: check if we just standardize
+	return Xh_train, Yh_train, Xh_test, Yh_test, perm_h_train, perm_h_test
 
-	# todo: include feature selection
-	# TODO: check why the non-linear models aren't working
-	# TODO: custom loss function as well for this scoring
-	# TODO: in some way for a nn combine the two outcomes for one loss function
-	# TODO: fix cross-validation
-	# TODO: error per time in training (maybe error is worse in beginning of training)
-	# TODO: add training time as variable
-	# TODO: use validation set
-	# TODO: imputation
+def glucose_avg(Yh_pred, perm):
+	# average the predicted glucose id over the last 15 measurements,
+	# as done in the LibreView Historic Glucose
+	Yh_avg = df.loc[perm.values(), ['athlete', 'file_id', 'glucose_id']].to_frame()
+	Yh_avg['Yh_pred'] = Yh_pred
+	Yh_map = Yh_avg.groupby(['athlete', 'file_id', 'glucose_id']).mean().to_dict()['Yh_pred']
+	return Yh_avg.apply(lambda x: Yh_map[x[0]], axis=1)
 
-	M = {'LinearRegression': LinearRegression(),
-		 'Lasso': Lasso(alpha=1.), 
-		 'ElasticNet': ElasticNet(alpha=1., l1_ratio=.5), 
-		 #'SVR': SVR(), 
-		 #'DecisionTree': DecisionTreeRegressor(), 
-		 #'RandomForest': RandomForestRegressor(), 
-		 #'ExtraTrees': ExtraTreesRegressor(), 
-		 #'AdaBoost': AdaBoostRegressor(), 
-		 #'GradientBoost': GradientBoostingRegressor()
-		 }
+def evaluate(model):
+	s = pd.Series(dtype=float)
+	
+	# mse for historic and scan glucose
+	s['mse_h_train'] = mean_squared_error(Yh_train, model.predict(Xh_train))
+	#s['mse_s_train'] = mean_squared_error(Ys_train, model.predict(Xs_train))
+	s['mse_h_test'] = mean_squared_error(Yh_test, model.predict(Xh_test))
+	#s['mse_s_test'] = mean_squared_error(Ys_test, model.predict(Xs_test))
 
-	#score = pd.DataFrame(columns=['mse_h_train', 'mse_h_avg_train', 'mse_s_train', 'mse_h_test' , 'mse_h_avg_test', 'mse_s_test', 
-	#							  'r2_h_train', 'r2_h_avg_train', 'r2_s_train', 'r2_h_test', 'r2_h_avg_test', 'r2_s_test'])
-	score = pd.DataFrame(columns=['mse_h_train', 'mse_h_avg_train', 'mse_h_test' , 'mse_h_avg_test',
-								  'r2_h_train', 'r2_h_avg_train', 'r2_h_test', 'r2_h_avg_test'])
+	# r2 for historic and scan glucose
+	s['r2_h_train'] = r2_score(Yh_train, model.predict(Xh_train))
+	#s['r2_s_train'] = r2_score(Ys_train, model.predict(Xs_train))
+	s['r2_h_test'] = r2_score(Yh_test, model.predict(Xh_test))
+	#s['r2_s_test'] = r2_score(Ys_test, model.predict(Xs_test))
 
-	for m in M.keys():
-		print(m)
-		M[m].fit(Xh_train, Yh_train)
+	# mse and r2 for averaged historic glucose
+	#s['mse_h_avg_train'] = mean_squared_error(Yh_train, glucose_avg(model.predict(Xh_train), perm_h_train))
+	#s['mse_h_avg_test'] = mean_squared_error(Yh_test, glucose_avg(model.predict(Xh_test), perm_h_test))
+	#s['r2_h_avg_train'] = r2_score(Yh_train, glucose_avg(model.predict(Xh_train), perm_h_train))
+	#s['r2_h_avg_test'] = r2_score(Yh_test, glucose_avg(model.predict(Xh_test), perm_h_test))
+	return s
 
-		# mse for historic and scan glucose
-		score.loc[m, 'mse_h_train'] = mean_squared_error(Yh_train, M[m].predict(Xh_train))
-		#score.loc[m, 'mse_s_train'] = mean_squared_error(Ys_train, M[m].predict(Xs_train))
-		score.loc[m, 'mse_h_test'] = mean_squared_error(Yh_test, M[m].predict(Xh_test))
-		#score.loc[m, 'mse_s_test'] = mean_squared_error(Ys_test, M[m].predict(Xs_test))
+def plot_history(history, metric):
+	plt.plot(history[metric], label='loss')
+	plt.plot(history['val_'+metric], label='val_loss')
+	plt.xlabel('Epoch')
+	plt.ylabel(metric)
+	plt.legend()
+	plt.show()
+	plt.close()
 
-		# r2 for historic and scan glucose
-		score.loc[m, 'r2_h_train'] = r2_score(Yh_train, M[m].predict(Xh_train))
-		#score.loc[m, 'r2_s_train'] = r2_score(Ys_train, M[m].predict(Xs_train))
-		score.loc[m, 'r2_h_test'] = r2_score(Yh_test, M[m].predict(Xh_test))
-		#score.loc[m, 'r2_s_test'] = r2_score(Ys_test, M[m].predict(Xs_test))
+def plot_avg_history(history, metric):
+	sns.lineplot(data=history, x='epoch', y=metric, label='loss')
+	sns.lineplot(data=history, x='epoch', y='val_'+metric, label='val_loss')
+	plt.xlabel('Epoch')
+	plt.ylabel(metric)
+	plt.legend()
+	plt.show()
+	plt.close()
 
-		# mse and r2 for averaged historic glucose
-		score.loc[m, 'mse_h_avg_train'] = mean_squared_error(Yh_train, glucose_avg(M[m].predict(Xh_train), perm_h_train))
-		score.loc[m, 'mse_h_avg_test'] = mean_squared_error(Yh_test, glucose_avg(M[m].predict(Xh_test), perm_h_test))
-		score.loc[m, 'r2_h_avg_train'] = r2_score(Yh_train, glucose_avg(M[m].predict(Xh_train), perm_h_train))
-		score.loc[m, 'r2_h_avg_test'] = r2_score(Yh_test, glucose_avg(M[m].predict(Xh_test), perm_h_test))
+# train test split
+# split up different file_ids, since we want to be able to predict for a new training
+# this means that one file_id stays within one group (either train or test)
+# this also means that the 15 outcomes of historic glucose stay within one group (train or test)
+# and are not split between the two
+# TODO: stratify by athlete
+# TODO: also group athletes, so some athletes are completely out-of-sample
+idx_train, idx_test = [], []
+for idx in GroupKFold(n_splits = K).split(df, groups = df['training_id']):
+	idx_train.append(shuffle(idx[0]))
+	idx_test.append(shuffle(idx[1]))
 
-		print(score.loc[m])
+# todo: include feature selection
+# TODO: check why the non-linear models aren't working
+# TODO: custom loss function as well for this scoring
+# TODO: in some way for a nn combine the two outcomes for one loss function
+# TODO: fix cross-validation
+# TODO: error per time in training (maybe error is worse in beginning of training)
+# TODO: add training time as variable
+# TODO: use validation set
+# TODO: imputation
+# TODO: bigger window?
+# TODo: shift glucose values?
+# TODO: optimize models
+# TODO: use model checkpoint and pick best model after early stopping
 
-	# neural network
-	# TODO: batch size
-	callbacks = [EarlyStopping(monitor='val_loss', min_delta=0, patience=20)]
+# ------------------ Linear
+M = {'LinearRegression': [LinearRegression() for _ in range(K)],
+	 'Lasso': [Lasso(alpha=1e-3) for _ in range(K)], 
+	 'ElasticNet': [ElasticNet(alpha=1e-3, l1_ratio=.5) for _ in range(K)], 
+	 #'SVR': [SVR() for _ in range(K)], 
+	 #'DecisionTree': [DecisionTreeRegressor(max_depth=30, min_samples_split=0.2) for _ in range(K)], 
+	 #'RandomForest': [RandomForestRegressor() for _ in range(K)], 
+	 #'ExtraTrees': [ExtraTreesRegressor() for _ in range(K)], 
+	 #'AdaBoost': [AdaBoostRegressor() for _ in range(K)], 
+	 #'GradientBoost': [GradientBoostingRegressor() for _ in range(K)]
+	 }
 
-	N = {'NeuralNetwork': NN(Xh_train.shape[1], 1, n_hidden = [5], act_hidden = ['tanh']).model}
+#score = pd.DataFrame(columns=['mse_h_train', 'mse_h_avg_train', 'mse_s_train', 'mse_h_test' , 'mse_h_avg_test', 'mse_s_test', 
+#							  'r2_h_train', 'r2_h_avg_train', 'r2_s_train', 'r2_h_test', 'r2_h_avg_test', 'r2_s_test'])
+score = {m: pd.DataFrame(columns=['mse_h_train', 'mse_h_avg_train', 'mse_h_test' , 'mse_h_avg_test',
+							  	  'r2_h_train', 'r2_h_avg_train', 'r2_h_test', 'r2_h_avg_test']) for m in M.keys()}
+for m in M.keys():
+	print(m)
+	for k in range(K):
+		print(k)
+		Xh_train, Yh_train, Xh_test, Yh_test, perm_h_train, perm_h_test = get_data(df, cols_X, cols_Y, k, idx_train, idx_test)
 
-	for n in N.keys():
-		print(n)
-		N[n].fit(Xh_train, Yh_train, 
-			epochs = 100,
+		M[m][k].fit(Xh_train, Yh_train)
+
+		score[m].loc[k] = evaluate(M[m][k])
+
+	print(score[m].mean())
+
+"""
+try:
+	coef = pd.DataFrame(M[m].coef_, index=cols_X)
+except AttributeError:
+	coef = pd.DataFrame(M[m].feature_importances_, index=cols_X)
+coef['abs'] = coef[0].abs()
+coef = coef.sort_values('abs', ascending=False).drop('abs', axis=1)
+
+coef.iloc[:20].plot(kind='barh')
+plt.title(m+' coefficients')
+plt.axvline(x=0)
+plt.subplots_adjust(left=.5)
+plt.show()
+"""
+
+# ------------------ Neural network
+N = {'NeuralNetwork': [NN(Xh_train.shape[1], 1, n_hidden = [50], act_hidden = ['relu'], do_hidden=[0.5, 0.5], optimizer=Adam(learning_rate=1e-3)).model for _ in range(K)]}
+
+score = {n: pd.DataFrame(columns=['mse_h_train', 'mse_h_avg_train', 'mse_h_test' , 'mse_h_avg_test',
+							  	  'r2_h_train', 'r2_h_avg_train', 'r2_h_test', 'r2_h_avg_test']) for n in N.keys()}
+history = pd.DataFrame()
+
+for n in N.keys():
+	print(n)
+	for k in range(K):
+		print(k)
+		Xh_train, Yh_train, Xh_test, Yh_test, perm_h_train, perm_h_test = get_data(df, cols_X, cols_Y, k, idx_train, idx_test)
+
+		# TODO: batch size
+		callbacks = [CSVLogger(savedir+'nn/history.log', separator=',', append=False),
+					 EarlyStopping(monitor='val_loss', min_delta=0, patience=10),
+					 ModelCheckpoint(savedir+'nn/weights.hdf5', monitor='val_loss', verbose=1, mode='min', save_best_only=True)]
+
+		N[n][k].fit(Xh_train, Yh_train, 
+			epochs = 200,
 			verbose = 1,
 			callbacks = callbacks,
 			validation_data = (Xh_test, Yh_test))
 
-		plot_history(N[n].history, 'loss')
-		plot_history(N[n].history, 'r_square')
+		N[n][k].load_weights(savedir+'nn/weights.hdf5')
+		hist = pd.read_csv(savedir+'nn/history.log', sep=',', engine='python')
+		hist['k'] = k
+		history = pd.concat([history, hist])
 
+		score[n].loc[k] = evaluate(N[n][k])
+
+		#plot_history(history[history['k'] == k], 'loss')
+		#plot_history(history[history['k'] == k], 'r_square')
+	print(score[n].mean())
+
+	plot_avg_history(history, 'loss')
+	plot_avg_history(history, 'r_square')
+
+"""
 	# lstm
 	L = {'LSTM': LSTM()}
 	for l in L.keys():
@@ -355,11 +445,4 @@ plt.scatter(Y_test, Y_pred, s=.1, alpha=.7)
 plt.xlabel('True '+cols_glucose[0][0])
 plt.ylabel('Predicted '+cols_glucose[0][0])
 plt.show()
-
-# Gaussian process
-
-# ----------------------------- Non-timeseries models
-# Standard
-
-# Latent variable model
-# Hidden markov?
+"""
