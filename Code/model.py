@@ -1,12 +1,34 @@
-# List of TODOS - overview
+# TOOD (shortterm):
+# - have validation set
+# - make all functions work (also with avg_glucose)
+# - once solid model, start summarizing data steps
+# - include more data?
+# - shift glucose values that we are predicting 5-15 minutes back in time
+# - train on data of one athlete
+# - train on scan glucose
+
+# TODOS (mid)
+# - include dexcom data?
+# - Error per time in training (maybe the error is worse in the beginning of training)
+# - Visualize train-test split
+# - Use past cycling data in prediction (summary of all features up until t)
+# - Besides mean, use other statistics in prediction with sliding window
+# - Figure out the cause of the similarity in performance between the linear and non-linear models
+# - Custom loss function for NN
+# - Try out custom nn where the scan glucose is also modelled
+# - Add time training as a variable (?) - Should we do this because distance is also a variable
+# - Imputation of variables
+# - Try out different window sizes for the glucose and for the cycling data
+# - Optimize models
+
+# TODOS (longterm)
+# - Include feature selection
 # - Model with and without imputation
 # - Model for each athlete individually and combined
 # - IDEA: don't use interpolation but GP/HMM to find true value of data
 # - Try out different aggregation (time) intervals
-# - Predict using diff of glucose levels
-# - Use past glucose levels in prediction
-# - Use past 15 minutes of cycling data in prediction
-# - TODO: use tsextract for sliding windows
+# - Check out how much history of cycling data is needed
+# - Should we group athletes so some athletes are completely out-of-sample?
 import numpy as np
 import scipy as sp
 import pandas as pd
@@ -331,19 +353,6 @@ for idx in GroupKFold(n_splits = K).split(df, groups = df['training_id']):
 	idx_train.append(shuffle(idx[0]))
 	idx_test.append(shuffle(idx[1]))
 
-# todo: include feature selection
-# TODO: check why the non-linear models aren't working
-# TODO: custom loss function as well for this scoring
-# TODO: in some way for a nn combine the two outcomes for one loss function
-# TODO: fix cross-validation
-# TODO: error per time in training (maybe error is worse in beginning of training)
-# TODO: add training time as variable
-# TODO: use validation set
-# TODO: imputation
-# TODO: bigger window?
-# TODo: shift glucose values?
-# TODO: optimize models
-# TODO: use model checkpoint and pick best model after early stopping
 
 # ------------------ Linear
 M = {'LinearRegression': [LinearRegression() for _ in range(K)],
