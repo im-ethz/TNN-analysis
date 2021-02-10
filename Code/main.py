@@ -159,6 +159,8 @@ cols_X = df[cols_feature].columns.append(pd.MultiIndex.from_product([['Historic 
 cols_Y = [('Historic Glucose mg/dL (filled)', 'mean', 't'), ('Scan Glucose mg/dL', 'mean', 't'), ('Bubble Glucose mg/dL', 'mean', 't')]#[('Historic Glucose mg/dL (diff)', 'mean', 't')]
 #cols_Ys = [('Scan Glucose mg/dL (diff)', 'mean', 't')]
 
+types = [c[0].rstrip(" (filled)").rstrip("lucose mg/dL")[:-2] for c in cols_Y]
+
 df.reset_index(inplace=True)
 
 # plot histogram of glucose
@@ -266,6 +268,47 @@ for idx in GroupKFold(n_splits = K).split(df.loc[idx_trainval], groups = df.loc[
 # visualize data split
 PlotData('Descriptives/').plot_data_split(df, idx_val, idx_test)
 
+# ------------------ Basic baseline
+# predicting based on previous glucose value
+def basic_baseline(Y, perm, name):
+	# TODO: not the best way to get glucose values
+	# TODO: maybe if there's a nan, just take a mean?
+
+	# combine:
+	cols = ['athlete', 'file_id']
+	if name == 'Historic':
+		cols += ['glucose_id']
+	Y_pred = df.loc[perm.values(), cols]
+	Y_pred.columns = Y_pred.columns.get_level_values(0)
+	Y_pred['Y_pred'] = Y
+	if name == 'Historic':
+		Y_map = Y_pred.groupby(cols).mean()
+	else:
+		Y_map = Y_pred.sort_values(cols).set_index(cols)
+	Y_map['Y_pred (shift)'] = np.nan
+	for a, f in zip(Y_map.index.get_level_values(0), Y_map.index.get_level_values(1)):
+		try:
+			Y_map.loc[a].loc[f]['Y_pred (shift)'] = Y_map.loc[a].loc[f]['Y_pred'].shift(1)
+		except AttributeError:
+			continue
+	Y_map = Y_map.to_dict()['Y_pred (shift)']
+	Y_pred = Y_pred.apply(lambda x: Y_map[tuple(x[:len(cols)])], axis=1)
+	Y = Y[Y_pred.notna()]
+	Y_pred = Y_pred.dropna().values
+	return Y, Y_pred
+
+X_trainval, Y_trainval, X_test, Y_test, perm_trainval, perm_test = get_data(df, cols_X, cols_Y, 0, [idx_trainval], [idx_test])
+
+score = pd.DataFrame(columns=pd.MultiIndex.from_product([['mse', 'r2'], types+['Historic (avg)'], ['trainval', 'test']]))
+
+score.loc['BasicBaseline'] = np.nan
+for i, t in enumerate(types):
+	score.loc['BasicBaseline'][('mse', t, 'trainval')] = mean_squared_error(*basic_baseline(Y_trainval[i], perm_trainval[i], t))
+	score.loc['BasicBaseline'][('r2', t, 'trainval')] = r2_score(*basic_baseline(Y_trainval[i], perm_trainval[i], t))
+	score.loc['BasicBaseline'][('mse', t, 'test')] = mean_squared_error(*basic_baseline(Y_test[i], perm_test[i], t))
+	score.loc['BasicBaseline'][('r2', t, 'test')] = r2_score(*basic_baseline(Y_test[i], perm_test[i], t))
+
+
 # ------------------ Linear
 M = {'LinearRegression': [LinearRegression() for _ in range(K+1)],
 	 #'Lasso': [Lasso(alpha=1e-3) for _ in range(K+1)], 
@@ -278,8 +321,7 @@ M = {'LinearRegression': [LinearRegression() for _ in range(K+1)],
 	 #'GradientBoost': [GradientBoostingRegressor() for _ in range(K+1)]
 	 }
 
-cv_score = {m: pd.DataFrame(columns=pd.MultiIndex.from_product([['mse', 'r2'], [c[0].rstrip(" (filled)").rstrip("lucose mg/dL")[:-2] for c in cols_Y]+['Historic (avg)'], ['train', 'val']])) for m in M.keys()}
-score = pd.DataFrame(columns=pd.MultiIndex.from_product([['mse', 'r2'], [c[0].rstrip(" (filled)").rstrip("lucose mg/dL")[:-2] for c in cols_Y]+['Historic (avg)'], ['trainval', 'test']]))
+cv_score = {m: pd.DataFrame(columns=pd.MultiIndex.from_product([['mse', 'r2'], types+['Historic (avg)'], ['train', 'val']])) for m in M.keys()}
 for m in M.keys():
 	print(m)
 	for k in range(K):
@@ -292,7 +334,6 @@ for m in M.keys():
 
 	print(cv_score[m].mean())
 
-	X_trainval, Y_trainval, X_test, Y_test, perm_trainval, perm_test = get_data(df, cols_X, cols_Y, 0, [idx_trainval], [idx_test])
 	M[m][k+1].fit(X_trainval[0], Y_trainval[0])
 	score.loc[m] = evaluate(M[m][k+1], {'trainval': (X_trainval, Y_trainval, perm_trainval), 'test': (X_test, Y_test, perm_test)})
 	print(score)
@@ -314,7 +355,7 @@ plt.show()
 # ------------------ Neural network
 N = {'NeuralNetwork': [NN(len(cols_X), 1, n_hidden = [50], act_hidden = ['relu'], do_hidden=[0.5, 0.5], optimizer=Adam(learning_rate=1e-3)).model for _ in range(K+1)]}
 
-cv_score.update({n: pd.DataFrame(columns=pd.MultiIndex.from_product([['mse', 'r2'],  [c[0].rstrip(" (filled)").rstrip("lucose mg/dL")[:-2] for c in cols_Y]+['Historic (avg)'], ['train', 'val']])) for n in N.keys()})
+cv_score.update({n: pd.DataFrame(columns=pd.MultiIndex.from_product([['mse', 'r2'],  types+['Historic (avg)'], ['train', 'val']])) for n in N.keys()})
 #score = pd.DataFrame(columns=pd.MultiIndex.from_product([['mse', 'r2'], ['hist', 'scan'], ['test']]))
 history = pd.DataFrame()
 
@@ -351,7 +392,6 @@ for n in N.keys():
 
 	# TODO: there's definitely something wrong here as test is better than trainval
 	# Maybe it has to do with the splitting? That some athletes in general are bad?
-	X_trainval, Y_trainval, X_test, Y_test, perm_trainval, perm_test = get_data(df, cols_X, cols_Y, 0, [idx_trainval], [idx_test])
 	N[n][k+1].fit(X_trainval[0], Y_trainval[0],
 		epochs = 200,
 		verbose = 1,
