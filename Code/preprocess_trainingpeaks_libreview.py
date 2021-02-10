@@ -30,6 +30,7 @@ merge_path = 'Data/TrainingPeaks+LibreView/'
 
 shift_historic = [15, 30, 45, 60]
 shift_scan = [3, 5, 10, 15]
+shift_bubble = [3, 5, 10, 15]
 
 if not os.path.exists(merge_path):
 	os.mkdir(merge_path)
@@ -64,7 +65,7 @@ for i in lv_athletes:
 	# -------------------- TrainingPeaks
 	df_tp = pd.read_csv(tp_path+str(i)+'/'+str(i)+'_data.csv', index_col=0)
 
-	df_tp.rename(columns={'glucose':'glucose_BUBBLE', 'Zwift':'zwift'}, inplace=True)
+	df_tp.rename(columns={'glucose':'Bubble Glucose mg/dL', 'Zwift':'zwift'}, inplace=True)
 
 	df_tp['timestamp'] = pd.to_datetime(df_tp['timestamp'])
 	df_tp['local_timestamp'] = pd.to_datetime(df_tp['local_timestamp'])
@@ -88,6 +89,16 @@ for i in lv_athletes:
 
 	for s in shift_scan:
 		df = shift_glucose(df, df_lv, 'Scan Glucose mg/dL', s)
+
+	for s in shift_bubble:
+		try:
+			df_shift = df.set_index('local_timestamp')['Bubble Glucose mg/dL']\
+			.shift(periods=-s, freq='min').dropna().reset_index()\
+			.rename(columns={'Bubble Glucose mg/dL':'Bubble Glucose mg/dL (shift-%s)'%str(s)})
+			df = pd.merge(df, df_shift, how='left', on='local_timestamp')
+		except KeyError as e:
+			print("KeyError: ", e)
+			continue
 
 	df.set_index('local_timestamp', drop=True, inplace=True)
 
@@ -120,7 +131,7 @@ for i in athletes:
 	# TODO: find out what happened when there are large gaps in the data
 
 
-	# -------------------- Temperature
+	# -------------------- Temperature -TODO: move to preprocess_trainingpeaks.py
 	# smooth temperature (because of binned values) (with centering implemented manually)
 	# rolling mean of {temp_window} seconds, centered
 	temp_window = 200 #in seconds
@@ -314,15 +325,17 @@ for i in athletes:
 	# other possibilities include: skewness and kurtosis, but don't know if this is relevant
 	agg_dict = {}
 	for col in cols_feature_eng:
-		agg_dict.update({col: [np.sum, np.mean, np.median, np.std, minmax, sp.stats.iqr]})
+		agg_dict.update({col: [np.sum, np.mean, np.median, np.std, sp.stats.iqr, np.min, np.max]})
 
 	# glucose
 	agg_dict.update({'Historic Glucose mg/dL'						: 'mean',
 					 'Historic Glucose mg/dL (filled)'				: 'mean',
-					 'Scan Glucose mg/dL'							: 'mean'})
+					 'Scan Glucose mg/dL'							: 'mean',
+					 'Bubble Glucose mg/dL'							: 'mean'})
 	agg_dict.update({'Historic Glucose mg/dL (shift-%s)'%s 			: 'mean' for s in shift_historic})
 	agg_dict.update({'Historic Glucose mg/dL (shift-%s) (filled)'%s : 'mean' for s in shift_historic})
 	agg_dict.update({'Scan Glucose mg/dL (shift-%s)'%s 				: 'mean' for s in shift_scan})
+	agg_dict.update({'Bubble Glucose mg/dL (shift-%s)'%s 			: 'mean' for s in shift_bubble})
 
 	# no feature engineering for remaining columns
 	agg_dict.update({'file_id'							: 'first',
@@ -332,7 +345,6 @@ for i in athletes:
 					'gps_accuracy'						: 'mean',
 					'battery_soc'						: 'mean',
 					'battery_soc_ilin'					: 'mean',
-					'glucose_BUBBLE'					: 'mean',
 					'time_from_course'					: 'mean', #??? first?
 					'compressed_speed_distance'			: 'mean',
 					'combined_pedal_smoothness'			: 'mean',
@@ -392,6 +404,8 @@ for i in athletes:
 	df = pd.read_csv(merge_path+'1min/'+str(i)+'.csv', header=[0,1], index_col=0)
 	df.index = pd.to_datetime(df.index)
 
+	df.rename(columns={'amin':'min', 'amax':'max'}, inplace=True)
+
 	# --------------------- Clean and recalculate some features
 	# recalculate time_training
 	df[('time_training', 'first')] = np.nan
@@ -410,15 +424,15 @@ for i in athletes:
 					'left_torque_effectiveness', 'right_torque_effectiveness', 'left_right_balance',
 					'power', 'speed', 'temperature']
 
-	print("Number of nans \n", df.isna().sum().unstack())
+	#print("Number of nans \n", df.isna().sum().unstack())
 	# TODO: obs: for temperature smooth, there are more nans than for temperature
 
-	print("Max number of nans per col type: \n", 
-		df.isna().sum().unstack().max(axis=1).sort_values())
+	#print("Max number of nans per col type: \n", 
+	#	df.isna().sum().unstack().max(axis=1).sort_values())
 
 	# save file where all nans are dropped
 	# don't consider ascent as it has too many nan values
-	df_dropna = df.dropna(how='any', subset=[(c,x) for c in cols_feature for x in ['iqr', 'mean', 'median', 'minmax', 'std', 'sum']])
+	df_dropna = df.dropna(how='any', subset=[(c,x) for c in cols_feature for x in ['iqr', 'mean', 'median', 'min', 'max', 'std', 'sum']])
 	df_dropna.to_csv(merge_path+'1min/dropna/'+str(i)+'.csv')
 
 	# TODO: drop if nanvalue is first of file
