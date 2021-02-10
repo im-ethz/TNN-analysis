@@ -348,7 +348,7 @@ class PlotData:
 		plt.close()
 
 class PlotResults:
-	def __init__(self, savedir, model, savetext=''):
+	def __init__(self, savedir, savetext=''):
 		sns.set()
 		sns.set_context('paper')
 		sns.set_style('white')
@@ -362,8 +362,8 @@ class PlotResults:
 		plt.xlabel('Epoch')
 		plt.ylabel(metric)
 		plt.legend()
-		plt.savefig(self.savedir+self.model+'_history_'+metric+'_'+self.savetext+'.pdf', bbox_inches='tight')
-		plt.savefig(self.savedir+self.model+'_history_'+metric+'_'+self.savetext+'.png', bbox_inches='tight')
+		plt.savefig(self.savedir+'_history_'+metric+'_'+self.savetext+'.pdf', bbox_inches='tight')
+		plt.savefig(self.savedir+'_history_'+metric+'_'+self.savetext+'.png', bbox_inches='tight')
 		plt.show()
 		plt.close()
 
