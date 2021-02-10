@@ -1,4 +1,7 @@
 # TOOD (shortterm):
+# - implement simple baseline
+# - implement shap
+# - plot coefficients
 # - include scan glucose
 # - once solid model, start summarizing data steps
 # - include more data?
@@ -34,28 +37,16 @@ import pandas as pd
 import datetime
 import os
 import gc
-import matplotlib
 
 from sklearn.preprocessing import PowerTransformer, StandardScaler, RobustScaler
 from sklearn.model_selection import GroupShuffleSplit, GroupKFold
 from sklearn.utils import shuffle
-
-from sklearn.linear_model import LinearRegression, Lasso, ElasticNet
-from sklearn.svm import SVR
-from sklearn.tree import DecisionTreeRegressor
-from sklearn.ensemble import RandomForestRegressor, ExtraTreesRegressor, AdaBoostRegressor, GradientBoostingRegressor
-from sklearn.metrics import mean_squared_error, r2_score
-from sklearn.base import clone
 
 from model import *
 from plot import *
 from helper import *
 
 verbose = 1
-
-sns.set()
-sns.set_context('paper')
-sns.set_style('white')
 
 K = 5
 
@@ -171,60 +162,9 @@ cols_Y = [('Historic Glucose mg/dL (filled)', 'mean', 't'), ('Scan Glucose mg/dL
 df.reset_index(inplace=True)
 
 # plot histogram of glucose
-# glucose at t
-glucose_palette = sns.diverging_palette(10, 50, n=5)[:3] + sns.diverging_palette(10, 50, n=7)[4:6]
-type_palette = sns.color_palette("viridis")
-patch_count = [0]
+PlotData('Descriptives/').plot_hist_glucose(df, cols_Y)
 
-fig, ax0 = plt.subplots()
-# annotate glucose levels
-for i, (g, l) in enumerate(glucose_levels.items()):
-	ax0.axvspan(l[0], l[1], alpha=0.2, color=glucose_palette[i])
-
-ax0.text(glucose_levels['hypo L2'][0]+25, 1.03, 'hypo', color=glucose_palette[0])
-ax0.text(glucose_levels['hyper L1'][0]+35, 1.03, 'hyper', color=glucose_palette[4])
-ax0.text(glucose_levels['normal'][0]+25, 1.03, 'normal', color=tuple([c*0.5 for c in glucose_palette[2]]))
-
-ax0.annotate('L2', xy=(glucose_levels['hypo L2'][0]+25, .95), color=glucose_palette[0])
-ax0.annotate('L1', xy=(glucose_levels['hypo L1'][0], .95), color=glucose_palette[1])
-ax0.annotate('L1', xy=(glucose_levels['hyper L1'][0]+25, .95), color=glucose_palette[3])
-ax0.annotate('L2', xy=(glucose_levels['hyper L2'][0]+80, .95), color=glucose_palette[4])
-
-ax = ax0.twinx()
-
-sns.histplot(df[('Scan Glucose mg/dL')], label='Scan', ax=ax,
-	stat='density', kde=True,
-	binwidth=10, alpha=0.3, line_kws={'lw':2.})
-patch_count.append(len(ax.patches))
-
-sns.histplot(df[('Bubble Glucose mg/dL')], label='Bubble',  ax=ax,
-	stat='density', kde=True,
-	binwidth=10, alpha=0.3, line_kws={'lw':2.})
-patch_count.append(len(ax.patches))
-
-sns.histplot(df[('Historic Glucose mg/dL (filled)', 'mean', 't')], label='Historic', ax=ax,
-	stat='density', kde=True, 
-	binwidth=10, alpha=0.3, line_kws={'lw':2.})
-patch_count.append(len(ax.patches))
-
-# somehow changing the color in the function does not work
-for l in range(len(ax.lines)):
-	ax.lines[l].set_color(type_palette[l*2])
-	for p in ax.patches[patch_count[l]:patch_count[l+1]]:
-		alpha = p.get_facecolor()[3]
-		p.set_facecolor(type_palette[l*2])#[n_color])
-		p.set_alpha(alpha)	
-
-ax.set_xlim((20, df[['Scan Glucose mg/dL', 'Bubble Glucose mg/dL', 'Historic Glucose mg/dL (filled)']].max().max()+30))
-ax0.set_xlabel('Glucose mg/dL')
-ax0.set_ylabel('Probability')
-ax.set_ylabel('')
-plt.legend()
-plt.savefig('Descriptives/hist_glucose.pdf', bbox_inches='tight')
-plt.savefig('Descriptives/hist_glucose.png', bbox_inches='tight')
-plt.show()
-
-
+"""
 # diff glucose at t and t-15
 #ax = sns.histplot(df[('Scan Glucose mg/dL (diff)')], label='Scan', 
 #	stat='density', kde=True,
@@ -236,6 +176,7 @@ sns.histplot(df[('Historic Glucose mg/dL (diff)', 'mean', 't')], label='Historic
 plt.xlabel('Glucose mg/dL (diff)')
 plt.legend()
 plt.show()
+"""
 
 # ----------------------------- Models
 def get_data(df, cols_X, cols_Y, k, idx_train, idx_val):
@@ -307,24 +248,6 @@ def evaluate(model, data, cols_Y=cols_Y):
 			s[('mse', t+' (avg)', val)], s[('r2', t+' (avg)', val)] = calc_score(model, X_val[i], Y_val[i], perm_val[i], historic=True)
 	return s
 
-def plot_history(history, metric):
-	plt.plot(history[metric], label='loss')
-	plt.plot(history['val_'+metric], label='val_loss')
-	plt.xlabel('Epoch')
-	plt.ylabel(metric)
-	plt.legend()
-	plt.show()
-	plt.close()
-
-def plot_avg_history(history, metric):
-	sns.lineplot(data=history, x='epoch', y=metric, label='loss')
-	sns.lineplot(data=history, x='epoch', y='val_'+metric, label='val_loss')
-	plt.xlabel('Epoch')
-	plt.ylabel(metric)
-	plt.legend()
-	plt.show()
-	plt.close()
-
 # train-val-test split
 # split up grouping on different file_ids, since we want to be able to predict for a new training
 # this means that one file_id stays within one group (either train or test)
@@ -341,19 +264,7 @@ for idx in GroupKFold(n_splits = K).split(df.loc[idx_trainval], groups = df.loc[
 	idx_val.append(shuffle(idx_trainval[idx[1]]))
 
 # visualize data split
-for k in range(K):
-	df.loc[idx_val[k], ('split', '', '')] = k
-df.loc[idx_test, ('split', '', '')] = K+1
-
-df_split = df.groupby('training_id').first()
-df_split = df_split[['local_timestamp', 'athlete', 'file_id', 'split']]
-df_split.columns = df_split.columns.get_level_values(0)
-df_split.sort_values(['athlete', 'file_id'])
-for i in athletes:
-	df_split.loc[df_split.athlete == i, 'file_id'] = np.arange(len(df_split[df_split.athlete == i]))
-df_split = df_split.set_index(['athlete', 'file_id']).unstack()['split']
-sns.heatmap(df_split, cmap=sns.color_palette('Greens', K+1))
-plt.show()
+PlotData('Descriptives/').plot_data_split(df, idx_val, idx_test)
 
 # ------------------ Linear
 M = {'LinearRegression': [LinearRegression() for _ in range(K+1)],
@@ -409,14 +320,16 @@ history = pd.DataFrame()
 
 for n in N.keys():
 	print(n)
+	if not os.path.exists(savedir+n):
+		os.mkdir(savedir+n)
 	for k in range(K):
 		print(k)
 		X_train, Y_train, X_val, Y_val, perm_train, perm_val = get_data(df, cols_X, cols_Y, k, idx_train, idx_val)
 
 		# TODO: batch size
-		callbacks = [CSVLogger(savedir+'nn/history.log', separator=',', append=False),
+		callbacks = [CSVLogger(savedir+n+'/history.log', separator=',', append=False),
 					 EarlyStopping(monitor='val_loss', min_delta=0, patience=10),
-					 ModelCheckpoint(savedir+'nn/weights.hdf5', monitor='val_loss', verbose=1, mode='min', save_best_only=True)]
+					 ModelCheckpoint(savedir+n+'/weights.hdf5', monitor='val_loss', verbose=1, mode='min', save_best_only=True)]
 
 		N[n][k].fit(X_train[0], Y_train[0], 
 			epochs = 200,
@@ -424,19 +337,17 @@ for n in N.keys():
 			callbacks = callbacks,
 			validation_data = (X_val[0], Y_val[0]))
 
-		N[n][k].load_weights(savedir+'nn/weights.hdf5')
-		hist = pd.read_csv(savedir+'nn/history.log', sep=',', engine='python')
+		N[n][k].load_weights(savedir+n+'/weights.hdf5')
+		hist = pd.read_csv(savedir+n+'/history.log', sep=',', engine='python')
 		hist['k'] = k
 		history = pd.concat([history, hist])
 
 		cv_score[n].loc[k] = evaluate(N[n][k], {'train': (X_train, Y_train, perm_train), 'val': (X_val, Y_val, perm_val)})
 
-		#plot_history(history[history['k'] == k], 'loss')
-		#plot_history(history[history['k'] == k], 'r_square')
 	print(cv_score[n].mean())
 
-	plot_avg_history(history, 'loss')
-	plot_avg_history(history, 'r_square')
+	PlotResults(savedir+n+'/', 'cv').plot_avg_metric_history(history, 'loss')
+	PlotResults(savedir+n+'/', 'cv').plot_avg_metric_history(history, 'r_square')
 
 	# TODO: there's definitely something wrong here as test is better than trainval
 	# Maybe it has to do with the splitting? That some athletes in general are bad?
@@ -447,17 +358,16 @@ for n in N.keys():
 		callbacks = callbacks,
 		validation_data = (X_test[0], Y_test[0]))
 
-	N[n][k+1].load_weights(savedir+'nn/weights.hdf5')
-	hist = pd.read_csv(savedir+'nn/history.log', sep=',', engine='python')
+	N[n][k+1].load_weights(savedir+n+'/weights.hdf5')
+	hist = pd.read_csv(savedir+n+'/history.log', sep=',', engine='python')
 	hist['k'] = k+1
 	history = pd.concat([history, hist])
 
 	score.loc[n] = evaluate(N[n][k+1], {'trainval': (X_trainval, Y_trainval, perm_trainval), 'test': (X_test, Y_test, perm_test)})
 	print(score)
 
-	plot_history(history[history['k'] == k+1], 'loss')
-	plot_history(history[history['k'] == k+1], 'r_square')
-
+	PlotResults(savedir+n+'/').plot_metric_history(history[history['k'] == k+1], 'loss')
+	PlotResults(savedir+n+'/').plot_metric_history(history[history['k'] == k+1], 'r_square')
 
 """
 	# lstm

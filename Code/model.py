@@ -9,6 +9,13 @@ import tensorflow as tf
 import tensorflow_addons as tfa
 from tensorflow_addons.metrics import RSquare
 
+from sklearn.linear_model import LinearRegression, Lasso, ElasticNet
+from sklearn.svm import SVR
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.ensemble import RandomForestRegressor, ExtraTreesRegressor, AdaBoostRegressor, GradientBoostingRegressor
+from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.base import clone
+
 class NN: # time-delay neural network
 	def __init__(self, n_input, n_output, n_hidden, act_hidden, do_hidden,
 		optimizer='Adam', loss='mse'):

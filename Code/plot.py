@@ -1,13 +1,18 @@
 import numpy as np
 import pandas as pd
 import seaborn as sns
+
+import matplotlib
 from matplotlib import pyplot as plt
 from matplotlib import cm
-import matplotlib.dates as mdates
+from matplotlib import dates as mdates
+
 from mpl_toolkits.axes_grid1 import host_subplot
-import mpl_toolkits.axisartist as AA
+from mpl_toolkits import axisartist as AA
+
 from statsmodels.graphics.tsaplots import plot_acf
 
+from helper import glucose_levels
 # TODO: adjust plotsize plot interp_subplots
 # TODO: ylabel interp plot
 # TODO: legend interp individual plot
@@ -55,6 +60,56 @@ class PlotData:
 			ax.set_yticks([])
 		plt.savefig(self.savedir+'hist_'+str(i)+'.pdf', bbox_inches='tight')
 		plt.savefig(self.savedir+'hist_'+str(i)+'.png', bbox_inches='tight')
+		plt.show()
+		plt.close()
+
+	def plot_hist_glucose(self, df, cols_Y, binwidth=10):
+		types = [c[0].rstrip(" (filled)").rstrip("lucose mg/dL")[:-2] for c in cols_Y]
+
+		# palettes
+		glucose_palette = sns.diverging_palette(10, 50, n=5)[:3] + sns.diverging_palette(10, 50, n=7)[4:6]
+		type_palette = sns.color_palette("viridis")
+		
+		patch_count = [0]
+
+		fig, ax0 = plt.subplots()
+		
+		# annotate glucose levels
+		for i, (g, l) in enumerate(glucose_levels.items()):
+			ax0.axvspan(l[0], l[1], alpha=0.2, color=glucose_palette[i])
+
+		ax0.text(glucose_levels['hypo L2'][0]+25, 1.03, 'hypo', color=glucose_palette[0])
+		ax0.text(glucose_levels['hyper L1'][0]+35, 1.03, 'hyper', color=glucose_palette[4])
+		ax0.text(glucose_levels['normal'][0]+25, 1.03, 'normal', color=tuple([c*0.5 for c in glucose_palette[2]]))
+
+		ax0.annotate('L2', xy=(glucose_levels['hypo L2'][0]+25, .95), color=glucose_palette[0])
+		ax0.annotate('L1', xy=(glucose_levels['hypo L1'][0], .95), color=glucose_palette[1])
+		ax0.annotate('L1', xy=(glucose_levels['hyper L1'][0]+25, .95), color=glucose_palette[3])
+		ax0.annotate('L2', xy=(glucose_levels['hyper L2'][0]+80, .95), color=glucose_palette[4])
+
+		ax = ax0.twinx()
+
+		for col, name in zip(cols_Y, types):
+			sns.histplot(df[col], label=name, ax=ax,
+				stat='density', kde=True,
+				binwidth=binwidth, alpha=0.3, line_kws={'lw':2.})
+			patch_count.append(len(ax.patches))
+
+		# somehow changing the color in the function does not work
+		for l in range(len(ax.lines)):
+			ax.lines[l].set_color(type_palette[l*2])
+			for p in ax.patches[patch_count[l]:patch_count[l+1]]:
+				alpha = p.get_facecolor()[3]
+				p.set_facecolor(type_palette[l*2])#[n_color])
+				p.set_alpha(alpha)	
+
+		ax.set_xlim((20, df[cols_Y].max().max()+30))
+		ax0.set_xlabel('Glucose mg/dL')
+		ax0.set_ylabel('Probability')
+		ax.set_ylabel('')
+		plt.legend()
+		plt.savefig(self.savedir+'hist_glucose.pdf', bbox_inches='tight')
+		plt.savefig(self.savedir+'hist_glucose.png', bbox_inches='tight')
 		plt.show()
 		plt.close()
 
@@ -107,7 +162,7 @@ class PlotData:
 		plt.savefig(self.savedir+'feature_'+pname+'_'+savetext+'.pdf', bbox_inches='tight')
 		plt.savefig(self.savedir+'feature_'+pname+'_'+savetext+'.png', bbox_inches='tight')
 		plt.show()
-
+		plt.close()
 
 	def plot_feature_timeseries_parasite(self, df, i, cols, ylabels, ylims, axlocs, lws, alphas, figsize=(15,4),
 		colors = [(0.6, 0.6, 0.6)] + sns.color_palette("colorblind"), legend=True):
@@ -223,6 +278,7 @@ class PlotData:
 		plt.savefig(self.savedir+'interp_allinone'+feature+'_'+savetext+'.pdf', bbox_inches='tight')
 		plt.savefig(self.savedir+'interp_allinone'+feature+'_'+savetext+'.png', bbox_inches='tight')
 		plt.show()
+		plt.close()
 
 	def plot_interp_subplots(self, df, feature, interp_list, shape, savetext=''):
 		fig, ax = plt.subplots(shape[0], shape[1], sharex=True, sharey=True)
@@ -236,6 +292,7 @@ class PlotData:
 		plt.savefig(self.savedir+'interp_'+feature+'_'+savetext+'.pdf', bbox_inches='tight')
 		plt.savefig(self.savedir+'interp_'+feature+'_'+savetext+'.png', bbox_inches='tight')
 		plt.show()
+		plt.close()
 
 	def plot_interp_individual(self, df, feature, interp):
 		plt.figure()
@@ -243,6 +300,7 @@ class PlotData:
 		plt.scatter(df.index, df['@'+feature], label=interp)
 		plt.legend()
 		plt.show()
+		plt.close()
 
 	def plot_smooth_individual(self, df, feature, smoothings):
 		plt.figure()
@@ -252,6 +310,7 @@ class PlotData:
 		plt.legend()
 		plt.ylabel(feature)
 		plt.show()
+		plt.close()
 
 	def plot_smooth_subplots(self, df, feature_list, smoothings, shape, savetext=''):
 		fig, ax = plt.subplots(shape[0], shape[1], sharex=True, figsize=(18,10))
@@ -267,3 +326,54 @@ class PlotData:
 		plt.savefig(self.savedir+'smooth_'+savetext+'.pdf', bbox_inches='tight')
 		plt.savefig(self.savedir+'smooth_'+savetext+'.png', bbox_inches='tight')
 		plt.show()
+		plt.close()
+
+	def plot_data_split(self, df, idx_val, idx_test):
+		K = len(idx_val)
+		for k in range(K):
+			df.loc[idx_val[k], ('split', '', '')] = k
+		df.loc[idx_test, ('split', '', '')] = K+1
+
+		df_split = df.groupby('training_id').first()
+		df_split = df_split[['local_timestamp', 'athlete', 'file_id', 'split']]
+		df_split.columns = df_split.columns.get_level_values(0)
+		df_split.sort_values(['athlete', 'file_id'])
+		for i in df.athlete.unique():
+			df_split.loc[df_split.athlete == i, 'file_id'] = np.arange(len(df_split[df_split.athlete == i]))
+		df_split = df_split.set_index(['athlete', 'file_id']).unstack()['split']
+		sns.heatmap(df_split, cmap=sns.color_palette('Greens', K+1))
+		plt.savefig(self.savedir+'data_split.pdf', bbox_inches='tight')
+		plt.savefig(self.savedir+'data_split.png', bbox_inches='tight')
+		plt.show()
+		plt.close()
+
+class PlotResults:
+	def __init__(self, savedir, model, savetext=''):
+		sns.set()
+		sns.set_context('paper')
+		sns.set_style('white')
+
+		self.savedir = savedir
+		self.savetext = savetext
+
+	def plot_metric_history(self, history, metric):
+		plt.plot(history[metric], label='loss')
+		plt.plot(history['val_'+metric], label='val_loss')
+		plt.xlabel('Epoch')
+		plt.ylabel(metric)
+		plt.legend()
+		plt.savefig(self.savedir+self.model+'_history_'+metric+'_'+self.savetext+'.pdf', bbox_inches='tight')
+		plt.savefig(self.savedir+self.model+'_history_'+metric+'_'+self.savetext+'.png', bbox_inches='tight')
+		plt.show()
+		plt.close()
+
+	def plot_avg_metric_history(self, history, metric):
+		sns.lineplot(data=history, x='epoch', y=metric, label='loss')
+		sns.lineplot(data=history, x='epoch', y='val_'+metric, label='val_loss')
+		plt.xlabel('Epoch')
+		plt.ylabel(metric)
+		plt.legend()
+		plt.savefig(self.savedir+'avghistory_'+metric+'_'+self.savetext+'.pdf', bbox_inches='tight')
+		plt.savefig(self.savedir+'avghistory_'+metric+'_'+self.savetext+'.png', bbox_inches='tight')
+		plt.show()
+		plt.close()
