@@ -323,6 +323,9 @@ M = {'LinearRegression': [LinearRegression() for _ in range(K+1)],
 cv_score = {m: pd.DataFrame(columns=pd.MultiIndex.from_product([['mse', 'r2'], types+['Historic (avg)'], ['train', 'val']])) for m in M.keys()}
 for m in M.keys():
 	print(m)
+	if not os.path.exists(savedir+m):
+		os.mkdir(savedir+m)	
+
 	for k in range(K):
 		print(k)
 		X_train, Y_train, X_val, Y_val, perm_train, perm_val = get_data(df, cols_X, cols_Y, k, idx_train, idx_val)
@@ -337,18 +340,7 @@ for m in M.keys():
 	score.loc[m] = evaluate(M[m][k+1], {'trainval': (X_trainval, Y_trainval, perm_trainval), 'test': (X_test, Y_test, perm_test)})
 	print(score)
 
-try:
-	coef = pd.DataFrame(M[m].coef_, index=cols_X)
-except AttributeError:
-	coef = pd.DataFrame(M[m].feature_importances_, index=cols_X)
-coef['abs'] = coef[0].abs()
-coef = coef.sort_values('abs', ascending=False).drop('abs', axis=1)
-
-coef.iloc[:20].plot(kind='barh')
-plt.title(m+' coefficients')
-plt.axvline(x=0)
-plt.subplots_adjust(left=.5)
-plt.show()
+	PlotResults(savedir+m+'/').plot_coef(M[m][k+1], cols_X)
 
 
 # ------------------ Neural network
@@ -362,6 +354,7 @@ for n in N.keys():
 	print(n)
 	if not os.path.exists(savedir+n):
 		os.mkdir(savedir+n)
+
 	for k in range(K):
 		print(k)
 		X_train, Y_train, X_val, Y_val, perm_train, perm_val = get_data(df, cols_X, cols_Y, k, idx_train, idx_val)
