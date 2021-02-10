@@ -308,7 +308,6 @@ for i, t in enumerate(types):
 	score.loc['BasicBaseline'][('mse', t, 'test')] = mean_squared_error(*basic_baseline(Y_test[i], perm_test[i], t))
 	score.loc['BasicBaseline'][('r2', t, 'test')] = r2_score(*basic_baseline(Y_test[i], perm_test[i], t))
 
-
 # ------------------ Linear
 M = {'LinearRegression': [LinearRegression() for _ in range(K+1)],
 	 #'Lasso': [Lasso(alpha=1e-3) for _ in range(K+1)], 
@@ -337,7 +336,7 @@ for m in M.keys():
 	M[m][k+1].fit(X_trainval[0], Y_trainval[0])
 	score.loc[m] = evaluate(M[m][k+1], {'trainval': (X_trainval, Y_trainval, perm_trainval), 'test': (X_test, Y_test, perm_test)})
 	print(score)
-"""
+
 try:
 	coef = pd.DataFrame(M[m].coef_, index=cols_X)
 except AttributeError:
@@ -350,7 +349,7 @@ plt.title(m+' coefficients')
 plt.axvline(x=0)
 plt.subplots_adjust(left=.5)
 plt.show()
-"""
+
 
 # ------------------ Neural network
 N = {'NeuralNetwork': [NN(len(cols_X), 1, n_hidden = [50], act_hidden = ['relu'], do_hidden=[0.5, 0.5], optimizer=Adam(learning_rate=1e-3)).model for _ in range(K+1)]}

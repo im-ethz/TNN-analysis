@@ -377,3 +377,20 @@ class PlotResults:
 		plt.savefig(self.savedir+'avghistory_'+metric+'_'+self.savetext+'.png', bbox_inches='tight')
 		plt.show()
 		plt.close()
+
+	def plot_coef(self, model, cols_X, first=20):
+		try:
+			coef = pd.DataFrame(model.coef_, index=cols_X)
+		except AttributeError:
+			coef = pd.DataFrame(model.feature_importances_, index=cols_X)
+		coef['abs'] = coef[0].abs()
+		coef = coef.sort_values('abs', ascending=False).drop('abs', axis=1)
+
+		coef.iloc[:first].plot(kind='barh')
+		plt.title(m+' coefficients')
+		plt.axvline(x=0)
+		plt.subplots_adjust(left=.5)
+		plt.savefig(self.savedir+'coef.pdf', bbox_inches='tight')
+		plt.savefig(self.savedir+'coef.png', bbox_inches='tight')
+		plt.show()
+		plt.close()
