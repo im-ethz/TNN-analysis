@@ -42,6 +42,7 @@ for i in files:
 
 	# for the items with same timestamp but different glucose levels:
 	# for record type 0 or 1, keep the last item, because that's probably the right item #TODO
+	# TODO: this line is weird
 	df[df['Record Type'] <= 1] = df[df['Record Type'] <= 1].drop_duplicates(subset=['Device Timestamp', 'Record Type', 'Device', 'Serial Number'], keep='last', ignore_index=True)
 	df.dropna(how='all', inplace=True) #this is necessary because previous step sets rows to nan somehow
 
