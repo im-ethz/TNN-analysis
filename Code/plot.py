@@ -54,12 +54,50 @@ class PlotData:
 		plt.savefig(self.savedir+str(self.athlete)+self.savetext+'_glucose_availaibility.pdf', bbox_inches='tight')
 		plt.close()
 
-	def plot_feature_distr_subplots(self, df, i, cols, figsize, savetext=''):
-		axs = df[cols].hist(grid=False, figsize=figsize)
-		for ax in axs.flatten():
+	def plot_training_calendar(self, df):
+		df_avail = df['athlete'].copy().to_frame()
+		df_avail.index = pd.to_datetime(df_avail.index).date
+		df_avail['month'] = pd.to_datetime(df_avail.index).month
+		df_avail = df_avail.reset_index().drop_duplicates()
+		df_avail = df_avail.groupby(['athlete', 'month']).count().unstack()['index']
+		df_avail = df_avail.rename(columns=month_mapping)
+		sns.heatmap(df_avail, annot=True, linewidth=.5, cmap='Greens')
+		plt.savefig(self.savedir+'glucose_availability_all.pdf', bbox_inches='tight')
+		plt.savefig(self.savedir+'glucose_availability_all.png', dpi=300, bbox_inches='tight')
+		plt.show()
+		plt.close()
+
+	def plot_hist_feature_subplots(self, df, athlete, cols, figsize, kde=False, plot_smooth=False, layout=None, savetext=''):
+		if isinstance(cols, pd.MultiIndex):
+			colnames = [c[0] for c in cols]
+		else:
+			colnames = cols
+		
+		if kde == True:
+			if layout is not None:
+				cols = cols.to_numpy().reshape(layout)
+				fig, axs = plt.subplots(*layout, figsize=figsize)
+				for i in range(layout[0]):
+					for j in range(layout[1]):
+						sns.histplot(df[cols[i,j]], ax=axs[i,j], kde=True)
+						axs[i,j].set_ylabel('')
+				if plot_smooth:
+					sns.histplot(df[('temperature_smooth', 'mean', 't')], ax=axs[layout[0]-1, layout[1]-1], kde=True, label='smooth', color='green')
+					axs[layout[0]-1, layout[1]-1].legend()
+			else:
+				print("Please give layout with KDE")
+				return
+		else:
+			axs = df[cols].hist(grid=False, figsize=figsize, layout=layout)
+
+		for j, ax in enumerate(axs.flatten()):
 			ax.set_yticks([])
-		plt.savefig(self.savedir+'hist_'+str(i)+'.pdf', bbox_inches='tight')
-		plt.savefig(self.savedir+'hist_'+str(i)+'.png', bbox_inches='tight')
+			ax.set_title('')
+			ax.set_xlabel(colnames[j])
+
+		plt.tight_layout()
+		plt.savefig(self.savedir+'hist_'+str(athlete)+'.pdf', bbox_inches='tight')
+		plt.savefig(self.savedir+'hist_'+str(athlete)+'.png', dpi=300, bbox_inches='tight')
 		plt.show()
 		plt.close()
 
@@ -109,7 +147,7 @@ class PlotData:
 		ax.set_ylabel('')
 		plt.legend()
 		plt.savefig(self.savedir+'hist_glucose.pdf', bbox_inches='tight')
-		plt.savefig(self.savedir+'hist_glucose.png', bbox_inches='tight')
+		plt.savefig(self.savedir+'hist_glucose.png', dpi=300, bbox_inches='tight')
 		plt.show()
 		plt.close()
 
@@ -120,10 +158,13 @@ class PlotData:
 		ax = sns.heatmap(corr, vmin=-1, vmax=1, center=0, #mask=np.triu(np.ones_like(corr, dtype=bool)),
 			linewidths=.5, cmap=sns.diverging_palette(230,20,as_cmap=True), square=True)
 		if ticklocs is not None:
-			plt.xticks(ticklocs+0.5, ticks)
+			plt.xticks(ticklocs+0.5, ticks, rotation='vertical')
 			plt.yticks(ticklocs+0.5, ticks)
+		ax.xaxis.tick_top()
+		plt.xlabel('')
+		plt.ylabel('')
 		plt.savefig(self.savedir+'corr_'+str(i)+'.pdf', bbox_inches='tight')
-		plt.savefig(self.savedir+'corr_'+str(i)+'.png', bbox_inches='tight')
+		plt.savefig(self.savedir+'corr_'+str(i)+'.png', dpi=300, bbox_inches='tight')
 		plt.show()
 		plt.close()
 
@@ -137,7 +178,7 @@ class PlotData:
 			plt.xticks(ticklocs+0.5, ticks)
 			plt.yticks(ticklocs+0.5, ticks)
 		plt.savefig(self.savedir+'corrcluster_'+str(i)+'.pdf', bbox_inches='tight')
-		plt.savefig(self.savedir+'corrcluster_'+str(i)+'.png', bbox_inches='tight')
+		plt.savefig(self.savedir+'corrcluster_'+str(i)+'.png', dpi=300, bbox_inches='tight')
 		plt.show()
 		plt.close()
 
@@ -160,7 +201,7 @@ class PlotData:
 					pass
 		plt.tight_layout()
 		plt.savefig(self.savedir+'feature_'+pname+'_'+savetext+'.pdf', bbox_inches='tight')
-		plt.savefig(self.savedir+'feature_'+pname+'_'+savetext+'.png', bbox_inches='tight')
+		plt.savefig(self.savedir+'feature_'+pname+'_'+savetext+'.png', dpi=300, bbox_inches='tight')
 		plt.show()
 		plt.close()
 
@@ -211,7 +252,7 @@ class PlotData:
 		if legend: ax[0].legend()
 
 		plt.savefig(self.savedir+'feature_timeseries_'+str(i)+'.pdf', bbox_inches='tight')
-		plt.savefig(self.savedir+'feature_timeseries_'+str(i)+'.png', bbox_inches='tight')
+		plt.savefig(self.savedir+'feature_timeseries_'+str(i)+'.png', dpi=300, bbox_inches='tight')
 		plt.show()
 		plt.close()
 
@@ -265,7 +306,7 @@ class PlotData:
 		if legend: ax[0].legend()
 
 		plt.savefig(self.savedir+'feature_timeseries_'+str(i)+'.pdf', bbox_inches='tight')
-		plt.savefig(self.savedir+'feature_timeseries_'+str(i)+'.png', bbox_inches='tight')
+		plt.savefig(self.savedir+'feature_timeseries_'+str(i)+'.png', dpi=300, bbox_inches='tight')
 		plt.show()
 		plt.close()
 
@@ -276,7 +317,7 @@ class PlotData:
 		plt.scatter(df.index, df['@'+feature])
 		plt.legend()
 		plt.savefig(self.savedir+'interp_allinone'+feature+'_'+savetext+'.pdf', bbox_inches='tight')
-		plt.savefig(self.savedir+'interp_allinone'+feature+'_'+savetext+'.png', bbox_inches='tight')
+		plt.savefig(self.savedir+'interp_allinone'+feature+'_'+savetext+'.png', dpi=300, bbox_inches='tight')
 		plt.show()
 		plt.close()
 
@@ -290,7 +331,7 @@ class PlotData:
 				ax[i,j].legend()
 		plt.tight_layout()
 		plt.savefig(self.savedir+'interp_'+feature+'_'+savetext+'.pdf', bbox_inches='tight')
-		plt.savefig(self.savedir+'interp_'+feature+'_'+savetext+'.png', bbox_inches='tight')
+		plt.savefig(self.savedir+'interp_'+feature+'_'+savetext+'.png', dpi=300, bbox_inches='tight')
 		plt.show()
 		plt.close()
 
@@ -324,7 +365,7 @@ class PlotData:
 				ax[i,j].legend()
 		plt.tight_layout()
 		plt.savefig(self.savedir+'smooth_'+savetext+'.pdf', bbox_inches='tight')
-		plt.savefig(self.savedir+'smooth_'+savetext+'.png', bbox_inches='tight')
+		plt.savefig(self.savedir+'smooth_'+savetext+'.png', dpi=300, bbox_inches='tight')
 		plt.show()
 		plt.close()
 
@@ -343,7 +384,7 @@ class PlotData:
 		df_split = df_split.set_index(['athlete', 'file_id']).unstack()['split']
 		sns.heatmap(df_split, cmap=sns.color_palette('Greens', K+1))
 		plt.savefig(self.savedir+'data_split.pdf', bbox_inches='tight')
-		plt.savefig(self.savedir+'data_split.png', bbox_inches='tight')
+		plt.savefig(self.savedir+'data_split.png', dpi=300, bbox_inches='tight')
 		plt.show()
 		plt.close()
 
@@ -363,7 +404,7 @@ class PlotResults:
 		plt.ylabel(metric)
 		plt.legend()
 		plt.savefig(self.savedir+'_history_'+metric+'_'+self.savetext+'.pdf', bbox_inches='tight')
-		plt.savefig(self.savedir+'_history_'+metric+'_'+self.savetext+'.png', bbox_inches='tight')
+		plt.savefig(self.savedir+'_history_'+metric+'_'+self.savetext+'.png', dpi=300, bbox_inches='tight')
 		plt.show()
 		plt.close()
 
@@ -374,7 +415,7 @@ class PlotResults:
 		plt.ylabel(metric)
 		plt.legend()
 		plt.savefig(self.savedir+'avghistory_'+metric+'_'+self.savetext+'.pdf', bbox_inches='tight')
-		plt.savefig(self.savedir+'avghistory_'+metric+'_'+self.savetext+'.png', bbox_inches='tight')
+		plt.savefig(self.savedir+'avghistory_'+metric+'_'+self.savetext+'.png', dpi=300, bbox_inches='tight')
 		plt.show()
 		plt.close()
 
@@ -391,6 +432,6 @@ class PlotResults:
 		plt.axvline(x=0)
 		plt.subplots_adjust(left=.5)
 		plt.savefig(self.savedir+'coef.pdf', bbox_inches='tight')
-		plt.savefig(self.savedir+'coef.png', bbox_inches='tight')
+		plt.savefig(self.savedir+'coef.png', dpi=300, bbox_inches='tight')
 		plt.show()
 		plt.close()

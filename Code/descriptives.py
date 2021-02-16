@@ -45,7 +45,7 @@ for i in athletes:
 	p = PlotData(savedir)
 
 	# plot histogram subplots of all features
-	p.plot_feature_distr_subplots(df, i, cols_plot.flatten(), figsize=(20,20))
+	p.plot_hist_feature_subplots(df, i, cols_plot.flatten(), figsize=(20,20))
 
 	# plot diagonal correlation matrix
 	p.plot_feature_correlation(df, i, cols_plot.flatten())
@@ -82,7 +82,7 @@ for i in athletes:
 	p = PlotData(savedir)
 
 	# plot histogram subplots of all features
-	p.plot_feature_distr_subplots(df, i, cols_plot.flatten(), figsize=(20,20))
+	p.plot_hist_feature_subplots(df, i, cols_plot.flatten(), figsize=(20,20))
 
 	# plot diagonal correlation matrix
 	p.plot_feature_correlation(df, i, cols_plot.flatten())

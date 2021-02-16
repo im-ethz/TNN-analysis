@@ -6,7 +6,7 @@ glucose_levels = {'hypo L2': (0,53),
 				  'hypo L1': (54,69),
 				  'normal' : (70,180),
 				  'hyper L1': (181,250),
-				  'hyper L2': (250,10000)}
+				  'hyper L2': (251,10000)}
 
 month_mapping = {1:'january', 2:'february', 3:'march', 4:'april', 5:'may', 6:'june', 7:'july',
 				 8:'august', 9:'september', 10:'october', 11:'november', 12:'december'}

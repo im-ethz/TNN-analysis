@@ -1,7 +1,5 @@
 # TOOD (shortterm):
-# - implement simple baseline
 # - implement shap
-# - plot coefficients
 # - include scan glucose
 # - once solid model, start summarizing data steps
 # - include more data?
@@ -78,6 +76,7 @@ cols_feature = ['acceleration', 'altitude', 'cadence', 'distance', #'ascent',
 				'heart_rate', 'left_pedal_smoothness', 'right_pedal_smoothness',
 				'left_torque_effectiveness', 'right_torque_effectiveness', 'left_right_balance',
 				'power', 'speed', 'temperature']
+cols_feature_extra = ['temperature_smooth']
 
 # read data
 df = pd.DataFrame()
@@ -91,9 +90,9 @@ for i in athletes:
 
 	# drop irrelevant cols
 	cols_other = set(df_i.columns) - set(cols_info) - set(cols_glucose) - set(cols_glucose_previous) - set(cols_device) \
-	- set([(c,x) for c in cols_feature for x in ['iqr', 'mean', 'median', 'minmax', 'std', 'sum']])
+	- set([(c,x) for c in cols_feature for x in ['iqr', 'mean', 'median', 'minmax', 'std', 'sum']])\
+	- set([(c,x) for c in cols_feature_extra for x in ['iqr', 'mean', 'median', 'minmax', 'std', 'sum']])
 	df_i.drop(cols_other - set([('Historic Glucose mg/dL', 'mean')]), axis=1, inplace=True)
-
 	print("T=", len(df_i.file_id.unique()), "N=", len(df_i))
 
 	# select one device
@@ -161,7 +160,17 @@ cols_Y = [('Historic Glucose mg/dL (filled)', 'mean', 't'), ('Scan Glucose mg/dL
 
 types = [c[0].rstrip(" (filled)").rstrip("lucose mg/dL")[:-2] for c in cols_Y]
 
-df.reset_index(inplace=True)
+# ----------------------------- Models
+cols_feature_long = pd.MultiIndex.from_product([[i for i in cols_feature if i != 'acceleration'], ['mean'], ['t']])
+PlotData('Descriptives/').plot_hist_feature_subplots(df, 'all', cols_feature_long, layout=(3,4), figsize=(15,9))
+PlotData('Descriptives/').plot_hist_feature_subplots(df, 'all_kde', cols_feature_long, kde=True, layout=(3,4), figsize=(15,9))
+PlotData('Descriptives/').plot_feature_correlation(df, 'all', cols_feature_long.to_list()+cols_Y, 
+	ticks = cols_feature_long.get_level_values(0).to_list()+[i[0] for i in cols_Y],
+	ticklocs = np.arange(len(cols_feature_long)+len(cols_Y)))
+#PlotData('Descriptives/').plot_feature_clustermap(df, 'all', cols_feature_long.to_list()+cols_Y, 
+#	ticks = cols_feature_long.get_level_values(0).to_list()+[i[0] for i in cols_Y],
+#	ticklocs = np.arange(len(cols_feature_long)+len(cols_Y)))
+PlotData('Descriptives/').plot_training_calendar(df)
 
 # plot histogram of glucose
 PlotData('Descriptives/').plot_hist_glucose(df, cols_Y)
@@ -179,6 +188,8 @@ plt.xlabel('Glucose mg/dL (diff)')
 plt.legend()
 plt.show()
 """
+df.reset_index(inplace=True)
+
 
 # ----------------------------- Models
 def get_data(df, cols_X, cols_Y, k, idx_train, idx_val):
@@ -310,8 +321,8 @@ for i, t in enumerate(types):
 
 # ------------------ Linear
 M = {'LinearRegression': [LinearRegression() for _ in range(K+1)],
-	 #'Lasso': [Lasso(alpha=1e-3) for _ in range(K+1)], 
-	 #'ElasticNet': [ElasticNet(alpha=1e-3, l1_ratio=.5) for _ in range(K+1)], 
+	 'Lasso': [Lasso(alpha=1e-3) for _ in range(K+1)], 
+	 'ElasticNet': [ElasticNet(alpha=1e-3, l1_ratio=.5) for _ in range(K+1)], 
 	 #'SVR': [SVR() for _ in range(K+1)], 
 	 #'DecisionTree': [DecisionTreeRegressor(max_depth=30, min_samples_split=0.2) for _ in range(K+1)], 
 	 #'RandomForest': [RandomForestRegressor() for _ in range(K+1)], 
