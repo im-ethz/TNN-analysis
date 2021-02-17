@@ -2,7 +2,7 @@
 Scrape Trainingpeaks
 Select by:
 - workout type = bike
-- date range = 01/01/2020 until 31/10/2020
+- date range = 01/01/2020 until 31/10/2020 -> 2019
 """
 from config import username_TP, password_TP
 
@@ -14,16 +14,18 @@ from selenium.webdriver.common.keys import Keys
 #from selenium.webdriver.support import expected_conditions as EC
 import time
 
-download_path = '/local/home/evanweenen/bicyclediabetes/Code/Data/'
+download_path = '/local/home/evanweenen/bicyclediabetes/Code/Data/TrainingPeaks/2019/'
 
 url_login = 'https://home.trainingpeaks.com/login'
 
-start_dates_list = ['1/1/2020', '1/2/2020', '1/3/2020', '1/4/2020', '1/5/2020', '1/6/2020', '1/7/2020', '1/8/2020', '1/9/2020', '1/10/2020']
-end_dates_list = ['31/1/2020', '29/2/2020', '31/3/2020', '30/4/2020', '31/5/2020', '30/6/2020', '31/7/2020', '31/8/2020', '30/9/2020', '31/10/2020']
+#start_dates_list = ['1/1/2020', '1/2/2020', '1/3/2020', '1/4/2020', '1/5/2020', '1/6/2020', '1/7/2020', '1/8/2020', '1/9/2020', '1/10/2020']
+start_dates_list = ['1/1/2019', '1/2/2019', '1/3/2019', '1/4/2019', '1/5/2019', '1/6/2019', '1/7/2019', '1/8/2019', '1/9/2019', '1/10/2019', '1/11/2019', '1/12/2019']
+#end_dates_list = ['31/1/2020', '29/2/2020', '31/3/2020', '30/4/2020', '31/5/2020', '30/6/2020', '31/7/2020', '31/8/2020', '30/9/2020', '31/10/2020']
+end_dates_list = ['31/1/2019', '28/2/2019', '31/3/2019', '30/4/2019', '31/5/2019', '30/6/2019', '31/7/2019', '31/8/2019', '30/9/2019', '31/10/2020', '30/11/2019', '31/12/2019']
 
 path = dr.install(browser=dr.chrome, file_directory='./lib/', verbose=True, chmod=True, overwrite=False, version='86.0.4240.22', filename=None, return_info=False)
 options = webdriver.ChromeOptions()
-options.add_argument("download.default_directory="+download_path)
+options.add_experimental_option("prefs", {"download.default_directory":download_path})
 driver = webdriver.Chrome(path, options=options)
 driver.maximize_window()
 
@@ -61,7 +63,7 @@ for i in range(1, len(athlete_elements)):
 	for d in range(len(start_dates_list)):
 		driver.find_element_by_class_name('startDate').clear()
 		driver.find_element_by_class_name('startDate').send_keys(start_dates_list[d]+'\n')
-		time.sleep(1)
+		time.sleep(5)
 
 		driver.find_element_by_class_name('endDate').clear()
 		driver.find_element_by_class_name('endDate').send_keys(end_dates_list[d]+'\n')
