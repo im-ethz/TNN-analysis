@@ -21,9 +21,9 @@
 */__pycache__/
 *.pyc
 
-/Code/Data/LibreView/RAW/*
-/Code/Data/TrainingPeaks/2019/RAW/*
-/Code/Data/TrainingPeaks/2020/RAW/*
+/Code/Data/LibreView/raw/*
+/Code/Data/TrainingPeaks/2019/raw/*
+/Code/Data/TrainingPeaks/2020/raw/*
 
 /Doc/*.log
 /Doc/*.aux
