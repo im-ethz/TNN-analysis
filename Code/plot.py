@@ -22,6 +22,83 @@ def custom_colormap(base, cmin, cmax, n):
 	cmap_custom = cmap_base.from_list(base+str(n), cmap_base(np.linspace(cmin, cmax, n)), n)
 	return cmap_custom
 
+def plot_glucose_levels(ax):
+	glucose_palette = sns.diverging_palette(10, 50, n=5)[:3] + sns.diverging_palette(10, 50, n=7)[4:6]
+	# annotate glucose levels
+	for i, (g, l) in enumerate(glucose_levels.items()):
+		ax.axvspan(l[0], l[1], alpha=0.2, color=glucose_palette[i])
+
+	ax.text(glucose_levels['hypo L2'][0]+25, 1.03, 'hypo', color=glucose_palette[0])
+	ax.text(glucose_levels['hyper L1'][0]+35, 1.03, 'hyper', color=glucose_palette[4])
+	ax.text(glucose_levels['normal'][0]+25, 1.03, 'normal', color=tuple([c*0.5 for c in glucose_palette[2]]))
+
+	ax.annotate('L2', xy=(glucose_levels['hypo L2'][0]+25, .95), color=glucose_palette[0])
+	ax.annotate('L1', xy=(glucose_levels['hypo L1'][0], .95), color=glucose_palette[1])
+	ax.annotate('L1', xy=(glucose_levels['hyper L1'][0]+25, .95), color=glucose_palette[3])
+	ax.annotate('L2', xy=(glucose_levels['hyper L2'][0]+80, .95), color=glucose_palette[4])
+	return ax
+
+class PlotPreprocess:
+	def __init__(self, savedir, savetext='', athlete='all'):
+		sns.set()
+		sns.set_context('paper')
+		sns.set_style('white')
+
+		self.savedir = savedir
+		self.savetext = savetext
+		self.athlete = athlete
+
+	def plot_smoothing(self, df, col, pfirst=5, cmap='viridis', kwargs={}, skwargs={}):
+		cmap = matplotlib.cm.get_cmap(cmap, len(df.file_id.unique()[:pfirst]))
+		ax = plt.subplot()
+		for c, idx in enumerate(df.file_id.unique()[:pfirst]): #for date in df.date.unique():
+			df[df.file_id == idx].plot(ax=ax, x='time_training', y=col+'_smooth',
+				color=cmap(c), legend=False, **skwargs)
+			df[df.file_id == idx].plot(ax=ax, x='time_training', y=col,
+				color=cmap(c), legend=False, **kwargs)
+		plt.ylabel(col)
+		plt.savefig(self.savedir+'smooth_'+col+'.pdf', bbox_inches='tight')
+		plt.savefig(self.savedir+'smooth_'+col+'.png', dpi=300, bbox_inches='tight')
+		plt.show()
+		plt.close()
+
+	def plot_interp(self, df, col, pfirst=5, cmap='viridis', kwargs={}, ikwargs={}):
+		cmap = matplotlib.cm.get_cmap(cmap, len(df.file_id.unique()[:pfirst]))
+		ax = plt.subplot()
+		for c, idx in enumerate(df.file_id.unique()[:pfirst]): #for date in df.date.unique():
+			df[df.file_id == idx].plot(ax=ax, x='time_training', y=col+'_ilin',
+				color=cmap(c), legend=False, **kwargs)
+			df[df.file_id == idx].plot(ax=ax, x='time_training', y=col,
+				color=cmap(c), legend=False, **ikwargs)
+		plt.ylabel(col)
+		plt.savefig(self.savedir+'interp_'+col+'.pdf', bbox_inches='tight')
+		plt.savefig(self.savedir+'interp_'+col+'.png', dpi=300, bbox_inches='tight')
+		plt.show()
+		plt.close()
+
+	def plot_hist_glucose(self, df, cols_glucose, binwidth=10):
+		type_palette = sns.color_palette("viridis")
+		
+		patch_count = [0]
+		fig, ax0 = plt.subplots()
+		ax0 = plot_glucose_levels(ax0)
+		ax = ax0.twinx()
+
+		for i, col in enumerate(cols_glucose):
+			sns.histplot(df[col], label=col, ax=ax,
+				stat='density', kde=True, color=type_palette[i*2],
+				binwidth=binwidth, alpha=0.3, line_kws={'lw':2.})
+
+		ax.set_xlim((20, df[cols_glucose].max().max()+30))
+		ax0.set_xlabel('Glucose mg/dL')
+		ax0.set_ylabel('Probability')
+		ax.set_ylabel('')
+		plt.legend()
+		plt.savefig(self.savedir+'preprocess_hist_glucose.pdf', bbox_inches='tight')
+		plt.savefig(self.savedir+'preprocess_hist_glucose.png', dpi=300, bbox_inches='tight')
+		plt.show()
+		plt.close()
+
 class PlotData:
 	def __init__(self, savedir, savetext='', athlete='all'):
 		sns.set()
@@ -103,28 +180,11 @@ class PlotData:
 
 	def plot_hist_glucose(self, df, cols_Y, binwidth=10):
 		types = [c[0].rstrip(" (filled)").rstrip("lucose mg/dL")[:-2] for c in cols_Y]
-
-		# palettes
-		glucose_palette = sns.diverging_palette(10, 50, n=5)[:3] + sns.diverging_palette(10, 50, n=7)[4:6]
 		type_palette = sns.color_palette("viridis")
 		
 		patch_count = [0]
-
 		fig, ax0 = plt.subplots()
-		
-		# annotate glucose levels
-		for i, (g, l) in enumerate(glucose_levels.items()):
-			ax0.axvspan(l[0], l[1], alpha=0.2, color=glucose_palette[i])
-
-		ax0.text(glucose_levels['hypo L2'][0]+25, 1.03, 'hypo', color=glucose_palette[0])
-		ax0.text(glucose_levels['hyper L1'][0]+35, 1.03, 'hyper', color=glucose_palette[4])
-		ax0.text(glucose_levels['normal'][0]+25, 1.03, 'normal', color=tuple([c*0.5 for c in glucose_palette[2]]))
-
-		ax0.annotate('L2', xy=(glucose_levels['hypo L2'][0]+25, .95), color=glucose_palette[0])
-		ax0.annotate('L1', xy=(glucose_levels['hypo L1'][0], .95), color=glucose_palette[1])
-		ax0.annotate('L1', xy=(glucose_levels['hyper L1'][0]+25, .95), color=glucose_palette[3])
-		ax0.annotate('L2', xy=(glucose_levels['hyper L2'][0]+80, .95), color=glucose_palette[4])
-
+		ax0 = plot_glucose_levels(ax0)
 		ax = ax0.twinx()
 
 		for col, name in zip(cols_Y, types):
@@ -133,6 +193,7 @@ class PlotData:
 				binwidth=binwidth, alpha=0.3, line_kws={'lw':2.})
 			patch_count.append(len(ax.patches))
 
+		# TODO: remove
 		# somehow changing the color in the function does not work
 		for l in range(len(ax.lines)):
 			ax.lines[l].set_color(type_palette[l*2])

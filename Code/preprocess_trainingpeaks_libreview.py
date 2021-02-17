@@ -38,10 +38,10 @@ if not os.path.exists(merge_path+'raw/'):
 	os.mkdir(merge_path+'raw/')
 if not os.path.exists(merge_path+'1sec/'):
 	os.mkdir(merge_path+'1sec/')
-if not os.path.exists(merge_path+'1min/'):
-	os.mkdir(merge_path+'1min/')
-if not os.path.exists(merge_path+'1min/dropna/'):
-	os.mkdir(merge_path+'1min/dropna/')
+if not os.path.exists(merge_path+'resample_1min/'):
+	os.mkdir(merge_path+'resample_1min/')
+if not os.path.exists(merge_path+'resample_1min/dropna/'):
+	os.mkdir(merge_path+'resample_1min/dropna/')
 
 # FOR NOW: ONLY SELECT ATHLETES THAT ARE IN LIBREVIEW
 
@@ -115,10 +115,15 @@ for i in athletes:
 	df = pd.read_csv(merge_path+'raw/'+str(i)+'.csv', index_col=0)
 	df.index = pd.to_datetime(df.index)
 
-	# -------------------- Backwards-fill glucose values
+	# -------------------- Backwards-fill + interpolate + shift glucose values
+	# backwards fill glucose
 	df = fill_glucose(df)
+	# shift glucose
 	for s in shift_historic:
 		df = fill_glucose(df, s)
+
+	PlotPreprocess('Descriptives/').plot_hist_glucose(df, ['Historic Glucose mg/dL', 'Historic Glucose mg/dL (filled)'])
+	# TODO
 
 	# -------------------- Zeros
 
@@ -144,17 +149,12 @@ for i in athletes:
 	print("Fraction of rows for which difference between original temperature and smoothed temperature is larger than 0.5: ",
 		((df['temperature_smooth'] - df['temperature']).abs() > .5).sum() / df.shape[0])
 
-	pfirst = 5#len(df.file_id.unique())#200
-	cmap = matplotlib.cm.get_cmap('viridis', len(df.file_id.unique()[:pfirst]))
-	ax = plt.subplot()
-	for c, idx in enumerate(df.file_id.unique()[:pfirst]): #for date in df.date.unique():
-		df[df.file_id == idx].plot(ax=ax, x='time_training', y='temperature_smooth',
-			color=cmap(c), legend=False)
-		df[df.file_id == idx].plot(ax=ax, x='time_training', y='temperature',
-			color=cmap(c), legend=False, alpha=.5, linewidth=2)
-	plt.ylabel('temperature')
-	#plt.show()
-	plt.close()
+	PlotPreprocess('Descriptives/').plot_smoothing(df, 'temperature', kwargs=dict(alpha=.5, linewidth=2))
+
+	# note that 200s should probably be more if you look at the distributions
+	sns.histplot(df, x='temperature', kde=True)
+	sns.histplot(df, x='temperature_smooth', kde=True, color='red')
+	plt.show()
 
 	# -------------------- Battery level
 	# find out if/when battery level is not monotonically decreasing
@@ -175,7 +175,7 @@ for i in athletes:
 			df[df.file_id == idx].plot(ax=ax, x='time_training', y='battery_soc',
 				color=cmap(c), legend=False, alpha=.5, kind='scatter', s=10.)
 		plt.ylabel('battery_soc')
-		#plt.show()
+		plt.show()
 		plt.close()
 
 	# linearly interpolate battery level (with only backwards direction)
@@ -184,17 +184,8 @@ for i in athletes:
 		df.loc[df.file_id == idx, 'battery_soc']\
 		.interpolate(method='time', limit_direction='forward')
 
-	pfirst = 5#len(df.file_id.unique())#200
-	cmap = matplotlib.cm.get_cmap('viridis', len(df.file_id.unique()[:pfirst]))
-	ax = plt.subplot()
-	for c, idx in enumerate(df.file_id.unique()[:pfirst]): #for date in df.date.unique():
-		df[df.file_id == idx].plot(ax=ax, x='time_training', y='battery_soc_ilin',
-			color=cmap(c), legend=False, alpha=.5)
-		df[df.file_id == idx].plot(ax=ax, x='time_training', y='battery_soc',
-			color=cmap(c), legend=False, alpha=.5, kind='scatter', s=10.)
-	plt.ylabel('battery_soc')
-	#plt.show()
-	plt.close()
+	PlotPreprocess('Descriptives/').plot_interp(df, 'battery_soc', kwargs=dict(alpha=.5), 
+		ikwargs=dict(alpha=.5, kind='scatter', s=10.))
 
 	# -------------------- Distance
 	# negative distance diffs (meaning that the athletes is moving backwards)
@@ -318,8 +309,6 @@ for i in athletes:
 						'ascent', 'altitude', 'grade', 'temperature', 'temperature_smooth',
 						'left_right_balance', 'left_pedal_smoothness', 'right_pedal_smoothness', 
 						'left_torque_effectiveness', 'right_torque_effectiveness']
-	def minmax(x):
-		return np.max(x) - np.min(x)
 
 	# note: we are not using entropy because difficult to calculate
 	# other possibilities include: skewness and kurtosis, but don't know if this is relevant
@@ -395,13 +384,13 @@ for i in athletes:
 	# (due to some weird issue with resampling)
 	df = df[df.index.isin(df_ts)]
 
-	df.to_csv(merge_path+'1min/'+str(i)+'.csv')
+	df.to_csv(merge_path+'resample_1min/'+str(i)+'.csv')
 
-athletes = sorted([int(i.rstrip('.csv')) for i in os.listdir(merge_path+'1min/') if i.endswith('.csv')])
+athletes = sorted([int(i.rstrip('.csv')) for i in os.listdir(merge_path+'resample_1min/') if i.endswith('.csv')])
 
 # Cleaning after resampling
 for i in athletes:
-	df = pd.read_csv(merge_path+'1min/'+str(i)+'.csv', header=[0,1], index_col=0)
+	df = pd.read_csv(merge_path+'resample_1min/'+str(i)+'.csv', header=[0,1], index_col=0)
 	df.index = pd.to_datetime(df.index)
 
 	df.rename(columns={'amin':'min', 'amax':'max'}, inplace=True)
@@ -433,7 +422,7 @@ for i in athletes:
 	# save file where all nans are dropped
 	# don't consider ascent as it has too many nan values
 	df_dropna = df.dropna(how='any', subset=[(c,x) for c in cols_feature for x in ['iqr', 'mean', 'median', 'min', 'max', 'std', 'sum']])
-	df_dropna.to_csv(merge_path+'1min/dropna/'+str(i)+'.csv')
+	df_dropna.to_csv(merge_path+'resample_1min/dropna/'+str(i)+'.csv')
 
 	# TODO: drop if nanvalue is first of file
 	# TODO: when do we want to delete the entire row? Also if sth like iqr is missing?
