@@ -1,14 +1,14 @@
 # List of TODOS - overview
-# - Can we include other athletes that are not in LibreView? -> No because they don't have the Libre?
-# - Can we use the data from the BUBBLE? How do we know that it is data from bubble? I.e. after 7 may and in TP?
+# - Change resampling: for now don't do it, but just calculate summary statistics with the sliding window approach over the last X minutes of training data (with sec frequency)
+# - Interpolate historic glucose
+# - Add elevation gain as a feature (= diff altitude), ignore ascent feature
+# - Calculate HbA1C
 # - Does BUBBLE include a 15 min lag from blood glucose to interstitial glucose
 # - Find out what happened when there are large gaps in the data
 # - Find out what happened when there are small gaps in the data
 # - Check GPS accuracy and battery level
 # - Possibly remove first entries if the speed = 0
-# - Later: check if we can combine data from other devices
 # - Imputation
-# - Model with and without imputation
 # - Is there a way that I can have missed data from Libre if there are timestamps missing in TP?
 # - IDEA: smooth instead of resampling for more data
 import numpy as np

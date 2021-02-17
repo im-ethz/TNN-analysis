@@ -1,3 +1,6 @@
+# TODO:
+# Glucose distribution plot: - stratify by athlete and stratify by time during/after training
+# Glycaemic control (HbA1C) over the course of a season per athlete
 import numpy as np
 import pandas as pd
 import seaborn as sns
