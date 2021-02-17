@@ -22,7 +22,8 @@
 *.pyc
 
 /Code/Data/LibreView/RAW/*
-/Code/Data/TrainingPeaks/RAW/*
+/Code/Data/TrainingPeaks/2019/RAW/*
+/Code/Data/TrainingPeaks/2020/RAW/*
 
 /Doc/*.log
 /Doc/*.aux
