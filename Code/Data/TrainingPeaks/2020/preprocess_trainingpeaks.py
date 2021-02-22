@@ -3,6 +3,10 @@
 # TODO: keep in mind that with filling the glucose values, we still have some duplicate timestamps in there
 # TODO: instead of deleting data for which both local timestamps are not incorrect, try finding out which one is the right one (if you overlap it with Libre)
 # TODO: there is something wrong with df['duplicate_timestamp']!!! Because it's not actually equal to df.local_timestamp.duplicated()
+import os
+import sys
+sys.path.append(os.path.abspath('../../../'))
+
 import numpy as np
 import pandas as pd
 
@@ -10,8 +14,6 @@ import datetime
 import pytz
 from tzwhere import tzwhere
 tzwhere = tzwhere.tzwhere()
-
-import os
 
 from plot import *
 from helper import *

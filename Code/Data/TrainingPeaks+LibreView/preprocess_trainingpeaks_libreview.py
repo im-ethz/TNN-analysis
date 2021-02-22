@@ -11,11 +11,14 @@
 # - Imputation
 # - Is there a way that I can have missed data from Libre if there are timestamps missing in TP?
 # - IDEA: smooth instead of resampling for more data
+import os
+import sys
+sys.path.append(os.path.abspath('../../'))
+
 import numpy as np
 import scipy as sp
 import pandas as pd
 import datetime
-import os
 import gc
 import matplotlib
 
