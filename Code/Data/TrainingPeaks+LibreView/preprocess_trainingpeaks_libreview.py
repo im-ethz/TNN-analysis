@@ -24,16 +24,14 @@ from helper import *
 
 verbose = 1
 
-lv_path = 'Data/LibreView/clean/'
-tp_path = 'Data/TrainingPeaks/clean2/'
-merge_path = 'Data/TrainingPeaks+LibreView/'
+lv_path = '../LibreView/clean/'
+tp_path = '../TrainingPeaks/clean2/'
+merge_path = './'
 
 shift_historic = [15, 30, 45, 60]
 shift_scan = [3, 5, 10, 15]
 shift_bubble = [3, 5, 10, 15]
 
-if not os.path.exists(merge_path):
-	os.mkdir(merge_path)
 if not os.path.exists(merge_path+'raw/'):
 	os.mkdir(merge_path+'raw/')
 if not os.path.exists(merge_path+'1sec/'):
@@ -122,7 +120,7 @@ for i in athletes:
 	for s in shift_historic:
 		df = fill_glucose(df, s)
 
-	PlotPreprocess('Descriptives/').plot_hist_glucose(df, ['Historic Glucose mg/dL', 'Historic Glucose mg/dL (filled)'])
+	PlotPreprocess('../Descriptives/').plot_hist_glucose(df, ['Historic Glucose mg/dL', 'Historic Glucose mg/dL (filled)'])
 	# TODO
 
 	# -------------------- Zeros
@@ -149,7 +147,7 @@ for i in athletes:
 	print("Fraction of rows for which difference between original temperature and smoothed temperature is larger than 0.5: ",
 		((df['temperature_smooth'] - df['temperature']).abs() > .5).sum() / df.shape[0])
 
-	PlotPreprocess('Descriptives/').plot_smoothing(df, 'temperature', kwargs=dict(alpha=.5, linewidth=2))
+	PlotPreprocess('../Descriptives/').plot_smoothing(df, 'temperature', kwargs=dict(alpha=.5, linewidth=2))
 
 	# note that 200s should probably be more if you look at the distributions
 	sns.histplot(df, x='temperature', kde=True)
@@ -184,7 +182,7 @@ for i in athletes:
 		df.loc[df.file_id == idx, 'battery_soc']\
 		.interpolate(method='time', limit_direction='forward')
 
-	PlotPreprocess('Descriptives/').plot_interp(df, 'battery_soc', kwargs=dict(alpha=.5), 
+	PlotPreprocess('../Descriptives/').plot_interp(df, 'battery_soc', kwargs=dict(alpha=.5), 
 		ikwargs=dict(alpha=.5, kind='scatter', s=10.))
 
 	# -------------------- Distance

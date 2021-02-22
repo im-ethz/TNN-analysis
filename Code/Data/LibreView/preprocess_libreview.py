@@ -6,7 +6,7 @@ import os
 from plot import *
 from helper import *
 
-path = 'Data/LibreView/'
+path = './'
 files = sorted([int(i.rstrip('.csv')) for i in os.listdir(path+'raw_anonymous/')])
 
 if not os.path.exists(path+'clean/'):

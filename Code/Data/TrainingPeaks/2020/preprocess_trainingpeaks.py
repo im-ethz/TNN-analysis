@@ -16,7 +16,7 @@ import os
 from plot import *
 from helper import *
 
-path = 'Data/TrainingPeaks/'
+path = './'
 if not os.path.exists(path+'combine/'):
 	os.mkdir(path+'combine/')
 if not os.path.exists(path+'clean/'):
