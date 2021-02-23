@@ -10,6 +10,7 @@ from helper import *
 from config import rider_mapping
 
 path = './'
+rider_mapping = {k.upper() : v for k, v in rider_mapping.items()}
 
 df = pd.read_excel(path+'TEST ANALYSIS Dec_2018.xlsx', nrows=16, header=(0,1), sheet_name=None)
 df = pd.concat(df)
@@ -21,15 +22,14 @@ df = df[['ID and ANTROPOMETRY', 'SPIROMETRY', 'VT1 (GET)', 'VT2 (RCP)', 'VO2peak
 df.dropna(how='all', axis=1, inplace=True)
 
 # apply anonymous mapping riders
-rider_mapping = {k.upper() : v for k, v in rider_mapping.items()}
 rider_mapping.update({'BEHRINGHER':1})
-df['ID'] = df[('ID and ANTROPOMETRY', 'Surname')].map(rider_mapping)
+df['RIDER'] = df[('ID and ANTROPOMETRY', 'Surname')].map(rider_mapping)
 df.drop([('ID and ANTROPOMETRY', 'Name'), ('ID and ANTROPOMETRY', 'Surname')], axis=1, inplace=True)
 
 # reset index
 df = df.reset_index()
 df.drop('level_1', axis=1, inplace=True)
 df.rename(columns={'level_0':'date'}, inplace=True)
-df = df.set_index(['ID', 'date']).sort_index()
+df = df.set_index(['RIDER', 'date']).sort_index()
 
 df.to_csv(path+'fitness_analysis_2019_anonymous.csv')
