@@ -1,0 +1,227 @@
+/local/home/evanweenen/.local/lib/python3.7/site-packages/numpy/core/_asarray.py:83: VisibleDeprecationWarning: Creating an ndarray from ragged nested sequences (which is a list-or-tuple of lists-or-tuples-or ndarrays with different lengths or shapes) is deprecated. If you meant to do this, you must specify 'dtype=object' when creating the ndarray
+  return array(a, dtype, copy=False, order=order)
+
+------------------------------- Athlete  1
+DROPPED:  ('file_id', 'unknown_7')
+DROPPED:  ('session', 'avg_combined_pedal_smoothness')
+DROPPED:  ('session', 'avg_left_pco')
+DROPPED:  ('session', 'avg_right_pco')
+DROPPED:  ('session', 'avg_right_pedal_smoothness')
+DROPPED:  ('session', 'avg_right_torque_effectiveness')
+DROPPED:  ('session', 'sport_index')
+DROPPED:  ('session', 'stand_count')
+DROPPED:  ('session', 'time_standing')
+DROPPED:  ('session', 'total_fractional_cycles')
+DROPPED:  ('session', 'unknown_107')
+DROPPED:  ('session', 'unknown_108')
+DROPPED:  ('session', 'unknown_109')
+DROPPED:  ('session', 'unknown_151')
+DROPPED:  ('sport', 'unknown_7')
+DROPPED:  ('units', 'ant_device_num')
+DROPPED:  ('units', 'travel_assist_level')
+DROPPED:  ('workout', 'capabilities')
+DROPPED:  ('workout', 'pool_length')
+DROPPED:  ('workout', 'pool_length_unit')
+DROPPED:  ('workout', 'sub_sport')
+DROPPED:  ('workout', 'unknown_10')
+DROPPED:  ('workout', 'unknown_12')
+DROPPED:  ('workout', 'unknown_13')
+DROPPED:  ('workout', 'unknown_7')
+DROPPED:  ('workout', 'unknown_9')
+WARNING: Cols outside of 'device' that have a high number of nans, and that we should look at:  [('activity', 'event_group'), ('file_id', 'garmin_product'), ('file_id', 'number'), ('session', 'avg_cadence_position'), ('session', 'avg_fractional_cadence'), ('session', 'avg_left_pedal_smoothness'), ('session', 'avg_left_power_phase'), ('session', 'avg_left_power_phase_peak'), ('session', 'avg_left_torque_effectiveness'), ('session', 'avg_power_position'), ('session', 'avg_right_power_phase'), ('session', 'avg_right_power_phase_peak'), ('session', 'avg_vam'), ('session', 'event_group'), ('session', 'first_lap_index'), ('session', 'max_cadence_position'), ('session', 'max_fractional_cadence'), ('session', 'max_power_position'), ('session', 'message_index'), ('session', 'nec_lat'), ('session', 'nec_long'), ('session', 'start_position_lat'), ('session', 'start_position_long'), ('session', 'sub_sport'), ('session', 'swc_lat'), ('session', 'swc_long'), ('session', 'total_anaerobic_training_effect'), ('session', 'total_cycles'), ('session', 'total_fat_calories'), ('session', 'total_training_effect'), ('session', 'trigger'), ('session', 'unknown_106'), ('session', 'unknown_110'), ('session', 'unknown_138'), ('session', 'unknown_150'), ('session', 'unknown_184'), ('session', 'unknown_38'), ('session', 'unknown_39'), ('session', 'unknown_81'), ('sport', 'name'), ('sport', 'unknown_10'), ('sport', 'unknown_12'), ('sport', 'unknown_15'), ('sport', 'unknown_17'), ('sport', 'unknown_18'), ('sport', 'unknown_4'), ('sport', 'unknown_5'), ('sport', 'unknown_6'), ('sport', 'unknown_8'), ('sport', 'unknown_9'), ('training_file', 'garmin_product'), ('training_file', 'manufacturer'), ('training_file', 'product'), ('training_file', 'serial_number'), ('training_file', 'time_created'), ('training_file', 'timestamp'), ('training_file', 'type'), ('units', 'ant_sensor_id'), ('workout', 'num_valid_steps'), ('workout', 'sport')]
+device_0 manufacturer is file_id manufacturer:  True
+device_0 product is file_id product:  False
+
+------------------------------- Athlete  2
+DROPPED:  ('units', 'ant_device_num')
+DROPPED:  ('units', 'travel_assist_level')
+WARNING: Cols outside of 'device' that have a high number of nans, and that we should look at:  [('session', 'left_right_balance'), ('session', 'sub_sport'), ('units', 'ant_sensor_id')]
+device_0 manufacturer is file_id manufacturer:  True
+device_0 product is file_id product:  False
+
+------------------------------- Athlete  3
+DROPPED:  ('file_id', 'unknown_7')
+DROPPED:  ('session', 'avg_combined_pedal_smoothness')
+DROPPED:  ('session', 'avg_left_pco')
+DROPPED:  ('session', 'avg_right_pco')
+DROPPED:  ('session', 'sport_index')
+DROPPED:  ('session', 'stand_count')
+DROPPED:  ('session', 'time_standing')
+DROPPED:  ('session', 'total_fractional_cycles')
+DROPPED:  ('session', 'unknown_107')
+DROPPED:  ('session', 'unknown_108')
+DROPPED:  ('session', 'unknown_109')
+DROPPED:  ('session', 'unknown_151')
+DROPPED:  ('session', 'unknown_185')
+DROPPED:  ('sport', 'unknown_7')
+DROPPED:  ('units', 'ant_device_num')
+DROPPED:  ('units', 'travel_assist_level')
+DROPPED:  ('workout', 'pool_length')
+DROPPED:  ('workout', 'pool_length_unit')
+DROPPED:  ('workout', 'sub_sport')
+DROPPED:  ('workout', 'unknown_10')
+DROPPED:  ('workout', 'unknown_12')
+DROPPED:  ('workout', 'unknown_13')
+DROPPED:  ('workout', 'unknown_7')
+DROPPED:  ('workout', 'unknown_9')
+WARNING: Cols outside of 'device' that have a high number of nans, and that we should look at:  [('activity', 'event_group'), ('file_id', 'garmin_product'), ('file_id', 'number'), ('session', 'avg_cadence_position'), ('session', 'avg_fractional_cadence'), ('session', 'avg_left_pedal_smoothness'), ('session', 'avg_left_power_phase'), ('session', 'avg_left_power_phase_peak'), ('session', 'avg_left_torque_effectiveness'), ('session', 'avg_power_position'), ('session', 'avg_right_pedal_smoothness'), ('session', 'avg_right_power_phase'), ('session', 'avg_right_power_phase_peak'), ('session', 'avg_right_torque_effectiveness'), ('session', 'avg_vam'), ('session', 'event_group'), ('session', 'first_lap_index'), ('session', 'left_right_balance'), ('session', 'max_cadence_position'), ('session', 'max_fractional_cadence'), ('session', 'max_power_position'), ('session', 'message_index'), ('session', 'nec_lat'), ('session', 'nec_long'), ('session', 'start_position_lat'), ('session', 'start_position_long'), ('session', 'sub_sport'), ('session', 'swc_lat'), ('session', 'swc_long'), ('session', 'total_anaerobic_training_effect'), ('session', 'total_cycles'), ('session', 'total_fat_calories'), ('session', 'total_moving_time'), ('session', 'total_training_effect'), ('session', 'trigger'), ('session', 'unknown_106'), ('session', 'unknown_110'), ('session', 'unknown_138'), ('session', 'unknown_150'), ('session', 'unknown_168'), ('session', 'unknown_169'), ('session', 'unknown_170'), ('session', 'unknown_177'), ('session', 'unknown_178'), ('session', 'unknown_179'), ('session', 'unknown_180'), ('session', 'unknown_181'), ('session', 'unknown_183'), ('session', 'unknown_184'), ('session', 'unknown_187'), ('session', 'unknown_188'), ('session', 'unknown_38'), ('session', 'unknown_39'), ('session', 'unknown_81'), ('sport', 'name'), ('sport', 'unknown_10'), ('sport', 'unknown_12'), ('sport', 'unknown_15'), ('sport', 'unknown_17'), ('sport', 'unknown_18'), ('sport', 'unknown_4'), ('sport', 'unknown_5'), ('sport', 'unknown_6'), ('sport', 'unknown_8'), ('sport', 'unknown_9'), ('training_file', 'garmin_product'), ('training_file', 'manufacturer'), ('training_file', 'product'), ('training_file', 'serial_number'), ('training_file', 'time_created'), ('training_file', 'timestamp'), ('training_file', 'type'), ('units', 'ant_sensor_id'), ('workout', 'capabilities'), ('workout', 'num_valid_steps'), ('workout', 'sport')]
+device_0 manufacturer is file_id manufacturer:  True
+device_0 product is file_id product:  False
+
+------------------------------- Athlete  4
+DROPPED:  ('file_id', 'unknown_7')
+DROPPED:  ('session', 'avg_combined_pedal_smoothness')
+DROPPED:  ('session', 'avg_left_pco')
+DROPPED:  ('session', 'avg_left_pedal_smoothness')
+DROPPED:  ('session', 'avg_left_torque_effectiveness')
+DROPPED:  ('session', 'avg_right_pco')
+DROPPED:  ('session', 'avg_right_pedal_smoothness')
+DROPPED:  ('session', 'avg_right_torque_effectiveness')
+DROPPED:  ('session', 'sport_index')
+DROPPED:  ('session', 'stand_count')
+DROPPED:  ('session', 'time_standing')
+DROPPED:  ('session', 'total_fractional_cycles')
+DROPPED:  ('session', 'unknown_107')
+DROPPED:  ('session', 'unknown_108')
+DROPPED:  ('session', 'unknown_109')
+DROPPED:  ('sport', 'unknown_7')
+DROPPED:  ('units', 'ant_device_num')
+DROPPED:  ('units', 'travel_assist_level')
+WARNING: Cols outside of 'device' that have a high number of nans, and that we should look at:  [('activity', 'event_group'), ('file_id', 'garmin_product'), ('file_id', 'number'), ('session', 'avg_cadence_position'), ('session', 'avg_fractional_cadence'), ('session', 'avg_left_power_phase'), ('session', 'avg_left_power_phase_peak'), ('session', 'avg_power_position'), ('session', 'avg_right_power_phase'), ('session', 'avg_right_power_phase_peak'), ('session', 'event_group'), ('session', 'first_lap_index'), ('session', 'left_right_balance'), ('session', 'max_cadence_position'), ('session', 'max_fractional_cadence'), ('session', 'max_power_position'), ('session', 'message_index'), ('session', 'nec_lat'), ('session', 'nec_long'), ('session', 'start_position_lat'), ('session', 'start_position_long'), ('session', 'sub_sport'), ('session', 'swc_lat'), ('session', 'swc_long'), ('session', 'total_cycles'), ('session', 'total_fat_calories'), ('session', 'total_training_effect'), ('session', 'trigger'), ('session', 'unknown_106'), ('session', 'unknown_110'), ('session', 'unknown_81'), ('sport', 'name'), ('sport', 'unknown_10'), ('sport', 'unknown_12'), ('sport', 'unknown_15'), ('sport', 'unknown_17'), ('sport', 'unknown_4'), ('sport', 'unknown_5'), ('sport', 'unknown_6'), ('sport', 'unknown_8'), ('sport', 'unknown_9'), ('training_file', 'garmin_product'), ('training_file', 'manufacturer'), ('training_file', 'product'), ('training_file', 'serial_number'), ('training_file', 'time_created'), ('training_file', 'timestamp'), ('training_file', 'type'), ('units', 'ant_sensor_id')]
+device_0 manufacturer is file_id manufacturer:  True
+device_0 product is file_id product:  False
+
+------------------------------- Athlete  5
+DROPPED:  ('units', 'ant_device_num')
+DROPPED:  ('units', 'travel_assist_level')
+WARNING: Cols outside of 'device' that have a high number of nans, and that we should look at:  [('activity', 'event_group'), ('file_id', 'number'), ('session', 'event_group'), ('session', 'first_lap_index'), ('session', 'left_right_balance'), ('session', 'message_index'), ('session', 'nec_lat'), ('session', 'nec_long'), ('session', 'start_position_lat'), ('session', 'start_position_long'), ('session', 'sub_sport'), ('session', 'swc_lat'), ('session', 'swc_long'), ('session', 'total_cycles'), ('session', 'total_fat_calories'), ('session', 'total_training_effect'), ('session', 'trigger'), ('units', 'ant_sensor_id')]
+device_0 manufacturer is file_id manufacturer:  True
+device_0 product is file_id product:  False
+
+------------------------------- Athlete  6
+DROPPED:  ('units', 'ant_device_num')
+DROPPED:  ('units', 'travel_assist_level')
+WARNING: Cols outside of 'device' that have a high number of nans, and that we should look at:  [('session', 'sub_sport'), ('units', 'ant_sensor_id')]
+device_0 manufacturer is file_id manufacturer:  True
+device_0 product is file_id product:  False
+
+------------------------------- Athlete  10
+DROPPED:  ('file_id', 'unknown_7')
+DROPPED:  ('session', 'avg_combined_pedal_smoothness')
+DROPPED:  ('session', 'avg_left_pco')
+DROPPED:  ('session', 'avg_right_pco')
+DROPPED:  ('session', 'sport_index')
+DROPPED:  ('session', 'stand_count')
+DROPPED:  ('session', 'time_standing')
+DROPPED:  ('session', 'total_fractional_cycles')
+DROPPED:  ('session', 'unknown_107')
+DROPPED:  ('session', 'unknown_108')
+DROPPED:  ('session', 'unknown_109')
+DROPPED:  ('sport', 'unknown_7')
+DROPPED:  ('units', 'ant_device_num')
+DROPPED:  ('units', 'travel_assist_level')
+WARNING: Cols outside of 'device' that have a high number of nans, and that we should look at:  [('activity', 'event_group'), ('file_id', 'garmin_product'), ('file_id', 'number'), ('session', 'avg_cadence_position'), ('session', 'avg_fractional_cadence'), ('session', 'avg_left_pedal_smoothness'), ('session', 'avg_left_power_phase'), ('session', 'avg_left_power_phase_peak'), ('session', 'avg_left_torque_effectiveness'), ('session', 'avg_power_position'), ('session', 'avg_right_pedal_smoothness'), ('session', 'avg_right_power_phase'), ('session', 'avg_right_power_phase_peak'), ('session', 'avg_right_torque_effectiveness'), ('session', 'avg_stance_time'), ('session', 'avg_vertical_oscillation'), ('session', 'event_group'), ('session', 'first_lap_index'), ('session', 'max_cadence_position'), ('session', 'max_fractional_cadence'), ('session', 'max_power_position'), ('session', 'message_index'), ('session', 'nec_lat'), ('session', 'nec_long'), ('session', 'start_position_lat'), ('session', 'start_position_long'), ('session', 'sub_sport'), ('session', 'swc_lat'), ('session', 'swc_long'), ('session', 'total_cycles'), ('session', 'total_fat_calories'), ('session', 'total_moving_time'), ('session', 'total_training_effect'), ('session', 'trigger'), ('session', 'unknown_106'), ('session', 'unknown_110'), ('session', 'unknown_81'), ('sport', 'name'), ('sport', 'unknown_10'), ('sport', 'unknown_12'), ('sport', 'unknown_4'), ('sport', 'unknown_5'), ('sport', 'unknown_6'), ('sport', 'unknown_8'), ('sport', 'unknown_9'), ('units', 'ant_sensor_id')]
+device_0 manufacturer is file_id manufacturer:  True
+device_0 product is file_id product:  False
+
+------------------------------- Athlete  12
+DROPPED:  ('units', 'ant_device_num')
+DROPPED:  ('units', 'travel_assist_level')
+WARNING: Cols outside of 'device' that have a high number of nans, and that we should look at:  [('file_id', 'product_name'), ('session', 'left_right_balance'), ('session', 'sub_sport'), ('units', 'ant_sensor_id')]
+device_0 manufacturer is file_id manufacturer:  True
+device_0 product is file_id product:  False
+
+------------------------------- Athlete  13
+DROPPED:  ('activity', 'event_group')
+DROPPED:  ('file_id', 'number')
+DROPPED:  ('file_id', 'unknown_7')
+DROPPED:  ('session', 'avg_combined_pedal_smoothness')
+DROPPED:  ('session', 'avg_fractional_cadence')
+DROPPED:  ('session', 'avg_left_pco')
+DROPPED:  ('session', 'avg_left_pedal_smoothness')
+DROPPED:  ('session', 'avg_left_torque_effectiveness')
+DROPPED:  ('session', 'avg_right_pco')
+DROPPED:  ('session', 'avg_right_pedal_smoothness')
+DROPPED:  ('session', 'avg_right_torque_effectiveness')
+DROPPED:  ('session', 'avg_stance_time')
+DROPPED:  ('session', 'avg_stance_time_balance')
+DROPPED:  ('session', 'avg_stance_time_percent')
+DROPPED:  ('session', 'avg_step_length')
+DROPPED:  ('session', 'avg_stroke_count')
+DROPPED:  ('session', 'avg_stroke_distance')
+DROPPED:  ('session', 'avg_vertical_oscillation')
+DROPPED:  ('session', 'avg_vertical_ratio')
+DROPPED:  ('session', 'event_group')
+DROPPED:  ('session', 'max_fractional_cadence')
+DROPPED:  ('session', 'num_active_lengths')
+DROPPED:  ('session', 'pool_length')
+DROPPED:  ('session', 'pool_length_unit')
+DROPPED:  ('session', 'sport_index')
+DROPPED:  ('session', 'stand_count')
+DROPPED:  ('session', 'swim_stroke')
+DROPPED:  ('session', 'time_standing')
+DROPPED:  ('session', 'total_cycles')
+DROPPED:  ('session', 'total_fractional_cycles')
+DROPPED:  ('session', 'unknown_107')
+DROPPED:  ('session', 'unknown_108')
+DROPPED:  ('session', 'unknown_109')
+DROPPED:  ('session', 'unknown_33')
+DROPPED:  ('session', 'unknown_78')
+DROPPED:  ('session', 'unknown_79')
+DROPPED:  ('session', 'unknown_80')
+DROPPED:  ('units', 'ant_device_num')
+DROPPED:  ('units', 'travel_assist_level')
+WARNING: Cols outside of 'device' that have a high number of nans, and that we should look at:  [('file_id', 'garmin_product'), ('session', 'avg_cadence_position'), ('session', 'avg_left_power_phase'), ('session', 'avg_left_power_phase_peak'), ('session', 'avg_power_position'), ('session', 'avg_right_power_phase'), ('session', 'avg_right_power_phase_peak'), ('session', 'first_lap_index'), ('session', 'left_right_balance'), ('session', 'max_cadence_position'), ('session', 'max_power_position'), ('session', 'message_index'), ('session', 'nec_lat'), ('session', 'nec_long'), ('session', 'start_position_lat'), ('session', 'start_position_long'), ('session', 'sub_sport'), ('session', 'swc_lat'), ('session', 'swc_long'), ('session', 'total_fat_calories'), ('session', 'total_training_effect'), ('session', 'trigger'), ('session', 'unknown_106'), ('session', 'unknown_110'), ('session', 'unknown_81'), ('sport', 'name'), ('sport', 'unknown_10'), ('sport', 'unknown_4'), ('sport', 'unknown_5'), ('sport', 'unknown_6'), ('units', 'ant_sensor_id')]
+device_0 manufacturer is file_id manufacturer:  True
+device_0 product is file_id product:  False
+
+------------------------------- Athlete  14
+DROPPED:  ('activity', 'event_group')
+DROPPED:  ('activity', 'unknown_7')
+DROPPED:  ('file_id', 'number')
+DROPPED:  ('file_id', 'unknown_7')
+DROPPED:  ('session', 'avg_combined_pedal_smoothness')
+DROPPED:  ('session', 'avg_left_pco')
+DROPPED:  ('session', 'avg_right_pco')
+DROPPED:  ('session', 'avg_stance_time')
+DROPPED:  ('session', 'avg_stance_time_balance')
+DROPPED:  ('session', 'avg_stance_time_percent')
+DROPPED:  ('session', 'avg_step_length')
+DROPPED:  ('session', 'avg_stroke_count')
+DROPPED:  ('session', 'avg_stroke_distance')
+DROPPED:  ('session', 'avg_vertical_oscillation')
+DROPPED:  ('session', 'avg_vertical_ratio')
+DROPPED:  ('session', 'event_group')
+DROPPED:  ('session', 'num_active_lengths')
+DROPPED:  ('session', 'pool_length')
+DROPPED:  ('session', 'pool_length_unit')
+DROPPED:  ('session', 'sport_index')
+DROPPED:  ('session', 'stand_count')
+DROPPED:  ('session', 'swim_stroke')
+DROPPED:  ('session', 'time_standing')
+DROPPED:  ('session', 'total_fractional_cycles')
+DROPPED:  ('session', 'unknown_107')
+DROPPED:  ('session', 'unknown_108')
+DROPPED:  ('session', 'unknown_109')
+DROPPED:  ('session', 'unknown_157')
+DROPPED:  ('session', 'unknown_158')
+DROPPED:  ('session', 'unknown_181')
+DROPPED:  ('session', 'unknown_183')
+DROPPED:  ('session', 'unknown_185')
+DROPPED:  ('session', 'unknown_187')
+DROPPED:  ('session', 'unknown_189')
+DROPPED:  ('session', 'unknown_190')
+DROPPED:  ('session', 'unknown_33')
+DROPPED:  ('session', 'unknown_78')
+DROPPED:  ('session', 'unknown_79')
+DROPPED:  ('session', 'unknown_80')
+DROPPED:  ('sport', 'unknown_7')
+DROPPED:  ('units', 'ant_device_num')
+WARNING: Cols outside of 'device' that have a high number of nans, and that we should look at:  [('file_id', 'garmin_product'), ('session', 'avg_cadence_position'), ('session', 'avg_fractional_cadence'), ('session', 'avg_left_pedal_smoothness'), ('session', 'avg_left_power_phase'), ('session', 'avg_left_power_phase_peak'), ('session', 'avg_left_torque_effectiveness'), ('session', 'avg_power_position'), ('session', 'avg_right_pedal_smoothness'), ('session', 'avg_right_power_phase'), ('session', 'avg_right_power_phase_peak'), ('session', 'avg_right_torque_effectiveness'), ('session', 'avg_vam'), ('session', 'first_lap_index'), ('session', 'left_right_balance'), ('session', 'max_cadence_position'), ('session', 'max_fractional_cadence'), ('session', 'max_power_position'), ('session', 'message_index'), ('session', 'nec_lat'), ('session', 'nec_long'), ('session', 'start_position_lat'), ('session', 'start_position_long'), ('session', 'sub_sport'), ('session', 'swc_lat'), ('session', 'swc_long'), ('session', 'total_anaerobic_training_effect'), ('session', 'total_cycles'), ('session', 'total_fat_calories'), ('session', 'total_training_effect'), ('session', 'trigger'), ('session', 'unknown_106'), ('session', 'unknown_110'), ('session', 'unknown_138'), ('session', 'unknown_150'), ('session', 'unknown_151'), ('session', 'unknown_152'), ('session', 'unknown_168'), ('session', 'unknown_169'), ('session', 'unknown_170'), ('session', 'unknown_177'), ('session', 'unknown_178'), ('session', 'unknown_179'), ('session', 'unknown_180'), ('session', 'unknown_184'), ('session', 'unknown_188'), ('session', 'unknown_38'), ('session', 'unknown_39'), ('session', 'unknown_81'), ('sport', 'name'), ('sport', 'unknown_10'), ('sport', 'unknown_11'), ('sport', 'unknown_12'), ('sport', 'unknown_13'), ('sport', 'unknown_15'), ('sport', 'unknown_17'), ('sport', 'unknown_18'), ('sport', 'unknown_19'), ('sport', 'unknown_4'), ('sport', 'unknown_5'), ('sport', 'unknown_6'), ('sport', 'unknown_8'), ('sport', 'unknown_9'), ('training_file', 'garmin_product'), ('training_file', 'manufacturer'), ('training_file', 'serial_number'), ('training_file', 'time_created'), ('training_file', 'timestamp'), ('training_file', 'type'), ('units', 'ant_sensor_id')]
+device_0 manufacturer is file_id manufacturer:  True
+device_0 product is file_id product:  False
+------------------------------- Athlete  15
+DROPPED:  ('units', 'ant_device_num')
+WARNING: Cols outside of 'device' that have a high number of nans, and that we should look at:  [('session', 'sub_sport')]
+device_0 manufacturer is file_id manufacturer:  True
+device_0 product is file_id product:  False
