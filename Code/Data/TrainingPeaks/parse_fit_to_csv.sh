@@ -1,5 +1,5 @@
 #!/bin/bash
-path='TrainingPeaks/2019/'
+path='2019/'
 path_raw='raw_anonymous/'
 athletes=("1" "2" "3" "4" "5" "6" "10" "12" "13" "14" "15")
 
