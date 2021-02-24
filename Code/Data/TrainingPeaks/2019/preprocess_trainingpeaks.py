@@ -256,13 +256,14 @@ for i in athletes:
 	print("Dates for which this happens: ", 
 		df[~nan_llts][df[~nan_llts]['local_timestamp'] != df[~nan_llts]['local_timestamp_loc']].timestamp.dt.date.unique())
 
-	#df['drop_error_ltimestamp'] = df[~nan_llts]['local_timestamp'] != df[~nan_llts]['local_timestamp_loc']
-	df.drop(df[~nan_llts][df[~nan_llts]['local_timestamp'] != df[~nan_llts]['local_timestamp_loc']].index, inplace=True)
-	print("DROPPED: discrepancy local timestamps")
+	df['error_local_timestamp'] = df[~nan_llts]['local_timestamp'] != df[~nan_llts]['local_timestamp_loc']
+	#df.drop(df[~nan_llts][df[~nan_llts]['local_timestamp'] != df[~nan_llts]['local_timestamp_loc']].index, inplace=True)
+	#print("DROPPED: discrepancy local timestamps")
 
 	# combine both local timestamps
-	df['local_timestamp'].fillna(df['local_timestamp_loc'], inplace=True)
-	df.drop('local_timestamp_loc', axis=1, inplace=True)
+	df['local_timestamp_loc'].fillna(df['local_timestamp'], inplace=True)
+	df.drop('local_timestamp', axis=1, inplace=True)
+	df.rename(columns={'local_timestamp_loc':'local_timestamp'}, inplace=True)
 
 	# print duplicate timestamps
 	print("Number of duplicated entries: ", df.duplicated().sum())
