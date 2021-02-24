@@ -3,6 +3,10 @@
 # TODO: keep in mind that with filling the glucose values, we still have some duplicate timestamps in there
 # TODO: instead of deleting data for which both local timestamps are not incorrect, try finding out which one is the right one (if you overlap it with Libre)
 # TODO: there is something wrong with df['duplicate_timestamp']!!! Because it's not actually equal to df.local_timestamp.duplicated()
+import os
+import sys
+sys.path.append(os.path.abspath('../../../'))
+
 import numpy as np
 import pandas as pd
 
@@ -10,8 +14,6 @@ import datetime
 import pytz
 from tzwhere import tzwhere
 tzwhere = tzwhere.tzwhere()
-
-import os
 
 from plot import *
 from helper import *
@@ -24,18 +26,14 @@ if not os.path.exists(path+'clean/'):
 if not os.path.exists(path+'clean2/'):
 	os.mkdir(path+'clean2/')
 
-verbose = 1
+verbose = 2
 
 def cleaning_per_file(df_data, df_info, j):
-	# drop first col
-	df_data.drop('Unnamed: 0', axis=1, inplace=True)
-
 	# convert latitude and longitude from semicircles to degrees
-	try:
+	if 'position_long' in df_data:
 		df_data['position_long'] = df_data['position_long'] * (180 / 2**31)
+	if 'position_lat' in df_data:
 		df_data['position_lat'] = df_data['position_lat'] * (180 / 2**31)
-	except KeyError:
-		pass
 
 	# get local timestamp
 	df_data['timestamp'] = pd.to_datetime(df_data['timestamp'])
@@ -107,7 +105,7 @@ for i in athletes:
 	for j, f in enumerate(files):
 		name = f.rstrip('_data.csv')
 
-		df_data = pd.read_csv(path+'csv/'+str(i)+'/data/'+f)
+		df_data = pd.read_csv(path+'csv/'+str(i)+'/data/'+f, index_col=0)
 		df_info = pd.read_csv(path+'csv/'+str(i)+'/info/'+name+'_info.csv', index_col=(0,1))
 
 		df_data, df_info = cleaning_per_file(df_data, df_info, j)
@@ -127,37 +125,6 @@ for i in athletes:
 			pass
 
 		df = df.append(df_data, ignore_index=True, verify_integrity=True)
-
-	df['Zwift'] = False
-
-	# -------------------- Virtual (Zwift)
-	if os.path.exists(path+'csv/'+str(i)+'/Zwift/data'):
-		files_virtual = sorted(os.listdir(path+'csv/'+str(i)+'/Zwift/data'))
-		for j, f in enumerate(files_virtual):
-			name = f.rstrip('_data.csv')
-
-			df_data = pd.read_csv(path+'csv/'+str(i)+'/Zwift/data/'+f)
-			df_info = pd.read_csv(path+'csv/'+str(i)+'/Zwift/info/'+name+'_info.csv', index_col=(0,1))
-
-			df_data, df_info = cleaning_per_file(df_data, df_info, j+len(files))
-
-			filename_date.update({f:df_data['timestamp'].dt.date.unique()}) # update filelist
-			fileid_filename.update({j+len(files):f})
-
-			# create df_information file
-			df_info = df_info.T.rename(index={'0':j+len(files)})
-			df_information = df_information.append(df_info, verify_integrity=True)
-
-			# open all other files and check for missing info
-			try:
-				df_n = pd.read_csv(path+'csv/'+str(i)+'/Zwift/nan/'+name+'_nan.csv', index_col=0)
-				df_nan = df_nan.append(df_n, ignore_index=True, verify_integrity=True)
-			except FileNotFoundError:
-				pass
-
-			df = df.append(df_data, ignore_index=True, verify_integrity=True)
-
-		df['Zwift'].fillna(True, inplace=True)
 
 	# -------------------- Move nan-info from df to df_nan
 	# remove unknown columns from into nans file TODO: process later
@@ -220,8 +187,9 @@ for i in athletes:
 	fileid_filename = pd.read_csv(path+'clean/'+str(i)+'/'+str(i)+'_fileid_filename.csv', index_col=0)
 
 	# -------------------- Clean df_data
+	""" TODO: do this later
 	# drop empty rows
-	cols_ignore = set(['timestamp', 'local_timestamp', 'local_timestamp_loc', 'file_id', 'Zwift'])
+	cols_ignore = set(['timestamp', 'local_timestamp', 'local_timestamp_loc', 'file_id'])
 	nanrows = df.shape[0] - df.dropna(how='all', subset=set(df.columns)-cols_ignore).shape[0]
 	if nanrows > 0:
 		print("DROPPED: Number of rows dropped due to being empty: ", nanrows)
@@ -234,6 +202,7 @@ for i in athletes:
 		df.drop(nanrows_index, inplace=True)
 	else:
 		print("GOOD: No rows have to be dropped due to being empty")
+	"""
 
 	# include device in df
 	#df_information[('nunique','')] = 1
@@ -252,18 +221,8 @@ for i in athletes:
 					   'device_wahoo_fitness ELEMNT ROAM':'device_ELEMNTROAM',
 					   'device_bkool BKOOL Website':'device_bkool'}, inplace=True)
 
-	# check if df['Zwift'] equals df['device_0'] == 'zwift'
-	if not (df['Zwift'] == (df['device_0'] == 'zwift')).all():
-		print("WARNING: zwift not correctly identified")
-		print("Number of times filename is called Zwift: ", df['Zwift'].sum())
-		print("Number of times device is Zwift: ", (df['device_0'] == 'zwift').sum())
-		if df['Zwift'].sum() > (df['device_0'] == 'zwift').sum():
-			print("Devices when filename is zwift and device is not zwift: ", df[(df['Zwift']) & (df['device_0'] != 'zwift')].device_0.value_counts())
-		else:
-			print("Filenames when device is zwift and filename is not zwift: ", [fileid_filename.loc[x][0] for x in df[(~df['Zwift']) & (df['device_0'] == 'zwift')].file_id.unique()])
-	# TODO: change bool Zwift to zwift device?
-
-	df = df.sort_values(by=['device_0', 'device_0_serialnumber', 'local_timestamp'], key=lambda x: x.map({'ELEMNTBOLT':0, 'zwift':1})) # sort for duplicates later
+	# sort by device and timestamp for duplicates later
+	df = df.sort_values(by=['device_0', 'device_0_serialnumber', 'local_timestamp'], key=lambda x: x.map({'ELEMNTBOLT':0, 'zwift':1}))
 	df.reset_index(drop=True, inplace=True)
 	devices = [x for x in df.columns[df.columns.str.startswith('device_')] if x != 'device_0' and x != 'device_0_serialnumber']
 
