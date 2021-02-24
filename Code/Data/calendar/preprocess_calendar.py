@@ -28,4 +28,4 @@ df = df.set_index(['RIDER', 'TrainingIndex'])
 
 df.to_csv(path+'calendar_2019_anonymous.csv')
 
-df[['WorkoutType','WorkoutDay', 'Event']].to_csv(path+'calendar-events_2019_anonymous')
+df[['WorkoutType','WorkoutDay', 'Event']].to_csv(path+'calendar-events_2019_anonymous.csv')
