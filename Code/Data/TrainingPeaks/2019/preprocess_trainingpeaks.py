@@ -261,6 +261,7 @@ for i in athletes:
 	#print("DROPPED: discrepancy local timestamps")
 
 	# combine both local timestamps
+	# keep timestamp from location as the primary timestamp
 	df['local_timestamp_loc'].fillna(df['local_timestamp'], inplace=True)
 	df.drop('local_timestamp', axis=1, inplace=True)
 	df.rename(columns={'local_timestamp_loc':'local_timestamp'}, inplace=True)
@@ -287,25 +288,25 @@ for i in athletes:
 	for ser in df['device_0_serialnumber'].unique():
 		print_times_dates(str(ser), df, dupl_timestamp_first & (df['device_0_serialnumber'] == ser), ts='local_timestamp')
 
-	# select devices to keep: ELEMNT BOLT and zwift
+	print("\n--------------- Device selection")
+	# select devices to keep: ELEMNT (BOLT/ROAM) and zwift
+	# note that often they also use garmin devices, but there is a large difference between the files of garmin and of ELEMNT, 
+	# so maybe we should use an entirely different package to parse them
 	keep_devices = ['device_ELEMNT', 'device_ELEMNTBOLT', 'device_ELEMNTROAM', 'device_zwift']
 	df['keep_devices'] = False
 	drop_devices = []
 	for k in keep_devices:
-		try:
+		if k in df:
 			df['keep_devices'] |= df[k]
-		except KeyError:
+		else:
 			drop_devices.append(k)
-			continue
 	keep_devices = list(set(keep_devices) - set(drop_devices))
 	
 	print("Fraction of data dropped with device selection: ", 
 		(~df['keep_devices']).sum()/df.shape[0])
-	try:
+	if 'glucose' in df:
 		print("Are there glucose values in the data that will be dropped with the device selection? ",
 			not df[~df['keep_devices']]['glucose'].dropna().empty)
-	except KeyError:
-		pass
 
 	print("Duplicate timestamps after dropping devices: ")
 	for dev in keep_devices:
