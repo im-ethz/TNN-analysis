@@ -288,7 +288,7 @@ for i in athletes:
 		print_times_dates(str(ser), df, dupl_timestamp_first & (df['device_0_serialnumber'] == ser), ts='local_timestamp')
 
 	# select devices to keep: ELEMNT BOLT and zwift
-	keep_devices = ['device_ELEMNTBOLT', 'device_ELEMNTROAM', 'device_zwift']
+	keep_devices = ['device_ELEMNT', 'device_ELEMNTBOLT', 'device_ELEMNTROAM', 'device_zwift']
 	df['keep_devices'] = False
 	drop_devices = []
 	for k in keep_devices:
