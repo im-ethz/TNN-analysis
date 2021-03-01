@@ -49,11 +49,19 @@ def cleaning_per_file(df_data, df_info, j):
 		df_data['local_timestamp'] = np.nan
 
 	# get local timestamp from location
-	try:
+	if 'position_lat' in df_data and 'position_long' in df_data:
 		tz_loc = pytz.timezone(tzwhere.tzNameAt(df_data['position_lat'].dropna().iloc[0], df_data['position_long'].dropna().iloc[0])).utcoffset(df_data['timestamp'][0])
 		df_data['local_timestamp_loc'] = df_data['timestamp'] + tz_loc
-	except KeyError:
+	else:
 		df_data['local_timestamp_loc'] = np.nan
+
+	# remove local_timestamp_loc if device is zwift
+	if ('device_0', 'manufacturer') in df_info.T:
+		if df_info.loc[('device_0', 'manufacturer')] == 'zwift':
+			df_data['local_timestamp_loc'] = np.nan
+	elif ('session', 'sub_sport') in df_info.T:
+		if df_info.loc[('session', 'sub_sport')] == 'virtual_activity':
+			df_data['local_timestamp_loc'] = np.nan
 
 	# create column filename
 	df_data['file_id'] = j
@@ -218,7 +226,6 @@ for i in athletes:
 	print("DROPPED: {:g} first rows with more than 75\% nans".format(count_drop_firstrows))
 
 	print("\n--------------- DEVICE")
-	# TODO: can we move this one section down?
 	# include device in df
 	df = pd.merge(df, df_information[('device_summary', '0')].str.strip("nan").str.strip().rename('device_0'),
 					left_on='file_id', right_index=True, how='left')
@@ -262,6 +269,8 @@ for i in athletes:
 	df['timestamp'] = pd.to_datetime(df['timestamp'])
 	df['local_timestamp'] = pd.to_datetime(df['local_timestamp'])
 	df['local_timestamp_loc'] = pd.to_datetime(df['local_timestamp_loc'])
+
+	# if 
 
 	# print nans local_timestamp and local_timestamp_loc
 	print("\n-------- Timestamp: nan")
