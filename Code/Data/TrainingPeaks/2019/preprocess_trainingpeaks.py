@@ -50,17 +50,19 @@ def cleaning_per_file(df_data, df_info, j):
 
 	# get local timestamp from location
 	if 'position_lat' in df_data and 'position_long' in df_data:
-		tz_loc = pytz.timezone(tzwhere.tzNameAt(df_data['position_lat'].dropna().iloc[0], df_data['position_long'].dropna().iloc[0])).utcoffset(df_data['timestamp'][0])
-		df_data['local_timestamp_loc'] = df_data['timestamp'] + tz_loc
+		tz_loc_name = tzwhere.tzNameAt(df_data['position_lat'].dropna().iloc[0], df_data['position_long'].dropna().iloc[0])
+		if tz_loc_name is not None:
+			tz_loc = pytz.timezone(tz_loc_name).utcoffset(df_data['timestamp'][0])
+			df_data['local_timestamp_loc'] = df_data['timestamp'] + tz_loc
 	else:
 		df_data['local_timestamp_loc'] = np.nan
 
 	# remove local_timestamp_loc if device is zwift
 	if ('device_0', 'manufacturer') in df_info.T:
-		if df_info.loc[('device_0', 'manufacturer')] == 'zwift':
+		if df_info.loc[('device_0', 'manufacturer')][0] == 'zwift':
 			df_data['local_timestamp_loc'] = np.nan
 	elif ('session', 'sub_sport') in df_info.T:
-		if df_info.loc[('session', 'sub_sport')] == 'virtual_activity':
+		if df_info.loc[('session', 'sub_sport')][0] == 'virtual_activity':
 			df_data['local_timestamp_loc'] = np.nan
 
 	# create column filename
@@ -212,19 +214,6 @@ for i in athletes:
 	else:
 		print("GOOD: No rows have to be dropped due to being empty")
 
-	print("\n-------- Remove first rows mostly nan")
-	# TODO: move this to the next stage
-	# for each file, go over the first rows and check the percentage of nans
-	count_drop_firstrows = 0
-	for f in df.file_id.unique():
-		for j, row in df[df.file_id == f].iterrows():
-			if row[set(df.columns) - cols_ignore].isna().sum() / len(set(df.columns) - cols_ignore) > .75:
-				df.drop(j, inplace=True)
-				count_drop_firstrows += 1
-			else:
-				break
-	print("DROPPED: {:g} first rows with more than 75\% nans".format(count_drop_firstrows))
-
 	print("\n--------------- DEVICE")
 	# include device in df
 	df = pd.merge(df, df_information[('device_summary', '0')].str.strip("nan").str.strip().rename('device_0'),
@@ -263,14 +252,44 @@ for i in athletes:
 	else:
 		print("There are no glucose values in the data at all.")
 
-
 	print("\n--------------- TIMESTAMP")
 	# fix local timestamp
 	df['timestamp'] = pd.to_datetime(df['timestamp'])
 	df['local_timestamp'] = pd.to_datetime(df['local_timestamp'])
 	df['local_timestamp_loc'] = pd.to_datetime(df['local_timestamp_loc'])
 
-	# if 
+	if 'device_ZWIFT' in df:
+		# fix zwift
+		ts_zwift = df.loc[df['device_ZWIFT'] & df['local_timestamp'].isna() & df['local_timestamp_loc'].isna(), 'timestamp'].dt.date.unique()
+		print("Get timezone of Zwift files for the following dates: ")
+		for ts in ts_zwift:
+			print(ts)
+			ts_range = [ts-datetime.timedelta(days=2), ts-datetime.timedelta(days=1), ts, ts+datetime.timedelta(days=1), ts+datetime.timedelta(days=2)]
+			df_ts_zwift = df[df['timestamp'].dt.date.isin(ts_range)]
+			tz_zwift = pd.concat([(df_ts_zwift['local_timestamp'] - df_ts_zwift['timestamp']),
+								  (df_ts_zwift['local_timestamp_loc'] - df_ts_zwift['timestamp'])], axis=1)
+			tz_meta = pd.DataFrame(tz_zwift[0].unique()).dropna().to_numpy()[0]
+			tz_loc = pd.DataFrame(tz_zwift[1].unique()).dropna().to_numpy()[0]
+			# make sure no difference in ts_range and we have tz both from meta and loc
+			if len(tz_meta) == 1 and len(tz_loc) == 1:
+				df.loc[df['device_ZWIFT'] & (df.timestamp.dt.date == ts), 'local_timestamp_loc'] = \
+				df.loc[df['device_ZWIFT'] & (df.timestamp.dt.date == ts), 'timestamp'] + tz_loc[0]
+				print("local_timestamp_loc changed to UTC offset: ", tz_loc[0].astype('timedelta64[h]'))
+				df.loc[df['device_ZWIFT'] & (df.timestamp.dt.date == ts), 'local_timestamp'] = \
+				df.loc[df['device_ZWIFT'] & (df.timestamp.dt.date == ts), 'timestamp'] + tz_meta[0]
+				print("local_timestamp changed to UTC offset: ", tz_meta[0].astype('timedelta64[h]'))
+			else:
+				print("local_timestamp_loc not changed because of difference in timezones in the range of two days before until two days after")
+
+	# distribution of timezones
+	plt.hist([(df.local_timestamp_loc - df.timestamp).astype('timedelta64[h]').to_numpy(),
+			  (df.local_timestamp - df.timestamp).astype('timedelta64[h]').to_numpy()],
+			  label=['position', 'metadata'])
+	plt.xlabel('UTC offset (hours)')
+	plt.legend()
+	plt.savefig('../../../Descriptives/hist_timezone_%s.pdf', bbox_inches='tight')
+	plt.savefig('../../../Descriptives/hist_timezone_%s.png', dpi=300, bbox_inches='tight')
+	plt.close()
 
 	# print nans local_timestamp and local_timestamp_loc
 	print("\n-------- Timestamp: nan")
@@ -397,6 +416,21 @@ for i in athletes:
 	df['local_timestamp'] = pd.to_datetime(df['local_timestamp'])
 
 	df = df.sort_values('local_timestamp')
+
+	print("\n-------- Remove first rows mostly nan")
+	# TODO: move this to the next stage
+	# for each file, go over the first rows and check the percentage of nans
+	df['percentage_nan'] = df[set(df.columns) - cols_ignore].isna().sum(axis=1) / len(set(df.columns) - cols_ignore)
+	count_drop_firstrows = 0
+	for f in df.file_id.unique():
+		for j, row in df[df.file_id == f].iterrows():
+			if row['percentage_nan'] > .75:
+				df.drop(j, inplace=True)
+				count_drop_firstrows += 1
+			else:
+				break
+	print("DROPPED: {:g} first rows with more than 75\% nans".format(count_drop_firstrows))
+
 
 	# select device
 	df = df[df['keep_devices']]
