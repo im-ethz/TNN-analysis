@@ -20,6 +20,10 @@ from helper import glucose_levels
 # TODO: ylabel interp plot
 # TODO: legend interp individual plot
 
+sns.set()
+sns.set_context('paper')
+sns.set_style('white')
+
 def custom_colormap(base, cmin, cmax, n):
 	cmap_base = plt.cm.get_cmap(base)
 	cmap_custom = cmap_base.from_list(base+str(n), cmap_base(np.linspace(cmin, cmax, n)), n)
