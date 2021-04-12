@@ -2,13 +2,17 @@
 # TODO: remove duplicate timestamps
 # TODO: keep in mind that with filling the glucose values, we still have some duplicate timestamps in there
 # TODO: instead of deleting data for which both local timestamps are not incorrect, try finding out which one is the right one (if you overlap it with Libre)
-# TODO: there is something wrong with df['duplicate_timestamp']!!! Because it's not actually equal to df.local_timestamp.duplicated()
+# TODO: duplicate rows: what to do if only part of the file contains duplicate timestamps?
 import os
 import sys
 sys.path.append(os.path.abspath('../../../'))
 
 import numpy as np
 import pandas as pd
+
+import matplotlib
+matplotlib.use('Agg')
+from pandas_profiling import ProfileReport
 
 import datetime
 import pytz
@@ -17,6 +21,8 @@ tzwhere = tzwhere.tzwhere()
 
 from plot import *
 from helper import *
+
+import gc
 
 path = './'
 if not os.path.exists(path+'combine/'):
@@ -96,6 +102,7 @@ def print_times_dates(text, df, df_mask, ts='timestamp'):
 
 athletes = sorted([int(i.rstrip('.csv')) for i in os.listdir(path+'csv/')])
 
+# merge all csv files
 for i in athletes:
 	print("\n------------------------------- Athlete ", i)
 	if not os.path.exists(path+'clean/'+str(i)):
@@ -189,7 +196,7 @@ for i in athletes:
 
 	df.to_csv(path+'combine/'+str(i)+'/'+str(i)+'_data.csv', index_label=False)
 
-# Clean df
+# first stage cleaning
 for i in athletes:
 	print("\n------------------------------- Athlete ", i)
 	df = pd.read_csv(path+'combine/'+str(i)+'/'+str(i)+'_data.csv', index_col=0)
@@ -203,7 +210,7 @@ for i in athletes:
 	# drop completely empty rows (usually first or last rows of a file)
 	nanrows = df.shape[0] - df.dropna(how='all', subset=set(df.columns)-cols_ignore).shape[0]
 	if nanrows > 0:
-		print("DROPPED: Number of rows dropped due to being empty: ", nanrows)
+		print("DROPPED: %s rows dropped due to being empty"%nanrows)
 		nanrows_index = df.index[~df.index.isin(df.dropna(how='all', subset=set(df.columns)-cols_ignore).index)]
 		if verbose == 2:
 			print("Timestamps before and after nanrows: ")
@@ -258,8 +265,9 @@ for i in athletes:
 	df['local_timestamp'] = pd.to_datetime(df['local_timestamp'])
 	df['local_timestamp_loc'] = pd.to_datetime(df['local_timestamp_loc'])
 
+	# fix zwift timestamps
+	print("\n-------- Timestamp: impute zwift nan")
 	if 'device_ZWIFT' in df:
-		# fix zwift
 		ts_zwift = df.loc[df['device_ZWIFT'] & df['local_timestamp'].isna() & df['local_timestamp_loc'].isna(), 'timestamp'].dt.date.unique()
 		print("Get timezone of Zwift files for the following dates: ")
 		for ts in ts_zwift:
@@ -287,8 +295,8 @@ for i in athletes:
 			  label=['position', 'metadata'])
 	plt.xlabel('UTC offset (hours)')
 	plt.legend()
-	plt.savefig('../../../Descriptives/hist_timezone_%s.pdf', bbox_inches='tight')
-	plt.savefig('../../../Descriptives/hist_timezone_%s.png', dpi=300, bbox_inches='tight')
+	plt.savefig('../../../Descriptives/hist_timezone_%s.pdf'%i, bbox_inches='tight')
+	plt.savefig('../../../Descriptives/hist_timezone_%s.png'%i, dpi=300, bbox_inches='tight')
 	plt.close()
 
 	# print nans local_timestamp and local_timestamp_loc
@@ -303,8 +311,9 @@ for i in athletes:
 		df, df['local_timestamp'].isna() & df['local_timestamp_loc'].isna())
 	
 	#df['drop_nan_timestamp'] = df['local_timestamp'].isna() & df['local_timestamp_loc'].isna()
-	df.drop(df[df['local_timestamp'].isna() & df['local_timestamp_loc'].isna()].index, inplace=True)
-	print("DROPPED: NaN local timestamps (if both are NaN)")
+	df_nan_ts = df[df['local_timestamp'].isna() & df['local_timestamp_loc'].isna()]
+	df.drop(df_nan_ts.index, inplace=True) 
+	print("DROPPED: %s files with %s nan local timestamps (both meta and loc)"%(len(df_nan_ts.file_id.unique()), len(df_nan_ts)))
 	
 	print("\n-------- Timestamp error")
 	# print how often local_timestamp does not equal local_timestamp_loc
@@ -326,7 +335,6 @@ for i in athletes:
 	df.drop('local_timestamp', axis=1, inplace=True)
 	df.rename(columns={'local_timestamp_loc':'local_timestamp'}, inplace=True)
 
-
 	print("\n--------------- DUPLICATES")
 	print("\n-------- Entire row duplicate")
 	# check if one of the files continues on, or if it's simply a complete file that we drop
@@ -335,13 +343,12 @@ for i in athletes:
 	for f in df[dupl].file_id.unique():
 		len_dupl.update({f:[len(df[df.file_id == f]), 
 							len(df[dupl & (df.file_id == f)])]})
-	print("CHECK if we remove entire file by removing duplicated entries, or if the file somehow continues on")
-	print("Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]\n",
-		len_dupl)
+	print("CHECK if we remove entire file by removing duplicated entries")
+	print("Dupl file_id: [len file, len dupl ts of file]\n",
+		len_dupl, "\n", dict(zip(len_dupl, [l==m for key, [l,m] in len_dupl.items()])))
 
-	print("Number of duplicated entries: ", df.duplicated(set(df.columns)-set(['file_id'])).sum())
+	print("DROPPED: %s duplicate entries"%df.duplicated(set(df.columns)-set(['file_id'])).sum())
 	df.drop_duplicates(subset=set(df.columns)-set(['file_id']), keep='first', inplace=True)
-	print("DROPPED: duplicate entries")
 
 	print("\n-------- Timestamp duplicate")
 	print_times_dates("duplicated timestamps", 
@@ -352,14 +359,25 @@ for i in athletes:
 	dupl_timestamp_both = df['local_timestamp'].duplicated(keep=False)
 	dupl_timestamp = df['local_timestamp'].duplicated(keep='first')
 
+	# check if dupl timestamps cover entire file, or only part of it
 	len_dupl_ts = {}
 	for f in df[dupl_timestamp_both].file_id.unique():
-		len_dupl_ts.update({f:[len(df[df.file_id == f]), 
-							   len(df[dupl_timestamp_both & (df.file_id == f)])]})
-	print("CHECK if we remove entire file by removing duplicated timestamps, or if the file somehow continues on")
-	print("Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]\n",
-		len_dupl_ts)
+		len_dupl_ts[f] = [len(df[df.file_id == f]), 
+						  len(df[dupl_timestamp_both & (df.file_id == f)])]
+	print("CHECK if we remove entire file by removing duplicated timestamps")
+	print("Dupl file_id: [len file, len dupl ts of file]\n",
+		len_dupl_ts, "\n", dict(zip(len_dupl_ts, [l==m for key, [l,m] in len_dupl_ts.items()])))
 
+	# check percentage of nan columns for each file with duplicated timestamps
+	len_colnan_dupl_ts = {}
+	colnan_dupl_ts = {}
+	for f in df[dupl_timestamp_both].file_id.unique():
+		len_colnan_dupl_ts[f] = df[df.file_id == f].isna().all().sum() / len(df.columns)
+		colnan_dupl_ts[f] = df.columns[df[df.file_id == f].isna().all()]
+	print("Percentage of missing columns per file\n", len_colnan_dupl_ts)
+	print("Missing columns per file\n", colnan_dupl_ts)
+
+	# check if duplicate timestamps are caused by using multiple devices at the same time
 	print("Duplicate timestamps in devices:")
 	for dev in devices:
 		print_times_dates(dev, df, dupl_timestamp_both & df[dev], ts='local_timestamp')
@@ -376,6 +394,8 @@ for i in athletes:
 	print(df[dupl_timestamp_both & df['keep_devices']].sort_values('local_timestamp'))
 	# Answer: sometimes. Maybe find way to select faulty values and remove them
 	# For now, keep identifyer in them so that we know we should do something with it
+	# Note: what can happen here is that two devices are recording at the same time for some reason
+	# but one of the two devices may not contain all the information.
 
 	# TODO: look into dropping duplicate timestamps for which the local timestamp is incorrect
 	# maybe sort by error timestamps as well?
@@ -395,15 +415,17 @@ for i in athletes:
 
 	df.drop(['device_0', 'device_0_serialnumber'], axis=1, inplace=True)
 
-	# TODO: check if there are training sessions that should be merged
-
-	# TODO: calculate values (statistics) on a training-level
-
 	# save df to file
 	df.to_csv(path+'clean/'+str(i)+'/'+str(i)+'_data.csv', index_label=False)
+
+	# create pandas profiling report
+	profile = ProfileReport(df, title='pandas profiling report', minimal=True)
+	profile.to_file(path+'clean/%s/%s_report.html'%(i,i))
+
 	del df, df_information
 
-# Second stage cleaning
+# TODO: check if there are training sessions that should be merged
+# second stage cleaning
 for i in athletes:
 	print("\n------------------------------- Athlete ", i)
 
@@ -417,6 +439,122 @@ for i in athletes:
 
 	df = df.sort_values('local_timestamp')
 
+	print("\n-------- select devices")
+	# -------------------- Select devices
+	cols_devices = df.columns[df.columns.str.startswith('device_')]
+	drop_devices = set(cols_devices) - set(['device_ELEMNT', 'device_ELEMNTBOLT', 'device_ELEMNTROAM', 'device_ZWIFT'])
+
+	print("DROPPED: %s files with %s entries from devices %s"\
+		%(len(df[~df['keep_devices']].file_id.unique()), (~df['keep_devices']).sum(), drop_devices))
+	df = df[df['keep_devices']]
+	df.drop(['keep_devices', *list(drop_devices)], axis=1, inplace=True)
+
+	print("\n-------- cleaning features")
+	# -------------------- Empty cols
+	empty_cols = ['fractional_cadence', 'time_from_course', 'compressed_speed_distance', 'resistance', 'cycle_length', 'accumulated_power']
+	for col in empty_cols:
+		if col in df:
+			df.drop(col, axis=1, inplace=True)
+			print("DROPPED: ", col, " (empty)")
+
+	# -------------------- Left-right balance
+	# there are some strings in this column for some reason (e.g. 'mask', 'right')
+	df.left_right_balance = pd.to_numeric(df.left_right_balance, errors='coerce')
+	print("CLEAN: left-right balance")
+
+	# -------------------- Zeros power meter
+	# TODO: figure out what to do with zeros from power meter
+	# CHECK: is the previous value for a nan always a zero: answer NO
+	# CHECK: is the a zero always followed by a nan: answer more NO
+	# Note: sometimes the power is nan if there is a shift in timestamps
+	# Note: zero power often happens for negative grades, so maybe it is actually when they stop pedalling
+	# TODO: ask how this works in real life
+	# TODO: nan seems to happen a lot also on a specific day, remove that file
+
+	# -------------------- Enhanced altitude
+	# check if enhanced_altitude equals altitude
+	print("CHECK: enhanced altitude does not equal altitude %s times"\
+		%((df['enhanced_altitude'] != df['altitude']) & 
+		(df['enhanced_altitude'].notna()) & (df['altitude'].notna())).sum())
+	print("DROPPED: altitude (equals enhanced_altitude)")
+	df.drop('altitude', axis=1, inplace=True)
+	df.rename({'enhanced_altitude':'altitude'}, axis=1, inplace=True)
+
+	# -------------------- Enhanced speed
+	# check if enhanced_speed equals speed
+	print("CHECK: enhanced speed does not equal speed %s times"\
+		%((df['enhanced_speed'] != df['speed']) & 
+		(df['enhanced_speed'].notna()) & (df['speed'].notna())).sum())
+	print("DROPPED: speed (equals enhanced_speed)")
+	df.drop('speed', axis=1, inplace=True)
+	df.rename({'enhanced_speed':'speed'}, axis=1, inplace=True)
+
+	# -------------------- Elevation gain
+	df['elevation_gain'] = df.groupby('file_id')['altitude'].transform(lambda x: x.diff())
+	print("CREATED: elevation gain")
+	# TODO: remove extreme values
+
+	# -------------------- Acceleration
+	df['acceleration'] = df.groupby('file_id')['speed'].transform(lambda x: x.diff())
+	print("CREATED: acceleration")
+	# TODO: remove extreme values
+
+	# -------------------- Acceleration
+	df['accumulated_power'] = df.groupby('file_id')['power'].transform(lambda x: x.sum())
+	print("CREATED: accumulated power")
+
+	# -------------------- Time in training
+	# create column time in training
+	df['time_training'] = np.nan
+	for fid in df.file_id.unique():
+		df.loc[df.file_id == fid, 'time_training'] = df[df.file_id == fid].local_timestamp - df[df.file_id == fid].local_timestamp.min()
+	df['time_training'] = df['time_training'] / np.timedelta64(1,'s')
+	print("CREATED: time training")
+
+	# length training
+	length_training = df.groupby('file_id').count().max(axis=1) / 60
+	PlotPreprocess('../../../Descriptives/', athlete=i).plot_hist(length_training, 'length_training (min)')
+
+	print("Max training length (min): ", length_training.max())
+	print("Number of trainings that last shorter than 10 min: ", (length_training <= 10).sum())
+	print("Number of trainings that last shorter than 20 min: ", (length_training <= 20).sum())
+	del length_training
+
+	# -------------------- Distance
+	# negative distance diffs (meaning that the athletes is moving backwards)
+	print("CHECK: Negative distance diffs: ", 
+		((df.time_training.diff() == 1) & (df['distance'].diff() < 0)).sum())
+	# only for athlete 10 there are two negative distance diffs
+
+	df.to_csv(path+'clean2/'+str(i)+'/'+str(i)+'_data.csv', index_label=False)
+
+	# create pandas profiling report
+	profile = ProfileReport(df, title='pandas profiling report', minimal=True)
+	profile.to_file(path+'clean2/%s/%s_report.html'%(i,i))
+
+	del df
+
+# TODO: find out what happened when there are large gaps in the data
+# TODO: calculate values (statistics) on a training-level
+# TODO: elevation_gain, acceleartion and accumulated power now contain extreme values when a large shift in time is made within a training
+# imputation
+for i in athletes:
+	print("\n------------------------------- Athlete ", i)
+
+	df = pd.read_csv(path+'clean2/'+str(i)+'/'+str(i)+'_data.csv', index_col=0)
+
+	df['timestamp'] = pd.to_datetime(df['timestamp'])
+	df['local_timestamp'] = pd.to_datetime(df['local_timestamp'])
+
+	# -------------------- Position
+	# check if position long and lat are missing at the same time or not 
+	print("Number of missing values position_lat: ", df['position_lat'].isna().sum())
+	print("Number of missing values position_long: ", df['position_long'].isna().sum())
+	print("Number of times both position_lat and position_long missing: ", 
+		(df['position_lat'].isna() & df['position_long'].isna()).sum())
+	# not really relevant because we're not going to do anything with it anymore
+
+	"""
 	print("\n-------- Remove first rows mostly nan")
 	# TODO: move this to the next stage
 	# for each file, go over the first rows and check the percentage of nans
@@ -430,60 +568,66 @@ for i in athletes:
 			else:
 				break
 	print("DROPPED: {:g} first rows with more than 75\% nans".format(count_drop_firstrows))
+	"""
+
+	# -------------------- Impute nans
+	# TODO fill up nans with duplicates
+	# df_dupl = pd.read_csv(path+'clean/'+str(i)+'/'+str(i)+'_data_dupl.csv', index_col=0)
 
 
-	# select device
-	df = df[df['keep_devices']]
-	df.drop('keep_devices', axis=1, inplace=True)
+	# -------------------- Temperature - TODO maybe move this to before
+	# smooth temperature (because of binned values) (with centering implemented manually)
+	# rolling mean of {temp_window} seconds, centered
+	temp_window = 200 #in seconds
+	df_temperature_smooth = df.set_index('local_timestamp')['temperature']\
+		.rolling('%ss'%temp_window, min_periods=1).mean()\
+		.shift(-temp_window/2, freq='s').rename('temperature_smooth')
+	df = pd.merge(df, df_temperature_smooth, left_on='local_timestamp', right_index=True, how='left')
+	del df_temperature_smooth ; gc.collect()
+	print("CREATED: temperature smooth")
 
-	devices = df.columns[df.columns.str.startswith('device_')]
-	keep_devices = ['device_ELEMNT', 'device_ELEMNTBOLT', 'device_ELEMNTROAM', 'device_ZWIFT']
-	drop_devices = set(devices) - set(keep_devices)
-	df.drop(drop_devices, axis=1, inplace=True)
-	print("DROPPED: all data of devices: ", drop_devices)
+	print("Fraction of rows for which difference between original temperature and smoothed temperature is larger than 0.5: ",
+		((df['temperature_smooth'] - df['temperature']).abs() > .5).sum() / df.shape[0])
 
-	# create column date and time in training
-	df['time_training'] = np.nan
-	for fid in df.file_id.unique():
-		df.loc[df.file_id == fid, 'time_training'] = df[df.file_id == fid].local_timestamp - df[df.file_id == fid].local_timestamp.min()
-	df['time_training'] = df['time_training'] / np.timedelta64(1,'s')
+	PlotPreprocess('../Descriptives/', athlete=i).plot_smoothing(df, 'temperature', kwargs=dict(alpha=.5, linewidth=2))
 
-	# length training
-	length_training = df.groupby('file_id').count().max(axis=1) / 60
-	print("Max training length (min):\n", length_training.max())
-	length_training.hist(bins=40)
-	plt.xlabel('length_training (min)')
+	# note that 200s should probably be more if you look at the distributions
+	sns.histplot(df, x='temperature', kde=True)
+	sns.histplot(df, x='temperature_smooth', kde=True, color='red')
 	plt.show()
+	plt.close()
 
-	print("Number of trainings that last shorter than 10 min: ",
-		(length_training <= 10).sum())
-	print("Number of trainings that last shorter than 20 min: ",
-		(length_training <= 20).sum())
-	del length_training
-	# TODO: look into this at some point
+	# -------------------- Battery level
+	# find out if/when battery level is not monotonically decreasing
+	# TODO: why does this happen?
+	battery_monotonic = pd.Series()
+	for idx in df.file_id.unique():
+		battery_monotonic.loc[idx] = (df.loc[df.file_id == idx, 'battery_soc'].dropna().diff().fillna(0) <= 0).all()
 
-	# check for negative distances
-	print("Negative distance diffs: ", 
-		((df.time_training.diff() == 1) & (df['distance'].diff() < 0)).sum())
+	if (~battery_monotonic).sum() > 0:
+		print("WARNING: Number of trainings for which battery level is not monotonically decreasing: ",
+			(~battery_monotonic).sum())
+		battery_notmonotonic_index = df.file_id.unique()[~battery_monotonic]
+	
+		# plot battery levels
+		cmap = matplotlib.cm.get_cmap('viridis', len(battery_notmonotonic_index))
+		ax = plt.subplot()
+		for c, idx in enumerate(battery_notmonotonic_index): #for date in df.date.unique():
+			df[df.file_id == idx].plot(ax=ax, x='time_training', y='battery_soc',
+				color=cmap(c), legend=False, alpha=.5, kind='scatter', s=10.)
+		plt.ylabel('battery_soc')
+		plt.show()
+		plt.close()
 
-	# ------------------- cleaning features
-	# check if enhanced_altitude equals altitude
-	eq_altitude = ((df['enhanced_altitude'] != df['altitude']) & 
-    	(df['enhanced_altitude'].notna()) & (df['altitude'].notna())).sum()
-	if eq_altitude == 0:
-		print("GOOD: enhanced_altitude equals altitude")
-		df.drop('enhanced_altitude', axis=1, inplace=True)
-	else:
-		print("WARNING: enhanced_altitude does not equal altitude %s times"%eq_altitude)
+	# linearly interpolate battery level (with only backwards direction)
+	for idx in df.file_id.unique():
+		df.loc[df.file_id == idx, 'battery_soc_ilin'] = \
+		df.loc[df.file_id == idx, 'battery_soc']\
+		.interpolate(method='time', limit_direction='forward')
+	print("CREATED: linearly interpolated battery level")
 
-	# check if enhanced_speed equals speed
-	eq_speed = ((df['enhanced_speed'] != df['speed']) & 
-    	(df['enhanced_speed'].notna()) & (df['speed'].notna())).sum()
-	if eq_speed == 0:
-		print("GOOD: enhanced_speed equals speed")
-		df.drop('enhanced_speed', axis=1, inplace=True)
-	else:
-		print("WARNING: enhanced_speed does not equal altitude %s times"%eq_speed)
+	PlotPreprocess('../Descriptives/', athlete=i).plot_interp(df, 'battery_soc', kwargs=dict(alpha=.5), 
+		ikwargs=dict(alpha=.5, kind='scatter', s=10.))
 
 	# TODO: clean more features here, and add some as well
 

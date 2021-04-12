@@ -1,6 +1,15 @@
 import numpy as np
 import pandas as pd
 
+# glucose levels in mg/dL
+glucose_levels = {'hypo L2': (0,53),
+				  'hypo L1': (54,69),
+				  'normal' : (70,180),
+				  'hyper L1': (181,250),
+				  'hyper L2': (251,10000)}
+mmoll_mgdl = 18#.018
+mgdl_mmoll = 0.0555
+
 def elevation_gain(altitude: pd.Series):
 	# calculate the total elevation gain during a workout
 	return altitude.diff()[altitude.diff() > 0].sum()
@@ -12,6 +21,7 @@ def elevation_loss(altitude: pd.Series):
 def grade(altitude, distance):
 	# TODO
 	# calculate the difference between distance travelled vertically and horizontally expressed as a percentage
+	return
 
 def velocity_ascended_in_mph(elevation_gain, t, grade):
 	# calculate velocity ascended in m/h (VAM), which measures how fast you are climbing a hill

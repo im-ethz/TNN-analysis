@@ -238,7 +238,6 @@ WARNING: Cols outside of 'device' that have a high number of nans, and that we s
 device_0 manufacturer is file_id manufacturer:  True
 device_0 product is file_id product:  False
 
-
 ------------------------------- Athlete  1
 /local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (18,19,20) have mixed types.Specify dtype option on import or set low_memory=False.
   interactivity=interactivity, compiler=compiler, result=result)
@@ -246,7 +245,7 @@ device_0 product is file_id product:  False
 --------------- NAN
 
 -------- Remove rows fully nan
-DROPPED: Number of rows dropped due to being empty:  57
+DROPPED: 57 rows dropped due to being empty
 Timestamps before and after nanrows: 
 Empty DataFrame
 Columns: [timestamp, position_lat, position_long, gps_accuracy, enhanced_altitude, altitude, distance, heart_rate, enhanced_speed, speed, power, combined_pedal_smoothness, left_torque_effectiveness, right_torque_effectiveness, temperature, grade, cadence, left_right_balance, local_timestamp, local_timestamp_loc, file_id, battery_soc, left_pedal_smoothness, right_pedal_smoothness, glucose, fractional_cadence, accumulated_power, time_from_course, compressed_speed_distance, resistance, cycle_length]
@@ -599,6 +598,8 @@ Fraction of data dropped with device selection:  0.12652638889440318
 Are there glucose values in the data that will be dropped with the device selection?  False
 
 --------------- TIMESTAMP
+
+-------- Timestamp: impute zwift nan
 Get timezone of Zwift files for the following dates: 
 2019-01-30
 local_timestamp_loc changed to UTC offset:  1 hours
@@ -647,7 +648,7 @@ Traceback (most recent call last):
     self.figure.draw(self.renderer)
   File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backend_bases.py", line 1544, in _draw
     def _draw(renderer): raise Done(renderer)
-matplotlib.backend_bases._get_renderer.<locals>.Done: <matplotlib.backends.backend_agg.RendererAgg object at 0x7fb7e1b1cbd0>
+matplotlib.backend_bases._get_renderer.<locals>.Done: <matplotlib.backends.backend_agg.RendererAgg object at 0x7fdaea4d4250>
 
 -------- Timestamp: nan
 
@@ -670,7 +671,7 @@ file ids:  [  4  33  35  41  48  55  56  62  63 283 284]
 times:  0
 days:  0
 file ids:  []
-DROPPED: NaN local timestamps (if both are NaN)
+DROPPED: 0 files with 0 nan local timestamps (both meta and loc)
 
 -------- Timestamp error
 
@@ -689,11 +690,11 @@ Dates for which this happens:  [datetime.date(2019, 2, 14) datetime.date(2019, 3
 --------------- DUPLICATES
 
 -------- Entire row duplicate
-CHECK if we remove entire file by removing duplicated entries, or if the file somehow continues on
-Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
- {38: [21641, 21641], 39: [21641, 21641]}
-Number of duplicated entries:  21641
-DROPPED: duplicate entries
+CHECK if we remove entire file by removing duplicated entries
+Dupl file_id: [len file, len dupl ts of file]
+ {38: [21641, 21641], 39: [21641, 21641]} 
+ {38: True, 39: True}
+DROPPED: 21641 duplicate entries
 
 -------- Timestamp duplicate
 
@@ -706,9 +707,28 @@ file ids:  [221 222]
 times:  14180
 days:  1
 file ids:  [221 222]
-CHECK if we remove entire file by removing duplicated timestamps, or if the file somehow continues on
-Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
- {220: [1758, 1493], 223: [12918, 12687], 221: [2004, 1493], 222: [12733, 12687]}
+CHECK if we remove entire file by removing duplicated timestamps
+Dupl file_id: [len file, len dupl ts of file]
+ {220: [1758, 1493], 223: [12918, 12687], 221: [2004, 1493], 222: [12733, 12687]} 
+ {220: False, 223: False, 221: False, 222: False}
+Percentage of missing columns per file
+ {220: 0.2631578947368421, 223: 0.2631578947368421, 221: 0.21052631578947367, 222: 0.21052631578947367}
+Missing columns per file
+ {220: Index(['battery_soc', 'left_pedal_smoothness', 'right_pedal_smoothness',
+       'glucose', 'fractional_cadence', 'accumulated_power',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length'],
+      dtype='object'), 223: Index(['battery_soc', 'left_pedal_smoothness', 'right_pedal_smoothness',
+       'glucose', 'fractional_cadence', 'accumulated_power',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length'],
+      dtype='object'), 221: Index(['combined_pedal_smoothness', 'glucose', 'fractional_cadence',
+       'accumulated_power', 'time_from_course', 'compressed_speed_distance',
+       'resistance', 'cycle_length'],
+      dtype='object'), 222: Index(['combined_pedal_smoothness', 'glucose', 'fractional_cadence',
+       'accumulated_power', 'time_from_course', 'compressed_speed_distance',
+       'resistance', 'cycle_length'],
+      dtype='object')}
 Duplicate timestamps in devices:
 
  device_ELEMNT
@@ -758,20 +778,20 @@ days:  0
 file ids:  []
 Duplicate timestamps after potentially dropping devices: 
 
- device_ZWIFT
-times:  0
-days:  0
-file ids:  []
+ device_ELEMNT
+times:  14180
+days:  1
+file ids:  [221 222]
 
  device_ELEMNTBOLT
 times:  14180
 days:  1
 file ids:  [220 223]
 
- device_ELEMNT
-times:  14180
-days:  1
-file ids:  [221 222]
+ device_ZWIFT
+times:  0
+days:  0
+file ids:  []
 Do the duplicate timestamps have the same data?
                   timestamp  position_lat  position_long  gps_accuracy  ...  device_GARMIN  device_ZWIFT  keep_devices  error_local_timestamp
 2216033 2019-09-10 23:40:53     30.477604     111.762913           2.0  ...          False         False          True                  False
@@ -801,7 +821,7 @@ DROPPED: 2 files with 14737 duplicate timestamps
 --------------- NAN
 
 -------- Remove rows fully nan
-DROPPED: Number of rows dropped due to being empty:  54
+DROPPED: 54 rows dropped due to being empty
 Timestamps before and after nanrows: 
                  timestamp  enhanced_altitude  altitude  heart_rate  ...  battery_soc  left_pedal_smoothness  right_pedal_smoothness  glucose
 52145  2018-12-06 14:40:56                4.0       4.0        93.0  ...          NaN                    NaN                     NaN      NaN
@@ -1136,6 +1156,8 @@ Fraction of data dropped with device selection:  0.0
 Are there glucose values in the data that will be dropped with the device selection?  False
 
 --------------- TIMESTAMP
+
+-------- Timestamp: impute zwift nan
 Exception in Tkinter callback
 Traceback (most recent call last):
   File "/usr/lib/python3.7/tkinter/__init__.py", line 1705, in __call__
@@ -1150,7 +1172,7 @@ Traceback (most recent call last):
     self.figure.draw(self.renderer)
   File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backend_bases.py", line 1544, in _draw
     def _draw(renderer): raise Done(renderer)
-matplotlib.backend_bases._get_renderer.<locals>.Done: <matplotlib.backends.backend_agg.RendererAgg object at 0x7fb7e5b7aed0>
+matplotlib.backend_bases._get_renderer.<locals>.Done: <matplotlib.backends.backend_agg.RendererAgg object at 0x7f8d79c31bd0>
 
 -------- Timestamp: nan
 
@@ -1175,7 +1197,7 @@ file ids:  [  1   8  12  20  26  28  39  41  48  57  58  64  67  76  87  89  90 
 times:  0
 days:  0
 file ids:  []
-DROPPED: NaN local timestamps (if both are NaN)
+DROPPED: 0 files with 0 nan local timestamps (both meta and loc)
 
 -------- Timestamp error
 
@@ -1195,8 +1217,7 @@ Dates for which this happens:  [datetime.date(2019, 2, 22) datetime.date(2019, 3
 CHECK if we remove entire file by removing duplicated entries, or if the file somehow continues on
 Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
  {}
-Number of duplicated entries:  0
-DROPPED: duplicate entries
+DROPPED: 0 duplicate entries
 
 -------- Timestamp duplicate
 
@@ -1211,6 +1232,11 @@ days:  0
 file ids:  []
 CHECK if we remove entire file by removing duplicated timestamps, or if the file somehow continues on
 Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
+ {} 
+ {}
+Percentage of missing columns per file
+ {}
+Missing columns per file
  {}
 Duplicate timestamps in devices:
 
@@ -1253,7 +1279,7 @@ DROPPED: 0 files with 0 duplicate timestamps
 --------------- NAN
 
 -------- Remove rows fully nan
-DROPPED: Number of rows dropped due to being empty:  82
+DROPPED: 82 rows dropped due to being empty
 Timestamps before and after nanrows: 
                   timestamp  position_lat  position_long  gps_accuracy  ...  resistance  cycle_length  fractional_cadence  accumulated_power
 103640  2018-12-09 11:28:14     41.403473       2.134769           3.0  ...         NaN           NaN                 NaN                NaN
@@ -1758,6 +1784,8 @@ Fraction of data dropped with device selection:  0.12008026925324834
 Are there glucose values in the data that will be dropped with the device selection?  False
 
 --------------- TIMESTAMP
+
+-------- Timestamp: impute zwift nan
 Get timezone of Zwift files for the following dates: 
 2019-01-29
 local_timestamp_loc changed to UTC offset:  1 hours
@@ -1839,7 +1867,7 @@ Traceback (most recent call last):
     self.figure.draw(self.renderer)
   File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backend_bases.py", line 1544, in _draw
     def _draw(renderer): raise Done(renderer)
-matplotlib.backend_bases._get_renderer.<locals>.Done: <matplotlib.backends.backend_agg.RendererAgg object at 0x7fb7e2c65fd0>
+matplotlib.backend_bases._get_renderer.<locals>.Done: <matplotlib.backends.backend_agg.RendererAgg object at 0x7f8d78741750>
 
 -------- Timestamp: nan
 
@@ -1864,7 +1892,7 @@ file ids:  [  6   8  18  21  48 141 142 306  43  63 352 353 354 355 356 357 358 
 times:  9705
 days:  2
 file ids:  [352 368]
-DROPPED: NaN local timestamps (if both are NaN)
+DROPPED: 2 files with 9705 nan local timestamps (both meta and loc)
 
 -------- Timestamp error
 
@@ -1885,8 +1913,7 @@ Dates for which this happens:  [datetime.date(2019, 5, 25) datetime.date(2019, 6
 CHECK if we remove entire file by removing duplicated entries, or if the file somehow continues on
 Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
  {62: [583, 35]}
-Number of duplicated entries:  34
-DROPPED: duplicate entries
+DROPPED: 34 duplicate entries
 
 -------- Timestamp duplicate
 
@@ -1901,7 +1928,136 @@ days:  12
 file ids:  [ 62 353 354 356 357 359 360 362 363 364 365 367]
 CHECK if we remove entire file by removing duplicated timestamps, or if the file somehow continues on
 Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
- {257: [7211, 971], 258: [7295, 280], 266: [6117, 2745], 267: [11793, 2494], 293: [16393, 2970], 296: [2964, 1943], 304: [3989, 156], 62: [549, 2], 318: [7932, 7659], 319: [6473, 6377], 326: [12617, 11392], 337: [30690, 4169], 353: [2194, 971], 354: [2309, 280], 356: [8429, 7659], 357: [7303, 6377], 359: [5666, 2745], 360: [2578, 2494], 362: [12089, 11392], 363: [3538, 2970], 364: [1971, 1943], 365: [4561, 4169], 367: [4767, 156]}
+ {257: [7211, 971], 258: [7295, 280], 266: [6117, 2745], 267: [11793, 2494], 293: [16393, 2970], 296: [2964, 1943], 304: [3989, 156], 62: [549, 2], 318: [7932, 7659], 319: [6473, 6377], 326: [12617, 11392], 337: [30690, 4169], 353: [2194, 971], 354: [2309, 280], 356: [8429, 7659], 357: [7303, 6377], 359: [5666, 2745], 360: [2578, 2494], 362: [12089, 11392], 363: [3538, 2970], 364: [1971, 1943], 365: [4561, 4169], 367: [4767, 156]} 
+ {257: False, 258: False, 266: False, 267: False, 293: False, 296: False, 304: False, 62: False, 318: False, 319: False, 326: False, 337: False, 353: False, 354: False, 356: False, 357: False, 359: False, 360: False, 362: False, 363: False, 364: False, 365: False, 367: False}
+Percentage of missing columns per file
+ {257: 0.21621621621621623, 258: 0.21621621621621623, 266: 0.21621621621621623, 267: 0.21621621621621623, 293: 0.2972972972972973, 296: 0.2972972972972973, 304: 0.24324324324324326, 62: 0.5135135135135135, 318: 0.4864864864864865, 319: 0.4864864864864865, 326: 0.2702702702702703, 337: 0.2702702702702703, 353: 0.5405405405405406, 354: 0.5405405405405406, 356: 0.4594594594594595, 357: 0.4594594594594595, 359: 0.5405405405405406, 360: 0.5135135135135135, 362: 0.4594594594594595, 363: 0.5405405405405406, 364: 0.5135135135135135, 365: 0.5405405405405406, 367: 0.5405405405405406}
+Missing columns per file
+ {257: Index(['combined_pedal_smoothness', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length',
+       'fractional_cadence', 'accumulated_power'],
+      dtype='object'), 258: Index(['combined_pedal_smoothness', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length',
+       'fractional_cadence', 'accumulated_power'],
+      dtype='object'), 266: Index(['combined_pedal_smoothness', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length',
+       'fractional_cadence', 'accumulated_power'],
+      dtype='object'), 267: Index(['combined_pedal_smoothness', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length',
+       'fractional_cadence', 'accumulated_power'],
+      dtype='object'), 293: Index(['left_right_balance', 'combined_pedal_smoothness',
+       'left_torque_effectiveness', 'left_pedal_smoothness', 'glucose',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length', 'fractional_cadence', 'accumulated_power'],
+      dtype='object'), 296: Index(['left_right_balance', 'combined_pedal_smoothness',
+       'left_torque_effectiveness', 'left_pedal_smoothness', 'glucose',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length', 'fractional_cadence', 'accumulated_power'],
+      dtype='object'), 304: Index(['left_right_balance', 'combined_pedal_smoothness', 'glucose',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length', 'fractional_cadence', 'accumulated_power'],
+      dtype='object'), 62: Index(['gps_accuracy', 'distance', 'temperature', 'grade',
+       'left_right_balance', 'combined_pedal_smoothness',
+       'left_torque_effectiveness', 'right_torque_effectiveness',
+       'battery_soc', 'left_pedal_smoothness', 'right_pedal_smoothness',
+       'glucose', 'time_from_course', 'compressed_speed_distance',
+       'resistance', 'cycle_length', 'fractional_cadence', 'accumulated_power',
+       'device_0_serialnumber'],
+      dtype='object'), 318: Index(['gps_accuracy', 'grade', 'power', 'left_right_balance',
+       'combined_pedal_smoothness', 'left_torque_effectiveness',
+       'right_torque_effectiveness', 'cadence', 'battery_soc',
+       'left_pedal_smoothness', 'right_pedal_smoothness', 'glucose',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length', 'fractional_cadence', 'accumulated_power'],
+      dtype='object'), 319: Index(['gps_accuracy', 'grade', 'power', 'left_right_balance',
+       'combined_pedal_smoothness', 'left_torque_effectiveness',
+       'right_torque_effectiveness', 'cadence', 'battery_soc',
+       'left_pedal_smoothness', 'right_pedal_smoothness', 'glucose',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length', 'fractional_cadence', 'accumulated_power'],
+      dtype='object'), 326: Index(['gps_accuracy', 'grade', 'left_right_balance',
+       'combined_pedal_smoothness', 'battery_soc', 'glucose',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length'],
+      dtype='object'), 337: Index(['gps_accuracy', 'grade', 'left_right_balance',
+       'combined_pedal_smoothness', 'battery_soc', 'glucose',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length'],
+      dtype='object'), 353: Index(['gps_accuracy', 'grade', 'power', 'left_right_balance',
+       'combined_pedal_smoothness', 'left_torque_effectiveness',
+       'right_torque_effectiveness', 'cadence', 'heart_rate', 'battery_soc',
+       'left_pedal_smoothness', 'right_pedal_smoothness', 'glucose',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length', 'fractional_cadence', 'accumulated_power',
+       'error_local_timestamp'],
+      dtype='object'), 354: Index(['gps_accuracy', 'grade', 'power', 'left_right_balance',
+       'combined_pedal_smoothness', 'left_torque_effectiveness',
+       'right_torque_effectiveness', 'cadence', 'heart_rate', 'battery_soc',
+       'left_pedal_smoothness', 'right_pedal_smoothness', 'glucose',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length', 'fractional_cadence', 'accumulated_power',
+       'error_local_timestamp'],
+      dtype='object'), 356: Index(['gps_accuracy', 'grade', 'left_right_balance',
+       'combined_pedal_smoothness', 'left_torque_effectiveness',
+       'right_torque_effectiveness', 'battery_soc', 'left_pedal_smoothness',
+       'right_pedal_smoothness', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length',
+       'fractional_cadence', 'accumulated_power', 'error_local_timestamp'],
+      dtype='object'), 357: Index(['gps_accuracy', 'grade', 'left_right_balance',
+       'combined_pedal_smoothness', 'left_torque_effectiveness',
+       'right_torque_effectiveness', 'battery_soc', 'left_pedal_smoothness',
+       'right_pedal_smoothness', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length',
+       'fractional_cadence', 'accumulated_power', 'error_local_timestamp'],
+      dtype='object'), 359: Index(['gps_accuracy', 'grade', 'power', 'left_right_balance',
+       'combined_pedal_smoothness', 'left_torque_effectiveness',
+       'right_torque_effectiveness', 'cadence', 'heart_rate', 'battery_soc',
+       'left_pedal_smoothness', 'right_pedal_smoothness', 'glucose',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length', 'fractional_cadence', 'accumulated_power',
+       'error_local_timestamp'],
+      dtype='object'), 360: Index(['gps_accuracy', 'grade', 'power', 'left_right_balance',
+       'combined_pedal_smoothness', 'left_torque_effectiveness',
+       'right_torque_effectiveness', 'cadence', 'battery_soc',
+       'left_pedal_smoothness', 'right_pedal_smoothness', 'glucose',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length', 'fractional_cadence', 'accumulated_power',
+       'error_local_timestamp'],
+      dtype='object'), 362: Index(['gps_accuracy', 'grade', 'left_right_balance',
+       'combined_pedal_smoothness', 'left_torque_effectiveness',
+       'right_torque_effectiveness', 'battery_soc', 'left_pedal_smoothness',
+       'right_pedal_smoothness', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length',
+       'fractional_cadence', 'accumulated_power', 'error_local_timestamp'],
+      dtype='object'), 363: Index(['gps_accuracy', 'grade', 'power', 'left_right_balance',
+       'combined_pedal_smoothness', 'left_torque_effectiveness',
+       'right_torque_effectiveness', 'cadence', 'heart_rate', 'battery_soc',
+       'left_pedal_smoothness', 'right_pedal_smoothness', 'glucose',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length', 'fractional_cadence', 'accumulated_power',
+       'error_local_timestamp'],
+      dtype='object'), 364: Index(['gps_accuracy', 'grade', 'power', 'left_right_balance',
+       'combined_pedal_smoothness', 'left_torque_effectiveness',
+       'right_torque_effectiveness', 'cadence', 'battery_soc',
+       'left_pedal_smoothness', 'right_pedal_smoothness', 'glucose',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length', 'fractional_cadence', 'accumulated_power',
+       'error_local_timestamp'],
+      dtype='object'), 365: Index(['gps_accuracy', 'grade', 'power', 'left_right_balance',
+       'combined_pedal_smoothness', 'left_torque_effectiveness',
+       'right_torque_effectiveness', 'cadence', 'heart_rate', 'battery_soc',
+       'left_pedal_smoothness', 'right_pedal_smoothness', 'glucose',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length', 'fractional_cadence', 'accumulated_power',
+       'error_local_timestamp'],
+      dtype='object'), 367: Index(['gps_accuracy', 'grade', 'power', 'left_right_balance',
+       'combined_pedal_smoothness', 'left_torque_effectiveness',
+       'right_torque_effectiveness', 'cadence', 'heart_rate', 'battery_soc',
+       'left_pedal_smoothness', 'right_pedal_smoothness', 'glucose',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length', 'fractional_cadence', 'accumulated_power',
+       'error_local_timestamp'],
+      dtype='object')}
 Duplicate timestamps in devices:
 
  device_ELEMNTBOLT
@@ -1946,15 +2102,15 @@ days:  4
 file ids:  [318 319 326 337]
 Duplicate timestamps after potentially dropping devices: 
 
- device_ZWIFT
-times:  2
-days:  1
-file ids:  [62]
-
  device_ELEMNTBOLT
 times:  11559
 days:  7
 file ids:  [257 258 266 267 293 296 304]
+
+ device_ZWIFT
+times:  2
+days:  1
+file ids:  [62]
 Do the duplicate timestamps have the same data?
                   timestamp  position_lat  position_long  gps_accuracy  ...  device_GARMIN  device_ZWIFT  keep_devices  error_local_timestamp
 2950021 2019-01-29 19:10:05    -11.645443     166.958417           NaN  ...          False          True          True                  False
@@ -1984,7 +2140,7 @@ DROPPED: 12 files with 55954 duplicate timestamps
 --------------- NAN
 
 -------- Remove rows fully nan
-DROPPED: Number of rows dropped due to being empty:  71
+DROPPED: 71 rows dropped due to being empty
 Timestamps before and after nanrows: 
 Empty DataFrame
 Columns: [timestamp, position_lat, position_long, gps_accuracy, enhanced_altitude, altitude, distance, heart_rate, cadence, enhanced_speed, speed, power, left_right_balance, combined_pedal_smoothness, left_torque_effectiveness, right_torque_effectiveness, grade, temperature, local_timestamp, local_timestamp_loc, file_id, battery_soc, left_pedal_smoothness, right_pedal_smoothness, glucose, time_from_course, compressed_speed_distance, resistance, cycle_length, fractional_cadence]
@@ -2421,6 +2577,8 @@ Fraction of data dropped with device selection:  0.015306636407320138
 Are there glucose values in the data that will be dropped with the device selection?  False
 
 --------------- TIMESTAMP
+
+-------- Timestamp: impute zwift nan
 Get timezone of Zwift files for the following dates: 
 2019-01-30
 local_timestamp_loc changed to UTC offset:  1 hours
@@ -2454,7 +2612,7 @@ Traceback (most recent call last):
     self.figure.draw(self.renderer)
   File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backend_bases.py", line 1544, in _draw
     def _draw(renderer): raise Done(renderer)
-matplotlib.backend_bases._get_renderer.<locals>.Done: <matplotlib.backends.backend_agg.RendererAgg object at 0x7fb7e5e3cb10>
+matplotlib.backend_bases._get_renderer.<locals>.Done: <matplotlib.backends.backend_agg.RendererAgg object at 0x7f8d76e95ed0>
 
 -------- Timestamp: nan
 
@@ -2477,7 +2635,7 @@ file ids:  [ 39  60  74  85  90  91  92  95  99 101 276 281 283 125 133]
 times:  0
 days:  0
 file ids:  []
-DROPPED: NaN local timestamps (if both are NaN)
+DROPPED: 0 files with 0 nan local timestamps (both meta and loc)
 
 -------- Timestamp error
 
@@ -2499,8 +2657,7 @@ Dates for which this happens:  [datetime.date(2018, 12, 9) datetime.date(2019, 2
 CHECK if we remove entire file by removing duplicated entries, or if the file somehow continues on
 Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
  {64: [15293, 15293], 65: [15293, 15293]}
-Number of duplicated entries:  15293
-DROPPED: duplicate entries
+DROPPED: 15293 duplicate entries
 
 -------- Timestamp duplicate
 
@@ -2515,7 +2672,30 @@ days:  2
 file ids:  [336 320]
 CHECK if we remove entire file by removing duplicated timestamps, or if the file somehow continues on
 Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
- {31: [12607, 6525], 156: [15006, 533], 336: [6612, 6525], 320: [600, 533]}
+ {31: [12607, 6525], 156: [15006, 533], 336: [6612, 6525], 320: [600, 533]} 
+ {31: False, 156: False, 336: False, 320: False}
+Percentage of missing columns per file
+ {31: 0.1891891891891892, 156: 0.1891891891891892, 336: 0.4864864864864865, 320: 0.43243243243243246}
+Missing columns per file
+ {31: Index(['combined_pedal_smoothness', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length',
+       'fractional_cadence'],
+      dtype='object'), 156: Index(['combined_pedal_smoothness', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length',
+       'fractional_cadence'],
+      dtype='object'), 336: Index(['gps_accuracy', 'distance', 'left_right_balance',
+       'combined_pedal_smoothness', 'left_torque_effectiveness',
+       'right_torque_effectiveness', 'grade', 'temperature', 'battery_soc',
+       'left_pedal_smoothness', 'right_pedal_smoothness', 'glucose',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length', 'fractional_cadence', 'device_0_serialnumber'],
+      dtype='object'), 320: Index(['gps_accuracy', 'heart_rate', 'power', 'left_right_balance',
+       'combined_pedal_smoothness', 'left_torque_effectiveness',
+       'right_torque_effectiveness', 'grade', 'battery_soc',
+       'left_pedal_smoothness', 'right_pedal_smoothness', 'glucose',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length'],
+      dtype='object')}
 Duplicate timestamps in devices:
 
  device_ELEMNT
@@ -2560,15 +2740,15 @@ days:  1
 file ids:  [320]
 Duplicate timestamps after potentially dropping devices: 
 
- device_ZWIFT
-times:  6525
-days:  1
-file ids:  [336]
-
  device_ELEMNTBOLT
 times:  7058
 days:  2
 file ids:  [ 31 156]
+
+ device_ZWIFT
+times:  6525
+days:  1
+file ids:  [336]
 
  device_ELEMNT
 times:  0
@@ -2603,7 +2783,7 @@ DROPPED: 2 files with 7212 duplicate timestamps
 --------------- NAN
 
 -------- Remove rows fully nan
-DROPPED: Number of rows dropped due to being empty:  33
+DROPPED: 33 rows dropped due to being empty
 Timestamps before and after nanrows: 
 Empty DataFrame
 Columns: [timestamp, cadence, power, temperature, battery_soc, left_pedal_smoothness, right_pedal_smoothness, left_torque_effectiveness, right_torque_effectiveness, position_lat, position_long, gps_accuracy, distance, enhanced_speed, speed, enhanced_altitude, altitude, grade, local_timestamp, local_timestamp_loc, file_id, heart_rate, left_right_balance, time_from_course, compressed_speed_distance, resistance, cycle_length, glucose, fractional_cadence, accumulated_power]
@@ -2811,6 +2991,8 @@ Fraction of data dropped with device selection:  0.0044878317438218785
 Are there glucose values in the data that will be dropped with the device selection?  False
 
 --------------- TIMESTAMP
+
+-------- Timestamp: impute zwift nan
 Get timezone of Zwift files for the following dates: 
 2018-12-17
 local_timestamp_loc changed to UTC offset:  1 hours
@@ -2898,7 +3080,7 @@ Traceback (most recent call last):
     self.figure.draw(self.renderer)
   File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backend_bases.py", line 1544, in _draw
     def _draw(renderer): raise Done(renderer)
-matplotlib.backend_bases._get_renderer.<locals>.Done: <matplotlib.backends.backend_agg.RendererAgg object at 0x7fb7e2510fd0>
+matplotlib.backend_bases._get_renderer.<locals>.Done: <matplotlib.backends.backend_agg.RendererAgg object at 0x7f8d76e8e390>
 
 -------- Timestamp: nan
 
@@ -2921,7 +3103,7 @@ file ids:  [54]
 times:  0
 days:  0
 file ids:  []
-DROPPED: NaN local timestamps (if both are NaN)
+DROPPED: 0 files with 0 nan local timestamps (both meta and loc)
 
 -------- Timestamp error
 
@@ -2939,8 +3121,7 @@ Dates for which this happens:  []
 CHECK if we remove entire file by removing duplicated entries, or if the file somehow continues on
 Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
  {}
-Number of duplicated entries:  0
-DROPPED: duplicate entries
+DROPPED: 0 duplicate entries
 
 -------- Timestamp duplicate
 
@@ -2955,7 +3136,48 @@ days:  4
 file ids:  [209 210 213 229]
 CHECK if we remove entire file by removing duplicated timestamps, or if the file somehow continues on
 Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
- {48: [3879, 3675], 50: [9909, 9751], 53: [5432, 4879], 196: [3095, 3015], 209: [3758, 3675], 210: [10846, 9751], 213: [7207, 4879], 229: [9022, 3015]}
+ {48: [3879, 3675], 50: [9909, 9751], 53: [5432, 4879], 196: [3095, 3015], 209: [3758, 3675], 210: [10846, 9751], 213: [7207, 4879], 229: [9022, 3015]} 
+ {48: False, 50: False, 53: False, 196: False, 209: False, 210: False, 213: False, 229: False}
+Percentage of missing columns per file
+ {48: 0.19444444444444445, 50: 0.2222222222222222, 53: 0.2222222222222222, 196: 0.2777777777777778, 209: 0.5, 210: 0.5, 213: 0.5, 229: 0.5}
+Missing columns per file
+ {48: Index(['time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length', 'glucose', 'fractional_cadence', 'accumulated_power'],
+      dtype='object'), 50: Index(['heart_rate', 'time_from_course', 'compressed_speed_distance',
+       'resistance', 'cycle_length', 'glucose', 'fractional_cadence',
+       'accumulated_power'],
+      dtype='object'), 53: Index(['heart_rate', 'time_from_course', 'compressed_speed_distance',
+       'resistance', 'cycle_length', 'glucose', 'fractional_cadence',
+       'accumulated_power'],
+      dtype='object'), 196: Index(['right_pedal_smoothness', 'right_torque_effectiveness',
+       'left_right_balance', 'time_from_course', 'compressed_speed_distance',
+       'resistance', 'cycle_length', 'glucose', 'fractional_cadence',
+       'accumulated_power'],
+      dtype='object'), 209: Index(['temperature', 'battery_soc', 'left_pedal_smoothness',
+       'right_pedal_smoothness', 'left_torque_effectiveness',
+       'right_torque_effectiveness', 'gps_accuracy', 'distance', 'grade',
+       'left_right_balance', 'time_from_course', 'compressed_speed_distance',
+       'resistance', 'cycle_length', 'glucose', 'fractional_cadence',
+       'accumulated_power', 'device_0_serialnumber'],
+      dtype='object'), 210: Index(['temperature', 'battery_soc', 'left_pedal_smoothness',
+       'right_pedal_smoothness', 'left_torque_effectiveness',
+       'right_torque_effectiveness', 'gps_accuracy', 'distance', 'grade',
+       'left_right_balance', 'time_from_course', 'compressed_speed_distance',
+       'resistance', 'cycle_length', 'glucose', 'fractional_cadence',
+       'accumulated_power', 'device_0_serialnumber'],
+      dtype='object'), 213: Index(['temperature', 'battery_soc', 'left_pedal_smoothness',
+       'right_pedal_smoothness', 'left_torque_effectiveness',
+       'right_torque_effectiveness', 'gps_accuracy', 'distance', 'grade',
+       'left_right_balance', 'time_from_course', 'compressed_speed_distance',
+       'resistance', 'cycle_length', 'glucose', 'fractional_cadence',
+       'accumulated_power', 'device_0_serialnumber'],
+      dtype='object'), 229: Index(['temperature', 'battery_soc', 'left_pedal_smoothness',
+       'right_pedal_smoothness', 'left_torque_effectiveness',
+       'right_torque_effectiveness', 'gps_accuracy', 'distance', 'grade',
+       'left_right_balance', 'time_from_course', 'compressed_speed_distance',
+       'resistance', 'cycle_length', 'glucose', 'fractional_cadence',
+       'accumulated_power', 'device_0_serialnumber'],
+      dtype='object')}
 Duplicate timestamps in devices:
 
  device_ELEMNTBOLT
@@ -3000,15 +3222,15 @@ days:  0
 file ids:  []
 Duplicate timestamps after potentially dropping devices: 
 
- device_ZWIFT
-times:  21320
-days:  4
-file ids:  [209 210 213 229]
-
  device_ELEMNTBOLT
 times:  21320
 days:  4
 file ids:  [ 48  50  53 196]
+
+ device_ZWIFT
+times:  21320
+days:  4
+file ids:  [209 210 213 229]
 Do the duplicate timestamps have the same data?
                   timestamp  cadence  power  temperature  ...  device_GARMIN  device_ZWIFT  keep_devices  error_local_timestamp
 519104  2019-01-30 19:01:40    100.0  350.0          NaN  ...          False         False          True                  False
@@ -3038,7 +3260,7 @@ DROPPED: 4 files with 30833 duplicate timestamps
 --------------- NAN
 
 -------- Remove rows fully nan
-DROPPED: Number of rows dropped due to being empty:  69
+DROPPED: 69 rows dropped due to being empty
 Timestamps before and after nanrows: 
                  timestamp  position_lat  position_long  ...  combined_pedal_smoothness  left_pedal_smoothness  right_pedal_smoothness
 52814  2018-12-03 12:08:14     37.155355      -1.826842  ...                        0.0                    NaN                     NaN
@@ -3463,6 +3685,8 @@ Fraction of data dropped with device selection:  0.0
 Are there glucose values in the data that will be dropped with the device selection?  False
 
 --------------- TIMESTAMP
+
+-------- Timestamp: impute zwift nan
 Exception in Tkinter callback
 Traceback (most recent call last):
   File "/usr/lib/python3.7/tkinter/__init__.py", line 1705, in __call__
@@ -3477,7 +3701,7 @@ Traceback (most recent call last):
     self.figure.draw(self.renderer)
   File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backend_bases.py", line 1544, in _draw
     def _draw(renderer): raise Done(renderer)
-matplotlib.backend_bases._get_renderer.<locals>.Done: <matplotlib.backends.backend_agg.RendererAgg object at 0x7fb7e44f3350>
+matplotlib.backend_bases._get_renderer.<locals>.Done: <matplotlib.backends.backend_agg.RendererAgg object at 0x7f8d92aabdd0>
 
 -------- Timestamp: nan
 
@@ -3501,7 +3725,7 @@ file ids:  [  8  41  42  54  55  56  57  58  59  60  61  62  63  78 171 176 276 
 times:  0
 days:  0
 file ids:  []
-DROPPED: NaN local timestamps (if both are NaN)
+DROPPED: 0 files with 0 nan local timestamps (both meta and loc)
 
 -------- Timestamp error
 
@@ -3527,8 +3751,7 @@ Dates for which this happens:  [datetime.date(2018, 12, 9) datetime.date(2018, 1
 CHECK if we remove entire file by removing duplicated entries, or if the file somehow continues on
 Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
  {}
-Number of duplicated entries:  0
-DROPPED: duplicate entries
+DROPPED: 0 duplicate entries
 
 -------- Timestamp duplicate
 
@@ -3543,7 +3766,18 @@ days:  3
 file ids:  [123 174 287]
 CHECK if we remove entire file by removing duplicated timestamps, or if the file somehow continues on
 Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
- {122: [7276, 5588], 123: [5631, 5588], 173: [15543, 15130], 174: [19350, 15130], 286: [17543, 17296], 287: [19972, 17296]}
+ {122: [7276, 5588], 123: [5631, 5588], 173: [15543, 15130], 174: [19350, 15130], 286: [17543, 17296], 287: [19972, 17296]} 
+ {122: False, 123: False, 173: False, 174: False, 286: False, 287: False}
+Percentage of missing columns per file
+ {122: 0.06896551724137931, 123: 0.06896551724137931, 173: 0.06896551724137931, 174: 0.20689655172413793, 286: 0.06896551724137931, 287: 0.20689655172413793}
+Missing columns per file
+ {122: Index(['glucose', 'combined_pedal_smoothness'], dtype='object'), 123: Index(['glucose', 'combined_pedal_smoothness'], dtype='object'), 173: Index(['glucose', 'combined_pedal_smoothness'], dtype='object'), 174: Index(['glucose', 'right_torque_effectiveness', 'left_torque_effectiveness',
+       'combined_pedal_smoothness', 'left_pedal_smoothness',
+       'right_pedal_smoothness'],
+      dtype='object'), 286: Index(['glucose', 'combined_pedal_smoothness'], dtype='object'), 287: Index(['glucose', 'right_torque_effectiveness', 'left_torque_effectiveness',
+       'combined_pedal_smoothness', 'left_pedal_smoothness',
+       'right_pedal_smoothness'],
+      dtype='object')}
 Duplicate timestamps in devices:
 
  device_ELEMNTBOLT
@@ -3616,7 +3850,7 @@ DROPPED: 3 files with 44953 duplicate timestamps
 --------------- NAN
 
 -------- Remove rows fully nan
-DROPPED: Number of rows dropped due to being empty:  56
+DROPPED: 56 rows dropped due to being empty
 Timestamps before and after nanrows: 
                  timestamp  position_lat  position_long  ...  time_from_course  compressed_speed_distance  cycle_length
 35716  2018-12-03 16:39:41     37.155323      -1.826809  ...               NaN                        NaN           NaN
@@ -3965,6 +4199,8 @@ Fraction of data dropped with device selection:  0.05349949391180581
 Are there glucose values in the data that will be dropped with the device selection?  False
 
 --------------- TIMESTAMP
+
+-------- Timestamp: impute zwift nan
 Get timezone of Zwift files for the following dates: 
 2019-01-30
 local_timestamp_loc changed to UTC offset:  0 hours
@@ -3989,7 +4225,7 @@ Traceback (most recent call last):
     self.figure.draw(self.renderer)
   File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backend_bases.py", line 1544, in _draw
     def _draw(renderer): raise Done(renderer)
-matplotlib.backend_bases._get_renderer.<locals>.Done: <matplotlib.backends.backend_agg.RendererAgg object at 0x7fb7fe8acc10>
+matplotlib.backend_bases._get_renderer.<locals>.Done: <matplotlib.backends.backend_agg.RendererAgg object at 0x7f8d92690250>
 
 -------- Timestamp: nan
 
@@ -4012,7 +4248,7 @@ file ids:  [  7  15  21  68  91  93  96  98 203 209 234 259 292 333 339 340]
 times:  0
 days:  0
 file ids:  []
-DROPPED: NaN local timestamps (if both are NaN)
+DROPPED: 0 files with 0 nan local timestamps (both meta and loc)
 
 -------- Timestamp error
 
@@ -4043,8 +4279,7 @@ Dates for which this happens:  [datetime.date(2019, 1, 29) datetime.date(2019, 1
 CHECK if we remove entire file by removing duplicated entries, or if the file somehow continues on
 Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
  {}
-Number of duplicated entries:  0
-DROPPED: duplicate entries
+DROPPED: 0 duplicate entries
 
 -------- Timestamp duplicate
 
@@ -4059,7 +4294,20 @@ days:  1
 file ids:  [69]
 CHECK if we remove entire file by removing duplicated timestamps, or if the file somehow continues on
 Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
- {68: [7642, 394], 69: [9006, 394]}
+ {68: [7642, 394], 69: [9006, 394]} 
+ {68: False, 69: False}
+Percentage of missing columns per file
+ {68: 0.40540540540540543, 69: 0.21621621621621623}
+Missing columns per file
+ {68: Index(['position_lat', 'position_long', 'gps_accuracy', 'enhanced_altitude',
+       'altitude', 'grade', 'left_right_balance', 'combined_pedal_smoothness',
+       'accumulated_power', 'fractional_cadence', 'resistance',
+       'time_from_course', 'compressed_speed_distance', 'cycle_length',
+       'error_local_timestamp'],
+      dtype='object'), 69: Index(['left_right_balance', 'combined_pedal_smoothness', 'accumulated_power',
+       'fractional_cadence', 'resistance', 'time_from_course',
+       'compressed_speed_distance', 'cycle_length'],
+      dtype='object')}
 Duplicate timestamps in devices:
 
  device_ELEMNTBOLT
@@ -4099,15 +4347,15 @@ days:  0
 file ids:  []
 Duplicate timestamps after potentially dropping devices: 
 
- device_ZWIFT
-times:  0
-days:  0
-file ids:  []
-
  device_ELEMNTBOLT
 times:  788
 days:  1
 file ids:  [68 69]
+
+ device_ZWIFT
+times:  0
+days:  0
+file ids:  []
 Do the duplicate timestamps have the same data?
                  timestamp  position_lat  position_long  gps_accuracy  ...  device_GARMIN  device_ZWIFT  keep_devices  error_local_timestamp
 712269 2019-01-31 14:04:24           NaN            NaN           NaN  ...          False         False          True                    NaN
@@ -4137,7 +4385,7 @@ DROPPED: 1 files with 9006 duplicate timestamps
 --------------- NAN
 
 -------- Remove rows fully nan
-DROPPED: Number of rows dropped due to being empty:  84
+DROPPED: 84 rows dropped due to being empty
 Timestamps before and after nanrows: 
 Empty DataFrame
 Columns: [timestamp, distance, heart_rate, cadence, enhanced_speed, speed, power, left_pedal_smoothness, right_pedal_smoothness, left_torque_effectiveness, right_torque_effectiveness, temperature, battery_soc, local_timestamp, local_timestamp_loc, file_id, position_lat, position_long, gps_accuracy, enhanced_altitude, altitude, grade, left_right_balance, glucose, time_from_course, compressed_speed_distance, resistance, cycle_length]
@@ -4651,6 +4899,8 @@ Fraction of data dropped with device selection:  0.0
 Are there glucose values in the data that will be dropped with the device selection?  False
 
 --------------- TIMESTAMP
+
+-------- Timestamp: impute zwift nan
 Get timezone of Zwift files for the following dates: 
 2018-12-18
 local_timestamp_loc changed to UTC offset:  1 hours
@@ -4672,7 +4922,7 @@ Traceback (most recent call last):
     self.figure.draw(self.renderer)
   File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backend_bases.py", line 1544, in _draw
     def _draw(renderer): raise Done(renderer)
-matplotlib.backend_bases._get_renderer.<locals>.Done: <matplotlib.backends.backend_agg.RendererAgg object at 0x7fb7c7fbe990>
+matplotlib.backend_bases._get_renderer.<locals>.Done: <matplotlib.backends.backend_agg.RendererAgg object at 0x7f8d5c88bfd0>
 
 -------- Timestamp: nan
 
@@ -4695,7 +4945,7 @@ file ids:  [  0   5  10  12  78 166 167 321 399 400 377 378 401]
 times:  0
 days:  0
 file ids:  []
-DROPPED: NaN local timestamps (if both are NaN)
+DROPPED: 0 files with 0 nan local timestamps (both meta and loc)
 
 -------- Timestamp error
 
@@ -4715,8 +4965,7 @@ Dates for which this happens:  [datetime.date(2019, 2, 14) datetime.date(2019, 3
 CHECK if we remove entire file by removing duplicated entries, or if the file somehow continues on
 Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
  {}
-Number of duplicated entries:  0
-DROPPED: duplicate entries
+DROPPED: 0 duplicate entries
 
 -------- Timestamp duplicate
 
@@ -4735,7 +4984,237 @@ file ids:  [289 298 308 311 315 317 319 323 326 328 330 331 335 337 339 343 346 
  386 391 403 404 408 411]
 CHECK if we remove entire file by removing duplicated timestamps, or if the file somehow continues on
 Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
- {288: [21282, 6738], 289: [17394, 6738], 291: [6460, 5707], 293: [14545, 8238], 295: [16381, 7388], 297: [4822, 3278], 298: [9868, 3278], 299: [21351, 11062], 301: [9120, 7370], 307: [12161, 12101], 308: [13005, 12101], 310: [625, 490], 311: [1011, 490], 314: [21205, 21019], 315: [21065, 21019], 316: [17303, 17213], 317: [17623, 17213], 318: [12352, 12334], 319: [12404, 12334], 322: [13221, 10527], 323: [10603, 10527], 325: [15731, 10329], 326: [11396, 10329], 327: [7843, 1322], 328: [11316, 1322], 329: [16005, 13148], 330: [17212, 16818], 331: [11786, 10154], 334: [14465, 8175], 335: [8993, 8175], 336: [15358, 2302], 337: [4828, 2302], 338: [16078, 10033], 339: [13243, 10033], 342: [18395, 4760], 343: [5754, 4760], 345: [10642, 8193], 346: [8238, 8193], 347: [3185, 2719], 348: [3746, 2719], 350: [4360, 3723], 351: [4202, 2065], 352: [3238, 1658], 353: [9716, 6662], 354: [6687, 6662], 355: [9267, 8060], 356: [8077, 8060], 357: [9531, 8804], 358: [8824, 8804], 359: [11709, 8649], 360: [7538, 7527], 361: [4647, 4647], 362: [11710, 11104], 363: [11140, 11104], 364: [8134, 5762], 365: [5770, 5762], 367: [7549, 6220], 368: [7500, 6220], 382: [11083, 9482], 383: [8482, 5560], 384: [6186, 6096], 387: [5407, 2761], 390: [7340, 6230], 402: [9741, 8023], 405: [10955, 9405], 409: [4, 4], 410: [9665, 7570], 292: [16204, 5707], 294: [9338, 8238], 296: [7855, 7388], 300: [11719, 11062], 302: [9102, 7370], 381: [20750, 9482], 385: [9939, 4668], 386: [11281, 2761], 391: [9810, 6230], 403: [10116, 8023], 404: [12312, 9405], 408: [8025, 4], 411: [16332, 7570]}
+ {288: [21282, 6738], 289: [17394, 6738], 291: [6460, 5707], 293: [14545, 8238], 295: [16381, 7388], 297: [4822, 3278], 298: [9868, 3278], 299: [21351, 11062], 301: [9120, 7370], 307: [12161, 12101], 308: [13005, 12101], 310: [625, 490], 311: [1011, 490], 314: [21205, 21019], 315: [21065, 21019], 316: [17303, 17213], 317: [17623, 17213], 318: [12352, 12334], 319: [12404, 12334], 322: [13221, 10527], 323: [10603, 10527], 325: [15731, 10329], 326: [11396, 10329], 327: [7843, 1322], 328: [11316, 1322], 329: [16005, 13148], 330: [17212, 16818], 331: [11786, 10154], 334: [14465, 8175], 335: [8993, 8175], 336: [15358, 2302], 337: [4828, 2302], 338: [16078, 10033], 339: [13243, 10033], 342: [18395, 4760], 343: [5754, 4760], 345: [10642, 8193], 346: [8238, 8193], 347: [3185, 2719], 348: [3746, 2719], 350: [4360, 3723], 351: [4202, 2065], 352: [3238, 1658], 353: [9716, 6662], 354: [6687, 6662], 355: [9267, 8060], 356: [8077, 8060], 357: [9531, 8804], 358: [8824, 8804], 359: [11709, 8649], 360: [7538, 7527], 361: [4647, 4647], 362: [11710, 11104], 363: [11140, 11104], 364: [8134, 5762], 365: [5770, 5762], 367: [7549, 6220], 368: [7500, 6220], 382: [11083, 9482], 383: [8482, 5560], 384: [6186, 6096], 387: [5407, 2761], 390: [7340, 6230], 402: [9741, 8023], 405: [10955, 9405], 409: [4, 4], 410: [9665, 7570], 292: [16204, 5707], 294: [9338, 8238], 296: [7855, 7388], 300: [11719, 11062], 302: [9102, 7370], 381: [20750, 9482], 385: [9939, 4668], 386: [11281, 2761], 391: [9810, 6230], 403: [10116, 8023], 404: [12312, 9405], 408: [8025, 4], 411: [16332, 7570]} 
+ {288: False, 289: False, 291: False, 293: False, 295: False, 297: False, 298: False, 299: False, 301: False, 307: False, 308: False, 310: False, 311: False, 314: False, 315: False, 316: False, 317: False, 318: False, 319: False, 322: False, 323: False, 325: False, 326: False, 327: False, 328: False, 329: False, 330: False, 331: False, 334: False, 335: False, 336: False, 337: False, 338: False, 339: False, 342: False, 343: False, 345: False, 346: False, 347: False, 348: False, 350: False, 351: False, 352: False, 353: False, 354: False, 355: False, 356: False, 357: False, 358: False, 359: False, 360: False, 361: True, 362: False, 363: False, 364: False, 365: False, 367: False, 368: False, 382: False, 383: False, 384: False, 387: False, 390: False, 402: False, 405: False, 409: True, 410: False, 292: False, 294: False, 296: False, 300: False, 302: False, 381: False, 385: False, 386: False, 391: False, 403: False, 404: False, 408: False, 411: False}
+Percentage of missing columns per file
+ {288: 0.14705882352941177, 289: 0.14705882352941177, 291: 0.14705882352941177, 293: 0.14705882352941177, 295: 0.14705882352941177, 297: 0.14705882352941177, 298: 0.38235294117647056, 299: 0.14705882352941177, 301: 0.14705882352941177, 307: 0.20588235294117646, 308: 0.35294117647058826, 310: 0.35294117647058826, 311: 0.35294117647058826, 314: 0.20588235294117646, 315: 0.14705882352941177, 316: 0.20588235294117646, 317: 0.14705882352941177, 318: 0.20588235294117646, 319: 0.14705882352941177, 322: 0.17647058823529413, 323: 0.17647058823529413, 325: 0.14705882352941177, 326: 0.17647058823529413, 327: 0.14705882352941177, 328: 0.17647058823529413, 329: 0.17647058823529413, 330: 0.14705882352941177, 331: 0.35294117647058826, 334: 0.17647058823529413, 335: 0.17647058823529413, 336: 0.17647058823529413, 337: 0.17647058823529413, 338: 0.14705882352941177, 339: 0.17647058823529413, 342: 0.17647058823529413, 343: 0.17647058823529413, 345: 0.38235294117647056, 346: 0.23529411764705882, 347: 0.17647058823529413, 348: 0.20588235294117646, 350: 0.20588235294117646, 351: 0.17647058823529413, 352: 0.17647058823529413, 353: 0.14705882352941177, 354: 0.20588235294117646, 355: 0.14705882352941177, 356: 0.20588235294117646, 357: 0.14705882352941177, 358: 0.20588235294117646, 359: 0.14705882352941177, 360: 0.20588235294117646, 361: 0.38235294117647056, 362: 0.14705882352941177, 363: 0.20588235294117646, 364: 0.14705882352941177, 365: 0.20588235294117646, 367: 0.17647058823529413, 368: 0.23529411764705882, 382: 0.14705882352941177, 383: 0.35294117647058826, 384: 0.38235294117647056, 387: 0.14705882352941177, 390: 0.14705882352941177, 402: 0.17647058823529413, 405: 0.17647058823529413, 409: 0.4117647058823529, 410: 0.38235294117647056, 292: 0.2647058823529412, 294: 0.2647058823529412, 296: 0.2647058823529412, 300: 0.2647058823529412, 302: 0.2647058823529412, 381: 0.38235294117647056, 385: 0.35294117647058826, 386: 0.35294117647058826, 391: 0.35294117647058826, 403: 0.35294117647058826, 404: 0.35294117647058826, 408: 0.35294117647058826, 411: 0.35294117647058826}
+Missing columns per file
+ {288: Index(['glucose', 'time_from_course', 'compressed_speed_distance',
+       'resistance', 'cycle_length'],
+      dtype='object'), 289: Index(['heart_rate', 'time_from_course', 'compressed_speed_distance',
+       'resistance', 'cycle_length'],
+      dtype='object'), 291: Index(['glucose', 'time_from_course', 'compressed_speed_distance',
+       'resistance', 'cycle_length'],
+      dtype='object'), 293: Index(['glucose', 'time_from_course', 'compressed_speed_distance',
+       'resistance', 'cycle_length'],
+      dtype='object'), 295: Index(['glucose', 'time_from_course', 'compressed_speed_distance',
+       'resistance', 'cycle_length'],
+      dtype='object'), 297: Index(['glucose', 'time_from_course', 'compressed_speed_distance',
+       'resistance', 'cycle_length'],
+      dtype='object'), 298: Index(['heart_rate', 'cadence', 'power', 'left_pedal_smoothness',
+       'right_pedal_smoothness', 'left_torque_effectiveness',
+       'right_torque_effectiveness', 'left_right_balance', 'glucose',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length'],
+      dtype='object'), 299: Index(['glucose', 'time_from_course', 'compressed_speed_distance',
+       'resistance', 'cycle_length'],
+      dtype='object'), 301: Index(['glucose', 'time_from_course', 'compressed_speed_distance',
+       'resistance', 'cycle_length'],
+      dtype='object'), 307: Index(['left_pedal_smoothness', 'right_pedal_smoothness', 'glucose',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length'],
+      dtype='object'), 308: Index(['heart_rate', 'cadence', 'power', 'left_pedal_smoothness',
+       'right_pedal_smoothness', 'left_torque_effectiveness',
+       'right_torque_effectiveness', 'left_right_balance', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length'],
+      dtype='object'), 310: Index(['cadence', 'power', 'left_pedal_smoothness', 'right_pedal_smoothness',
+       'left_torque_effectiveness', 'right_torque_effectiveness',
+       'left_right_balance', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length'],
+      dtype='object'), 311: Index(['heart_rate', 'cadence', 'left_pedal_smoothness',
+       'right_pedal_smoothness', 'left_torque_effectiveness',
+       'right_torque_effectiveness', 'left_right_balance', 'glucose',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length'],
+      dtype='object'), 314: Index(['left_pedal_smoothness', 'right_pedal_smoothness', 'glucose',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length'],
+      dtype='object'), 315: Index(['heart_rate', 'time_from_course', 'compressed_speed_distance',
+       'resistance', 'cycle_length'],
+      dtype='object'), 316: Index(['left_pedal_smoothness', 'right_pedal_smoothness', 'glucose',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length'],
+      dtype='object'), 317: Index(['heart_rate', 'time_from_course', 'compressed_speed_distance',
+       'resistance', 'cycle_length'],
+      dtype='object'), 318: Index(['left_pedal_smoothness', 'right_pedal_smoothness', 'glucose',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length'],
+      dtype='object'), 319: Index(['heart_rate', 'time_from_course', 'compressed_speed_distance',
+       'resistance', 'cycle_length'],
+      dtype='object'), 322: Index(['heart_rate', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length'],
+      dtype='object'), 323: Index(['heart_rate', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length'],
+      dtype='object'), 325: Index(['glucose', 'time_from_course', 'compressed_speed_distance',
+       'resistance', 'cycle_length'],
+      dtype='object'), 326: Index(['heart_rate', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length'],
+      dtype='object'), 327: Index(['glucose', 'time_from_course', 'compressed_speed_distance',
+       'resistance', 'cycle_length'],
+      dtype='object'), 328: Index(['heart_rate', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length'],
+      dtype='object'), 329: Index(['heart_rate', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length'],
+      dtype='object'), 330: Index(['glucose', 'time_from_course', 'compressed_speed_distance',
+       'resistance', 'cycle_length'],
+      dtype='object'), 331: Index(['cadence', 'power', 'left_pedal_smoothness', 'right_pedal_smoothness',
+       'left_torque_effectiveness', 'right_torque_effectiveness',
+       'left_right_balance', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length'],
+      dtype='object'), 334: Index(['heart_rate', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length'],
+      dtype='object'), 335: Index(['heart_rate', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length'],
+      dtype='object'), 336: Index(['heart_rate', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length'],
+      dtype='object'), 337: Index(['heart_rate', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length'],
+      dtype='object'), 338: Index(['glucose', 'time_from_course', 'compressed_speed_distance',
+       'resistance', 'cycle_length'],
+      dtype='object'), 339: Index(['heart_rate', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length'],
+      dtype='object'), 342: Index(['heart_rate', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length'],
+      dtype='object'), 343: Index(['heart_rate', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length'],
+      dtype='object'), 345: Index(['heart_rate', 'cadence', 'power', 'left_pedal_smoothness',
+       'right_pedal_smoothness', 'left_torque_effectiveness',
+       'right_torque_effectiveness', 'left_right_balance', 'glucose',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length'],
+      dtype='object'), 346: Index(['heart_rate', 'left_pedal_smoothness', 'right_pedal_smoothness',
+       'glucose', 'time_from_course', 'compressed_speed_distance',
+       'resistance', 'cycle_length'],
+      dtype='object'), 347: Index(['heart_rate', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length'],
+      dtype='object'), 348: Index(['left_pedal_smoothness', 'right_pedal_smoothness', 'glucose',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length'],
+      dtype='object'), 350: Index(['left_pedal_smoothness', 'right_pedal_smoothness', 'glucose',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length'],
+      dtype='object'), 351: Index(['heart_rate', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length'],
+      dtype='object'), 352: Index(['heart_rate', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length'],
+      dtype='object'), 353: Index(['heart_rate', 'time_from_course', 'compressed_speed_distance',
+       'resistance', 'cycle_length'],
+      dtype='object'), 354: Index(['left_pedal_smoothness', 'right_pedal_smoothness', 'glucose',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length'],
+      dtype='object'), 355: Index(['heart_rate', 'time_from_course', 'compressed_speed_distance',
+       'resistance', 'cycle_length'],
+      dtype='object'), 356: Index(['left_pedal_smoothness', 'right_pedal_smoothness', 'glucose',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length'],
+      dtype='object'), 357: Index(['heart_rate', 'time_from_course', 'compressed_speed_distance',
+       'resistance', 'cycle_length'],
+      dtype='object'), 358: Index(['left_pedal_smoothness', 'right_pedal_smoothness', 'glucose',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length'],
+      dtype='object'), 359: Index(['heart_rate', 'time_from_course', 'compressed_speed_distance',
+       'resistance', 'cycle_length'],
+      dtype='object'), 360: Index(['left_pedal_smoothness', 'right_pedal_smoothness', 'glucose',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length'],
+      dtype='object'), 361: Index(['heart_rate', 'cadence', 'power', 'left_pedal_smoothness',
+       'right_pedal_smoothness', 'left_torque_effectiveness',
+       'right_torque_effectiveness', 'left_right_balance', 'glucose',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length'],
+      dtype='object'), 362: Index(['heart_rate', 'time_from_course', 'compressed_speed_distance',
+       'resistance', 'cycle_length'],
+      dtype='object'), 363: Index(['left_pedal_smoothness', 'right_pedal_smoothness', 'glucose',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length'],
+      dtype='object'), 364: Index(['heart_rate', 'time_from_course', 'compressed_speed_distance',
+       'resistance', 'cycle_length'],
+      dtype='object'), 365: Index(['left_pedal_smoothness', 'right_pedal_smoothness', 'glucose',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length'],
+      dtype='object'), 367: Index(['heart_rate', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length'],
+      dtype='object'), 368: Index(['heart_rate', 'left_pedal_smoothness', 'right_pedal_smoothness',
+       'glucose', 'time_from_course', 'compressed_speed_distance',
+       'resistance', 'cycle_length'],
+      dtype='object'), 382: Index(['glucose', 'time_from_course', 'compressed_speed_distance',
+       'resistance', 'cycle_length'],
+      dtype='object'), 383: Index(['cadence', 'power', 'left_pedal_smoothness', 'right_pedal_smoothness',
+       'left_torque_effectiveness', 'right_torque_effectiveness',
+       'left_right_balance', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length'],
+      dtype='object'), 384: Index(['heart_rate', 'cadence', 'power', 'left_pedal_smoothness',
+       'right_pedal_smoothness', 'left_torque_effectiveness',
+       'right_torque_effectiveness', 'left_right_balance', 'glucose',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length'],
+      dtype='object'), 387: Index(['glucose', 'time_from_course', 'compressed_speed_distance',
+       'resistance', 'cycle_length'],
+      dtype='object'), 390: Index(['glucose', 'time_from_course', 'compressed_speed_distance',
+       'resistance', 'cycle_length'],
+      dtype='object'), 402: Index(['heart_rate', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length'],
+      dtype='object'), 405: Index(['heart_rate', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length'],
+      dtype='object'), 409: Index(['heart_rate', 'cadence', 'power', 'left_pedal_smoothness',
+       'right_pedal_smoothness', 'left_torque_effectiveness',
+       'right_torque_effectiveness', 'temperature', 'left_right_balance',
+       'glucose', 'time_from_course', 'compressed_speed_distance',
+       'resistance', 'cycle_length'],
+      dtype='object'), 410: Index(['heart_rate', 'cadence', 'power', 'left_pedal_smoothness',
+       'right_pedal_smoothness', 'left_torque_effectiveness',
+       'right_torque_effectiveness', 'left_right_balance', 'glucose',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length'],
+      dtype='object'), 292: Index(['heart_rate', 'left_pedal_smoothness', 'left_torque_effectiveness',
+       'left_right_balance', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length'],
+      dtype='object'), 294: Index(['heart_rate', 'left_pedal_smoothness', 'left_torque_effectiveness',
+       'left_right_balance', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length'],
+      dtype='object'), 296: Index(['heart_rate', 'left_pedal_smoothness', 'left_torque_effectiveness',
+       'left_right_balance', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length'],
+      dtype='object'), 300: Index(['heart_rate', 'left_pedal_smoothness', 'left_torque_effectiveness',
+       'left_right_balance', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length'],
+      dtype='object'), 302: Index(['heart_rate', 'left_pedal_smoothness', 'left_torque_effectiveness',
+       'left_right_balance', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length'],
+      dtype='object'), 381: Index(['heart_rate', 'cadence', 'power', 'left_pedal_smoothness',
+       'right_pedal_smoothness', 'left_torque_effectiveness',
+       'right_torque_effectiveness', 'left_right_balance', 'glucose',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length'],
+      dtype='object'), 385: Index(['cadence', 'power', 'left_pedal_smoothness', 'right_pedal_smoothness',
+       'left_torque_effectiveness', 'right_torque_effectiveness',
+       'left_right_balance', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length'],
+      dtype='object'), 386: Index(['cadence', 'power', 'left_pedal_smoothness', 'right_pedal_smoothness',
+       'left_torque_effectiveness', 'right_torque_effectiveness',
+       'left_right_balance', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length'],
+      dtype='object'), 391: Index(['cadence', 'power', 'left_pedal_smoothness', 'right_pedal_smoothness',
+       'left_torque_effectiveness', 'right_torque_effectiveness',
+       'left_right_balance', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length'],
+      dtype='object'), 403: Index(['cadence', 'power', 'left_pedal_smoothness', 'right_pedal_smoothness',
+       'left_torque_effectiveness', 'right_torque_effectiveness',
+       'left_right_balance', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length'],
+      dtype='object'), 404: Index(['cadence', 'power', 'left_pedal_smoothness', 'right_pedal_smoothness',
+       'left_torque_effectiveness', 'right_torque_effectiveness',
+       'left_right_balance', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length'],
+      dtype='object'), 408: Index(['cadence', 'power', 'left_pedal_smoothness', 'right_pedal_smoothness',
+       'left_torque_effectiveness', 'right_torque_effectiveness',
+       'left_right_balance', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length'],
+      dtype='object'), 411: Index(['cadence', 'power', 'left_pedal_smoothness', 'right_pedal_smoothness',
+       'left_torque_effectiveness', 'right_torque_effectiveness',
+       'left_right_balance', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length'],
+      dtype='object')}
 Duplicate timestamps in devices:
 
  device_ELEMNTBOLT
@@ -4790,11 +5269,6 @@ days:  13
 file ids:  [292 294 296 300 302 381 385 386 391 403 404 408 411]
 Duplicate timestamps after potentially dropping devices: 
 
- device_ZWIFT
-times:  0
-days:  0
-file ids:  []
-
  device_ELEMNTBOLT
 times:  519575
 days:  36
@@ -4802,6 +5276,11 @@ file ids:  [288 289 291 293 295 297 298 299 301 307 308 310 311 314 315 316 317 
  319 322 323 325 326 327 328 329 330 331 334 335 336 337 338 339 342 343
  345 346 347 348 350 351 352 353 354 355 356 357 358 359 360 361 362 363
  364 365 367 368 382 383 384 387 390 402 405 409 410]
+
+ device_ZWIFT
+times:  0
+days:  0
+file ids:  []
 
  device_ELEMNTROAM
 times:  87908
@@ -4836,7 +5315,7 @@ DROPPED: 42 files with 426077 duplicate timestamps
 --------------- NAN
 
 -------- Remove rows fully nan
-DROPPED: Number of rows dropped due to being empty:  38
+DROPPED: 38 rows dropped due to being empty
 Timestamps before and after nanrows: 
                  timestamp  position_lat  position_long  gps_accuracy  ...  right_pedal_smoothness  battery_soc  glucose  accumulated_power
 80237  2018-12-16 14:53:47     47.515693       18.82419           1.0  ...                     NaN          NaN      NaN                NaN
@@ -5076,6 +5555,8 @@ Fraction of data dropped with device selection:  0.0045835517955707195
 Are there glucose values in the data that will be dropped with the device selection?  False
 
 --------------- TIMESTAMP
+
+-------- Timestamp: impute zwift nan
 Exception in Tkinter callback
 Traceback (most recent call last):
   File "/usr/lib/python3.7/tkinter/__init__.py", line 1705, in __call__
@@ -5090,7 +5571,7 @@ Traceback (most recent call last):
     self.figure.draw(self.renderer)
   File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backend_bases.py", line 1544, in _draw
     def _draw(renderer): raise Done(renderer)
-matplotlib.backend_bases._get_renderer.<locals>.Done: <matplotlib.backends.backend_agg.RendererAgg object at 0x7fb7c5a282d0>
+matplotlib.backend_bases._get_renderer.<locals>.Done: <matplotlib.backends.backend_agg.RendererAgg object at 0x7f8d7acdab90>
 
 -------- Timestamp: nan
 
@@ -5115,7 +5596,7 @@ file ids:  [  9  11  12  15  19  21  22  23  24  25  27  28  30  32  58  68  70 
 times:  0
 days:  0
 file ids:  []
-DROPPED: NaN local timestamps (if both are NaN)
+DROPPED: 0 files with 0 nan local timestamps (both meta and loc)
 
 -------- Timestamp error
 
@@ -5140,8 +5621,7 @@ Dates for which this happens:  [datetime.date(2019, 2, 22) datetime.date(2019, 5
 CHECK if we remove entire file by removing duplicated entries, or if the file somehow continues on
 Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
  {60: [5339, 5339], 61: [5339, 5339], 62: [11105, 11105], 63: [11105, 11105], 89: [18562, 2822], 90: [18562, 2822]}
-Number of duplicated entries:  19266
-DROPPED: duplicate entries
+DROPPED: 19266 duplicate entries
 
 -------- Timestamp duplicate
 
@@ -5156,7 +5636,16 @@ days:  1
 file ids:  [90]
 CHECK if we remove entire file by removing duplicated timestamps, or if the file somehow continues on
 Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
- {89: [18562, 15740], 90: [15740, 15740]}
+ {89: [18562, 15740], 90: [15740, 15740]} 
+ {89: False, 90: True}
+Percentage of missing columns per file
+ {89: 0.12903225806451613, 90: 0.12903225806451613}
+Missing columns per file
+ {89: Index(['combined_pedal_smoothness', 'left_pedal_smoothness',
+       'right_pedal_smoothness', 'accumulated_power'],
+      dtype='object'), 90: Index(['combined_pedal_smoothness', 'left_pedal_smoothness',
+       'right_pedal_smoothness', 'accumulated_power'],
+      dtype='object')}
 Duplicate timestamps in devices:
 
  device_ELEMNTBOLT
@@ -5219,7 +5708,7 @@ DROPPED: 1 files with 15740 duplicate timestamps
 --------------- NAN
 
 -------- Remove rows fully nan
-DROPPED: Number of rows dropped due to being empty:  36
+DROPPED: 36 rows dropped due to being empty
 Timestamps before and after nanrows: 
                  timestamp  enhanced_altitude  altitude  position_lat  ...  battery_soc  glucose  accumulated_power  fractional_cadence
 61251  2018-12-06 11:59:40              -40.0     -40.0     37.155387  ...          NaN      NaN                NaN                 NaN
@@ -5447,6 +5936,8 @@ Fraction of data dropped with device selection:  0.13146947866261194
 Are there glucose values in the data that will be dropped with the device selection?  False
 
 --------------- TIMESTAMP
+
+-------- Timestamp: impute zwift nan
 Exception in Tkinter callback
 Traceback (most recent call last):
   File "/usr/lib/python3.7/tkinter/__init__.py", line 1705, in __call__
@@ -5461,7 +5952,7 @@ Traceback (most recent call last):
     self.figure.draw(self.renderer)
   File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backend_bases.py", line 1544, in _draw
     def _draw(renderer): raise Done(renderer)
-matplotlib.backend_bases._get_renderer.<locals>.Done: <matplotlib.backends.backend_agg.RendererAgg object at 0x7fb7ca753f50>
+matplotlib.backend_bases._get_renderer.<locals>.Done: <matplotlib.backends.backend_agg.RendererAgg object at 0x7f8d76e9be50>
 
 -------- Timestamp: nan
 
@@ -5484,7 +5975,7 @@ file ids:  [  4  50  67 116 119 121 123 130 135 139 209 262 266]
 times:  0
 days:  0
 file ids:  []
-DROPPED: NaN local timestamps (if both are NaN)
+DROPPED: 0 files with 0 nan local timestamps (both meta and loc)
 
 -------- Timestamp error
 
@@ -5509,8 +6000,7 @@ Dates for which this happens:  [datetime.date(2018, 12, 22) datetime.date(2018, 
 CHECK if we remove entire file by removing duplicated entries, or if the file somehow continues on
 Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
  {}
-Number of duplicated entries:  0
-DROPPED: duplicate entries
+DROPPED: 0 duplicate entries
 
 -------- Timestamp duplicate
 
@@ -5525,7 +6015,16 @@ days:  1
 file ids:  [303]
 CHECK if we remove entire file by removing duplicated timestamps, or if the file somehow continues on
 Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
- {283: [1819, 1771], 303: [1853, 1771]}
+ {283: [1819, 1771], 303: [1853, 1771]} 
+ {283: False, 303: False}
+Percentage of missing columns per file
+ {283: 0.25, 303: 0.21875}
+Missing columns per file
+ {283: Index(['altitude', 'gps_accuracy', 'speed', 'grade', 'left_right_balance',
+       'combined_pedal_smoothness', 'battery_soc', 'glucose'],
+      dtype='object'), 303: Index(['gps_accuracy', 'heart_rate', 'grade', 'left_right_balance',
+       'combined_pedal_smoothness', 'battery_soc', 'glucose'],
+      dtype='object')}
 Duplicate timestamps in devices:
 
  device_ELEMNTBOLT
@@ -5582,7 +6081,7 @@ DROPPED: 1 files with 1853 duplicate timestamps
 --------------- NAN
 
 -------- Remove rows fully nan
-DROPPED: Number of rows dropped due to being empty:  45
+DROPPED: 45 rows dropped due to being empty
 Timestamps before and after nanrows: 
                  timestamp  position_lat  position_long  ...  left_pedal_smoothness  right_pedal_smoothness  glucose
 83073  2018-12-09 10:40:29     48.758225       6.129600  ...                    NaN                     NaN      NaN
@@ -5863,6 +6362,8 @@ Fraction of data dropped with device selection:  0.0
 Are there glucose values in the data that will be dropped with the device selection?  False
 
 --------------- TIMESTAMP
+
+-------- Timestamp: impute zwift nan
 Exception in Tkinter callback
 Traceback (most recent call last):
   File "/usr/lib/python3.7/tkinter/__init__.py", line 1705, in __call__
@@ -5877,7 +6378,7 @@ Traceback (most recent call last):
     self.figure.draw(self.renderer)
   File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backend_bases.py", line 1544, in _draw
     def _draw(renderer): raise Done(renderer)
-matplotlib.backend_bases._get_renderer.<locals>.Done: <matplotlib.backends.backend_agg.RendererAgg object at 0x7fb7e6bdd650>
+matplotlib.backend_bases._get_renderer.<locals>.Done: <matplotlib.backends.backend_agg.RendererAgg object at 0x7f8d5fb16dd0>
 
 -------- Timestamp: nan
 
@@ -5902,7 +6403,7 @@ file ids:  [  2  26  35  41  47  49  54  76  78  79  80  84  89 121 137 138 248 
 times:  0
 days:  0
 file ids:  []
-DROPPED: NaN local timestamps (if both are NaN)
+DROPPED: 0 files with 0 nan local timestamps (both meta and loc)
 
 -------- Timestamp error
 
@@ -5921,8 +6422,7 @@ Dates for which this happens:  [datetime.date(2019, 2, 22) datetime.date(2019, 1
 CHECK if we remove entire file by removing duplicated entries, or if the file somehow continues on
 Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
  {}
-Number of duplicated entries:  0
-DROPPED: duplicate entries
+DROPPED: 0 duplicate entries
 
 -------- Timestamp duplicate
 
@@ -5937,6 +6437,11 @@ days:  0
 file ids:  []
 CHECK if we remove entire file by removing duplicated timestamps, or if the file somehow continues on
 Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
+ {} 
+ {}
+Percentage of missing columns per file
+ {}
+Missing columns per file
  {}
 Duplicate timestamps in devices:
 
@@ -5981,3 +6486,349 @@ A value is trying to be set on a copy of a slice from a DataFrame
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   errors=errors,
 DROPPED: 0 files with 0 duplicate timestamps
+
+
+
+------------------------------- Athlete  1
+/local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (18,36) have mixed types.Specify dtype option on import or set low_memory=False.
+  interactivity=interactivity, compiler=compiler, result=result)
+
+-------- select devices
+DROPPED: 45 files with 414287 entries from devices {'device_GARMIN'}
+
+-------- cleaning features
+DROPPED:  fractional_cadence  (empty)
+DROPPED:  time_from_course  (empty)
+DROPPED:  compressed_speed_distance  (empty)
+DROPPED:  resistance  (empty)
+DROPPED:  cycle_length  (empty)
+DROPPED:  accumulated_power  (empty)
+CLEAN: left-right balance
+CHECK: enhanced altitude does not equal altitude 0 times
+DROPPED: altitude (equals enhanced_altitude)
+CHECK: enhanced speed does not equal speed 0 times
+DROPPED: speed (equals enhanced_speed)
+CREATED: elevation gain
+CREATED: acceleration
+CREATED: accumulated power
+CREATED: time training
+/local/home/evanweenen/bicyclediabetes/Code/plot.py:63: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+  plt.show()
+Max training length (min):  478.01666666666665
+Number of trainings that last shorter than 10 min:  8
+Number of trainings that last shorter than 20 min:  20
+CHECK: Negative distance diffs:  0
+Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 39/39 [00:25<00:00,  1.52it/s, Completed]
+Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:13<00:00, 13.78s/it]
+Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.31it/s]
+Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 311.98it/s]
+
+------------------------------- Athlete  2
+/local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (18,27) have mixed types.Specify dtype option on import or set low_memory=False.
+  interactivity=interactivity, compiler=compiler, result=result)
+
+-------- select devices
+DROPPED: 0 files with 0 entries from devices set()
+
+-------- cleaning features
+CLEAN: left-right balance
+CHECK: enhanced altitude does not equal altitude 0 times
+DROPPED: altitude (equals enhanced_altitude)
+CHECK: enhanced speed does not equal speed 0 times
+DROPPED: speed (equals enhanced_speed)
+CREATED: elevation gain
+CREATED: acceleration
+CREATED: accumulated power
+CREATED: time training
+/local/home/evanweenen/bicyclediabetes/Code/plot.py:63: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+  plt.show()
+Max training length (min):  435.6
+Number of trainings that last shorter than 10 min:  1
+Number of trainings that last shorter than 20 min:  3
+CHECK: Negative distance diffs:  0
+Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 36/36 [00:30<00:00,  1.18it/s, Completed]
+Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:12<00:00, 12.42s/it]
+Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.68it/s]
+Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 483.33it/s]
+
+------------------------------- Athlete  3
+/local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (13,35) have mixed types.Specify dtype option on import or set low_memory=False.
+  interactivity=interactivity, compiler=compiler, result=result)
+
+-------- select devices
+DROPPED: 43 files with 351966 entries from devices {'device_GARMIN'}
+
+-------- cleaning features
+DROPPED:  fractional_cadence  (empty)
+DROPPED:  time_from_course  (empty)
+DROPPED:  compressed_speed_distance  (empty)
+DROPPED:  resistance  (empty)
+DROPPED:  cycle_length  (empty)
+DROPPED:  accumulated_power  (empty)
+CLEAN: left-right balance
+CHECK: enhanced altitude does not equal altitude 0 times
+DROPPED: altitude (equals enhanced_altitude)
+CHECK: enhanced speed does not equal speed 0 times
+DROPPED: speed (equals enhanced_speed)
+CREATED: elevation gain
+CREATED: acceleration
+CREATED: accumulated power
+CREATED: time training
+/local/home/evanweenen/bicyclediabetes/Code/plot.py:63: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+  plt.show()
+Max training length (min):  493.3
+Number of trainings that last shorter than 10 min:  8
+Number of trainings that last shorter than 20 min:  20
+CHECK: Negative distance diffs:  0
+Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 38/38 [00:29<00:00,  1.27it/s, Completed]
+Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:13<00:00, 13.38s/it]
+Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.65it/s]
+Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 525.47it/s]
+
+------------------------------- Athlete  4
+/local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (13,35) have mixed types.Specify dtype option on import or set low_memory=False.
+  interactivity=interactivity, compiler=compiler, result=result)
+
+-------- select devices
+DROPPED: 12 files with 52278 entries from devices {'device_GARMIN'}
+
+-------- cleaning features
+DROPPED:  fractional_cadence  (empty)
+DROPPED:  time_from_course  (empty)
+DROPPED:  compressed_speed_distance  (empty)
+DROPPED:  resistance  (empty)
+DROPPED:  cycle_length  (empty)
+CLEAN: left-right balance
+CHECK: enhanced altitude does not equal altitude 0 times
+DROPPED: altitude (equals enhanced_altitude)
+CHECK: enhanced speed does not equal speed 0 times
+DROPPED: speed (equals enhanced_speed)
+CREATED: elevation gain
+CREATED: acceleration
+CREATED: accumulated power
+CREATED: time training
+/local/home/evanweenen/bicyclediabetes/Code/plot.py:63: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+  plt.show()
+Max training length (min):  401.7
+Number of trainings that last shorter than 10 min:  6
+Number of trainings that last shorter than 20 min:  14
+CHECK: Negative distance diffs:  5
+Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 39/39 [00:34<00:00,  1.13it/s, Completed]
+Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:14<00:00, 14.42s/it]
+Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.60it/s]
+Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 461.47it/s]
+
+------------------------------- Athlete  5
+/local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (22,34) have mixed types.Specify dtype option on import or set low_memory=False.
+  interactivity=interactivity, compiler=compiler, result=result)
+
+-------- select devices
+DROPPED: 3 files with 10528 entries from devices {'device_GARMIN'}
+
+-------- cleaning features
+DROPPED:  fractional_cadence  (empty)
+DROPPED:  time_from_course  (empty)
+DROPPED:  compressed_speed_distance  (empty)
+DROPPED:  resistance  (empty)
+DROPPED:  cycle_length  (empty)
+DROPPED:  accumulated_power  (empty)
+CLEAN: left-right balance
+CHECK: enhanced altitude does not equal altitude 0 times
+DROPPED: altitude (equals enhanced_altitude)
+CHECK: enhanced speed does not equal speed 0 times
+DROPPED: speed (equals enhanced_speed)
+CREATED: elevation gain
+CREATED: acceleration
+CREATED: accumulated power
+CREATED: time training
+/local/home/evanweenen/bicyclediabetes/Code/plot.py:63: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+  plt.show()
+Max training length (min):  404.21666666666664
+Number of trainings that last shorter than 10 min:  2
+Number of trainings that last shorter than 20 min:  9
+CHECK: Negative distance diffs:  0
+Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 37/37 [00:21<00:00,  1.75it/s, Completed]
+Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:12<00:00, 12.24s/it]
+Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.71it/s]
+Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 524.94it/s]
+
+------------------------------- Athlete  6
+/local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (17,27) have mixed types.Specify dtype option on import or set low_memory=False.
+  interactivity=interactivity, compiler=compiler, result=result)
+
+-------- select devices
+DROPPED: 0 files with 0 entries from devices set()
+
+-------- cleaning features
+CLEAN: left-right balance
+CHECK: enhanced altitude does not equal altitude 0 times
+DROPPED: altitude (equals enhanced_altitude)
+CHECK: enhanced speed does not equal speed 0 times
+DROPPED: speed (equals enhanced_speed)
+CREATED: elevation gain
+CREATED: acceleration
+CREATED: accumulated power
+CREATED: time training
+/local/home/evanweenen/bicyclediabetes/Code/plot.py:63: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+  plt.show()
+Max training length (min):  387.01666666666665
+Number of trainings that last shorter than 10 min:  17
+Number of trainings that last shorter than 20 min:  27
+CHECK: Negative distance diffs:  0
+Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 37/37 [00:30<00:00,  1.21it/s, Completed]
+Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:15<00:00, 15.52s/it]
+Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.38it/s]
+Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 439.06it/s]
+
+------------------------------- Athlete  10
+/local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (13,35) have mixed types.Specify dtype option on import or set low_memory=False.
+  interactivity=interactivity, compiler=compiler, result=result)
+
+-------- select devices
+DROPPED: 21 files with 194404 entries from devices {'device_GARMIN'}
+
+-------- cleaning features
+DROPPED:  fractional_cadence  (empty)
+DROPPED:  time_from_course  (empty)
+DROPPED:  compressed_speed_distance  (empty)
+DROPPED:  resistance  (empty)
+DROPPED:  cycle_length  (empty)
+DROPPED:  accumulated_power  (empty)
+CLEAN: left-right balance
+CHECK: enhanced altitude does not equal altitude 0 times
+DROPPED: altitude (equals enhanced_altitude)
+CHECK: enhanced speed does not equal speed 0 times
+DROPPED: speed (equals enhanced_speed)
+CREATED: elevation gain
+CREATED: acceleration
+CREATED: accumulated power
+CREATED: time training
+/local/home/evanweenen/bicyclediabetes/Code/plot.py:63: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+  plt.show()
+Max training length (min):  440.1166666666667
+Number of trainings that last shorter than 10 min:  0
+Number of trainings that last shorter than 20 min:  6
+CHECK: Negative distance diffs:  0
+Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 38/38 [00:34<00:00,  1.10it/s, Completed]
+Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:15<00:00, 15.12s/it]
+Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.39it/s]
+Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 436.41it/s]
+
+------------------------------- Athlete  12
+/local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (22,32) have mixed types.Specify dtype option on import or set low_memory=False.
+  interactivity=interactivity, compiler=compiler, result=result)
+
+-------- select devices
+DROPPED: 0 files with 0 entries from devices set()
+
+-------- cleaning features
+DROPPED:  time_from_course  (empty)
+DROPPED:  compressed_speed_distance  (empty)
+DROPPED:  resistance  (empty)
+DROPPED:  cycle_length  (empty)
+CLEAN: left-right balance
+CHECK: enhanced altitude does not equal altitude 0 times
+DROPPED: altitude (equals enhanced_altitude)
+CHECK: enhanced speed does not equal speed 0 times
+DROPPED: speed (equals enhanced_speed)
+CREATED: elevation gain
+CREATED: acceleration
+CREATED: accumulated power
+CREATED: time training
+/local/home/evanweenen/bicyclediabetes/Code/plot.py:63: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+  plt.show()
+Max training length (min):  471.98333333333335
+Number of trainings that last shorter than 10 min:  2
+Number of trainings that last shorter than 20 min:  6
+CHECK: Negative distance diffs:  0
+Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 38/38 [00:48<00:00,  1.27s/it, Completed]
+Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:16<00:00, 16.27s/it]
+Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.22it/s]
+Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 530.39it/s]
+
+------------------------------- Athlete  13
+/local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (13,29) have mixed types.Specify dtype option on import or set low_memory=False.
+  interactivity=interactivity, compiler=compiler, result=result)
+
+-------- select devices
+DROPPED: 5 files with 12134 entries from devices {'device_GARMIN'}
+
+-------- cleaning features
+DROPPED:  accumulated_power  (empty)
+CLEAN: left-right balance
+CHECK: enhanced altitude does not equal altitude 0 times
+DROPPED: altitude (equals enhanced_altitude)
+CHECK: enhanced speed does not equal speed 0 times
+DROPPED: speed (equals enhanced_speed)
+CREATED: elevation gain
+CREATED: acceleration
+CREATED: accumulated power
+CREATED: time training
+/local/home/evanweenen/bicyclediabetes/Code/plot.py:63: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+  plt.show()
+Max training length (min):  405.73333333333335
+Number of trainings that last shorter than 10 min:  0
+Number of trainings that last shorter than 20 min:  0
+CHECK: Negative distance diffs:  0
+Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 37/37 [00:24<00:00,  1.51it/s, Completed]
+Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:12<00:00, 12.59s/it]
+Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.59it/s]
+Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 437.82it/s]
+
+------------------------------- Athlete  14
+/local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (17,30) have mixed types.Specify dtype option on import or set low_memory=False.
+  interactivity=interactivity, compiler=compiler, result=result)
+
+-------- select devices
+DROPPED: 53 files with 419785 entries from devices {'device_GARMIN'}
+
+-------- cleaning features
+DROPPED:  fractional_cadence  (empty)
+DROPPED:  accumulated_power  (empty)
+CLEAN: left-right balance
+CHECK: enhanced altitude does not equal altitude 0 times
+DROPPED: altitude (equals enhanced_altitude)
+CHECK: enhanced speed does not equal speed 0 times
+DROPPED: speed (equals enhanced_speed)
+CREATED: elevation gain
+CREATED: acceleration
+CREATED: accumulated power
+CREATED: time training
+/local/home/evanweenen/bicyclediabetes/Code/plot.py:63: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+  plt.show()
+Max training length (min):  430.26666666666665
+Number of trainings that last shorter than 10 min:  3
+Number of trainings that last shorter than 20 min:  11
+CHECK: Negative distance diffs:  0
+Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 36/36 [00:26<00:00,  1.37it/s, Completed]
+Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:13<00:00, 13.35s/it]
+Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.42it/s]
+Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 454.27it/s]
+
+------------------------------- Athlete  15
+/local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (16,27) have mixed types.Specify dtype option on import or set low_memory=False.
+  interactivity=interactivity, compiler=compiler, result=result)
+
+-------- select devices
+DROPPED: 0 files with 0 entries from devices set()
+
+-------- cleaning features
+CLEAN: left-right balance
+CHECK: enhanced altitude does not equal altitude 0 times
+DROPPED: altitude (equals enhanced_altitude)
+CHECK: enhanced speed does not equal speed 0 times
+DROPPED: speed (equals enhanced_speed)
+CREATED: elevation gain
+CREATED: acceleration
+CREATED: accumulated power
+CREATED: time training
+/local/home/evanweenen/bicyclediabetes/Code/plot.py:63: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+  plt.show()
+Max training length (min):  429.8666666666667
+Number of trainings that last shorter than 10 min:  4
+Number of trainings that last shorter than 20 min:  6
+CHECK: Negative distance diffs:  0
+Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 36/36 [00:39<00:00,  1.11s/it, Completed]
+Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:16<00:00, 16.11s/it]
+Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.21it/s]
+Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 238.19it/s]

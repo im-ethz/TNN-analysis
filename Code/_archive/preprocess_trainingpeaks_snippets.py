@@ -1,4 +1,31 @@
 
+
+	idx_zero_power = df[df.power == 0].index
+	idx_nan_power = df[df.power.isna()].index
+
+	idx_first_zero_power = idx_zero_power[idx_zero_power.to_series().diff() != 1]
+	idx_first_nan_power = idx_nan_power[idx_nan_power.to_series().diff() != 1]
+
+	df.loc[idx_first_nan_power-1, 'power']
+	df['timediff'] = df.local_timestamp.diff() 
+	df['power_shift'] = df.power.shift(1)
+	df.loc[idx_first_nan_power, ['timediff', 'device_ELEMNT', 'device_ELEMNTBOLT', 'device_GARMIN', 'device_ZWIFT']]
+	df.groupby(['device_ELEMNT', 'device_ELEMNTBOLT', 'device_GARMIN', 'device_ZWIFT'])['timediff'].mean()
+
+	df.loc[idx_first_nan_power].loc[(df.loc[idx_first_nan_power, 'timediff'] != '1s') & \
+									(df.loc[idx_first_nan_power, 'power_shift'] == 0)]
+
+	for i in idx_first_nan_power:
+		print(df.loc[i-20:i+10, ['local_timestamp', 'power', 'file_id']])
+
+	for f in df.file_id.unique():
+		df_f = df[df.file_id == f]
+		idx_zero_power = df_f[df_f.power == 0].index
+		idx_nan_power = df_f[df_f.power == 0].index
+
+
+
+
 	"""
 	OLD: use this when we don't remove nans for local timestamps, or when we don't combine both timestamps
 	nan_ts = df['timestamp'].notna()

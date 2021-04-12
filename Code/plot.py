@@ -15,7 +15,7 @@ from mpl_toolkits import axisartist as AA
 
 from statsmodels.graphics.tsaplots import plot_acf
 
-from helper import glucose_levels
+from calc import glucose_levels
 # TODO: adjust plotsize plot interp_subplots
 # TODO: ylabel interp plot
 # TODO: legend interp individual plot
@@ -53,7 +53,15 @@ class PlotPreprocess:
 
 		self.savedir = savedir
 		self.savetext = savetext
-		self.athlete = athlete
+		self.athlete = str(athlete)
+
+	def plot_hist(self, x, xname, bins=40):
+		x.hist(bins=bins)
+		plt.xlabel(xname)
+		plt.savefig(self.savedir+xname+'_'+self.athlete+'.pdf', bbox_inches='tight')
+		plt.savefig(self.savedir+xname+'_'+self.athlete+'.pdf', bbox_inches='tight')
+		plt.show()
+		plt.close()
 
 	def plot_smoothing(self, df, col, pfirst=5, cmap='viridis', kwargs={}, skwargs={}):
 		cmap = matplotlib.cm.get_cmap(cmap, len(df.file_id.unique()[:pfirst]))
@@ -64,8 +72,8 @@ class PlotPreprocess:
 			df[df.file_id == idx].plot(ax=ax, x='time_training', y=col,
 				color=cmap(c), legend=False, **kwargs)
 		plt.ylabel(col)
-		plt.savefig(self.savedir+'smooth_'+col+'.pdf', bbox_inches='tight')
-		plt.savefig(self.savedir+'smooth_'+col+'.png', dpi=300, bbox_inches='tight')
+		plt.savefig(self.savedir+self.athlete+'_smooth_'+col+'.pdf', bbox_inches='tight')
+		plt.savefig(self.savedir+self.athlete+'_smooth_'+col+'.png', dpi=300, bbox_inches='tight')
 		plt.show()
 		plt.close()
 
@@ -78,8 +86,8 @@ class PlotPreprocess:
 			df[df.file_id == idx].plot(ax=ax, x='time_training', y=col,
 				color=cmap(c), legend=False, **ikwargs)
 		plt.ylabel(col)
-		plt.savefig(self.savedir+'interp_'+col+'.pdf', bbox_inches='tight')
-		plt.savefig(self.savedir+'interp_'+col+'.png', dpi=300, bbox_inches='tight')
+		plt.savefig(self.savedir+self.athlete+'_interp_'+col+'.pdf', bbox_inches='tight')
+		plt.savefig(self.savedir+self.athlete+'_interp_'+col+'.png', dpi=300, bbox_inches='tight')
 		plt.show()
 		plt.close()
 
