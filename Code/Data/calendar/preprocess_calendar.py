@@ -24,8 +24,7 @@ df['RIDER'] = df['RIDER'].map(rider_mapping)
 df = df.reset_index()
 df.drop('level_0', axis=1, inplace=True)
 df.rename(columns={'level_1':'TrainingIndex'}, inplace=True)
-df = df.set_index(['RIDER', 'TrainingIndex'])
+df.sort_values(['RIDER', 'TrainingIndex'], inplace=True)
+df.set_index(['RIDER', 'TrainingIndex'], inplace=True)
 
 df.to_csv(path+'calendar_2019_anonymous.csv')
-
-df[['WorkoutType','WorkoutDay', 'Event']].to_csv(path+'calendar-events_2019_anonymous.csv')
