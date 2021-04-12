@@ -1,0 +1,1010 @@
+------------------------------- Athlete  1
+--------------- NAN
+-------- Remove rows fully nan
+DROPPED: 57 rows dropped due to being empty
+(seem like they are the first rows of a file)
+--------------- DEVICE
+Devices used:
+ELEMNTBOLT    284
+GARMIN         45
+ZWIFT          15
+ELEMNT          3
+Are there glucose values in the data that will be dropped with the device selection?  False
+--------------- TIMESTAMP
+-------- Timestamp: impute zwift nan
+Get timezone of Zwift files for the following dates: 
+2019-01-30
+2019-01-31
+2019-02-11
+2019-03-07
+2019-03-08
+2019-03-13
+2019-03-15
+2019-11-17
+2019-11-19
+2019-03-27
+2019-04-04
+-------- Timestamp: nan
+local timestamp not available
+times:  0
+days:  0
+file ids:  []
+local timestamp from location not available
+times:  32168
+days:  9
+file ids:  [  4  33  35  41  48  55  56  62  63 283 284]
+local timestamp OR local timestamp from location not available
+times:  32168
+days:  9
+file ids:  [  4  33  35  41  48  55  56  62  63 283 284]
+local timestamp AND local timestamp from location not available
+times:  0
+days:  0
+file ids:  []
+DROPPED: 0 files with 0 nan local timestamps (both meta and loc)
+-------- Timestamp error
+local timestamp does not equal local timestamp from location (excl. nans)
+times:  63220
+days:  10
+file ids:  [ 68  88  89 149 243 221 222 227 337 338]
+Dates for which this happens:
+2019-02-14
+2019-03-06
+2019-03-09
+2019-05-25
+2019-09-24
+2019-09-10
+2019-09-11
+2019-09-12
+2019-03-07
+2019-03-08
+-------- Timestamp local combine
+--------------- DUPLICATES
+-------- Entire row duplicate
+CHECK if we remove entire file by removing duplicated entries
+Dupl file_id: [len file, len dupl ts of file]
+{38: [21641, 21641], 39: [21641, 21641]}
+DROPPED: 21641 duplicate entries
+-------- Timestamp duplicate
+duplicated timestamps
+times:  14180
+days:  2
+file ids:  [221 222]
+duplicated local timestamps
+times:  14180
+days:  1
+file ids:  [221 222]
+CHECK if we remove entire file by removing duplicated timestamps
+Dupl file_id: [len file, len dupl ts of file]
+{220: [1758, 1493], 223: [12918, 12687], 221: [2004, 1493], 222: [12733, 12687]}
+{220: False, 223: False, 221: False, 222: False}
+Percentage of missing columns per file
+{220: 0.2631578947368421, 223: 0.2631578947368421, 221: 0.21052631578947367, 222: 0.21052631578947367}
+Duplicate timestamps in devices:
+device_ELEMNT - times:  14180 - days:  1 - file ids:  [221 222]
+device_ELEMNTBOLT - times:  14180 - days:  1 - file ids:  [220 223]
+device_GARMIN - times:  0 - days:  0 - file ids:  []
+device_ZWIFT - times:  0 - days:  0 - file ids:  []
+Duplicate timestamps after potentially dropping devices: 
+device_ELEMNTBOLT - times:  14180 - days:  1 - file ids:  [220 223]
+device_ZWIFT - times:  0 - days:  0 - file ids:  []
+device_ELEMNT - times:  14180 - days:  1 - file ids:  [221 222]
+
+------------------------------- Athlete  2
+--------------- NAN
+-------- Remove rows fully nan
+DROPPED: 54 rows dropped due to being empty
+--------------- DEVICE
+Devices used:
+ELEMNTBOLT    303
+Are there glucose values in the data that will be dropped with the device selection?  False
+--------------- TIMESTAMP
+-------- Timestamp: impute zwift nan
+-------- Timestamp: nan
+local timestamp not available
+times:  0
+days:  0
+file ids:  []
+local timestamp from location not available
+times:  186517
+days:  30
+file ids:  [  1   8  12  20  26  28  39  41  48  57  58  64  67  76  87  89  90  93  95 110 126 127 131 132 137 148 232 259 289 291 296 301]
+local timestamp OR local timestamp from location not available
+times:  186517
+days:  30
+file ids:  [  1   8  12  20  26  28  39  41  48  57  58  64  67  76  87  89  90  93  95 110 126 127 131 132 137 148 232 259 289 291 296 301]
+local timestamp AND local timestamp from location not available
+times:  0
+days:  0
+file ids:  []
+DROPPED: 0 files with 0 nan local timestamps (both meta and loc)
+-------- Timestamp error
+local timestamp does not equal local timestamp from location (excl. nans)
+times:  47908
+days:  6
+file ids:  [ 86  97  98 114 150 279]
+Dates for which this happens:
+2019-02-22
+2019-03-04
+2019-03-05
+2019-03-22
+2019-05-31
+2019-11-04
+-------- Timestamp local combine
+--------------- DUPLICATES
+-------- Entire row duplicate
+CHECK if we remove entire file by removing duplicated entries
+DROPPED: 0 duplicate entries
+-------- Timestamp duplicate
+duplicated timestamps
+times:  0
+days:  0
+file ids:  []
+duplicated local timestamps
+times:  0
+days:  0
+file ids:  []
+CHECK if we remove entire file by removing duplicated timestamps
+Duplicate timestamps in devices:
+device_ELEMNTBOLT
+times:  0
+days:  0
+file ids:  []
+DROPPED: 0 files with 0 duplicate timestamps
+
+------------------------------- Athlete  3
+--------------- NAN
+-------- Remove rows fully nan
+DROPPED: 82 rows dropped due to being empty
+--------------- DEVICE
+Devices used:
+ELEMNTBOLT    311
+GARMIN         56
+ZWIFT          37
+Are there glucose values in the data that will be dropped with the device selection?  False
+--------------- TIMESTAMP
+-------- Timestamp: impute zwift nan
+Get timezone of Zwift files for the following dates: 
+2019-01-29
+2019-05-07
+2019-02-01
+2019-02-03
+2019-02-05
+2019-02-06
+2019-02-07
+2019-02-11
+2019-02-13
+2019-02-14
+2019-02-15
+2019-02-20
+2019-02-21
+2019-02-23
+2019-02-25
+2019-02-27
+2019-03-06
+2019-03-13
+2019-03-20
+2019-03-27
+2019-05-03
+2019-05-06
+-------- Timestamp: nan
+local timestamp not available
+times:  112779
+days:  20
+file ids:  [ 48  43  63 352 353 354 355 356 357 358 359 360 361 362 363 364 365 366 367 368]
+local timestamp from location not available
+times:  66311
+days:  8
+file ids:  [  6   8  18  21 141 142 306 352 368]
+local timestamp OR local timestamp from location not available
+times:  169385
+days:  26
+file ids:  [  6   8  18  21  48 141 142 306  43  63 352 353 354 355 356 357 358 359 360 361 362 363 364 365 366 367 368]
+local timestamp AND local timestamp from location not available
+times:  9705
+days:  2
+file ids:  [352 368]
+DROPPED: 2 files with 9705 nan local timestamps (both meta and loc)
+-------- Timestamp error
+local timestamp does not equal local timestamp from location (excl. nans)
+times:  67524
+days:  8
+file ids:  [174 187 205 206 207 290 298 305]
+Dates for which this happens:
+2019-05-25
+2019-06-02
+2019-06-19
+2019-06-20
+2019-06-21
+2019-09-24
+2019-10-17
+2019-10-31
+-------- Timestamp local combine
+--------------- DUPLICATES
+-------- Entire row duplicate
+CHECK if we remove entire file by removing duplicated entries
+Dupl file_id: [len file, len dupl ts of file]
+{62: [583, 35]}
+DROPPED: 34 duplicate entries
+-------- Timestamp duplicate
+duplicated timestamps
+times:  41001
+days:  11
+file ids:  [ 62 353 354 356 357 359 360 362 363 364 365]
+duplicated local timestamps
+times:  41157
+days:  12
+file ids:  [ 62 353 354 356 357 359 360 362 363 364 365 367]
+CHECK if we remove entire file by removing duplicated timestamps
+Dupl file_id: [len file, len dupl ts of file]
+{257: [7211, 971], 258: [7295, 280], 266: [6117, 2745], 267: [11793, 2494], 293: [16393, 2970], 296: [2964, 1943], 304: [3989, 156], 62: [549, 2], 318: [7932, 7659], 319: [6473, 6377], 326: [12617, 11392], 337: [30690, 4169], 353: [2194, 971], 354: [2309, 280], 356: [8429, 7659], 357: [7303, 6377], 359: [5666, 2745], 360: [2578, 2494], 362: [12089, 11392], 363: [3538, 2970], 364: [1971, 1943], 365: [4561, 4169], 367: [4767, 156]} 
+{257: False, 258: False, 266: False, 267: False, 293: False, 296: False, 304: False, 62: False, 318: False, 319: False, 326: False, 337: False, 353: False, 354: False, 356: False, 357: False, 359: False, 360: False, 362: False, 363: False, 364: False, 365: False, 367: False}
+Percentage of missing columns per file
+{257: 0.21621621621621623, 258: 0.21621621621621623, 266: 0.21621621621621623, 267: 0.21621621621621623, 293: 0.2972972972972973, 296: 0.2972972972972973, 304: 0.24324324324324326, 62: 0.5135135135135135, 318: 0.4864864864864865, 319: 0.4864864864864865, 326: 0.2702702702702703, 337: 0.2702702702702703, 353: 0.5405405405405406, 354: 0.5405405405405406, 356: 0.4594594594594595, 357: 0.4594594594594595, 359: 0.5405405405405406, 360: 0.5135135135135135, 362: 0.4594594594594595, 363: 0.5405405405405406, 364: 0.5135135135135135, 365: 0.5405405405405406, 367: 0.5405405405405406}
+Duplicate timestamps in devices:
+device_ELEMNTBOLT
+times:  11559
+days:  7
+file ids:  [257 258 266 267 293 296 304]
+device_GARMIN
+times:  70753
+days:  11
+file ids:  [318 319 326 337 353 354 356 357 359 360 362 363 364 365 367]
+device_ZWIFT
+times:  2
+days:  1
+file ids:  [62]
+Duplicate timestamps after potentially dropping devices: 
+device_ELEMNTBOLT
+times:  11559
+days:  7
+file ids:  [257 258 266 267 293 296 304]
+device_ZWIFT
+times:  2
+days:  1
+file ids:  [62]
+DROPPED: 12 files with 55954 duplicate timestamps
+
+------------------------------- Athlete  4
+--------------- NAN
+-------- Remove rows fully nan
+DROPPED: 71 rows dropped due to being empty
+--------------- DEVICE
+Devices used:
+ELEMNTBOLT    184
+ELEMNT        135
+GARMIN         13
+ZWIFT           6
+Are there glucose values in the data that will be dropped with the device selection?  False
+--------------- TIMESTAMP
+-------- Timestamp: impute zwift nan
+Get timezone of Zwift files for the following dates: 
+2019-01-30
+2018-12-09
+2018-12-10
+2018-12-11
+2018-12-29
+2019-03-13
+-------- Timestamp: nan
+local timestamp not available
+times:  0
+days:  0
+file ids:  []
+local timestamp from location not available
+times:  59574
+days:  12
+file ids:  [ 39  60  74  85  90  91  92  95  99 101 276 281 283 125 133]
+local timestamp OR local timestamp from location not available
+times:  59574
+days:  12
+file ids:  [ 39  60  74  85  90  91  92  95  99 101 276 281 283 125 133]
+local timestamp AND local timestamp from location not available
+times:  0
+days:  0
+file ids:  []
+DROPPED: 0 files with 0 nan local timestamps (both meta and loc)
+-------- Timestamp error
+local timestamp does not equal local timestamp from location (excl. nans)
+times:  72689
+days:  9
+file ids:  [  8  87  88 119 298 135 334 335]
+Dates for which this happens:
+2018, 12, 9
+2019, 2, 22
+2019, 2, 23
+2019, 3, 25
+2019, 11, 5
+2019, 4, 6
+2019, 4, 7
+2018, 12, 10
+2018, 12, 11
+-------- Timestamp local combine
+--------------- DUPLICATES
+-------- Entire row duplicate
+CHECK if we remove entire file by removing duplicated entries
+Dupl file_id: [len file, len dupl ts of file]
+{64: [15293, 15293], 65: [15293, 15293]}
+DROPPED: 15293 duplicate entries
+-------- Timestamp duplicate
+duplicated timestamps
+times:  10624
+days:  3
+file ids:  [333 336 320]
+duplicated local timestamps
+times:  7058
+days:  2
+file ids:  [336 320]
+CHECK if we remove entire file by removing duplicated timestamps
+Dupl file_id: [len file, len dupl ts of file]
+{31: [12607, 6525], 156: [15006, 533], 336: [6612, 6525], 320: [600, 533]} 
+{31: False, 156: False, 336: False, 320: False}
+Percentage of missing columns per file
+{31: 0.1891891891891892, 156: 0.1891891891891892, 336: 0.4864864864864865, 320: 0.43243243243243246}
+Duplicate timestamps in devices:
+device_ELEMNT
+times:  0
+days:  0
+file ids:  []
+device_ELEMNTBOLT
+times:  7058
+days:  2
+file ids:  [ 31 156]
+device_GARMIN
+times:  533
+days:  1
+file ids:  [320]
+device_ZWIFT
+times:  6525
+days:  1
+file ids:  [336]
+Duplicate timestamps after potentially dropping devices: 
+device_ELEMNTBOLT
+times:  7058
+days:  2
+file ids:  [ 31 156]
+device_ZWIFT
+times:  6525
+days:  1
+file ids:  [336]
+device_ELEMNT
+times:  0
+days:  0
+file ids:  []
+DROPPED: 2 files with 7212 duplicate timestamps
+
+------------------------------- Athlete  5
+--------------- NAN
+-------- Remove rows fully nan
+DROPPED: 33 rows dropped due to being empty
+--------------- DEVICE
+Devices used:
+ELEMNTBOLT    198
+ZWIFT          30
+GARMIN          3
+Are there glucose values in the data that will be dropped with the device selection?  False
+--------------- TIMESTAMP
+-------- Timestamp: impute zwift nan
+Get timezone of Zwift files for the following dates: 
+2018-12-17
+2018-12-21
+2018-12-28
+2019-01-05
+2019-01-07
+2019-01-08
+2019-01-17
+2019-08-16
+2019-01-30
+2019-02-01
+2019-02-02
+2019-09-06
+2019-02-04
+2019-09-11
+2019-02-06
+2019-02-08
+2019-02-10
+2019-02-27
+2019-03-06
+2019-03-08
+2019-03-15
+2019-03-16
+2019-11-26
+2019-11-28
+-------- Timestamp: nan
+local timestamp not available
+times:  0
+days:  0
+file ids:  []
+local timestamp from location not available
+times:  24
+days:  1
+file ids:  [54]
+local timestamp OR local timestamp from location not available
+times:  24
+days:  1
+file ids:  [54]
+local timestamp AND local timestamp from location not available
+times:  0
+days:  0
+file ids:  []
+DROPPED: 0 files with 0 nan local timestamps (both meta and loc)
+-------- Timestamp error
+local timestamp does not equal local timestamp from location (excl. nans)
+times:  0
+days:  0
+file ids:  []
+Dates for which this happens:  []
+-------- Timestamp local combine
+--------------- DUPLICATES
+-------- Entire row duplicate
+CHECK if we remove entire file by removing duplicated entries
+Dupl file_id: [len file, len dupl ts of file] {}
+DROPPED: 0 duplicate entries
+-------- Timestamp duplicate
+duplicated timestamps
+times:  21320
+days:  4
+file ids:  [209 210 213 229]
+duplicated local timestamps
+times:  21320
+days:  4
+file ids:  [209 210 213 229]
+CHECK if we remove entire file by removing duplicated timestamps
+Dupl file_id: [len file, len dupl ts of file]
+{48: [3879, 3675], 50: [9909, 9751], 53: [5432, 4879], 196: [3095, 3015], 209: [3758, 3675], 210: [10846, 9751], 213: [7207, 4879], 229: [9022, 3015]} 
+{48: False, 50: False, 53: False, 196: False, 209: False, 210: False, 213: False, 229: False}
+Percentage of missing columns per file
+{48: 0.19444444444444445, 50: 0.2222222222222222, 53: 0.2222222222222222, 196: 0.2777777777777778, 209: 0.5, 210: 0.5, 213: 0.5, 229: 0.5}
+Duplicate timestamps in devices:
+device_ELEMNTBOLT
+times:  21320
+days:  4
+file ids:  [ 48  50  53 196]
+device_GARMIN
+times:  0
+days:  0
+file ids:  []
+device_ZWIFT
+times:  21320
+days:  4
+file ids:  [209 210 213 229]
+Duplicate timestamps after potentially dropping devices: 
+device_ELEMNTBOLT
+times:  21320
+days:  4
+file ids:  [ 48  50  53 196]
+device_ZWIFT
+times:  21320
+days:  4
+file ids:  [209 210 213 229]
+DROPPED: 4 files with 30833 duplicate timestamps
+
+------------------------------- Athlete  6
+--------------- NAN
+-------- Remove rows fully nan
+DROPPED: 69 rows dropped due to being empty
+--------------- DEVICE
+Devices used:
+ELEMNTBOLT    354
+Are there glucose values in the data that will be dropped with the device selection?  False
+--------------- TIMESTAMP
+-------- Timestamp: impute zwift nan
+-------- Timestamp: nan
+local timestamp not available
+times:  15074
+days:  2
+file ids:  [304]
+local timestamp from location not available
+times:  117422
+days:  18
+file ids:  [  8  41  42  54  55  56  57  58  59  60  61  62  63  78 171 176 276 290]
+local timestamp OR local timestamp from location not available
+times:  132496
+days:  20
+file ids:  [  8  41  42  54  55  56  57  58  59  60  61  62  63  78 171 176 276 290 304]
+local timestamp AND local timestamp from location not available
+times:  0
+days:  0
+file ids:  []
+DROPPED: 0 files with 0 nan local timestamps (both meta and loc)
+-------- Timestamp error
+local timestamp does not equal local timestamp from location (excl. nans)
+times:  129752
+days:  17
+file ids:  [ 13  34  36  53  64 105 164 172 173 202 298 299 300 301 302]
+Dates for which this happens:
+2018-12-09
+2018-12-29
+2018-12-30
+2019-01-01
+2019-01-02
+2019-02-02
+2019-02-13
+2019-02-14
+2019-03-22
+2019-05-22
+2019-05-27
+2019-05-28
+2019-07-08
+2019-09-30
+2019-10-01
+2019-10-02
+2019-10-03
+-------- Timestamp local combine
+--------------- DUPLICATES
+-------- Entire row duplicate
+CHECK if we remove entire file by removing duplicated entries
+Dupl file_id: [len file, len dupl ts of file] {}
+DROPPED: 0 duplicate entries
+-------- Timestamp duplicate
+duplicated timestamps
+times:  38014
+days:  3
+file ids:  [123 174 287]
+duplicated local timestamps
+times:  38014
+days:  3
+file ids:  [123 174 287]
+CHECK if we remove entire file by removing duplicated timestamps
+Dupl file_id: [len file, len dupl ts of file]
+{122: [7276, 5588], 123: [5631, 5588], 173: [15543, 15130], 174: [19350, 15130], 286: [17543, 17296], 287: [19972, 17296]} 
+{122: False, 123: False, 173: False, 174: False, 286: False, 287: False}
+Percentage of missing columns per file
+{122: 0.06896551724137931, 123: 0.06896551724137931, 173: 0.06896551724137931, 174: 0.20689655172413793, 286: 0.06896551724137931, 287: 0.20689655172413793}
+Duplicate timestamps in devices:
+device_ELEMNTBOLT
+times:  76028
+days:  3
+file ids:  [122 123 173 174 286 287]
+Duplicate timestamps after potentially dropping devices: 
+device_ELEMNTBOLT
+times:  76028
+days:  3
+file ids:  [122 123 173 174 286 287]
+DROPPED: 3 files with 44953 duplicate timestamps
+------------------------------- Athlete  10
+--------------- NAN
+-------- Remove rows fully nan
+DROPPED: 56 rows dropped due to being empty
+--------------- DEVICE
+Devices used:
+ELEMNTBOLT    338
+GARMIN         21
+ZWIFT           5
+Are there glucose values in the data that will be dropped with the device selection?  False
+--------------- TIMESTAMP
+-------- Timestamp: impute zwift nan
+Get timezone of Zwift files for the following dates: 
+2019-01-30
+2019-02-13
+2019-03-06
+-------- Timestamp: nan
+local timestamp not available
+times:  7531
+days:  1
+file ids:  [234]
+local timestamp from location not available
+times:  105108
+days:  15
+file ids:  [  7  15  21  68  91  93  96  98 203 209 259 292 333 339 340]
+local timestamp OR local timestamp from location not available
+times:  112639
+days:  16
+file ids:  [  7  15  21  68  91  93  96  98 203 209 234 259 292 333 339 340]
+local timestamp AND local timestamp from location not available
+times:  0
+days:  0
+file ids:  []
+DROPPED: 0 files with 0 nan local timestamps (both meta and loc)
+-------- Timestamp error
+local timestamp does not equal local timestamp from location (excl. nans)
+times:  198001
+days:  25
+file ids:  [ 67  69  90  92 101 128 140 157 184 185 186 187 211 244 245 246 247 277 278 279 284 297 298 299 359 360 362 363]
+Dates for which this happens:
+2019-01-29
+2019-01-31
+2019-02-22
+2019-02-24
+2019-03-05
+2019-04-06
+2019-04-18
+2019-05-05
+2019-05-30
+2019-05-31
+2019-06-01
+2019-06-02
+2019-06-27
+2019-07-29
+2019-07-30
+2019-07-31
+2019-08-01
+2019-09-17
+2019-09-18
+2019-09-23
+2019-10-07
+2019-10-08
+2019-10-09
+2019-01-30
+2019-03-06
+-------- Timestamp local combine
+--------------- DUPLICATES
+-------- Entire row duplicate
+CHECK if we remove entire file by removing duplicated entries
+Dupl file_id: [len file, len dupl ts of file]  {}
+DROPPED: 0 duplicate entries
+-------- Timestamp duplicate
+duplicated timestamps
+times:  0
+days:  0
+file ids:  []
+duplicated local timestamps
+times:  394
+days:  1
+file ids:  [69]
+CHECK if we remove entire file by removing duplicated timestamps
+Dupl file_id: [len file, len dupl ts of file]
+{68: [7642, 394], 69: [9006, 394]} 
+{68: False, 69: False}
+Percentage of missing columns per file
+{68: 0.40540540540540543, 69: 0.21621621621621623}
+Duplicate timestamps in devices:
+device_ELEMNTBOLT
+times:  788
+days:  1
+file ids:  [68 69]
+device_GARMIN
+times:  0
+days:  0
+file ids:  []
+device_ZWIFT
+times:  0
+days:  0
+file ids:  []
+Duplicate timestamps after potentially dropping devices: 
+device_ELEMNTBOLT
+times:  788
+days:  1
+file ids:  [68 69]
+device_ZWIFT
+times:  0
+days:  0
+file ids:  []
+DROPPED: 1 files with 9006 duplicate timestamps
+
+------------------------------- Athlete  12
+--------------- NAN
+-------- Remove rows fully nan
+DROPPED: 84 rows dropped due to being empty
+--------------- DEVICE
+Devices used:
+ELEMNTBOLT    348
+ELEMNTROAM     70
+ZWIFT           2
+Are there glucose values in the data that will be dropped with the device selection?  False
+--------------- TIMESTAMP
+-------- Timestamp: impute zwift nan
+Get timezone of Zwift files for the following dates: 
+2018-12-18
+2018-12-25
+-------- Timestamp: nan
+local timestamp not available
+times:  0
+days:  0
+file ids:  []
+local timestamp from location not available
+times:  58865
+days:  11
+file ids:  [  0   5  10  12  78 166 167 321 399 400 377 378 401]
+local timestamp OR local timestamp from location not available
+times:  58865
+days:  11
+file ids:  [  0   5  10  12  78 166 167 321 399 400 377 378 401]
+local timestamp AND local timestamp from location not available
+times:  0
+days:  0
+file ids:  []
+DROPPED: 0 files with 0 nan local timestamps (both meta and loc)
+-------- Timestamp error
+local timestamp does not equal local timestamp from location (excl. nans)
+times:  35068
+days:  5
+file ids:  [ 86 105 168 169 375]
+Dates for which this happens:
+2019-02-14
+2019-03-06
+2019-05-08
+2019-05-09
+2019-10-21
+-------- Timestamp local combine
+--------------- DUPLICATES
+-------- Entire row duplicate
+CHECK if we remove entire file by removing duplicated entries
+Dupl file_id: [len file, len dupl ts of file]  {}
+DROPPED: 0 duplicate entries
+
+-------- Timestamp duplicate
+duplicated timestamps
+times:  302367
+days:  36
+file ids:  [289 298 308 311 315 317 319 323 326 328 330 331 335 337 339 343 346 348 351 352 354 356 358 360 363 365 368 384 292 294 296 300 302 381 385 386 391 403 404 408 411]
+duplicated local timestamps
+times:  308633
+days:  36
+file ids:  [289 298 308 311 315 317 319 323 326 328 330 331 335 337 339 343 346 348 351 352 354 356 358 360 361 363 365 368 384 292 294 296 300 302 381 385 386 391 403 404 408 411]
+CHECK if we remove entire file by removing duplicated timestamps
+Dupl file_id: [len file, len dupl ts of file]
+{288: [21282, 6738], 289: [17394, 6738], 291: [6460, 5707], 293: [14545, 8238], 295: [16381, 7388], 297: [4822, 3278], 298: [9868, 3278], 299: [21351, 11062], 301: [9120, 7370], 307: [12161, 12101], 308: [13005, 12101], 310: [625, 490], 311: [1011, 490], 314: [21205, 21019], 315: [21065, 21019], 316: [17303, 17213], 317: [17623, 17213], 318: [12352, 12334], 319: [12404, 12334], 322: [13221, 10527], 323: [10603, 10527], 325: [15731, 10329], 326: [11396, 10329], 327: [7843, 1322], 328: [11316, 1322], 329: [16005, 13148], 330: [17212, 16818], 331: [11786, 10154], 334: [14465, 8175], 335: [8993, 8175], 336: [15358, 2302], 337: [4828, 2302], 338: [16078, 10033], 339: [13243, 10033], 342: [18395, 4760], 343: [5754, 4760], 345: [10642, 8193], 346: [8238, 8193], 347: [3185, 2719], 348: [3746, 2719], 350: [4360, 3723], 351: [4202, 2065], 352: [3238, 1658], 353: [9716, 6662], 354: [6687, 6662], 355: [9267, 8060], 356: [8077, 8060], 357: [9531, 8804], 358: [8824, 8804], 359: [11709, 8649], 360: [7538, 7527], 361: [4647, 4647], 362: [11710, 11104], 363: [11140, 11104], 364: [8134, 5762], 365: [5770, 5762], 367: [7549, 6220], 368: [7500, 6220], 382: [11083, 9482], 383: [8482, 5560], 384: [6186, 6096], 387: [5407, 2761], 390: [7340, 6230], 402: [9741, 8023], 405: [10955, 9405], 409: [4, 4], 410: [9665, 7570], 292: [16204, 5707], 294: [9338, 8238], 296: [7855, 7388], 300: [11719, 11062], 302: [9102, 7370], 381: [20750, 9482], 385: [9939, 4668], 386: [11281, 2761], 391: [9810, 6230], 403: [10116, 8023], 404: [12312, 9405], 408: [8025, 4], 411: [16332, 7570]} 
+{288: False, 289: False, 291: False, 293: False, 295: False, 297: False, 298: False, 299: False, 301: False, 307: False, 308: False, 310: False, 311: False, 314: False, 315: False, 316: False, 317: False, 318: False, 319: False, 322: False, 323: False, 325: False, 326: False, 327: False, 328: False, 329: False, 330: False, 331: False, 334: False, 335: False, 336: False, 337: False, 338: False, 339: False, 342: False, 343: False, 345: False, 346: False, 347: False, 348: False, 350: False, 351: False, 352: False, 353: False, 354: False, 355: False, 356: False, 357: False, 358: False, 359: False, 360: False, 361: True, 362: False, 363: False, 364: False, 365: False, 367: False, 368: False, 382: False, 383: False, 384: False, 387: False, 390: False, 402: False, 405: False, 409: True, 410: False, 292: False, 294: False, 296: False, 300: False, 302: False, 381: False, 385: False, 386: False, 391: False, 403: False, 404: False, 408: False, 411: False}
+Percentage of missing columns per file
+{288: 0.14705882352941177, 289: 0.14705882352941177, 291: 0.14705882352941177, 293: 0.14705882352941177, 295: 0.14705882352941177, 297: 0.14705882352941177, 298: 0.38235294117647056, 299: 0.14705882352941177, 301: 0.14705882352941177, 307: 0.20588235294117646, 308: 0.35294117647058826, 310: 0.35294117647058826, 311: 0.35294117647058826, 314: 0.20588235294117646, 315: 0.14705882352941177, 316: 0.20588235294117646, 317: 0.14705882352941177, 318: 0.20588235294117646, 319: 0.14705882352941177, 322: 0.17647058823529413, 323: 0.17647058823529413, 325: 0.14705882352941177, 326: 0.17647058823529413, 327: 0.14705882352941177, 328: 0.17647058823529413, 329: 0.17647058823529413, 330: 0.14705882352941177, 331: 0.35294117647058826, 334: 0.17647058823529413, 335: 0.17647058823529413, 336: 0.17647058823529413, 337: 0.17647058823529413, 338: 0.14705882352941177, 339: 0.17647058823529413, 342: 0.17647058823529413, 343: 0.17647058823529413, 345: 0.38235294117647056, 346: 0.23529411764705882, 347: 0.17647058823529413, 348: 0.20588235294117646, 350: 0.20588235294117646, 351: 0.17647058823529413, 352: 0.17647058823529413, 353: 0.14705882352941177, 354: 0.20588235294117646, 355: 0.14705882352941177, 356: 0.20588235294117646, 357: 0.14705882352941177, 358: 0.20588235294117646, 359: 0.14705882352941177, 360: 0.20588235294117646, 361: 0.38235294117647056, 362: 0.14705882352941177, 363: 0.20588235294117646, 364: 0.14705882352941177, 365: 0.20588235294117646, 367: 0.17647058823529413, 368: 0.23529411764705882, 382: 0.14705882352941177, 383: 0.35294117647058826, 384: 0.38235294117647056, 387: 0.14705882352941177, 390: 0.14705882352941177, 402: 0.17647058823529413, 405: 0.17647058823529413, 409: 0.4117647058823529, 410: 0.38235294117647056, 292: 0.2647058823529412, 294: 0.2647058823529412, 296: 0.2647058823529412, 300: 0.2647058823529412, 302: 0.2647058823529412, 381: 0.38235294117647056, 385: 0.35294117647058826, 386: 0.35294117647058826, 391: 0.35294117647058826, 403: 0.35294117647058826, 404: 0.35294117647058826, 408: 0.35294117647058826, 411: 0.35294117647058826}
+Duplicate timestamps in devices:
+device_ELEMNTBOLT
+times:  519575
+days:  36
+file ids:  [288 289 291 293 295 297 298 299 301 307 308 310 311 314 315 316 317 318 319 322 323 325 326 327 328 329 330 331 334 335 336 337 338 339 342 343 345 346 347 348 350 351 352 353 354 355 356 357 358 359 360 361 362 363 364 365 367 368 382 383 384 387 390 402 405 409 410]
+device_ELEMNTROAM
+times:  87908
+days:  13
+file ids:  [292 294 296 300 302 381 385 386 391 403 404 408 411]
+device_ZWIFT
+times:  0
+days:  0
+file ids:  []
+Duplicate timestamps after potentially dropping devices: 
+device_ELEMNTBOLT
+times:  519575
+days:  36
+file ids:  [288 289 291 293 295 297 298 299 301 307 308 310 311 314 315 316 317 318 319 322 323 325 326 327 328 329 330 331 334 335 336 337 338 339 342 343 345 346 347 348 350 351 352 353 354 355 356 357 358 359 360 361 362 363 364 365 367 368 382 383 384 387 390 402 405 409 410]
+device_ZWIFT
+times:  0
+days:  0
+file ids:  []
+device_ELEMNTROAM
+times:  87908
+days:  13
+file ids:  [292 294 296 300 302 381 385 386 391 403 404 408 411]
+DROPPED: 42 files with 426077 duplicate timestamps
+
+------------------------------- Athlete  13
+--------------- NAN
+-------- Remove rows fully nan
+DROPPED: 38 rows dropped due to being empty
+--------------- DEVICE
+Devices used:
+ELEMNTBOLT    268
+GARMIN          5
+Are there glucose values in the data that will be dropped with the device selection?  False
+--------------- TIMESTAMP
+-------- Timestamp: impute zwift nan
+-------- Timestamp: nan
+local timestamp not available
+times:  0
+days:  0
+file ids:  []
+local timestamp from location not available
+times:  96233
+days:  21
+file ids:  [  9  11  12  15  19  21  22  23  24  25  27  28  30  32  58  68  70  73  76  88 270]
+local timestamp OR local timestamp from location not available
+times:  96233
+days:  21
+file ids:  [  9  11  12  15  19  21  22  23  24  25  27  28  30  32  58  68  70  73  76  88 270]
+local timestamp AND local timestamp from location not available
+times:  0
+days:  0
+file ids:  []
+DROPPED: 0 files with 0 nan local timestamps (both meta and loc)
+-------- Timestamp error
+local timestamp does not equal local timestamp from location (excl. nans)
+times:  111224
+days:  16
+file ids:  [ 67 128 141 142 147 148 149 150 151 241 243 244 245 246 254 255 258]
+Dates for which this happens:
+2019-02-22
+2019-05-06
+2019-05-21
+2019-05-22
+2019-05-28
+2019-05-29
+2019-05-30
+2019-05-31
+2019-09-28
+2019-10-03
+2019-10-04
+2019-10-05
+2019-10-06
+2019-10-17
+2019-10-18
+2019-11-18
+-------- Timestamp local combine
+--------------- DUPLICATES
+-------- Entire row duplicate
+CHECK if we remove entire file by removing duplicated entries
+Dupl file_id: [len file, len dupl ts of file]
+{60: [5339, 5339], 61: [5339, 5339], 62: [11105, 11105], 63: [11105, 11105], 89: [18562, 2822], 90: [18562, 2822]}
+DROPPED: 19266 duplicate entries
+-------- Timestamp duplicate
+duplicated timestamps
+times:  15740
+days:  1
+file ids:  [90]
+duplicated local timestamps
+times:  15740
+days:  1
+file ids:  [90]
+CHECK if we remove entire file by removing duplicated timestamps
+Dupl file_id: [len file, len dupl ts of file]
+{89: [18562, 15740], 90: [15740, 15740]} 
+{89: False, 90: True}
+Percentage of missing columns per file
+{89: 0.12903225806451613, 90: 0.12903225806451613}
+Duplicate timestamps in devices:
+device_ELEMNTBOLT
+times:  31480
+days:  1
+file ids:  [89 90]
+device_GARMIN
+times:  0
+days:  0
+file ids:  []
+Duplicate timestamps after potentially dropping devices: 
+device_ELEMNTBOLT
+times:  31480
+days:  1
+file ids:  [89 90]
+DROPPED: 1 files with 15740 duplicate timestamps
+
+------------------------------- Athlete  14
+--------------- NAN
+-------- Remove rows fully nan
+DROPPED: 36 rows dropped due to being empty
+--------------- DEVICE
+Devices used:
+ELEMNTBOLT    273
+GARMIN         54
+Are there glucose values in the data that will be dropped with the device selection?  False
+--------------- TIMESTAMP
+-------- Timestamp: impute zwift nan
+-------- Timestamp: nan
+local timestamp not available
+times:  0
+days:  0
+file ids:  []
+local timestamp from location not available
+times:  51999
+days:  13
+file ids:  [  4  50  67 116 119 121 123 130 135 139 209 262 266]
+local timestamp OR local timestamp from location not available
+times:  51999
+days:  13
+file ids:  [  4  50  67 116 119 121 123 130 135 139 209 262 266]
+local timestamp AND local timestamp from location not available
+times:  0
+days:  0
+file ids:  []
+DROPPED: 0 files with 0 nan local timestamps (both meta and loc)
+-------- Timestamp error
+local timestamp does not equal local timestamp from location (excl. nans)
+times:  93943
+days:  15
+file ids:  [ 21  24  25  26  35  69  92 149 165 197 205 206 239 247 248 267]
+Dates for which this happens:
+2018-12-22
+2018-12-26
+2018-12-27
+2019-01-07
+2019-02-14
+2019-03-06
+2019-05-05
+2019-05-20
+2019-06-18
+2019-06-27
+2019-06-28
+2019-08-02
+2019-08-11
+2019-08-12
+2019-10-17
+-------- Timestamp local combine
+--------------- DUPLICATES
+-------- Entire row duplicate
+CHECK if we remove entire file by removing duplicated entries
+Dupl file_id: [len file, len dupl ts of file]  {}
+DROPPED: 0 duplicate entries
+-------- Timestamp duplicate
+duplicated timestamps
+times:  1771
+days:  1
+file ids:  [303]
+duplicated local timestamps
+times:  1771
+days:  1
+file ids:  [303]
+CHECK if we remove entire file by removing duplicated timestamps
+Dupl file_id: [len file, len dupl ts of file]
+{283: [1819, 1771], 303: [1853, 1771]} 
+{283: False, 303: False}
+Percentage of missing columns per file
+{283: 0.25, 303: 0.21875}
+Duplicate timestamps in devices:
+device_ELEMNTBOLT
+times:  0
+days:  0
+file ids:  []
+device_GARMIN
+times:  3542
+days:  1
+file ids:  [283 303]
+Duplicate timestamps after potentially dropping devices: 
+device_ELEMNTBOLT
+times:  0
+days:  0
+file ids:  []
+DROPPED: 1 files with 1853 duplicate timestamps
+
+------------------------------- Athlete  15
+--------------- NAN
+-------- Remove rows fully nan
+DROPPED: 45 rows dropped due to being empty
+--------------- DEVICE
+Devices used:
+ELEMNTBOLT    319
+Are there glucose values in the data that will be dropped with the device selection?  False
+--------------- TIMESTAMP
+-------- Timestamp: impute zwift nan
+-------- Timestamp: nan
+local timestamp not available
+times:  0
+days:  0
+file ids:  []
+local timestamp from location not available
+times:  87347
+days:  15
+file ids:  [  2  26  35  41  47  49  54  76  78  79  80  84  89 121 137 138 248 304 307 308]
+local timestamp OR local timestamp from location not available
+times:  87347
+days:  15
+file ids:  [  2  26  35  41  47  49  54  76  78  79  80  84  89 121 137 138 248 304 307 308]
+local timestamp AND local timestamp from location not available
+times:  0
+days:  0
+file ids:  []
+DROPPED: 0 files with 0 nan local timestamps (both meta and loc)
+-------- Timestamp error
+local timestamp does not equal local timestamp from location (excl. nans)
+times:  31481
+days:  4
+file ids:  [ 75 286 297 302]
+Dates for which this happens:
+2019-02-22
+2019-10-07
+2019-10-17
+2019-11-09
+-------- Timestamp local combine
+--------------- DUPLICATES
+-------- Entire row duplicate
+CHECK if we remove entire file by removing duplicated entries
+Dupl file_id: [len file, len dupl ts of file]  {}
+DROPPED: 0 duplicate entries
+-------- Timestamp duplicate
+duplicated timestamps
+times:  0
+days:  0
+file ids:  []
+duplicated local timestamps
+times:  0
+days:  0
+file ids:  []
+CHECK if we remove entire file by removing duplicated timestamps
+Dupl file_id: [len file, len dupl ts of file] {} {}
+Percentage of missing columns per file {}
+Duplicate timestamps in devices:
+device_ELEMNTBOLT
+times:  0
+days:  0
+file ids:  []
+Duplicate timestamps after potentially dropping devices: 
+device_ELEMNTBOLT
+times:  0
+days:  0
+file ids:  []
+DROPPED: 0 files with 0 duplicate timestamps
