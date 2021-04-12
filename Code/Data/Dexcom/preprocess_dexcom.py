@@ -26,9 +26,6 @@ df_excel = pd.read_excel(path+'TNN_CGM_2019.xlsx', sheet_name=None)
 df_excel['kamstra'] = df_excel.pop('Sheet4')
 df_excel['peron'].drop(0, inplace=True)
 
-dates_2019 = pd.date_range(start='12/1/2018', end='11/30/2019').date
-glucose_avail = pd.DataFrame(index=df_excel.keys(), columns=dates_2019)
-
 # --------------------- descriptives
 for i, df_i in df_excel.items():
 	print("\n------------------------------- Athlete ", i)
@@ -39,10 +36,6 @@ for i, df_i in df_excel.items():
 	ts = pd.to_datetime(df_i['Timestamp (YYYY-MM-DDThh:mm:ss)'])
 	print("First glucose measurement: ", ts.min())
 	print("Last glucose measurement: ", ts.max())
-
-	# glucose availability
-	glucose_avail.loc[i, set(ts.dt.date.unique()) & set(dates_2019)] = 1
-
 	# event types
 	print("Event types: ", df_i['Event Type'].unique())
 
@@ -57,11 +50,6 @@ for i, df_i in df_excel.items():
 	
 	print("Fraction of nans")
 	print(df_i.isna().sum() / len(df_i))
-
-glucose_avail.fillna(0, inplace=True)
-ax = sns.heatmap(glucose_avail, cmap='Blues', cbar=False) 
-plt.xticks(ticks=[d+15 for d in month_firstday.values()], labels=list(month_firstday.keys())[-1]+list(month_firstday.keys())[:-1], rotation=0)
-plt.show()
 
 # --------------------- combine, anonymize and first clean
 df = pd.DataFrame(columns=list(df_excel.values())[0].columns)
@@ -149,6 +137,10 @@ rows_nan = (df[['Insulin Value (u)', 'Carb Value (grams)', 'Duration (hh:mm:ss)'
 			& (df['Event Type'] != 'Insulin') & (df['Event Type'] != 'Health'))
 df.drop(df[rows_nan].index, inplace=True)
 print("DROPPED %s nan rows (not event type insulin or health)"%rows_nan.sum())
+
+# filter date range
+df = df[(df.local_timestamp.dt.date < datetime.date(2019,12,1)) & (df.local_timestamp.dt.date >= datetime.date(2018,12,1))]
+print("DROPPED entries after 30-11-2019 or before 01-12-2018")
 
 df.reset_index(drop=True, inplace=True)
 
