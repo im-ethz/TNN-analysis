@@ -534,6 +534,9 @@ for i in athletes:
 
 	del df
 
+# TODO: filter out training sessions for which a whole column is missing
+# TODO: remove training sessions for which there is no distance at all
+
 # TODO: find out what happened when there are large gaps in the data
 # TODO: calculate values (statistics) on a training-level
 # TODO: elevation_gain, acceleartion and accumulated power now contain extreme values when a large shift in time is made within a training

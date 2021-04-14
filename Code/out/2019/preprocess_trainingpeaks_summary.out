@@ -20,10 +20,10 @@ Get timezone of Zwift files for the following dates:
 2019-03-08
 2019-03-13
 2019-03-15
-2019-11-17
-2019-11-19
 2019-03-27
 2019-04-04
+2019-11-17
+2019-11-19
 -------- Timestamp: nan
 local timestamp not available
 times:  0
@@ -50,14 +50,14 @@ file ids:  [ 68  88  89 149 243 221 222 227 337 338]
 Dates for which this happens:
 2019-02-14
 2019-03-06
+2019-03-07
+2019-03-08
 2019-03-09
 2019-05-25
-2019-09-24
 2019-09-10
 2019-09-11
 2019-09-12
-2019-03-07
-2019-03-08
+2019-09-24
 -------- Timestamp local combine
 --------------- DUPLICATES
 -------- Entire row duplicate
@@ -166,7 +166,6 @@ Are there glucose values in the data that will be dropped with the device select
 -------- Timestamp: impute zwift nan
 Get timezone of Zwift files for the following dates: 
 2019-01-29
-2019-05-07
 2019-02-01
 2019-02-03
 2019-02-05
@@ -187,6 +186,7 @@ Get timezone of Zwift files for the following dates:
 2019-03-27
 2019-05-03
 2019-05-06
+2019-05-07
 -------- Timestamp: nan
 local timestamp not available
 times:  112779
@@ -279,11 +279,11 @@ Are there glucose values in the data that will be dropped with the device select
 --------------- TIMESTAMP
 -------- Timestamp: impute zwift nan
 Get timezone of Zwift files for the following dates: 
-2019-01-30
 2018-12-09
 2018-12-10
 2018-12-11
 2018-12-29
+2019-01-30
 2019-03-13
 -------- Timestamp: nan
 local timestamp not available
@@ -309,15 +309,15 @@ times:  72689
 days:  9
 file ids:  [  8  87  88 119 298 135 334 335]
 Dates for which this happens:
-2018, 12, 9
-2019, 2, 22
-2019, 2, 23
-2019, 3, 25
-2019, 11, 5
-2019, 4, 6
-2019, 4, 7
-2018, 12, 10
-2018, 12, 11
+2018-12-09
+2018-12-10
+2018-12-11
+2019-02-22
+2019-02-23
+2019-03-25
+2019-04-06
+2019-04-07
+2019-11-05
 -------- Timestamp local combine
 --------------- DUPLICATES
 -------- Entire row duplicate
@@ -392,13 +392,10 @@ Get timezone of Zwift files for the following dates:
 2019-01-07
 2019-01-08
 2019-01-17
-2019-08-16
 2019-01-30
 2019-02-01
 2019-02-02
-2019-09-06
 2019-02-04
-2019-09-11
 2019-02-06
 2019-02-08
 2019-02-10
@@ -407,6 +404,9 @@ Get timezone of Zwift files for the following dates:
 2019-03-08
 2019-03-15
 2019-03-16
+2019-08-16
+2019-09-06
+2019-09-11
 2019-11-26
 2019-11-28
 -------- Timestamp: nan
@@ -561,6 +561,7 @@ times:  76028
 days:  3
 file ids:  [122 123 173 174 286 287]
 DROPPED: 3 files with 44953 duplicate timestamps
+
 ------------------------------- Athlete  10
 --------------- NAN
 -------- Remove rows fully nan
@@ -602,10 +603,12 @@ days:  25
 file ids:  [ 67  69  90  92 101 128 140 157 184 185 186 187 211 244 245 246 247 277 278 279 284 297 298 299 359 360 362 363]
 Dates for which this happens:
 2019-01-29
+2019-01-30
 2019-01-31
 2019-02-22
 2019-02-24
 2019-03-05
+2019-03-06
 2019-04-06
 2019-04-18
 2019-05-05
@@ -624,8 +627,6 @@ Dates for which this happens:
 2019-10-07
 2019-10-08
 2019-10-09
-2019-01-30
-2019-03-06
 -------- Timestamp local combine
 --------------- DUPLICATES
 -------- Entire row duplicate
