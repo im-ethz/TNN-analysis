@@ -9,11 +9,14 @@ import matplotlib
 from matplotlib import pyplot as plt
 from matplotlib import cm
 from matplotlib import dates as mdates
+from matplotlib.patches import Patch
 
 from mpl_toolkits.axes_grid1 import host_subplot
 from mpl_toolkits import axisartist as AA
 
 from statsmodels.graphics.tsaplots import plot_acf
+
+from colorsys import rgb_to_hls
 
 from calc import glucose_levels
 # TODO: adjust plotsize plot interp_subplots
@@ -29,8 +32,11 @@ def custom_colormap(base, cmin, cmax, n):
 	cmap_custom = cmap_base.from_list(base+str(n), cmap_base(np.linspace(cmin, cmax, n)), n)
 	return cmap_custom
 
-def plot_glucose_levels(ax):
-	glucose_palette = sns.diverging_palette(10, 50, n=5)[:3] + sns.diverging_palette(10, 50, n=7)[4:6]
+def plot_glucose_levels(ax, color=True):
+	if color:
+		glucose_palette = sns.diverging_palette(10, 50, n=5)[:3] + sns.diverging_palette(10, 50, n=7)[4:6]
+	else:
+		glucose_palette = sns.diverging_palette(10, 10, s=0, n=5)
 	# annotate glucose levels
 	for i, (g, l) in enumerate(glucose_levels.items()):
 		ax.axvspan(l[0], l[1], alpha=0.2, color=glucose_palette[i])

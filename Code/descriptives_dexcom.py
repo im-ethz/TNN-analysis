@@ -9,6 +9,7 @@ from calc import *
 
 path = 'Data/Dexcom/'
 path_trainingpeaks = 'Data/TrainingPeaks/2019/clean2/'
+savepath = 'Descriptives/'
 
 athletes = sorted([int(i.rstrip('.csv')) for i in os.listdir(path_trainingpeaks)])
 
@@ -172,23 +173,218 @@ ts_day.drop_duplicates(inplace=True)
 df_glucose_day = pd.merge(df_glucose, ts_day, how='inner', on=['RIDER','local_timestamp'], validate='one_to_one')
 df_glucose_day.to_csv('Data/Dexcom/dexcom_clean_day.csv')
 
-# -------------------------- Descriptives
 
+# -------------------------- Glucose distributions
+# TODO: extremes??
+
+col = 'Glucose Value (mg/dL)'
+
+# plot all glucose data that we have
+fig, ax0 = plt.subplots()
+ax0 = plot_glucose_levels(ax0, color=False)
+ax = ax0.twinx()
+
+sns.kdeplot(df_glucose[col], ax=ax, linewidth=2,
+	label=r'all ($\mu = {:.1f}$ $\sigma/\mu = {:.0f}\%$)'\
+	.format(df_glucose[col].mean(), df_glucose[col].std()/df_glucose[col].mean()*100))
+
+ax.set_xlim((20, 410))
+ax.set_xlabel(col)
+ax.set_ylabel('Probability')
+ax.yaxis.set_ticks_position('left')
+ax.yaxis.set_label_position('left')
+ax0.yaxis.set_visible(False)
+ax0.set_ylabel('')
+plt.legend(loc='upper right', bbox_to_anchor=(0.98, 0.93), prop={'family': 'DejaVu Sans Mono'})
+plt.savefig(savepath+'hist_glucose.pdf', bbox_inches='tight')
+plt.savefig(savepath+'hist_glucose.png', dpi=300, bbox_inches='tight')
+plt.show()
+plt.close()
+
+# divide glucose in sections
+df_glucose_ = { 'day     '	: pd.read_csv('Data/Dexcom/dexcom_clean_day.csv', index_col=0),
+				'wake    '	: pd.read_csv('Data/Dexcom/dexcom_clean_wake.csv', index_col=0),
+				'training'	: pd.read_csv('Data/Dexcom/dexcom_clean_training.csv', index_col=0),
+				'after   '	: pd.read_csv('Data/Dexcom/dexcom_clean_after.csv', index_col=0),
+				'sleep   '	: pd.read_csv('Data/Dexcom/dexcom_clean_sleep.csv', index_col=0)}
+
+# plot hue stages
+type_palette = sns.color_palette("Set1")
+
+fig, ax0 = plt.subplots()
+ax0 = plot_glucose_levels(ax0, color=False)
+ax = ax0.twinx()
+
+for k, sec in enumerate(df_glucose_.keys()):
+	sns.kdeplot(df_glucose_[sec][col], ax=ax, linewidth=2, color=type_palette[k],
+		label=sec+r' ($\mu = {:.1f}$ $\sigma/\mu = {:.0f}\%$)'.format(df_glucose_[sec][col].mean(), df_glucose_[sec][col].std()/df_glucose_[sec][col].mean()*100))
+
+ax.set_xlim((20, 410))
+ax.set_xlabel(col)
+ax.set_ylabel('Probability')
+ax.yaxis.set_ticks_position('left')
+ax.yaxis.set_label_position('left')
+ax0.yaxis.set_visible(False)
+ax0.set_ylabel('')
+plt.legend(loc='upper right', bbox_to_anchor=(0.98, 0.93), prop={'family': 'DejaVu Sans Mono'})
+plt.savefig(savepath+'hist_glucose_sec.pdf', bbox_inches='tight')
+plt.savefig(savepath+'hist_glucose_sec.png', dpi=300, bbox_inches='tight')
+plt.show()
+plt.close()
+
+# plot for athletes individually, hue: stages
+for i in df_glucose.RIDER.unique():
+	type_palette = sns.color_palette("Set1")
+
+	fig, ax0 = plt.subplots()
+	ax0 = plot_glucose_levels(ax0, color=False)
+	ax = ax0.twinx()
+
+	for k, sec in enumerate(df_glucose_.keys()):
+		sns.kdeplot(df_glucose_[sec][df_glucose_[sec].RIDER == i][col], ax=ax, linewidth=2, color=type_palette[k],
+			label=sec+r' ($\mu = {:.1f}$ $\sigma/\mu = {:.0f}\%$)'\
+			.format(df_glucose_[sec][df_glucose_[sec].RIDER == i][col].mean(), 
+					df_glucose_[sec][df_glucose_[sec].RIDER == i][col].std()/df_glucose_[sec][df_glucose_[sec].RIDER == i][col].mean()*100))
+
+	ax.set_xlim((20, 410))
+	ax.set_xlabel(col)
+	ax.set_ylabel('Probability')
+	ax.yaxis.set_ticks_position('left')
+	ax.yaxis.set_label_position('left')
+	ax0.yaxis.set_visible(False)
+	ax0.set_ylabel('')
+	plt.title('Rider %s'%i, y=1.06)
+	plt.legend(loc='upper right', bbox_to_anchor=(0.98, 0.93), prop={'family': 'DejaVu Sans Mono'})
+	plt.savefig(savepath+'hist_glucose_sec_%s.pdf'%i, bbox_inches='tight')
+	plt.savefig(savepath+'hist_glucose_sec_%s.png'%i, dpi=300, bbox_inches='tight')
+	plt.show()
+	plt.close()
+
+# plot hue athletes
+type_palette = sns.color_palette("viridis_r", n_colors=11)
+
+fig, ax0 = plt.subplots()
+ax0 = plot_glucose_levels(ax0, color=False)
+ax = ax0.twinx()
+
+for c, i in enumerate(athletes):
+	sns.kdeplot(df_glucose[df_glucose.RIDER == i][col], ax=ax, 
+		linewidth=1.5, color=type_palette[c], alpha=.8,
+		label=str(i)+r' ($\mu = {:.1f}$ $\sigma/\mu = {:.0f}\%$)'\
+		.format(df_glucose[df_glucose.RIDER == i][col].mean(), 
+				df_glucose[df_glucose.RIDER == i][col].std()/df_glucose[df_glucose.RIDER == i][col].mean()*100))
+
+ax.set_xlim((20, 410))
+ax.set_xlabel(col)
+ax.set_ylabel('Probability')
+ax.yaxis.set_ticks_position('left')
+ax.yaxis.set_label_position('left')
+ax0.yaxis.set_visible(False)
+ax0.set_ylabel('')
+plt.legend(loc='upper right', bbox_to_anchor=(0.98, 0.93), prop={'family': 'DejaVu Sans Mono'})
+plt.savefig(savepath+'hist_glucose_riders.pdf', bbox_inches='tight')
+plt.savefig(savepath+'hist_glucose_riders.png', dpi=300, bbox_inches='tight')
+plt.show()
+plt.close()
+
+# plot for stages individually, hue: athletes
+for k, sec in enumerate(df_glucose_.keys()):
+	type_palette = {'day     '	: sns.color_palette('Reds', n_colors=11),
+					'wake    '	: sns.color_palette('Blues', n_colors=11),
+					'training'	: sns.color_palette('Greens', n_colors=11),
+					'after   '	: sns.color_palette('Purples', n_colors=11),
+					'sleep   '	: sns.color_palette('Oranges', n_colors=11)}
+
+	fig, ax0 = plt.subplots()
+	ax0 = plot_glucose_levels(ax0, color=False)
+	ax = ax0.twinx()
+
+	for c, i in enumerate(athletes):
+		sns.kdeplot(df_glucose_[sec][df_glucose_[sec].RIDER == i][col], ax=ax, 
+			linewidth=1.5, color=type_palette[sec][c], alpha=.8,
+			label=str(i)+r' ($\mu = {:.1f}$ $\sigma/\mu = {:.0f}\%$)'\
+			.format(df_glucose_[sec][df_glucose_[sec].RIDER == i][col].mean(), 
+					df_glucose_[sec][df_glucose_[sec].RIDER == i][col].std()/df_glucose_[sec][df_glucose_[sec].RIDER == i][col].mean()*100))
+
+	ax.set_xlim((20, 410))
+	ax.set_xlabel(col)
+	ax.set_ylabel('Probability')
+	ax.yaxis.set_ticks_position('left')
+	ax.yaxis.set_label_position('left')
+	ax0.yaxis.set_visible(False)
+	ax0.set_ylabel('')
+	plt.title(sec.rstrip(), y=1.06)
+	plt.legend(loc='upper right', bbox_to_anchor=(0.98, 0.93), prop={'family': 'DejaVu Sans Mono'})
+	plt.savefig(savepath+'hist_glucose_%s.pdf'%sec.rstrip(), bbox_inches='tight')
+	plt.savefig(savepath+'hist_glucose_%s.png'%sec.rstrip(), dpi=300, bbox_inches='tight')
+	plt.show()
+	plt.close()
+
+
+# -------------------------- Glucose barcharts
 # TODO: also plot extremes
 
-# select glucose data only on the days that there is a training
+# TODO: time spent in ...
+# TODO: either this or impute and then time spent in hypo (kind of depends if there are less measurements when someone is in hypo)
 
-# descriptives
-inclusion: minimum of 14 consecutive days of data with approximately 70% of possible CGM readings over those 14 days
+def get_percinlevel(df, col='Glucose Value (mg/dL)', extreme=False):
+	pil = {level: ((df[col] >= lmin) & (df[col] <= lmax)).sum() / len(df)*100 for level, (lmin, lmax) in glucose_levels.items()}
+	if extreme:
+		pil['High'] = (df[col+' EXTREME'] == 'High').sum() / len(df)*100
+		pil['Low'] = (df[col+' EXTREME'] == 'Low').sum() / len(df)*100
+	return pil
 
-calculate metrics for the following blocks:
-- sleep (24-6)
-- wake (6-24)
-- all
-- trainingpeaks
+def plot_barh(data, y, height=.5, colors=dict(h_neg=10, h_pos=10, s=0, l=50)):
+	color_palette = sns.diverging_palette(**colors, n=5)
+	left = 0
+	for i, (label, x) in enumerate(data.items()):
+		plt.barh(y=y, width=x, height=height, left=left, color=color_palette[i])
+		left += x
 
-mean glucose
-percentage time in hypo L2, L1, target, hyper L1, L2
-glycemic variability (CV and SD)
-eA1c (estimated HbA1c)
+colors = [dict(zip(['h_neg', 'h_pos', 'l', 's'], [c[0]*360, c[0]*360, c[1]*100, c[2]*100])) \
+			for c in [rgb_to_hls(*j) for j in sns.color_palette("Set1")]]
 
+legend_elements = [Patch(facecolor=c, edgecolor='white', label=l) \
+					for c, l in zip(sns.diverging_palette(10, 10, s=0, n=5), pil.keys())] 
+
+# plot for all athletes, hue: stages
+fig, ax = plt.subplots()
+for k, sec in enumerate(df_glucose_.keys()):
+	pil = get_percinlevel(df_glucose_[sec])
+	plot_barh(pil, y=k, colors=colors[k])
+
+plt.xticks(np.arange(0, 101, 20), ['{}%'.format(j) for j in np.arange(0, 101, 20)])
+plt.yticks(np.arange(len(df_glucose_.keys())), [j.rstrip() for j in df_glucose_.keys()])
+plt.xlim((0,100))
+plt.xlabel('CGM readings')
+
+ax.legend(handles=legend_elements, ncol=5, loc='lower center', bbox_to_anchor=(0.5, 1.01))
+ax.xaxis.grid(True)
+sns.despine(left=True, bottom=True, right=True)
+
+plt.savefig(savepath+'timeperc_in_glucoselevel.pdf', bbox_inches='tight')
+plt.savefig(savepath+'timeperc_in_glucoselevel.png', dpi=300, bbox_inches='tight')
+plt.show()
+plt.close()
+
+# stratify by athlete, hue: stages
+for i in athletes:
+	fig, ax = plt.subplots()
+	for k, sec in enumerate(df_glucose_.keys()):
+		pil = get_percinlevel(df_glucose_[sec][df_glucose_[sec].RIDER == i])
+		plot_barh(pil, y=k, colors=colors[k])
+
+	plt.xticks(np.arange(0, 101, 20), ['{}%'.format(j) for j in np.arange(0, 101, 20)])
+	plt.yticks(np.arange(len(df_glucose_.keys())), [j.rstrip() for j in df_glucose_.keys()])
+	plt.xlim((0,100))
+	plt.xlabel('CGM readings')
+	plt.title('Rider %s'%i, y=1.09)
+
+	ax.legend(handles=legend_elements, ncol=5, loc='lower center', bbox_to_anchor=(0.5, 1.01))
+	ax.xaxis.grid(True)
+	sns.despine(left=True, bottom=True, right=True)
+
+	plt.savefig(savepath+'timeperc_in_glucoselevel_%s.pdf'%i, bbox_inches='tight')
+	plt.savefig(savepath+'timeperc_in_glucoselevel_%s.png'%i, dpi=300, bbox_inches='tight')
+	plt.show()
+	plt.close()
