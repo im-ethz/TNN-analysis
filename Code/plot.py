@@ -233,7 +233,7 @@ class PlotData:
 		plt.show()
 		plt.close()
 
-	def plot_feature_correlation(self, df, i, cols, ticks=None, ticklocs=None):
+	def plot_feature_correlation(self, df, cols, ticks=None, ticklocs=None):
 		if ticks is None:
 			ticks = cols
 		corr = df[cols].corr()
@@ -245,8 +245,8 @@ class PlotData:
 		ax.xaxis.tick_top()
 		plt.xlabel('')
 		plt.ylabel('')
-		plt.savefig(self.savedir+'corr_'+str(i)+'.pdf', bbox_inches='tight')
-		plt.savefig(self.savedir+'corr_'+str(i)+'.png', dpi=300, bbox_inches='tight')
+		plt.savefig(self.savedir+'corr_'+self.savetext+'_'+str(self.athlete)+'.pdf', bbox_inches='tight')
+		plt.savefig(self.savedir+'corr_'+self.savetext+'_'+str(self.athlete)+'.png', dpi=300, bbox_inches='tight')
 		plt.show()
 		plt.close()
 

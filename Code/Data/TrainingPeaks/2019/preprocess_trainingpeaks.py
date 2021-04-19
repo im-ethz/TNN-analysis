@@ -1,8 +1,6 @@
 # TODO: include units in column names (not possible for now, maybe saved units wrong..)
 # TODO: remove duplicate timestamps
-# TODO: keep in mind that with filling the glucose values, we still have some duplicate timestamps in there
 # TODO: instead of deleting data for which both local timestamps are not incorrect, try finding out which one is the right one (if you overlap it with Libre)
-# TODO: duplicate rows: what to do if only part of the file contains duplicate timestamps?
 import os
 import sys
 sys.path.append(os.path.abspath('../../../'))
@@ -634,4 +632,4 @@ for i in athletes:
 
 	# TODO: clean more features here, and add some as well
 
-	df.to_csv(path+'clean2/'+str(i)+'/'+str(i)+'_data.csv', index_label=False)
+	df.to_csv(path+'clean3/'+str(i)+'/'+str(i)+'_data.csv', index_label=False)

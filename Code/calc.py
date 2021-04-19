@@ -43,9 +43,9 @@ def intensity_factor(NP, FTP):
 	# calculate intensity factor (IF) as ratio between normalised power (NP) and functional threshold power (FTP)
 	return NP/FTP
 
-def training_stress_score(t, IF):
-	# calculate training stress score (TSS) using duration of workout in seconds (t) and intensity factor (IF)
-	return 100 * (t/3600) * IF**2 
+def training_stress_score(T, IF):
+	# calculate training stress score (TSS) using duration of workout in seconds (T) and intensity factor (IF)
+	return 100 * (T/3600) * IF**2 
 
 def chronic_training_load(TSS: pd.Series):
 	# calculate chronic training load (CTL) (fitness)
