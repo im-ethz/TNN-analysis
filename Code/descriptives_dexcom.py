@@ -175,7 +175,6 @@ df_glucose_day.to_csv('Data/Dexcom/dexcom_clean_day.csv')
 
 
 # -------------------------- Glucose distributions
-# TODO: extremes??
 def plot_hist_glucose_settings(ax, ax0, col, xlim=(20,410), ylabel='Probability', loc_legend=(0.98, 0.93)):
 	ax.set_xlim((20, 410))
 	ax.set_xlabel(col)
@@ -331,15 +330,10 @@ for k, sec in enumerate(df_glucose_.keys()):
 
 
 # -------------------------- Glucose barcharts
-# TODO: also plot extremes
 # TODO: either this or impute and then time spent in hypo (kind of depends if there are less measurements when someone is in hypo)
 
-def get_percinlevel(df, col='Glucose Value (mg/dL)', extreme=False):
-	pil = {level: ((df[col] >= lmin) & (df[col] <= lmax)).sum() / len(df)*100 for level, (lmin, lmax) in glucose_levels.items()}
-	if extreme:
-		pil['High'] = (df[col+' EXTREME'] == 'High').sum() / len(df)*100
-		pil['Low'] = (df[col+' EXTREME'] == 'Low').sum() / len(df)*100
-	return pil
+def get_percinlevel(df, col='Glucose Value (mg/dL)'):
+	return = {level: ((df[col] >= lmin) & (df[col] <= lmax)).sum() / len(df)*100 for level, (lmin, lmax) in glucose_levels.items()}
 
 def plot_barh(data, y, height=.5, colors=dict(h_neg=10, h_pos=10, s=0, l=50)):
 	color_palette = sns.diverging_palette(**colors, n=5)

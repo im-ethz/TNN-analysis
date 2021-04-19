@@ -1,7 +1,7 @@
-# TODO: check what transmitter time is
-# TODO: check which values we should replace low and high with
 # TODO: check if we indeed can use event subtype to fill extremes with
 # TODO: check why there can be duplicate timestamps again
+# TODO: why duplicates (doesn't matter though, just remove)
+# TODO: why duplicate timestamps in there?
 import os
 import sys
 sys.path.append(os.path.abspath('../../'))
@@ -15,7 +15,7 @@ from pandas_profiling import ProfileReport
 
 from plot import *
 from helper import *
-from calc import mmoll_mgdl
+from calc import *
 from config import rider_mapping
 
 path = './'
@@ -111,6 +111,12 @@ df.loc[mask_subtype, 'Glucose Value (mg/dL) EXTREME'] = df.loc[mask_subtype, 'Gl
 df.loc[mask_subtype, 'Event Subtype'] = np.nan
 print("FILLNA Glucose Value mg/dL EXTREME with Event Subtype")
 
+# replace low and high with 40 and 400
+df['Glucose Value (mg/dL)'].fillna(df['Glucose Value (mg/dL) EXTREME'].replace({'Low':40., 'High':400.}), inplace=True)
+df.drop('Glucose Value (mg/dL) EXTREME', axis=1, inplace=True)
+print("REPLACE Low with 40 and High with 400")
+print("FILLNA Glucose Value mg/dL with EXTREME 40 (Low) and 400 (High)")
+
 df.sort_values(['RIDER', 'local_timestamp', 'Event Type', 'Event Subtype', 'Transmitter Time (Long Integer)'], inplace=True)
 df.reset_index(drop=True, inplace=True)
 
@@ -133,7 +139,7 @@ df.reset_index(drop=True, inplace=True)
 print("DROPPED %s duplicate timestamps (per rider, event type and event subtype)"%df_dupl.duplicated(subset=cols_dupl).sum())
 
 # check for nan rows
-rows_nan = (df[['Insulin Value (u)', 'Carb Value (grams)', 'Duration (hh:mm:ss)', 'Glucose Value (mg/dL)', 'Glucose Value (mg/dL) EXTREME']].isna().all(axis=1)
+rows_nan = (df[['Insulin Value (u)', 'Carb Value (grams)', 'Duration (hh:mm:ss)', 'Glucose Value (mg/dL)']].isna().all(axis=1)
 			& (df['Event Type'] != 'Insulin') & (df['Event Type'] != 'Health'))
 df.drop(df[rows_nan].index, inplace=True)
 print("DROPPED %s nan rows (not event type insulin or health)"%rows_nan.sum())
