@@ -21,20 +21,48 @@
 */__pycache__/
 *.pyc
 
+/Code/Data/Dexcom/*.csv
+/Code/Data/Dexcom/TNN_CGM_2019.xlsx
+/Code/Data/Dexcom/_bin/*
+
+/Code/Data/LibreView/clean/*
+/Code/Data/LibreView/raw_anonymous/*
 /Code/Data/LibreView/raw/*
 /Code/Data/LibreView/_bin/*
 
+/Code/Data/TrainingPeaks/2019/clean2/*
+/Code/Data/TrainingPeaks/2019/clean/*
+/Code/Data/TrainingPeaks/2019/combine/*
+/Code/Data/TrainingPeaks/2019/csv/*
+/Code/Data/TrainingPeaks/2019/fit/*
+/Code/Data/TrainingPeaks/2019/raw_anonymous/*
 /Code/Data/TrainingPeaks/2019/raw/*
 /Code/Data/TrainingPeaks/2019/_bin/*
 
+/Code/Data/TrainingPeaks/2020/clean2/*
+/Code/Data/TrainingPeaks/2020/clean/*
+/Code/Data/TrainingPeaks/2020/combine/*
+/Code/Data/TrainingPeaks/2020/csv/*
+/Code/Data/TrainingPeaks/2020/fit/*
+/Code/Data/TrainingPeaks/2020/raw_anonymous/*
 /Code/Data/TrainingPeaks/2020/raw/*
 /Code/Data/TrainingPeaks/2020/_bin/*
 
+/Code/Data/TrainingPeaks+Dexcom/*.csv
+/Code/Data/TrainingPeaks+Dexcom/_bin/*
+
+/Code/Data/TrainingPeaks+LibreView/resample_1min/*
+/Code/Data/TrainingPeaks+LibreView/1sec/*
+/Code/Data/TrainingPeaks+LibreView/raw/*
 /Code/Data/TrainingPeaks+LibreView/_bin/*
 
+/Code/Data/calendar/calendar_2019_anonymous.csv
 /Code/Data/calendar/2019_WorkoutsSummary.xls
+
+/Code/Data/fitness/fitness_analysis_2019_anonymous.csv
 /Code/Data/fitness/TEST ANALYSIS Dec_2018.xlsx
-/Code/Data/Dexcom/TNN_CGM_2019.xlsx
+
+/Code/Data/info/*
 
 /Doc/*.log
 /Doc/*.aux
