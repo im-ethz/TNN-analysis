@@ -20,9 +20,9 @@ df_glucose = pd.read_csv(path+'dexcom_clean.csv', index_col=0)
 df_glucose['local_timestamp'] = pd.to_datetime(df_glucose['local_timestamp'])
 
 # select glucose measurements
-df_glucose = df_glucose[((df_glucose['Event Type'] == 'EGV') | (df_glucose['Event Type'] == 'Calibration'))]
+df_glucose = df_glucose[df_glucose['Event Type'] == 'EGV']
 
-# -------------------------- Glucose availability
+# -------------------------- Glucose availability (1)
 # create calendar with glucose availability
 dates_2019 = pd.date_range(start='12/1/2018', end='11/30/2019').date
 glucose_avail = pd.DataFrame(index=df_glucose.RIDER.unique(), columns=dates_2019)
@@ -55,27 +55,59 @@ plt.savefig('Descriptives/glucose_availability_month_all.png', dpi=300, bbox_inc
 plt.show()
 plt.close()
 
+# -------------------------- Max measurements
+
 # measurements per day per athlete
 df_glucose['date'] = df_glucose['local_timestamp'].dt.date
 
-glucose_count = df_glucose.groupby(['RIDER', 'date'])['local_timestamp'].nunique()
+glucose_count = df_glucose.groupby(['RIDER', 'date'])['local_timestamp', 'Event Type', 'Event Subtype', 'Source Device ID', 'Transmitter ID'].nunique()
 
-glucose_count = pd.merge(glucose_count, 
-	df_glucose[df_glucose['Event Type'] == 'EGV'].groupby(['RIDER', 'date'])['local_timestamp'].nunique().rename('egv'),
-	how='left', on=['RIDER', 'date'], validate='one_to_one')
-
-glucose_count.index.set_levels(glucose_count.index.levels[1].date, level=1, inplace=True)
-
-glucose_count = pd.merge(glucose_count, 
-	df_glucose[df_glucose['Event Type'] == 'Calibration'].groupby(['RIDER', 'date'])['local_timestamp'].nunique().rename('calibration'),
-	how='left', on=['RIDER', 'date'], validate='one_to_one')
-
+# glucose file with readings more than the max per day
 max_readings = 24*60/5
-
 print("Days with more than the max number of readings:\n",
-	glucose_count[glucose_count['egv'] > max_readings])
-print("Day after days with more than the max number of readings:\n",
-	glucose_count[(glucose_count['egv'] > max_readings).shift().fillna(False)])
+	glucose_count[glucose_count['local_timestamp'] > max_readings])
+print("Days with glucose more than 300:\n",
+	glucose_count[glucose_count['local_timestamp'] > 300])
+
+# save clean glucose file with max readings exceeded
+df_glucose_exceed = pd.DataFrame(columns=df_glucose.columns)
+glucose_exceed = glucose_count[glucose_count['local_timestamp'] > max_readings]
+glucose_exceed.to_csv(path+'exceed/glucose_exceed.csv')
+for r, d in glucose_exceed.index:
+	df_glucose_exceed = df_glucose_exceed.append(df_glucose[(df_glucose.RIDER == r) & (df_glucose.date == d)])
+df_glucose_exceed.to_csv(path+'exceed/dexcom_clean_exceed.csv')
+
+# save raw glucose file with max readings exceeded
+df_glucose_raw = pd.read_csv(path+'dexcom_raw.csv', index_col=0)
+df_glucose_raw['local_timestamp'] = pd.to_datetime(df_glucose_raw['local_timestamp'])
+df_glucose_raw.sort_values(['RIDER', 'local_timestamp', 'Event Type', 'Event Subtype', 'Transmitter Time (Long Integer)'], inplace=True)
+df_glucose_raw.reset_index(drop=True, inplace=True)
+df_glucose_raw['date'] = df_glucose_raw['local_timestamp'].dt.date
+
+df_glucose_exceed_raw = pd.DataFrame(columns=df_glucose_raw.columns)
+for r, d in glucose_exceed.index:
+	print(r,d)
+	df_glucose_exceed_raw = df_glucose_exceed_raw.append(df_glucose_raw[(df_glucose_raw.RIDER == r) & (df_glucose_raw.date == d)])
+df_glucose_exceed_raw.to_csv(path+'exceed/dexcom_raw_exceed.csv')
+del df_glucose_exceed_raw, df_glucose_raw
+
+for i, (r, d) in enumerate(glucose_exceed.index):
+	df_glucose_exceed_i = df_glucose_exceed[(df_glucose_exceed.RIDER == r) & (df_glucose_exceed.date == d) & (df_glucose_exceed['Event Type'] == 'EGV')]
+	df_glucose_exceed_i['min'] = df_glucose_exceed_i['local_timestamp'].dt.round('min')
+	df_glucose_exceed_i['dupl'] = df_glucose_exceed_i['min'].duplicated(keep=False).astype(int)
+
+	ax = sns.scatterplot(df_glucose_exceed_i['local_timestamp'], df_glucose_exceed_i['Glucose Value (mg/dL)'], hue=df_glucose_exceed_i['dupl'])
+	ax.xaxis.set_major_locator(matplotlib.dates.HourLocator(interval=4))   # every 4 hours
+	ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter('%H:%M'))  # hours and minutes
+
+	plt.title('Rider %s - %s'%(r,d))
+	plt.ylabel('Glucose Value (mg/dL) EGV')
+	plt.savefig(path+'exceed/glucose_%s_%s.pdf'%(r,d), bbox_inches='tight')
+	plt.savefig(path+'exceed/glucose_%s_%s.png'%(r,d), dpi=300, bbox_inches='tight')
+	plt.show()
+	plt.close()
+
+
 """
 overlap: 
 6 2018-12-09
@@ -83,6 +115,8 @@ overlap:
 6 2019-10-02
 10 2019-04-18
 """
+# -------------------------- Glucose availability (2)
+
 glucose_avail_perc = glucose_count['local_timestamp'].unstack() / max_readings
 glucose_avail_perc.fillna(0, inplace=True)
 
