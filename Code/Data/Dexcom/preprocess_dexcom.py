@@ -23,8 +23,8 @@ if not os.path.exists(path+'dupl/'):
 	os.mkdir(path+'dupl/')
 if not os.path.exists(path+'exceed/'):
 	os.mkdir(path+'exceed/')
-if not os.path.exists(path+'exceed/without_dupl/'):
-	os.mkdir(path+'exceed/without_dupl/')
+if not os.path.exists(path+'short/'):
+	os.mkdir(path+'short/')
 
 df_excel = pd.read_excel(path+'TNN_CGM_2019.xlsx', sheet_name=None)
 
@@ -169,10 +169,9 @@ matplotlib.use('TkAgg')
 # plot duplicates
 for i, (r, d) in enumerate(count_dupl_ts.index):
 	df_dupl_ts_i = df[(df.RIDER == r) & (df.date == d) & (df['Event Type'] == 'EGV')]
-	df_dupl_ts_i['min'] = df_dupl_ts_i['local_timestamp'].dt.round('min')
-	df_dupl_ts_i['dupl'] = df_dupl_ts_i['min'].duplicated(keep=False).astype(int)
 
-	ax = sns.scatterplot(df_dupl_ts_i['local_timestamp'], df_dupl_ts_i['Glucose Value (mg/dL)'], hue=df_dupl_ts_i['dupl'])
+	ax = sns.scatterplot(df_dupl_ts_i['local_timestamp'], df_dupl_ts_i['Glucose Value (mg/dL)'], 
+		hue=df_dupl_ts_i[cols_dupl_ts].duplicated(keep=False))
 	ax.xaxis.set_major_locator(matplotlib.dates.HourLocator(interval=4))   # every 4 hours
 	ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter('%H:%M'))  # hours and minutes
 
@@ -182,6 +181,7 @@ for i, (r, d) in enumerate(count_dupl_ts.index):
 	plt.savefig(path+'dupl/glucose_%s_%s.png'%(r,d), dpi=300, bbox_inches='tight')
 	plt.show()
 	plt.close()
+# note sometimes no hue because duplicated are not in EGV
 
 df.reset_index(drop=True, inplace=True)
 
@@ -206,7 +206,8 @@ for i, (r, d) in enumerate(count_exceed.index):
 	df_exceed_i['min'] = df_exceed_i['local_timestamp'].dt.round('min')
 	df_exceed_i['dupl'] = df_exceed_i['min'].duplicated(keep=False).astype(int)
 
-	ax = sns.scatterplot(df_exceed_i['local_timestamp'], df_exceed_i['Glucose Value (mg/dL)'], hue=df_exceed_i['dupl'])
+	ax = sns.scatterplot(df_exceed_i['local_timestamp'], df_exceed_i['Glucose Value (mg/dL)'], 
+		hue=df_exceed_i['dupl'])
 	ax.xaxis.set_major_locator(matplotlib.dates.HourLocator(interval=4))   # every 4 hours
 	ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter('%H:%M'))  # hours and minutes
 
@@ -214,6 +215,29 @@ for i, (r, d) in enumerate(count_exceed.index):
 	plt.ylabel('Glucose Value (mg/dL) EGV')
 	plt.savefig(path+'exceed/glucose_%s_%s.pdf'%(r,d), bbox_inches='tight')
 	plt.savefig(path+'exceed/glucose_%s_%s.png'%(r,d), dpi=300, bbox_inches='tight')
+	plt.close()
+
+# interval within 4 min
+df_egv = df[df['Event Type'] == 'EGV']
+short = df_egv.loc[df_egv.local_timestamp.diff() < '4min', ['RIDER', 'date']].drop_duplicates()
+
+df_short = pd.DataFrame(columns=df_egv.columns)
+for i, (r, d) in short.iterrows():
+	df_short = df_short.append(df_egv[(df_egv.RIDER == r) & (df_egv.date == d)])
+df_short.to_csv(path+'short/dexcom_clean_short.csv')
+
+for i, (r, d) in short.iterrows():
+	df_short_i = df_short[(df_short.RIDER == r) & (df_short.date == d)]
+
+	ax = sns.scatterplot(df_short_i['local_timestamp'], df_short_i['Glucose Value (mg/dL)'], 
+		hue=df_short_i.local_timestamp.diff() < '4min')
+	ax.xaxis.set_major_locator(matplotlib.dates.HourLocator(interval=4))   # every 4 hours
+	ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter('%H:%M'))  # hours and minutes
+
+	plt.title('Rider %s - %s'%(r,d))
+	plt.ylabel('Glucose Value (mg/dL) EGV')
+	plt.savefig(path+'short/glucose_%s_%s.pdf'%(r,d), bbox_inches='tight')
+	plt.savefig(path+'short/glucose_%s_%s.png'%(r,d), dpi=300, bbox_inches='tight')
 	plt.close()
 
 # filter date range
