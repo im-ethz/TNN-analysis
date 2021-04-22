@@ -30,4 +30,21 @@ df.reset_index(inplace=True)
 df.rename(columns={'index':'CalendarIndex'}, inplace=True)
 df.set_index(['RIDER', 'TrainingIndex'], drop=True, inplace=True)
 
+df = df[['WorkoutDay', 'WorkoutType', 'Event', 'Title', 'WorkoutDescription',
+       'PlannedDuration', 'PlannedDistanceInMeters',
+       'CoachComments', 'DistanceInMeters', 'PowerAverage', 'PowerMax',
+       'Energy', 'AthleteComments', 'TimeTotalInHours', 'VelocityAverage',
+       'VelocityMax', 'CadenceAverage', 'CadenceMax', 'HeartRateAverage',
+       'HeartRateMax', 'TorqueAverage', 'TorqueMax', 'IF', 'TSS',
+       'HRZone1Minutes', 'HRZone2Minutes', 'HRZone3Minutes', 'HRZone4Minutes',
+       'HRZone5Minutes', 'HRZone6Minutes', 'HRZone7Minutes', 'HRZone8Minutes',
+       'HRZone9Minutes', 'HRZone10Minutes', 'PWRZone1Minutes',
+       'PWRZone2Minutes', 'PWRZone3Minutes', 'PWRZone4Minutes',
+       'PWRZone5Minutes', 'PWRZone6Minutes', 'PWRZone7Minutes',
+       'PWRZone8Minutes', 'PWRZone9Minutes', 'PWRZone10Minutes', 'Rpe',
+       'Feeling', 'CalendarIndex']]
+
+df[df.Event == 'Race'].to_csv('calendar_2019_anon_RACE.csv')
+df[df.Event == 'Camp'].to_csv('calendar_2019_anon_CAMP.csv')
+
 df.to_csv(path+'calendar_2019_anonymous.csv')
