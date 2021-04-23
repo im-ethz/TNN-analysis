@@ -1,5 +1,58 @@
+	# fix zwift timestamps
+	print("\n-------- Timestamp: impute zwift nan")
+	if 'device_ZWIFT' in df:
+		ts_zwift = df.loc[df['device_ZWIFT'] & df['local_timestamp'].isna() & df['local_timestamp_loc'].isna(), 'timestamp'].dt.date.unique()
+		print("Get timezone of Zwift files for the following dates: ")
+		for ts in ts_zwift:
+			print(ts)
+			ts_range = [ts-datetime.timedelta(days=2), ts-datetime.timedelta(days=1), ts, ts+datetime.timedelta(days=1), ts+datetime.timedelta(days=2)]
+			df_ts_zwift = df[df['timestamp'].dt.date.isin(ts_range)]
+			tz_zwift = pd.concat([(df_ts_zwift['local_timestamp'] - df_ts_zwift['timestamp']),
+								  (df_ts_zwift['local_timestamp_loc'] - df_ts_zwift['timestamp'])], axis=1)
+			tz_meta = pd.DataFrame(tz_zwift[0].unique()).dropna().to_numpy()[0]
+			tz_loc = pd.DataFrame(tz_zwift[1].unique()).dropna().to_numpy()[0]
+			# make sure no difference in ts_range and we have tz both from meta and loc
+			if len(tz_meta) == 1 and len(tz_loc) == 1:
+				df.loc[df['device_ZWIFT'] & (df.timestamp.dt.date == ts), 'local_timestamp_loc'] = \
+				df.loc[df['device_ZWIFT'] & (df.timestamp.dt.date == ts), 'timestamp'] + tz_loc[0]
+				print("local_timestamp_loc changed to UTC offset: ", tz_loc[0].astype('timedelta64[h]'))
+				df.loc[df['device_ZWIFT'] & (df.timestamp.dt.date == ts), 'local_timestamp'] = \
+				df.loc[df['device_ZWIFT'] & (df.timestamp.dt.date == ts), 'timestamp'] + tz_meta[0]
+				print("local_timestamp changed to UTC offset: ", tz_meta[0].astype('timedelta64[h]'))
+			else:
+				print("local_timestamp_loc not changed because of difference in timezones in the range of two days before until two days after")
+
+	# distribution of timezones
+	plt.hist([(df.local_timestamp_loc - df.timestamp).astype('timedelta64[h]').to_numpy(),
+			  (df.local_timestamp - df.timestamp).astype('timedelta64[h]').to_numpy()],
+			  label=['position', 'metadata'])
+	plt.xlabel('UTC offset (hours)')
+	plt.legend()
+	plt.savefig('../../../Descriptives/hist_timezone_%s.pdf'%i, bbox_inches='tight')
+	plt.savefig('../../../Descriptives/hist_timezone_%s.png'%i, dpi=300, bbox_inches='tight')
+	plt.close()
+
+	#df['drop_nan_timestamp'] = df['local_timestamp'].isna() & df['local_timestamp_loc'].isna()
+	df_nan_ts = df[df['local_timestamp'].isna() & df['local_timestamp_loc'].isna()]
+	df.drop(df_nan_ts.index, inplace=True) 
+	print("DROPPED: %s files with %s nan local timestamps (both meta and loc)"%(len(df_nan_ts.file_id.unique()), len(df_nan_ts)))
+
+	print("\n-------- Timestamp local combine")
+	# combine both local timestamps
+	# keep timestamp from location as the primary timestamp
+	df['local_timestamp_loc'].fillna(df['local_timestamp'], inplace=True)
+	df.drop('local_timestamp', axis=1, inplace=True)
+	df.rename(columns={'local_timestamp_loc':'local_timestamp'}, inplace=True)
+
+	# TODO: look into dropping duplicate timestamps for which the local timestamp is incorrect
+	# maybe sort by error timestamps as well?
+	#print("Error timestamps in duplicate timestamps: ",
+	#	df[dupl_timestamp_both & df['keep_devices']].error_local_timestamp.sum() != 0)
+	#print("DROPPED: duplicate timestamps for which the local timestamp is possibly incorrect")
+	# TODO: for each file, check whether it's duplicate has more nans (so for missing files, check percentage of nans)
 
 
+#####################################################################################################
 	idx_zero_power = df[df.power == 0].index
 	idx_nan_power = df[df.power.isna()].index
 

@@ -238,6 +238,7 @@ WARNING: Cols outside of 'device' that have a high number of nans, and that we s
 device_0 manufacturer is file_id manufacturer:  True
 device_0 product is file_id product:  False
 
+
 ------------------------------- Athlete  1
 /local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (18,19,20) have mixed types.Specify dtype option on import or set low_memory=False.
   interactivity=interactivity, compiler=compiler, result=result)
@@ -599,101 +600,46 @@ Are there glucose values in the data that will be dropped with the device select
 
 --------------- TIMESTAMP
 
--------- Timestamp: impute zwift nan
-Get timezone of Zwift files for the following dates: 
-2019-01-30
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-01-31
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-02-11
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-03-07
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  2 hours
-2019-03-08
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  2 hours
-2019-03-13
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-03-15
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-11-17
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-11-19
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-03-27
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-04-04
-local_timestamp_loc changed to UTC offset:  2 hours
-local_timestamp changed to UTC offset:  2 hours
-Exception in Tkinter callback
-Traceback (most recent call last):
-  File "/usr/lib/python3.7/tkinter/__init__.py", line 1705, in __call__
-    return self.func(*args)
-  File "/usr/lib/python3.7/tkinter/__init__.py", line 749, in callit
-    func(*args)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backends/_backend_tk.py", line 253, in idle_draw
-    self.draw()
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backends/backend_tkagg.py", line 9, in draw
-    super(FigureCanvasTkAgg, self).draw()
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backends/backend_agg.py", line 407, in draw
-    self.figure.draw(self.renderer)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backend_bases.py", line 1544, in _draw
-    def _draw(renderer): raise Done(renderer)
-matplotlib.backend_bases._get_renderer.<locals>.Done: <matplotlib.backends.backend_agg.RendererAgg object at 0x7fdaea4d4250>
-
--------- Timestamp: nan
+-------- Local timestamp: nan
 
  local timestamp not available
-times:  0
-days:  0
-file ids:  []
+times:  77012
+days:  11
+file ids:  [332 333 334 335 336 337 338 339 340 341 342 343 344 345 346]
 
  local timestamp from location not available
-times:  32168
-days:  9
-file ids:  [  4  33  35  41  48  55  56  62  63 283 284]
+times:  109180
+days:  20
+file ids:  [  4  33  35  41  48  55  56  62  63 283 284 332 333 334 335 336 337 338
+ 339 340 341 342 343 344 345 346]
 
  local timestamp OR local timestamp from location not available
-times:  32168
-days:  9
-file ids:  [  4  33  35  41  48  55  56  62  63 283 284]
+times:  109180
+days:  20
+file ids:  [  4  33  35  41  48  55  56  62  63 283 284 332 333 334 335 336 337 338
+ 339 340 341 342 343 344 345 346]
 
  local timestamp AND local timestamp from location not available
-times:  0
-days:  0
-file ids:  []
-DROPPED: 0 files with 0 nan local timestamps (both meta and loc)
+times:  77012
+days:  11
+file ids:  [332 333 334 335 336 337 338 339 340 341 342 343 344 345 346]
 
--------- Timestamp error
+-------- Local timestamp: error
 
  local timestamp does not equal local timestamp from location (excl. nans)
-times:  63220
-days:  10
-file ids:  [ 68  88  89 149 243 221 222 227 337 338]
+times:  49696
+days:  8
+file ids:  [ 68  88  89 149 243 221 222 227]
 Dates for which this happens:  [datetime.date(2019, 2, 14) datetime.date(2019, 3, 6)
  datetime.date(2019, 3, 9) datetime.date(2019, 5, 25)
  datetime.date(2019, 9, 24) datetime.date(2019, 9, 10)
- datetime.date(2019, 9, 11) datetime.date(2019, 9, 12)
- datetime.date(2019, 3, 7) datetime.date(2019, 3, 8)]
-
--------- Timestamp local combine
+ datetime.date(2019, 9, 11) datetime.date(2019, 9, 12)]
 
 --------------- DUPLICATES
 
 -------- Entire row duplicate
-CHECK if we remove entire file by removing duplicated entries
-Dupl file_id: [len file, len dupl ts of file]
- {38: [21641, 21641], 39: [21641, 21641]} 
- {38: True, 39: True}
+CHECK if we remove entire file by removing duplicated entries:  {38: True, 39: True}
+CHECK if there are glucose values in the duplicated entries:  {38: False, 39: False}
 DROPPED: 21641 duplicate entries
 
 -------- Timestamp duplicate
@@ -704,15 +650,15 @@ days:  2
 file ids:  [221 222]
 
  duplicated local timestamps
-times:  14180
+times:  77011
 days:  1
-file ids:  [221 222]
+file ids:  [332 333 334 335 336 337 338 339 340 341 342 343 344 345 346]
 CHECK if we remove entire file by removing duplicated timestamps
 Dupl file_id: [len file, len dupl ts of file]
  {220: [1758, 1493], 223: [12918, 12687], 221: [2004, 1493], 222: [12733, 12687]} 
  {220: False, 223: False, 221: False, 222: False}
 Percentage of missing columns per file
- {220: 0.2631578947368421, 223: 0.2631578947368421, 221: 0.21052631578947367, 222: 0.21052631578947367}
+ {220: 0.29411764705882354, 223: 0.29411764705882354, 221: 0.23529411764705882, 222: 0.23529411764705882}
 Missing columns per file
  {220: Index(['battery_soc', 'left_pedal_smoothness', 'right_pedal_smoothness',
        'glucose', 'fractional_cadence', 'accumulated_power',
@@ -731,22 +677,22 @@ Missing columns per file
       dtype='object')}
 Duplicate timestamps in devices:
 
- device_ELEMNT
+ ELEMNT
 times:  14180
-days:  1
+days:  2
 file ids:  [221 222]
 
- device_ELEMNTBOLT
+ ELEMNTBOLT
 times:  14180
-days:  1
+days:  2
 file ids:  [220 223]
 
- device_GARMIN
+ GARMIN
 times:  0
 days:  0
 file ids:  []
 
- device_ZWIFT
+ ZWIFT
 times:  0
 days:  0
 file ids:  []
@@ -759,12 +705,12 @@ file ids:  []
 
  181139456.0
 times:  14180
-days:  1
+days:  2
 file ids:  [220 223]
 
  4167528448.0
 times:  14180
-days:  1
+days:  2
 file ids:  [221 222]
 
  nan
@@ -778,41 +724,50 @@ days:  0
 file ids:  []
 Duplicate timestamps after potentially dropping devices: 
 
- device_ELEMNT
+ ELEMNT
 times:  14180
-days:  1
+days:  2
 file ids:  [221 222]
 
- device_ELEMNTBOLT
+ ELEMNTBOLT
 times:  14180
-days:  1
+days:  2
 file ids:  [220 223]
 
- device_ZWIFT
+ ZWIFT
+times:  0
+days:  0
+file ids:  []
+
+ ELEMNTROAM
 times:  0
 days:  0
 file ids:  []
 Do the duplicate timestamps have the same data?
-                  timestamp  position_lat  position_long  gps_accuracy  ...  device_GARMIN  device_ZWIFT  keep_devices  error_local_timestamp
-2216033 2019-09-10 23:40:53     30.477604     111.762913           2.0  ...          False         False          True                  False
-2767618 2019-09-10 23:40:53           NaN            NaN           NaN  ...          False         False          True                   True
-2216036 2019-09-10 23:40:56     30.477630     111.762740           2.0  ...          False         False          True                  False
-2767619 2019-09-10 23:40:56           NaN            NaN           NaN  ...          False         False          True                   True
-2216037 2019-09-10 23:40:57     30.477637     111.762680           2.0  ...          False         False          True                  False
-...                     ...           ...            ...           ...  ...            ...           ...           ...                    ...
-2230572 2019-09-11 04:33:02     30.436831     111.724699           3.0  ...          False         False          True                  False
-2782353 2019-09-11 04:33:03     30.431795     111.729121           2.0  ...          False         False          True                   True
-2230573 2019-09-11 04:33:03     30.436830     111.724785           3.0  ...          False         False          True                  False
-2230574 2019-09-11 04:33:04     30.436828     111.724871           3.0  ...          False         False          True                  False
-2782354 2019-09-11 04:33:04     30.431804     111.729139           2.0  ...          False         False          True                   True
+                  timestamp  position_lat  position_long  ...    device_0  device_0_serialnumber  error_local_timestamp
+2216033 2019-09-10 23:40:53     30.477604     111.762913  ...  ELEMNTBOLT           1.811395e+08                  False
+2767618 2019-09-10 23:40:53           NaN            NaN  ...      ELEMNT           4.167528e+09                   True
+2216036 2019-09-10 23:40:56     30.477630     111.762740  ...  ELEMNTBOLT           1.811395e+08                  False
+2767619 2019-09-10 23:40:56           NaN            NaN  ...      ELEMNT           4.167528e+09                   True
+2216037 2019-09-10 23:40:57     30.477637     111.762680  ...  ELEMNTBOLT           1.811395e+08                  False
+...                     ...           ...            ...  ...         ...                    ...                    ...
+2230572 2019-09-11 04:33:02     30.436831     111.724699  ...  ELEMNTBOLT           1.811395e+08                  False
+2782353 2019-09-11 04:33:03     30.431795     111.729121  ...      ELEMNT           4.167528e+09                   True
+2230573 2019-09-11 04:33:03     30.436830     111.724785  ...  ELEMNTBOLT           1.811395e+08                  False
+2230574 2019-09-11 04:33:04     30.436828     111.724871  ...  ELEMNTBOLT           1.811395e+08                  False
+2782354 2019-09-11 04:33:04     30.431804     111.729139  ...      ELEMNT           4.167528e+09                   True
 
-[28360 rows x 38 columns]
+[28360 rows x 34 columns]
 /local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/frame.py:4312: SettingWithCopyWarning: 
 A value is trying to be set on a copy of a slice from a DataFrame
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   errors=errors,
 DROPPED: 2 files with 14737 duplicate timestamps
+Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 42/42 [00:56<00:00,  1.35s/it, Completed]
+Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:15<00:00, 15.40s/it]
+Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.13it/s]
+Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 333.20it/s]
 
 ------------------------------- Athlete  2
 /local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (18) have mixed types.Specify dtype option on import or set low_memory=False.
@@ -1157,24 +1112,7 @@ Are there glucose values in the data that will be dropped with the device select
 
 --------------- TIMESTAMP
 
--------- Timestamp: impute zwift nan
-Exception in Tkinter callback
-Traceback (most recent call last):
-  File "/usr/lib/python3.7/tkinter/__init__.py", line 1705, in __call__
-    return self.func(*args)
-  File "/usr/lib/python3.7/tkinter/__init__.py", line 749, in callit
-    func(*args)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backends/_backend_tk.py", line 253, in idle_draw
-    self.draw()
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backends/backend_tkagg.py", line 9, in draw
-    super(FigureCanvasTkAgg, self).draw()
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backends/backend_agg.py", line 407, in draw
-    self.figure.draw(self.renderer)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backend_bases.py", line 1544, in _draw
-    def _draw(renderer): raise Done(renderer)
-matplotlib.backend_bases._get_renderer.<locals>.Done: <matplotlib.backends.backend_agg.RendererAgg object at 0x7f8d79c31bd0>
-
--------- Timestamp: nan
+-------- Local timestamp: nan
 
  local timestamp not available
 times:  0
@@ -1197,9 +1135,8 @@ file ids:  [  1   8  12  20  26  28  39  41  48  57  58  64  67  76  87  89  90 
 times:  0
 days:  0
 file ids:  []
-DROPPED: 0 files with 0 nan local timestamps (both meta and loc)
 
--------- Timestamp error
+-------- Local timestamp: error
 
  local timestamp does not equal local timestamp from location (excl. nans)
 times:  47908
@@ -1209,14 +1146,11 @@ Dates for which this happens:  [datetime.date(2019, 2, 22) datetime.date(2019, 3
  datetime.date(2019, 3, 5) datetime.date(2019, 3, 22)
  datetime.date(2019, 5, 31) datetime.date(2019, 11, 4)]
 
--------- Timestamp local combine
-
 --------------- DUPLICATES
 
 -------- Entire row duplicate
-CHECK if we remove entire file by removing duplicated entries, or if the file somehow continues on
-Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
- {}
+CHECK if we remove entire file by removing duplicated entries:  {}
+CHECK if there are glucose values in the duplicated entries:  {}
 DROPPED: 0 duplicate entries
 
 -------- Timestamp duplicate
@@ -1230,8 +1164,8 @@ file ids:  []
 times:  0
 days:  0
 file ids:  []
-CHECK if we remove entire file by removing duplicated timestamps, or if the file somehow continues on
-Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
+CHECK if we remove entire file by removing duplicated timestamps
+Dupl file_id: [len file, len dupl ts of file]
  {} 
  {}
 Percentage of missing columns per file
@@ -1240,7 +1174,7 @@ Missing columns per file
  {}
 Duplicate timestamps in devices:
 
- device_ELEMNTBOLT
+ ELEMNTBOLT
 times:  0
 days:  0
 file ids:  []
@@ -1257,13 +1191,28 @@ days:  0
 file ids:  []
 Duplicate timestamps after potentially dropping devices: 
 
- device_ELEMNTBOLT
+ ELEMNT
+times:  0
+days:  0
+file ids:  []
+
+ ELEMNTBOLT
+times:  0
+days:  0
+file ids:  []
+
+ ZWIFT
+times:  0
+days:  0
+file ids:  []
+
+ ELEMNTROAM
 times:  0
 days:  0
 file ids:  []
 Do the duplicate timestamps have the same data?
 Empty DataFrame
-Columns: [timestamp, enhanced_altitude, altitude, heart_rate, position_lat, position_long, gps_accuracy, distance, cadence, enhanced_speed, speed, power, combined_pedal_smoothness, left_torque_effectiveness, right_torque_effectiveness, temperature, grade, left_right_balance, local_timestamp, file_id, battery_soc, left_pedal_smoothness, right_pedal_smoothness, glucose, device_0, device_0_serialnumber, device_ELEMNTBOLT, keep_devices, error_local_timestamp]
+Columns: [timestamp, enhanced_altitude, altitude, heart_rate, position_lat, position_long, gps_accuracy, distance, cadence, enhanced_speed, speed, power, combined_pedal_smoothness, left_torque_effectiveness, right_torque_effectiveness, temperature, grade, left_right_balance, local_timestamp, local_timestamp_loc, file_id, battery_soc, left_pedal_smoothness, right_pedal_smoothness, glucose, device_0, device_0_serialnumber, error_local_timestamp]
 Index: []
 /local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/frame.py:4312: SettingWithCopyWarning: 
 A value is trying to be set on a copy of a slice from a DataFrame
@@ -1271,6 +1220,10 @@ A value is trying to be set on a copy of a slice from a DataFrame
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   errors=errors,
 DROPPED: 0 files with 0 duplicate timestamps
+Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 35/35 [00:46<00:00,  1.33s/it, Completed]
+Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:12<00:00, 12.90s/it]
+Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.56it/s]
+Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 339.65it/s]
 
 ------------------------------- Athlete  3
 /local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (13,18,19) have mixed types.Specify dtype option on import or set low_memory=False.
@@ -1785,116 +1738,39 @@ Are there glucose values in the data that will be dropped with the device select
 
 --------------- TIMESTAMP
 
--------- Timestamp: impute zwift nan
-Get timezone of Zwift files for the following dates: 
-2019-01-29
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-05-07
-local_timestamp_loc changed to UTC offset:  2 hours
-local_timestamp changed to UTC offset:  2 hours
-2019-02-01
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-02-03
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-02-05
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-02-06
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-02-07
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-02-11
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-02-13
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-02-14
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-02-15
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-02-20
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-02-21
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-02-23
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-02-25
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-02-27
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-03-06
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-03-13
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-03-20
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-03-27
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-05-03
-local_timestamp_loc changed to UTC offset:  2 hours
-local_timestamp changed to UTC offset:  2 hours
-2019-05-06
-local_timestamp_loc changed to UTC offset:  2 hours
-local_timestamp changed to UTC offset:  2 hours
-Exception in Tkinter callback
-Traceback (most recent call last):
-  File "/usr/lib/python3.7/tkinter/__init__.py", line 1705, in __call__
-    return self.func(*args)
-  File "/usr/lib/python3.7/tkinter/__init__.py", line 749, in callit
-    func(*args)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backends/_backend_tk.py", line 253, in idle_draw
-    self.draw()
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backends/backend_tkagg.py", line 9, in draw
-    super(FigureCanvasTkAgg, self).draw()
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backends/backend_agg.py", line 407, in draw
-    self.figure.draw(self.renderer)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backend_bases.py", line 1544, in _draw
-    def _draw(renderer): raise Done(renderer)
-matplotlib.backend_bases._get_renderer.<locals>.Done: <matplotlib.backends.backend_agg.RendererAgg object at 0x7f8d78741750>
-
--------- Timestamp: nan
+-------- Local timestamp: nan
 
  local timestamp not available
-times:  112779
-days:  20
-file ids:  [ 48  43  63 352 353 354 355 356 357 358 359 360 361 362 363 364 365 366
- 367 368]
+times:  219728
+days:  42
+file ids:  [ 48  61  62 156 370 371 372 373 374 375 376 377 378 379 380 381 382 383
+ 384 385 386 387 388 389 390 391 392 393 394 395 396 397 398 399 400 401
+ 402 403  43  63 352 353 354 355 356 357 358 359 360 361 362 363 364 365
+ 366 367 368]
 
  local timestamp from location not available
-times:  66311
-days:  8
-file ids:  [  6   8  18  21 141 142 306 352 368]
+times:  173260
+days:  30
+file ids:  [  6   8  18  21 141 142 306  61  62 156 370 371 372 373 374 375 376 377
+ 378 379 380 381 382 383 384 385 386 387 388 389 390 391 392 393 394 395
+ 396 397 398 399 400 401 402 403 352 368]
 
  local timestamp OR local timestamp from location not available
-times:  169385
-days:  26
-file ids:  [  6   8  18  21  48 141 142 306  43  63 352 353 354 355 356 357 358 359
- 360 361 362 363 364 365 366 367 368]
+times:  276334
+days:  48
+file ids:  [  6   8  18  21  48 141 142 306  61  62 156 370 371 372 373 374 375 376
+ 377 378 379 380 381 382 383 384 385 386 387 388 389 390 391 392 393 394
+ 395 396 397 398 399 400 401 402 403  43  63 352 353 354 355 356 357 358
+ 359 360 361 362 363 364 365 366 367 368]
 
  local timestamp AND local timestamp from location not available
-times:  9705
-days:  2
-file ids:  [352 368]
-DROPPED: 2 files with 9705 nan local timestamps (both meta and loc)
+times:  116654
+days:  24
+file ids:  [ 61  62 156 370 371 372 373 374 375 376 377 378 379 380 381 382 383 384
+ 385 386 387 388 389 390 391 392 393 394 395 396 397 398 399 400 401 402
+ 403 352 368]
 
--------- Timestamp error
+-------- Local timestamp: error
 
  local timestamp does not equal local timestamp from location (excl. nans)
 times:  67524
@@ -1905,33 +1781,33 @@ Dates for which this happens:  [datetime.date(2019, 5, 25) datetime.date(2019, 6
  datetime.date(2019, 6, 21) datetime.date(2019, 9, 24)
  datetime.date(2019, 10, 17) datetime.date(2019, 10, 31)]
 
--------- Timestamp local combine
-
 --------------- DUPLICATES
 
 -------- Entire row duplicate
-CHECK if we remove entire file by removing duplicated entries, or if the file somehow continues on
-Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
- {62: [583, 35]}
+CHECK if we remove entire file by removing duplicated entries:  {62: False}
+CHECK if there are glucose values in the duplicated entries:  {62: False}
 DROPPED: 34 duplicate entries
 
 -------- Timestamp duplicate
 
  duplicated timestamps
-times:  41001
-days:  11
-file ids:  [ 62 353 354 356 357 359 360 362 363 364 365]
+times:  47591
+days:  12
+file ids:  [ 62 353 354 356 357 359 360 362 363 364 365 368]
 
  duplicated local timestamps
-times:  41157
-days:  12
-file ids:  [ 62 353 354 356 357 359 360 362 363 364 365 367]
-CHECK if we remove entire file by removing duplicated timestamps, or if the file somehow continues on
-Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
- {257: [7211, 971], 258: [7295, 280], 266: [6117, 2745], 267: [11793, 2494], 293: [16393, 2970], 296: [2964, 1943], 304: [3989, 156], 62: [549, 2], 318: [7932, 7659], 319: [6473, 6377], 326: [12617, 11392], 337: [30690, 4169], 353: [2194, 971], 354: [2309, 280], 356: [8429, 7659], 357: [7303, 6377], 359: [5666, 2745], 360: [2578, 2494], 362: [12089, 11392], 363: [3538, 2970], 364: [1971, 1943], 365: [4561, 4169], 367: [4767, 156]} 
- {257: False, 258: False, 266: False, 267: False, 293: False, 296: False, 304: False, 62: False, 318: False, 319: False, 326: False, 337: False, 353: False, 354: False, 356: False, 357: False, 359: False, 360: False, 362: False, 363: False, 364: False, 365: False, 367: False}
+times:  219693
+days:  1
+file ids:  [ 48  61  62 156 370 371 372 373 374 375 376 377 378 379 380 381 382 383
+ 384 385 386 387 388 389 390 391 392 393 394 395 396 397 398 399 400 401
+ 402 403  43  63 352 353 354 355 356 357 358 359 360 361 362 363 364 365
+ 366 367 368]
+CHECK if we remove entire file by removing duplicated timestamps
+Dupl file_id: [len file, len dupl ts of file]
+ {257: [7211, 971], 258: [7295, 280], 266: [6117, 2745], 267: [11793, 2494], 293: [16393, 2970], 296: [2964, 1943], 306: [11211, 6590], 62: [549, 2], 318: [7932, 7659], 319: [6473, 6377], 326: [12617, 11392], 337: [30690, 4169], 353: [2194, 971], 354: [2309, 280], 356: [8429, 7659], 357: [7303, 6377], 359: [5666, 2745], 360: [2578, 2494], 362: [12089, 11392], 363: [3538, 2970], 364: [1971, 1943], 365: [4561, 4169], 368: [6693, 6590]} 
+ {257: False, 258: False, 266: False, 267: False, 293: False, 296: False, 306: False, 62: False, 318: False, 319: False, 326: False, 337: False, 353: False, 354: False, 356: False, 357: False, 359: False, 360: False, 362: False, 363: False, 364: False, 365: False, 368: False}
 Percentage of missing columns per file
- {257: 0.21621621621621623, 258: 0.21621621621621623, 266: 0.21621621621621623, 267: 0.21621621621621623, 293: 0.2972972972972973, 296: 0.2972972972972973, 304: 0.24324324324324326, 62: 0.5135135135135135, 318: 0.4864864864864865, 319: 0.4864864864864865, 326: 0.2702702702702703, 337: 0.2702702702702703, 353: 0.5405405405405406, 354: 0.5405405405405406, 356: 0.4594594594594595, 357: 0.4594594594594595, 359: 0.5405405405405406, 360: 0.5135135135135135, 362: 0.4594594594594595, 363: 0.5405405405405406, 364: 0.5135135135135135, 365: 0.5405405405405406, 367: 0.5405405405405406}
+ {257: 0.23529411764705882, 258: 0.23529411764705882, 266: 0.23529411764705882, 267: 0.23529411764705882, 293: 0.3235294117647059, 296: 0.3235294117647059, 306: 0.4117647058823529, 62: 0.6470588235294118, 318: 0.5294117647058824, 319: 0.5294117647058824, 326: 0.29411764705882354, 337: 0.29411764705882354, 353: 0.6176470588235294, 354: 0.6176470588235294, 356: 0.5294117647058824, 357: 0.5294117647058824, 359: 0.6176470588235294, 360: 0.5882352941176471, 362: 0.5294117647058824, 363: 0.6176470588235294, 364: 0.5882352941176471, 365: 0.6176470588235294, 368: 0.6470588235294118}
 Missing columns per file
  {257: Index(['combined_pedal_smoothness', 'glucose', 'time_from_course',
        'compressed_speed_distance', 'resistance', 'cycle_length',
@@ -1953,16 +1829,19 @@ Missing columns per file
        'left_torque_effectiveness', 'left_pedal_smoothness', 'glucose',
        'time_from_course', 'compressed_speed_distance', 'resistance',
        'cycle_length', 'fractional_cadence', 'accumulated_power'],
-      dtype='object'), 304: Index(['left_right_balance', 'combined_pedal_smoothness', 'glucose',
-       'time_from_course', 'compressed_speed_distance', 'resistance',
-       'cycle_length', 'fractional_cadence', 'accumulated_power'],
+      dtype='object'), 306: Index(['left_right_balance', 'combined_pedal_smoothness',
+       'left_torque_effectiveness', 'local_timestamp_loc', 'heart_rate',
+       'left_pedal_smoothness', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length',
+       'fractional_cadence', 'accumulated_power', 'error_local_timestamp'],
       dtype='object'), 62: Index(['gps_accuracy', 'distance', 'temperature', 'grade',
        'left_right_balance', 'combined_pedal_smoothness',
        'left_torque_effectiveness', 'right_torque_effectiveness',
-       'battery_soc', 'left_pedal_smoothness', 'right_pedal_smoothness',
-       'glucose', 'time_from_course', 'compressed_speed_distance',
-       'resistance', 'cycle_length', 'fractional_cadence', 'accumulated_power',
-       'device_0_serialnumber'],
+       'local_timestamp', 'local_timestamp_loc', 'battery_soc',
+       'left_pedal_smoothness', 'right_pedal_smoothness', 'glucose',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length', 'fractional_cadence', 'accumulated_power',
+       'device_0_serialnumber', 'error_local_timestamp'],
       dtype='object'), 318: Index(['gps_accuracy', 'grade', 'power', 'left_right_balance',
        'combined_pedal_smoothness', 'left_torque_effectiveness',
        'right_torque_effectiveness', 'cadence', 'battery_soc',
@@ -1985,74 +1864,78 @@ Missing columns per file
        'cycle_length'],
       dtype='object'), 353: Index(['gps_accuracy', 'grade', 'power', 'left_right_balance',
        'combined_pedal_smoothness', 'left_torque_effectiveness',
-       'right_torque_effectiveness', 'cadence', 'heart_rate', 'battery_soc',
-       'left_pedal_smoothness', 'right_pedal_smoothness', 'glucose',
-       'time_from_course', 'compressed_speed_distance', 'resistance',
-       'cycle_length', 'fractional_cadence', 'accumulated_power',
-       'error_local_timestamp'],
+       'right_torque_effectiveness', 'cadence', 'local_timestamp',
+       'heart_rate', 'battery_soc', 'left_pedal_smoothness',
+       'right_pedal_smoothness', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length',
+       'fractional_cadence', 'accumulated_power', 'error_local_timestamp'],
       dtype='object'), 354: Index(['gps_accuracy', 'grade', 'power', 'left_right_balance',
        'combined_pedal_smoothness', 'left_torque_effectiveness',
-       'right_torque_effectiveness', 'cadence', 'heart_rate', 'battery_soc',
-       'left_pedal_smoothness', 'right_pedal_smoothness', 'glucose',
-       'time_from_course', 'compressed_speed_distance', 'resistance',
-       'cycle_length', 'fractional_cadence', 'accumulated_power',
-       'error_local_timestamp'],
+       'right_torque_effectiveness', 'cadence', 'local_timestamp',
+       'heart_rate', 'battery_soc', 'left_pedal_smoothness',
+       'right_pedal_smoothness', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length',
+       'fractional_cadence', 'accumulated_power', 'error_local_timestamp'],
       dtype='object'), 356: Index(['gps_accuracy', 'grade', 'left_right_balance',
        'combined_pedal_smoothness', 'left_torque_effectiveness',
-       'right_torque_effectiveness', 'battery_soc', 'left_pedal_smoothness',
-       'right_pedal_smoothness', 'glucose', 'time_from_course',
-       'compressed_speed_distance', 'resistance', 'cycle_length',
-       'fractional_cadence', 'accumulated_power', 'error_local_timestamp'],
-      dtype='object'), 357: Index(['gps_accuracy', 'grade', 'left_right_balance',
-       'combined_pedal_smoothness', 'left_torque_effectiveness',
-       'right_torque_effectiveness', 'battery_soc', 'left_pedal_smoothness',
-       'right_pedal_smoothness', 'glucose', 'time_from_course',
-       'compressed_speed_distance', 'resistance', 'cycle_length',
-       'fractional_cadence', 'accumulated_power', 'error_local_timestamp'],
-      dtype='object'), 359: Index(['gps_accuracy', 'grade', 'power', 'left_right_balance',
-       'combined_pedal_smoothness', 'left_torque_effectiveness',
-       'right_torque_effectiveness', 'cadence', 'heart_rate', 'battery_soc',
+       'right_torque_effectiveness', 'local_timestamp', 'battery_soc',
        'left_pedal_smoothness', 'right_pedal_smoothness', 'glucose',
        'time_from_course', 'compressed_speed_distance', 'resistance',
        'cycle_length', 'fractional_cadence', 'accumulated_power',
        'error_local_timestamp'],
-      dtype='object'), 360: Index(['gps_accuracy', 'grade', 'power', 'left_right_balance',
+      dtype='object'), 357: Index(['gps_accuracy', 'grade', 'left_right_balance',
        'combined_pedal_smoothness', 'left_torque_effectiveness',
-       'right_torque_effectiveness', 'cadence', 'battery_soc',
+       'right_torque_effectiveness', 'local_timestamp', 'battery_soc',
        'left_pedal_smoothness', 'right_pedal_smoothness', 'glucose',
        'time_from_course', 'compressed_speed_distance', 'resistance',
        'cycle_length', 'fractional_cadence', 'accumulated_power',
+       'error_local_timestamp'],
+      dtype='object'), 359: Index(['gps_accuracy', 'grade', 'power', 'left_right_balance',
+       'combined_pedal_smoothness', 'left_torque_effectiveness',
+       'right_torque_effectiveness', 'cadence', 'local_timestamp',
+       'heart_rate', 'battery_soc', 'left_pedal_smoothness',
+       'right_pedal_smoothness', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length',
+       'fractional_cadence', 'accumulated_power', 'error_local_timestamp'],
+      dtype='object'), 360: Index(['gps_accuracy', 'grade', 'power', 'left_right_balance',
+       'combined_pedal_smoothness', 'left_torque_effectiveness',
+       'right_torque_effectiveness', 'cadence', 'local_timestamp',
+       'battery_soc', 'left_pedal_smoothness', 'right_pedal_smoothness',
+       'glucose', 'time_from_course', 'compressed_speed_distance',
+       'resistance', 'cycle_length', 'fractional_cadence', 'accumulated_power',
        'error_local_timestamp'],
       dtype='object'), 362: Index(['gps_accuracy', 'grade', 'left_right_balance',
        'combined_pedal_smoothness', 'left_torque_effectiveness',
-       'right_torque_effectiveness', 'battery_soc', 'left_pedal_smoothness',
+       'right_torque_effectiveness', 'local_timestamp', 'battery_soc',
+       'left_pedal_smoothness', 'right_pedal_smoothness', 'glucose',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length', 'fractional_cadence', 'accumulated_power',
+       'error_local_timestamp'],
+      dtype='object'), 363: Index(['gps_accuracy', 'grade', 'power', 'left_right_balance',
+       'combined_pedal_smoothness', 'left_torque_effectiveness',
+       'right_torque_effectiveness', 'cadence', 'local_timestamp',
+       'heart_rate', 'battery_soc', 'left_pedal_smoothness',
        'right_pedal_smoothness', 'glucose', 'time_from_course',
        'compressed_speed_distance', 'resistance', 'cycle_length',
        'fractional_cadence', 'accumulated_power', 'error_local_timestamp'],
-      dtype='object'), 363: Index(['gps_accuracy', 'grade', 'power', 'left_right_balance',
-       'combined_pedal_smoothness', 'left_torque_effectiveness',
-       'right_torque_effectiveness', 'cadence', 'heart_rate', 'battery_soc',
-       'left_pedal_smoothness', 'right_pedal_smoothness', 'glucose',
-       'time_from_course', 'compressed_speed_distance', 'resistance',
-       'cycle_length', 'fractional_cadence', 'accumulated_power',
-       'error_local_timestamp'],
       dtype='object'), 364: Index(['gps_accuracy', 'grade', 'power', 'left_right_balance',
        'combined_pedal_smoothness', 'left_torque_effectiveness',
-       'right_torque_effectiveness', 'cadence', 'battery_soc',
-       'left_pedal_smoothness', 'right_pedal_smoothness', 'glucose',
-       'time_from_course', 'compressed_speed_distance', 'resistance',
-       'cycle_length', 'fractional_cadence', 'accumulated_power',
+       'right_torque_effectiveness', 'cadence', 'local_timestamp',
+       'battery_soc', 'left_pedal_smoothness', 'right_pedal_smoothness',
+       'glucose', 'time_from_course', 'compressed_speed_distance',
+       'resistance', 'cycle_length', 'fractional_cadence', 'accumulated_power',
        'error_local_timestamp'],
       dtype='object'), 365: Index(['gps_accuracy', 'grade', 'power', 'left_right_balance',
        'combined_pedal_smoothness', 'left_torque_effectiveness',
-       'right_torque_effectiveness', 'cadence', 'heart_rate', 'battery_soc',
-       'left_pedal_smoothness', 'right_pedal_smoothness', 'glucose',
-       'time_from_course', 'compressed_speed_distance', 'resistance',
-       'cycle_length', 'fractional_cadence', 'accumulated_power',
-       'error_local_timestamp'],
-      dtype='object'), 367: Index(['gps_accuracy', 'grade', 'power', 'left_right_balance',
+       'right_torque_effectiveness', 'cadence', 'local_timestamp',
+       'heart_rate', 'battery_soc', 'left_pedal_smoothness',
+       'right_pedal_smoothness', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length',
+       'fractional_cadence', 'accumulated_power', 'error_local_timestamp'],
+      dtype='object'), 368: Index(['gps_accuracy', 'grade', 'power', 'left_right_balance',
        'combined_pedal_smoothness', 'left_torque_effectiveness',
-       'right_torque_effectiveness', 'cadence', 'heart_rate', 'battery_soc',
+       'right_torque_effectiveness', 'cadence', 'local_timestamp',
+       'local_timestamp_loc', 'heart_rate', 'battery_soc',
        'left_pedal_smoothness', 'right_pedal_smoothness', 'glucose',
        'time_from_course', 'compressed_speed_distance', 'resistance',
        'cycle_length', 'fractional_cadence', 'accumulated_power',
@@ -2060,17 +1943,17 @@ Missing columns per file
       dtype='object')}
 Duplicate timestamps in devices:
 
- device_ELEMNTBOLT
-times:  11559
+ ELEMNTBOLT
+times:  17993
 days:  7
-file ids:  [257 258 266 267 293 296 304]
+file ids:  [257 258 266 267 293 296 306]
 
- device_GARMIN
-times:  70753
+ GARMIN
+times:  77187
 days:  11
-file ids:  [318 319 326 337 353 354 356 357 359 360 362 363 364 365 367]
+file ids:  [318 319 326 337 353 354 356 357 359 360 362 363 364 365 368]
 
- device_ZWIFT
+ ZWIFT
 times:  2
 days:  1
 file ids:  [62]
@@ -2087,14 +1970,14 @@ days:  0
 file ids:  []
 
  4144448512.0
-times:  5069
+times:  11503
 days:  3
-file ids:  [293 296 304]
+file ids:  [293 296 306]
 
  3830891575.0
-times:  41156
+times:  47590
 days:  11
-file ids:  [353 354 356 357 359 360 362 363 364 365 367]
+file ids:  [353 354 356 357 359 360 362 363 364 365 368]
 
  3999940022.0
 times:  29597
@@ -2102,36 +1985,50 @@ days:  4
 file ids:  [318 319 326 337]
 Duplicate timestamps after potentially dropping devices: 
 
- device_ELEMNTBOLT
-times:  11559
-days:  7
-file ids:  [257 258 266 267 293 296 304]
+ ELEMNT
+times:  0
+days:  0
+file ids:  []
 
- device_ZWIFT
+ ELEMNTBOLT
+times:  17993
+days:  7
+file ids:  [257 258 266 267 293 296 306]
+
+ ZWIFT
 times:  2
 days:  1
 file ids:  [62]
-Do the duplicate timestamps have the same data?
-                  timestamp  position_lat  position_long  gps_accuracy  ...  device_GARMIN  device_ZWIFT  keep_devices  error_local_timestamp
-2950021 2019-01-29 19:10:05    -11.645443     166.958417           NaN  ...          False          True          True                  False
-2950020 2019-01-29 19:10:05    -11.645430     166.958450           NaN  ...          False          True          True                  False
-2502763 2019-08-10 07:10:13     41.691393       2.280935           2.0  ...          False         False          True                  False
-2502765 2019-08-10 07:10:15     41.691326       2.280870           2.0  ...          False         False          True                  False
-2502766 2019-08-10 07:10:16     41.691288       2.280839           2.0  ...          False         False          True                  False
-...                     ...           ...            ...           ...  ...            ...           ...           ...                    ...
-2820201 2019-10-20 01:39:24     36.619926     139.792938           2.0  ...          False         False          True                  False
-2820203 2019-10-20 01:39:26     36.619926     139.792938           1.0  ...          False         False          True                  False
-2820204 2019-10-20 01:39:27     36.619926     139.792938           1.0  ...          False         False          True                  False
-2820205 2019-10-20 01:39:28     36.619926     139.792938           1.0  ...          False         False          True                  False
-2820206 2019-10-20 01:39:29     36.619926     139.792938           1.0  ...          False         False          True                  False
 
-[11561 rows x 37 columns]
+ ELEMNTROAM
+times:  0
+days:  0
+file ids:  []
+Do the duplicate timestamps have the same data?
+                  timestamp  position_lat  position_long  ...    device_0  device_0_serialnumber  error_local_timestamp
+2950021 2019-01-29 19:10:05    -11.645443     166.958417  ...       ZWIFT                    NaN                    NaN
+2950020 2019-01-29 19:10:05    -11.645430     166.958450  ...       ZWIFT                    NaN                    NaN
+2502763 2019-08-10 07:10:13     41.691393       2.280935  ...  ELEMNTBOLT           2.927510e+09                  False
+2502765 2019-08-10 07:10:15     41.691326       2.280870  ...  ELEMNTBOLT           2.927510e+09                  False
+2502766 2019-08-10 07:10:16     41.691288       2.280839  ...  ELEMNTBOLT           2.927510e+09                  False
+...                     ...           ...            ...  ...         ...                    ...                    ...
+2849578 2019-11-02 12:09:48     41.828049       3.075166  ...  ELEMNTBOLT           4.144449e+09                    NaN
+2849584 2019-11-02 12:09:54     41.828194       3.075073  ...  ELEMNTBOLT           4.144449e+09                    NaN
+2849585 2019-11-02 12:09:55     41.828220       3.075066  ...  ELEMNTBOLT           4.144449e+09                    NaN
+2849586 2019-11-02 12:09:56     41.828251       3.075057  ...  ELEMNTBOLT           4.144449e+09                    NaN
+2849587 2019-11-02 12:09:57     41.828278       3.075047  ...  ELEMNTBOLT           4.144449e+09                    NaN
+
+[17995 rows x 34 columns]
 /local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/frame.py:4312: SettingWithCopyWarning: 
 A value is trying to be set on a copy of a slice from a DataFrame
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   errors=errors,
-DROPPED: 12 files with 55954 duplicate timestamps
+DROPPED: 12 files with 57880 duplicate timestamps
+Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 42/42 [01:02<00:00,  1.49s/it, Completed]
+Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:18<00:00, 18.54s/it]
+Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.39it/s]
+Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 429.74it/s]
 
 ------------------------------- Athlete  4
 /local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (13,19,20) have mixed types.Specify dtype option on import or set low_memory=False.
@@ -2578,85 +2475,46 @@ Are there glucose values in the data that will be dropped with the device select
 
 --------------- TIMESTAMP
 
--------- Timestamp: impute zwift nan
-Get timezone of Zwift files for the following dates: 
-2019-01-30
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2018-12-09
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2018-12-10
-local_timestamp_loc changed to UTC offset:  11 hours
-local_timestamp changed to UTC offset:  1 hours
-2018-12-11
-local_timestamp_loc changed to UTC offset:  11 hours
-local_timestamp changed to UTC offset:  1 hours
-2018-12-29
-local_timestamp_loc changed to UTC offset:  11 hours
-local_timestamp changed to UTC offset:  11 hours
-2019-03-13
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-Exception in Tkinter callback
-Traceback (most recent call last):
-  File "/usr/lib/python3.7/tkinter/__init__.py", line 1705, in __call__
-    return self.func(*args)
-  File "/usr/lib/python3.7/tkinter/__init__.py", line 749, in callit
-    func(*args)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backends/_backend_tk.py", line 253, in idle_draw
-    self.draw()
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backends/backend_tkagg.py", line 9, in draw
-    super(FigureCanvasTkAgg, self).draw()
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backends/backend_agg.py", line 407, in draw
-    self.figure.draw(self.renderer)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backend_bases.py", line 1544, in _draw
-    def _draw(renderer): raise Done(renderer)
-matplotlib.backend_bases._get_renderer.<locals>.Done: <matplotlib.backends.backend_agg.RendererAgg object at 0x7f8d76e95ed0>
-
--------- Timestamp: nan
+-------- Local timestamp: nan
 
  local timestamp not available
-times:  0
-days:  0
-file ids:  []
+times:  37293
+days:  6
+file ids:  [ 62 333 334 335 336 337]
 
  local timestamp from location not available
-times:  59574
-days:  12
-file ids:  [ 39  60  74  85  90  91  92  95  99 101 276 281 283 125 133]
+times:  96867
+days:  18
+file ids:  [ 39  60  74  85  90  91  92  95  99 101 276 281 283 125 133  62 333 334
+ 335 336 337]
 
  local timestamp OR local timestamp from location not available
-times:  59574
-days:  12
-file ids:  [ 39  60  74  85  90  91  92  95  99 101 276 281 283 125 133]
+times:  96867
+days:  18
+file ids:  [ 39  60  74  85  90  91  92  95  99 101 276 281 283 125 133  62 333 334
+ 335 336 337]
 
  local timestamp AND local timestamp from location not available
-times:  0
-days:  0
-file ids:  []
-DROPPED: 0 files with 0 nan local timestamps (both meta and loc)
+times:  37293
+days:  6
+file ids:  [ 62 333 334 335 336 337]
 
--------- Timestamp error
+-------- Local timestamp: error
 
  local timestamp does not equal local timestamp from location (excl. nans)
-times:  72689
-days:  9
-file ids:  [  8  87  88 119 298 135 334 335]
+times:  58261
+days:  7
+file ids:  [  8  87  88 119 298 135]
 Dates for which this happens:  [datetime.date(2018, 12, 9) datetime.date(2019, 2, 22)
  datetime.date(2019, 2, 23) datetime.date(2019, 3, 25)
  datetime.date(2019, 11, 5) datetime.date(2019, 4, 6)
- datetime.date(2019, 4, 7) datetime.date(2018, 12, 10)
- datetime.date(2018, 12, 11)]
-
--------- Timestamp local combine
+ datetime.date(2019, 4, 7)]
 
 --------------- DUPLICATES
 
 -------- Entire row duplicate
-CHECK if we remove entire file by removing duplicated entries, or if the file somehow continues on
-Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
- {64: [15293, 15293], 65: [15293, 15293]}
+CHECK if we remove entire file by removing duplicated entries:  {64: True, 65: True}
+CHECK if there are glucose values in the duplicated entries:  {64: True, 65: True}
 DROPPED: 15293 duplicate entries
 
 -------- Timestamp duplicate
@@ -2667,28 +2525,39 @@ days:  3
 file ids:  [333 336 320]
 
  duplicated local timestamps
-times:  7058
+times:  37825
 days:  2
-file ids:  [336 320]
-CHECK if we remove entire file by removing duplicated timestamps, or if the file somehow continues on
-Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
- {31: [12607, 6525], 156: [15006, 533], 336: [6612, 6525], 320: [600, 533]} 
- {31: False, 156: False, 336: False, 320: False}
+file ids:  [ 62 333 334 335 336 337 320]
+CHECK if we remove entire file by removing duplicated timestamps
+Dupl file_id: [len file, len dupl ts of file]
+ {8: [3606, 3566], 31: [12607, 6525], 156: [15006, 533], 333: [3617, 3566], 336: [6612, 6525], 320: [600, 533]} 
+ {8: False, 31: False, 156: False, 333: False, 336: False, 320: False}
 Percentage of missing columns per file
- {31: 0.1891891891891892, 156: 0.1891891891891892, 336: 0.4864864864864865, 320: 0.43243243243243246}
+ {8: 0.2727272727272727, 31: 0.21212121212121213, 156: 0.21212121212121213, 333: 0.6363636363636364, 336: 0.6363636363636364, 320: 0.48484848484848486}
 Missing columns per file
- {31: Index(['combined_pedal_smoothness', 'glucose', 'time_from_course',
+ {8: Index(['battery_soc', 'left_pedal_smoothness', 'right_pedal_smoothness',
+       'glucose', 'time_from_course', 'compressed_speed_distance',
+       'resistance', 'cycle_length', 'fractional_cadence'],
+      dtype='object'), 31: Index(['combined_pedal_smoothness', 'glucose', 'time_from_course',
        'compressed_speed_distance', 'resistance', 'cycle_length',
        'fractional_cadence'],
       dtype='object'), 156: Index(['combined_pedal_smoothness', 'glucose', 'time_from_course',
        'compressed_speed_distance', 'resistance', 'cycle_length',
        'fractional_cadence'],
+      dtype='object'), 333: Index(['gps_accuracy', 'distance', 'left_right_balance',
+       'combined_pedal_smoothness', 'left_torque_effectiveness',
+       'right_torque_effectiveness', 'grade', 'temperature', 'local_timestamp',
+       'local_timestamp_loc', 'battery_soc', 'left_pedal_smoothness',
+       'right_pedal_smoothness', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length',
+       'fractional_cadence', 'device_0_serialnumber', 'error_local_timestamp'],
       dtype='object'), 336: Index(['gps_accuracy', 'distance', 'left_right_balance',
        'combined_pedal_smoothness', 'left_torque_effectiveness',
-       'right_torque_effectiveness', 'grade', 'temperature', 'battery_soc',
-       'left_pedal_smoothness', 'right_pedal_smoothness', 'glucose',
-       'time_from_course', 'compressed_speed_distance', 'resistance',
-       'cycle_length', 'fractional_cadence', 'device_0_serialnumber'],
+       'right_torque_effectiveness', 'grade', 'temperature', 'local_timestamp',
+       'local_timestamp_loc', 'battery_soc', 'left_pedal_smoothness',
+       'right_pedal_smoothness', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length',
+       'fractional_cadence', 'device_0_serialnumber', 'error_local_timestamp'],
       dtype='object'), 320: Index(['gps_accuracy', 'heart_rate', 'power', 'left_right_balance',
        'combined_pedal_smoothness', 'left_torque_effectiveness',
        'right_torque_effectiveness', 'grade', 'battery_soc',
@@ -2698,31 +2567,31 @@ Missing columns per file
       dtype='object')}
 Duplicate timestamps in devices:
 
- device_ELEMNT
+ ELEMNT
 times:  0
 days:  0
 file ids:  []
 
- device_ELEMNTBOLT
-times:  7058
-days:  2
-file ids:  [ 31 156]
+ ELEMNTBOLT
+times:  10624
+days:  3
+file ids:  [  8  31 156]
 
- device_GARMIN
+ GARMIN
 times:  533
 days:  1
 file ids:  [320]
 
- device_ZWIFT
-times:  6525
-days:  1
-file ids:  [336]
+ ZWIFT
+times:  10091
+days:  2
+file ids:  [333 336]
 Duplicate timestamps in serialnumbers:
 
  2290548736.0
-times:  7058
-days:  2
-file ids:  [ 31 156]
+times:  10624
+days:  3
+file ids:  [  8  31 156]
 
  4167528448.0
 times:  0
@@ -2740,41 +2609,50 @@ days:  1
 file ids:  [320]
 Duplicate timestamps after potentially dropping devices: 
 
- device_ELEMNTBOLT
-times:  7058
+ ELEMNT
+times:  0
+days:  0
+file ids:  []
+
+ ELEMNTBOLT
+times:  10624
+days:  3
+file ids:  [  8  31 156]
+
+ ZWIFT
+times:  10091
 days:  2
-file ids:  [ 31 156]
+file ids:  [333 336]
 
- device_ZWIFT
-times:  6525
-days:  1
-file ids:  [336]
-
- device_ELEMNT
+ ELEMNTROAM
 times:  0
 days:  0
 file ids:  []
 Do the duplicate timestamps have the same data?
-                  timestamp  position_lat  position_long  gps_accuracy  ...  device_GARMIN  device_ZWIFT  keep_devices  error_local_timestamp
-332423  2018-12-29 20:03:35           NaN            NaN           NaN  ...          False         False          True                  False
-3386149 2018-12-29 20:03:35     40.774528     -73.968920           NaN  ...          False          True          True                  False
-332424  2018-12-29 20:03:36    -32.756495     151.775802           1.0  ...          False         False          True                  False
-3386150 2018-12-29 20:03:36     40.774418     -73.969011           NaN  ...          False          True          True                  False
-332425  2018-12-29 20:03:37    -32.756495     151.775802           1.0  ...          False         False          True                  False
-...                     ...           ...            ...           ...  ...            ...           ...           ...                    ...
-1410006 2019-04-24 22:51:57    -32.835529     151.449976           2.0  ...          False         False          True                  False
-1410007 2019-04-24 22:51:58    -32.835481     151.450067           2.0  ...          False         False          True                  False
-1410012 2019-04-24 22:52:03    -32.835250     151.450503           2.0  ...          False         False          True                  False
-1410015 2019-04-24 22:52:06    -32.835128     151.450738           2.0  ...          False         False          True                  False
-1410021 2019-04-24 22:54:08    -32.835043     151.451002           1.0  ...          False         False          True                  False
+                  timestamp  position_lat  position_long  ...    device_0  device_0_serialnumber  error_local_timestamp
+82577   2018-12-09 07:04:45    -32.756443     151.775870  ...  ELEMNTBOLT           2.290549e+09                   True
+3368056 2018-12-09 07:04:45    -11.640043     166.942846  ...       ZWIFT                    NaN                    NaN
+3368057 2018-12-09 07:04:46    -11.640087     166.942770  ...       ZWIFT                    NaN                    NaN
+82578   2018-12-09 07:04:46    -32.756443     151.775870  ...  ELEMNTBOLT           2.290549e+09                   True
+82579   2018-12-09 07:04:47    -32.756443     151.775870  ...  ELEMNTBOLT           2.290549e+09                   True
+...                     ...           ...            ...  ...         ...                    ...                    ...
+1410006 2019-04-24 22:51:57    -32.835529     151.449976  ...  ELEMNTBOLT           2.290549e+09                  False
+1410007 2019-04-24 22:51:58    -32.835481     151.450067  ...  ELEMNTBOLT           2.290549e+09                  False
+1410012 2019-04-24 22:52:03    -32.835250     151.450503  ...  ELEMNTBOLT           2.290549e+09                  False
+1410015 2019-04-24 22:52:06    -32.835128     151.450738  ...  ELEMNTBOLT           2.290549e+09                  False
+1410021 2019-04-24 22:54:08    -32.835043     151.451002  ...  ELEMNTBOLT           2.290549e+09                  False
 
-[13583 rows x 37 columns]
+[20715 rows x 33 columns]
 /local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/frame.py:4312: SettingWithCopyWarning: 
 A value is trying to be set on a copy of a slice from a DataFrame
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   errors=errors,
-DROPPED: 2 files with 7212 duplicate timestamps
+DROPPED: 3 files with 10829 duplicate timestamps
+Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 41/41 [00:51<00:00,  1.24s/it, Completed]
+Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:13<00:00, 13.71s/it]
+Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.32it/s]
+Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 383.46it/s]
 
 ------------------------------- Athlete  5
 /local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (19,20,23) have mixed types.Specify dtype option on import or set low_memory=False.
@@ -2992,120 +2870,33 @@ Are there glucose values in the data that will be dropped with the device select
 
 --------------- TIMESTAMP
 
--------- Timestamp: impute zwift nan
-Get timezone of Zwift files for the following dates: 
-2018-12-17
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2018-12-21
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2018-12-28
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-01-05
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-01-07
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-01-08
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-01-17
-local_timestamp_loc changed to UTC offset:  0 hours
-local_timestamp changed to UTC offset:  0 hours
-2019-08-16
-local_timestamp_loc changed to UTC offset:  2 hours
-local_timestamp changed to UTC offset:  2 hours
-2019-01-30
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-02-01
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-02-02
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-09-06
-local_timestamp_loc changed to UTC offset:  2 hours
-local_timestamp changed to UTC offset:  2 hours
-2019-02-04
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-09-11
-local_timestamp_loc changed to UTC offset:  2 hours
-local_timestamp changed to UTC offset:  2 hours
-2019-02-06
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-02-08
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-02-10
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-02-27
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-03-06
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-03-08
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-03-15
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-03-16
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-11-26
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-11-28
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-Exception in Tkinter callback
-Traceback (most recent call last):
-  File "/usr/lib/python3.7/tkinter/__init__.py", line 1705, in __call__
-    return self.func(*args)
-  File "/usr/lib/python3.7/tkinter/__init__.py", line 749, in callit
-    func(*args)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backends/_backend_tk.py", line 253, in idle_draw
-    self.draw()
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backends/backend_tkagg.py", line 9, in draw
-    super(FigureCanvasTkAgg, self).draw()
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backends/backend_agg.py", line 407, in draw
-    self.figure.draw(self.renderer)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backend_bases.py", line 1544, in _draw
-    def _draw(renderer): raise Done(renderer)
-matplotlib.backend_bases._get_renderer.<locals>.Done: <matplotlib.backends.backend_agg.RendererAgg object at 0x7f8d76e8e390>
-
--------- Timestamp: nan
+-------- Local timestamp: nan
 
  local timestamp not available
-times:  0
-days:  0
-file ids:  []
+times:  156606
+days:  24
+file ids:  [ 12 202 203 204 205 206 207 208 209 210 211 212 213 214 215 216 217 218
+ 219 220 221 222 223 224 225 226 227 228 229 230]
 
  local timestamp from location not available
-times:  24
-days:  1
-file ids:  [54]
+times:  156630
+days:  24
+file ids:  [ 54  12 202 203 204 205 206 207 208 209 210 211 212 213 214 215 216 217
+ 218 219 220 221 222 223 224 225 226 227 228 229 230]
 
  local timestamp OR local timestamp from location not available
-times:  24
-days:  1
-file ids:  [54]
+times:  156630
+days:  24
+file ids:  [ 54  12 202 203 204 205 206 207 208 209 210 211 212 213 214 215 216 217
+ 218 219 220 221 222 223 224 225 226 227 228 229 230]
 
  local timestamp AND local timestamp from location not available
-times:  0
-days:  0
-file ids:  []
-DROPPED: 0 files with 0 nan local timestamps (both meta and loc)
+times:  156606
+days:  24
+file ids:  [ 12 202 203 204 205 206 207 208 209 210 211 212 213 214 215 216 217 218
+ 219 220 221 222 223 224 225 226 227 228 229 230]
 
--------- Timestamp error
+-------- Local timestamp: error
 
  local timestamp does not equal local timestamp from location (excl. nans)
 times:  0
@@ -3113,14 +2904,11 @@ days:  0
 file ids:  []
 Dates for which this happens:  []
 
--------- Timestamp local combine
-
 --------------- DUPLICATES
 
 -------- Entire row duplicate
-CHECK if we remove entire file by removing duplicated entries, or if the file somehow continues on
-Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
- {}
+CHECK if we remove entire file by removing duplicated entries:  {}
+CHECK if there are glucose values in the duplicated entries:  {}
 DROPPED: 0 duplicate entries
 
 -------- Timestamp duplicate
@@ -3131,15 +2919,16 @@ days:  4
 file ids:  [209 210 213 229]
 
  duplicated local timestamps
-times:  21320
-days:  4
-file ids:  [209 210 213 229]
-CHECK if we remove entire file by removing duplicated timestamps, or if the file somehow continues on
-Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
+times:  156605
+days:  1
+file ids:  [ 12 202 203 204 205 206 207 208 209 210 211 212 213 214 215 216 217 218
+ 219 220 221 222 223 224 225 226 227 228 229 230]
+CHECK if we remove entire file by removing duplicated timestamps
+Dupl file_id: [len file, len dupl ts of file]
  {48: [3879, 3675], 50: [9909, 9751], 53: [5432, 4879], 196: [3095, 3015], 209: [3758, 3675], 210: [10846, 9751], 213: [7207, 4879], 229: [9022, 3015]} 
  {48: False, 50: False, 53: False, 196: False, 209: False, 210: False, 213: False, 229: False}
 Percentage of missing columns per file
- {48: 0.19444444444444445, 50: 0.2222222222222222, 53: 0.2222222222222222, 196: 0.2777777777777778, 209: 0.5, 210: 0.5, 213: 0.5, 229: 0.5}
+ {48: 0.21212121212121213, 50: 0.24242424242424243, 53: 0.24242424242424243, 196: 0.30303030303030304, 209: 0.6363636363636364, 210: 0.6363636363636364, 213: 0.6363636363636364, 229: 0.6363636363636364}
 Missing columns per file
  {48: Index(['time_from_course', 'compressed_speed_distance', 'resistance',
        'cycle_length', 'glucose', 'fractional_cadence', 'accumulated_power'],
@@ -3156,41 +2945,45 @@ Missing columns per file
       dtype='object'), 209: Index(['temperature', 'battery_soc', 'left_pedal_smoothness',
        'right_pedal_smoothness', 'left_torque_effectiveness',
        'right_torque_effectiveness', 'gps_accuracy', 'distance', 'grade',
-       'left_right_balance', 'time_from_course', 'compressed_speed_distance',
-       'resistance', 'cycle_length', 'glucose', 'fractional_cadence',
-       'accumulated_power', 'device_0_serialnumber'],
+       'local_timestamp', 'local_timestamp_loc', 'left_right_balance',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length', 'glucose', 'fractional_cadence', 'accumulated_power',
+       'device_0_serialnumber', 'error_local_timestamp'],
       dtype='object'), 210: Index(['temperature', 'battery_soc', 'left_pedal_smoothness',
        'right_pedal_smoothness', 'left_torque_effectiveness',
        'right_torque_effectiveness', 'gps_accuracy', 'distance', 'grade',
-       'left_right_balance', 'time_from_course', 'compressed_speed_distance',
-       'resistance', 'cycle_length', 'glucose', 'fractional_cadence',
-       'accumulated_power', 'device_0_serialnumber'],
+       'local_timestamp', 'local_timestamp_loc', 'left_right_balance',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length', 'glucose', 'fractional_cadence', 'accumulated_power',
+       'device_0_serialnumber', 'error_local_timestamp'],
       dtype='object'), 213: Index(['temperature', 'battery_soc', 'left_pedal_smoothness',
        'right_pedal_smoothness', 'left_torque_effectiveness',
        'right_torque_effectiveness', 'gps_accuracy', 'distance', 'grade',
-       'left_right_balance', 'time_from_course', 'compressed_speed_distance',
-       'resistance', 'cycle_length', 'glucose', 'fractional_cadence',
-       'accumulated_power', 'device_0_serialnumber'],
+       'local_timestamp', 'local_timestamp_loc', 'left_right_balance',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length', 'glucose', 'fractional_cadence', 'accumulated_power',
+       'device_0_serialnumber', 'error_local_timestamp'],
       dtype='object'), 229: Index(['temperature', 'battery_soc', 'left_pedal_smoothness',
        'right_pedal_smoothness', 'left_torque_effectiveness',
        'right_torque_effectiveness', 'gps_accuracy', 'distance', 'grade',
-       'left_right_balance', 'time_from_course', 'compressed_speed_distance',
-       'resistance', 'cycle_length', 'glucose', 'fractional_cadence',
-       'accumulated_power', 'device_0_serialnumber'],
+       'local_timestamp', 'local_timestamp_loc', 'left_right_balance',
+       'time_from_course', 'compressed_speed_distance', 'resistance',
+       'cycle_length', 'glucose', 'fractional_cadence', 'accumulated_power',
+       'device_0_serialnumber', 'error_local_timestamp'],
       dtype='object')}
 Duplicate timestamps in devices:
 
- device_ELEMNTBOLT
+ ELEMNTBOLT
 times:  21320
 days:  4
 file ids:  [ 48  50  53 196]
 
- device_GARMIN
+ GARMIN
 times:  0
 days:  0
 file ids:  []
 
- device_ZWIFT
+ ZWIFT
 times:  21320
 days:  4
 file ids:  [209 210 213 229]
@@ -3222,36 +3015,50 @@ days:  0
 file ids:  []
 Duplicate timestamps after potentially dropping devices: 
 
- device_ELEMNTBOLT
+ ELEMNT
+times:  0
+days:  0
+file ids:  []
+
+ ELEMNTBOLT
 times:  21320
 days:  4
 file ids:  [ 48  50  53 196]
 
- device_ZWIFT
+ ZWIFT
 times:  21320
 days:  4
 file ids:  [209 210 213 229]
-Do the duplicate timestamps have the same data?
-                  timestamp  cadence  power  temperature  ...  device_GARMIN  device_ZWIFT  keep_devices  error_local_timestamp
-519104  2019-01-30 19:01:40    100.0  350.0          NaN  ...          False         False          True                  False
-2221466 2019-01-30 19:01:40      0.0  372.0          NaN  ...          False          True          True                  False
-2221467 2019-01-30 19:01:41      0.0  352.0          NaN  ...          False          True          True                  False
-519105  2019-01-30 19:01:41    102.0  350.0          NaN  ...          False         False          True                  False
-519106  2019-01-30 19:01:42    103.0  342.0          NaN  ...          False         False          True                  False
-...                     ...      ...    ...          ...  ...            ...           ...           ...                    ...
-2158379 2019-11-26 14:13:41      NaN    NaN         19.0  ...          False         False          True                  False
-2318501 2019-11-26 14:13:42      0.0    0.0          NaN  ...          False          True          True                  False
-2158380 2019-11-26 14:13:42      NaN    NaN         19.0  ...          False         False          True                  False
-2158381 2019-11-26 14:13:43      NaN    NaN         19.0  ...          False         False          True                  False
-2318502 2019-11-26 14:13:43      0.0    0.0          NaN  ...          False          True          True                  False
 
-[42640 rows x 36 columns]
+ ELEMNTROAM
+times:  0
+days:  0
+file ids:  []
+Do the duplicate timestamps have the same data?
+                  timestamp  cadence  power  temperature  ...  accumulated_power    device_0  device_0_serialnumber  error_local_timestamp
+519104  2019-01-30 19:01:40    100.0  350.0          NaN  ...                NaN  ELEMNTBOLT           1.725529e+09                  False
+2221466 2019-01-30 19:01:40      0.0  372.0          NaN  ...                NaN       ZWIFT                    NaN                    NaN
+2221467 2019-01-30 19:01:41      0.0  352.0          NaN  ...                NaN       ZWIFT                    NaN                    NaN
+519105  2019-01-30 19:01:41    102.0  350.0          NaN  ...                NaN  ELEMNTBOLT           1.725529e+09                  False
+519106  2019-01-30 19:01:42    103.0  342.0          NaN  ...                NaN  ELEMNTBOLT           1.725529e+09                  False
+...                     ...      ...    ...          ...  ...                ...         ...                    ...                    ...
+2158379 2019-11-26 14:13:41      NaN    NaN         19.0  ...                NaN  ELEMNTBOLT           1.725529e+09                  False
+2318501 2019-11-26 14:13:42      0.0    0.0          NaN  ...                NaN       ZWIFT                    NaN                    NaN
+2158380 2019-11-26 14:13:42      NaN    NaN         19.0  ...                NaN  ELEMNTBOLT           1.725529e+09                  False
+2158381 2019-11-26 14:13:43      NaN    NaN         19.0  ...                NaN  ELEMNTBOLT           1.725529e+09                  False
+2318502 2019-11-26 14:13:43      0.0    0.0          NaN  ...                NaN       ZWIFT                    NaN                    NaN
+
+[42640 rows x 33 columns]
 /local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/frame.py:4312: SettingWithCopyWarning: 
 A value is trying to be set on a copy of a slice from a DataFrame
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   errors=errors,
 DROPPED: 4 files with 30833 duplicate timestamps
+Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 41/41 [00:37<00:00,  1.09it/s, Completed]
+Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:16<00:00, 16.34s/it]
+Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.43it/s]
+Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 339.13it/s]
 
 ------------------------------- Athlete  6
 /local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (17,21) have mixed types.Specify dtype option on import or set low_memory=False.
@@ -3686,24 +3493,7 @@ Are there glucose values in the data that will be dropped with the device select
 
 --------------- TIMESTAMP
 
--------- Timestamp: impute zwift nan
-Exception in Tkinter callback
-Traceback (most recent call last):
-  File "/usr/lib/python3.7/tkinter/__init__.py", line 1705, in __call__
-    return self.func(*args)
-  File "/usr/lib/python3.7/tkinter/__init__.py", line 749, in callit
-    func(*args)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backends/_backend_tk.py", line 253, in idle_draw
-    self.draw()
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backends/backend_tkagg.py", line 9, in draw
-    super(FigureCanvasTkAgg, self).draw()
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backends/backend_agg.py", line 407, in draw
-    self.figure.draw(self.renderer)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backend_bases.py", line 1544, in _draw
-    def _draw(renderer): raise Done(renderer)
-matplotlib.backend_bases._get_renderer.<locals>.Done: <matplotlib.backends.backend_agg.RendererAgg object at 0x7f8d92aabdd0>
-
--------- Timestamp: nan
+-------- Local timestamp: nan
 
  local timestamp not available
 times:  15074
@@ -3725,9 +3515,8 @@ file ids:  [  8  41  42  54  55  56  57  58  59  60  61  62  63  78 171 176 276 
 times:  0
 days:  0
 file ids:  []
-DROPPED: 0 files with 0 nan local timestamps (both meta and loc)
 
--------- Timestamp error
+-------- Local timestamp: error
 
  local timestamp does not equal local timestamp from location (excl. nans)
 times:  129752
@@ -3743,14 +3532,11 @@ Dates for which this happens:  [datetime.date(2018, 12, 9) datetime.date(2018, 1
  datetime.date(2019, 10, 1) datetime.date(2019, 10, 2)
  datetime.date(2019, 10, 3)]
 
--------- Timestamp local combine
-
 --------------- DUPLICATES
 
 -------- Entire row duplicate
-CHECK if we remove entire file by removing duplicated entries, or if the file somehow continues on
-Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
- {}
+CHECK if we remove entire file by removing duplicated entries:  {}
+CHECK if there are glucose values in the duplicated entries:  {}
 DROPPED: 0 duplicate entries
 
 -------- Timestamp duplicate
@@ -3761,15 +3547,15 @@ days:  3
 file ids:  [123 174 287]
 
  duplicated local timestamps
-times:  38014
-days:  3
-file ids:  [123 174 287]
-CHECK if we remove entire file by removing duplicated timestamps, or if the file somehow continues on
-Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
+times:  49644
+days:  4
+file ids:  [123 174 287 304]
+CHECK if we remove entire file by removing duplicated timestamps
+Dupl file_id: [len file, len dupl ts of file]
  {122: [7276, 5588], 123: [5631, 5588], 173: [15543, 15130], 174: [19350, 15130], 286: [17543, 17296], 287: [19972, 17296]} 
  {122: False, 123: False, 173: False, 174: False, 286: False, 287: False}
 Percentage of missing columns per file
- {122: 0.06896551724137931, 123: 0.06896551724137931, 173: 0.06896551724137931, 174: 0.20689655172413793, 286: 0.06896551724137931, 287: 0.20689655172413793}
+ {122: 0.07142857142857142, 123: 0.07142857142857142, 173: 0.07142857142857142, 174: 0.21428571428571427, 286: 0.07142857142857142, 287: 0.21428571428571427}
 Missing columns per file
  {122: Index(['glucose', 'combined_pedal_smoothness'], dtype='object'), 123: Index(['glucose', 'combined_pedal_smoothness'], dtype='object'), 173: Index(['glucose', 'combined_pedal_smoothness'], dtype='object'), 174: Index(['glucose', 'right_torque_effectiveness', 'left_torque_effectiveness',
        'combined_pedal_smoothness', 'left_pedal_smoothness',
@@ -3780,7 +3566,7 @@ Missing columns per file
       dtype='object')}
 Duplicate timestamps in devices:
 
- device_ELEMNTBOLT
+ ELEMNTBOLT
 times:  76028
 days:  3
 file ids:  [122 123 173 174 286 287]
@@ -3817,31 +3603,50 @@ days:  1
 file ids:  [287]
 Duplicate timestamps after potentially dropping devices: 
 
- device_ELEMNTBOLT
+ ELEMNT
+times:  0
+days:  0
+file ids:  []
+
+ ELEMNTBOLT
 times:  76028
 days:  3
 file ids:  [122 123 173 174 286 287]
-Do the duplicate timestamps have the same data?
-                  timestamp  position_lat  position_long  ...  device_ELEMNTBOLT  keep_devices  error_local_timestamp
-1188794 2019-04-05 09:33:51     42.668409      -2.023297  ...               True          True                  False
-1196069 2019-04-05 09:33:51     42.668404      -2.023292  ...               True          True                  False
-1196070 2019-04-05 09:33:52     42.668385      -2.023284  ...               True          True                  False
-1188795 2019-04-05 09:33:52     42.668380      -2.023283  ...               True          True                  False
-1188796 2019-04-05 09:33:53     42.668346      -2.023270  ...               True          True                  False
-...                     ...           ...            ...  ...                ...           ...                    ...
-2607440 2019-09-18 13:05:41     42.103390       2.766500  ...               True          True                  False
-2589493 2019-09-18 13:05:42     42.103333       2.766457  ...               True          True                  False
-2607441 2019-09-18 13:05:42     42.103310       2.766469  ...               True          True                  False
-2589494 2019-09-18 13:05:43     42.103260       2.766431  ...               True          True                  False
-2607442 2019-09-18 13:05:43     42.103233       2.766439  ...               True          True                  False
 
-[76028 rows x 29 columns]
+ ZWIFT
+times:  0
+days:  0
+file ids:  []
+
+ ELEMNTROAM
+times:  0
+days:  0
+file ids:  []
+Do the duplicate timestamps have the same data?
+                  timestamp  position_lat  position_long  ...    device_0  device_0_serialnumber  error_local_timestamp
+1188794 2019-04-05 09:33:51     42.668409      -2.023297  ...  ELEMNTBOLT             2927509504                  False
+1196069 2019-04-05 09:33:51     42.668404      -2.023292  ...  ELEMNTBOLT             3430528000                  False
+1196070 2019-04-05 09:33:52     42.668385      -2.023284  ...  ELEMNTBOLT             3430528000                  False
+1188795 2019-04-05 09:33:52     42.668380      -2.023283  ...  ELEMNTBOLT             2927509504                  False
+1188796 2019-04-05 09:33:53     42.668346      -2.023270  ...  ELEMNTBOLT             2927509504                  False
+...                     ...           ...            ...  ...         ...                    ...                    ...
+2607440 2019-09-18 13:05:41     42.103390       2.766500  ...  ELEMNTBOLT              276743168                  False
+2589493 2019-09-18 13:05:42     42.103333       2.766457  ...  ELEMNTBOLT              849822720                  False
+2607441 2019-09-18 13:05:42     42.103310       2.766469  ...  ELEMNTBOLT              276743168                  False
+2589494 2019-09-18 13:05:43     42.103260       2.766431  ...  ELEMNTBOLT              849822720                  False
+2607442 2019-09-18 13:05:43     42.103233       2.766439  ...  ELEMNTBOLT              276743168                  False
+
+[76028 rows x 28 columns]
 /local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/frame.py:4312: SettingWithCopyWarning: 
 A value is trying to be set on a copy of a slice from a DataFrame
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   errors=errors,
 DROPPED: 3 files with 44953 duplicate timestamps
+Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 36/36 [00:44<00:00,  1.24s/it, Completed]
+Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:12<00:00, 12.80s/it]
+Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.58it/s]
+Export report to file: 100%|███████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 79.95it/s]
 
 ------------------------------- Athlete  10
 /local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (13,18,19) have mixed types.Specify dtype option on import or set low_memory=False.
@@ -4200,63 +4005,37 @@ Are there glucose values in the data that will be dropped with the device select
 
 --------------- TIMESTAMP
 
--------- Timestamp: impute zwift nan
-Get timezone of Zwift files for the following dates: 
-2019-01-30
-local_timestamp_loc changed to UTC offset:  0 hours
-local_timestamp changed to UTC offset:  1 hours
-2019-02-13
-local_timestamp_loc changed to UTC offset:  0 hours
-local_timestamp changed to UTC offset:  0 hours
-2019-03-06
-local_timestamp_loc changed to UTC offset:  0 hours
-local_timestamp changed to UTC offset:  4 hours
-Exception in Tkinter callback
-Traceback (most recent call last):
-  File "/usr/lib/python3.7/tkinter/__init__.py", line 1705, in __call__
-    return self.func(*args)
-  File "/usr/lib/python3.7/tkinter/__init__.py", line 749, in callit
-    func(*args)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backends/_backend_tk.py", line 253, in idle_draw
-    self.draw()
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backends/backend_tkagg.py", line 9, in draw
-    super(FigureCanvasTkAgg, self).draw()
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backends/backend_agg.py", line 407, in draw
-    self.figure.draw(self.renderer)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backend_bases.py", line 1544, in _draw
-    def _draw(renderer): raise Done(renderer)
-matplotlib.backend_bases._get_renderer.<locals>.Done: <matplotlib.backends.backend_agg.RendererAgg object at 0x7f8d92690250>
-
--------- Timestamp: nan
+-------- Local timestamp: nan
 
  local timestamp not available
-times:  7531
-days:  1
-file ids:  [234]
+times:  22576
+days:  4
+file ids:  [234 359 360 361 362 363]
 
  local timestamp from location not available
-times:  105108
-days:  15
-file ids:  [  7  15  21  68  91  93  96  98 203 209 259 292 333 339 340]
+times:  120153
+days:  18
+file ids:  [  7  15  21  68  91  93  96  98 203 209 259 292 333 359 360 361 362 363
+ 339 340]
 
  local timestamp OR local timestamp from location not available
-times:  112639
-days:  16
-file ids:  [  7  15  21  68  91  93  96  98 203 209 234 259 292 333 339 340]
+times:  127684
+days:  19
+file ids:  [  7  15  21  68  91  93  96  98 203 209 234 259 292 333 359 360 361 362
+ 363 339 340]
 
  local timestamp AND local timestamp from location not available
-times:  0
-days:  0
-file ids:  []
-DROPPED: 0 files with 0 nan local timestamps (both meta and loc)
+times:  15045
+days:  3
+file ids:  [359 360 361 362 363]
 
--------- Timestamp error
+-------- Local timestamp: error
 
  local timestamp does not equal local timestamp from location (excl. nans)
-times:  198001
-days:  25
+times:  186604
+days:  23
 file ids:  [ 67  69  90  92 101 128 140 157 184 185 186 187 211 244 245 246 247 277
- 278 279 284 297 298 299 359 360 362 363]
+ 278 279 284 297 298 299]
 Dates for which this happens:  [datetime.date(2019, 1, 29) datetime.date(2019, 1, 31)
  datetime.date(2019, 2, 22) datetime.date(2019, 2, 24)
  datetime.date(2019, 3, 5) datetime.date(2019, 4, 6)
@@ -4268,17 +4047,13 @@ Dates for which this happens:  [datetime.date(2019, 1, 29) datetime.date(2019, 1
  datetime.date(2019, 8, 1) datetime.date(2019, 9, 17)
  datetime.date(2019, 9, 18) datetime.date(2019, 9, 23)
  datetime.date(2019, 10, 7) datetime.date(2019, 10, 8)
- datetime.date(2019, 10, 9) datetime.date(2019, 1, 30)
- datetime.date(2019, 3, 6)]
-
--------- Timestamp local combine
+ datetime.date(2019, 10, 9)]
 
 --------------- DUPLICATES
 
 -------- Entire row duplicate
-CHECK if we remove entire file by removing duplicated entries, or if the file somehow continues on
-Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
- {}
+CHECK if we remove entire file by removing duplicated entries:  {}
+CHECK if there are glucose values in the duplicated entries:  {}
 DROPPED: 0 duplicate entries
 
 -------- Timestamp duplicate
@@ -4289,47 +4064,39 @@ days:  0
 file ids:  []
 
  duplicated local timestamps
-times:  394
+times:  22575
 days:  1
-file ids:  [69]
-CHECK if we remove entire file by removing duplicated timestamps, or if the file somehow continues on
-Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
- {68: [7642, 394], 69: [9006, 394]} 
- {68: False, 69: False}
+file ids:  [234 359 360 361 362 363]
+CHECK if we remove entire file by removing duplicated timestamps
+Dupl file_id: [len file, len dupl ts of file]
+ {} 
+ {}
 Percentage of missing columns per file
- {68: 0.40540540540540543, 69: 0.21621621621621623}
+ {}
 Missing columns per file
- {68: Index(['position_lat', 'position_long', 'gps_accuracy', 'enhanced_altitude',
-       'altitude', 'grade', 'left_right_balance', 'combined_pedal_smoothness',
-       'accumulated_power', 'fractional_cadence', 'resistance',
-       'time_from_course', 'compressed_speed_distance', 'cycle_length',
-       'error_local_timestamp'],
-      dtype='object'), 69: Index(['left_right_balance', 'combined_pedal_smoothness', 'accumulated_power',
-       'fractional_cadence', 'resistance', 'time_from_course',
-       'compressed_speed_distance', 'cycle_length'],
-      dtype='object')}
+ {}
 Duplicate timestamps in devices:
 
- device_ELEMNTBOLT
-times:  788
-days:  1
-file ids:  [68 69]
-
- device_GARMIN
+ ELEMNTBOLT
 times:  0
 days:  0
 file ids:  []
 
- device_ZWIFT
+ GARMIN
+times:  0
+days:  0
+file ids:  []
+
+ ZWIFT
 times:  0
 days:  0
 file ids:  []
 Duplicate timestamps in serialnumbers:
 
  2690854400.0
-times:  788
-days:  1
-file ids:  [68 69]
+times:  0
+days:  0
+file ids:  []
 
  nan
 times:  0
@@ -4347,36 +4114,39 @@ days:  0
 file ids:  []
 Duplicate timestamps after potentially dropping devices: 
 
- device_ELEMNTBOLT
-times:  788
-days:  1
-file ids:  [68 69]
+ ELEMNT
+times:  0
+days:  0
+file ids:  []
 
- device_ZWIFT
+ ELEMNTBOLT
+times:  0
+days:  0
+file ids:  []
+
+ ZWIFT
+times:  0
+days:  0
+file ids:  []
+
+ ELEMNTROAM
 times:  0
 days:  0
 file ids:  []
 Do the duplicate timestamps have the same data?
-                 timestamp  position_lat  position_long  gps_accuracy  ...  device_GARMIN  device_ZWIFT  keep_devices  error_local_timestamp
-712269 2019-01-31 14:04:24           NaN            NaN           NaN  ...          False         False          True                    NaN
-715071 2019-01-31 15:04:24     54.262305      -4.618446           3.0  ...          False         False          True                   True
-712270 2019-01-31 14:04:25           NaN            NaN           NaN  ...          False         False          True                    NaN
-715072 2019-01-31 15:04:25     54.262402      -4.618362           3.0  ...          False         False          True                   True
-712271 2019-01-31 14:04:26           NaN            NaN           NaN  ...          False         False          True                    NaN
-...                    ...           ...            ...           ...  ...            ...           ...           ...                    ...
-712660 2019-01-31 14:11:48           NaN            NaN           NaN  ...          False         False          True                    NaN
-715516 2019-01-31 15:11:49     54.287887      -4.581759           2.0  ...          False         False          True                   True
-712661 2019-01-31 14:11:49           NaN            NaN           NaN  ...          False         False          True                    NaN
-712662 2019-01-31 14:11:50           NaN            NaN           NaN  ...          False         False          True                    NaN
-715517 2019-01-31 15:11:50     54.287946      -4.581703           2.0  ...          False         False          True                   True
-
-[788 rows x 37 columns]
+Empty DataFrame
+Columns: [timestamp, position_lat, position_long, gps_accuracy, enhanced_altitude, altitude, grade, distance, cadence, enhanced_speed, speed, power, left_right_balance, combined_pedal_smoothness, left_torque_effectiveness, right_torque_effectiveness, temperature, local_timestamp, local_timestamp_loc, file_id, heart_rate, battery_soc, left_pedal_smoothness, right_pedal_smoothness, glucose, accumulated_power, fractional_cadence, resistance, time_from_course, compressed_speed_distance, cycle_length, device_0, device_0_serialnumber, error_local_timestamp]
+Index: []
 /local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/frame.py:4312: SettingWithCopyWarning: 
 A value is trying to be set on a copy of a slice from a DataFrame
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   errors=errors,
-DROPPED: 1 files with 9006 duplicate timestamps
+DROPPED: 0 files with 0 duplicate timestamps
+Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 41/41 [00:55<00:00,  1.36s/it, Completed]
+Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:13<00:00, 13.37s/it]
+Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.50it/s]
+Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 122.96it/s]
 
 ------------------------------- Athlete  12
 /local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (23) have mixed types.Specify dtype option on import or set low_memory=False.
@@ -4900,54 +4670,29 @@ Are there glucose values in the data that will be dropped with the device select
 
 --------------- TIMESTAMP
 
--------- Timestamp: impute zwift nan
-Get timezone of Zwift files for the following dates: 
-2018-12-18
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-2018-12-25
-local_timestamp_loc changed to UTC offset:  1 hours
-local_timestamp changed to UTC offset:  1 hours
-Exception in Tkinter callback
-Traceback (most recent call last):
-  File "/usr/lib/python3.7/tkinter/__init__.py", line 1705, in __call__
-    return self.func(*args)
-  File "/usr/lib/python3.7/tkinter/__init__.py", line 749, in callit
-    func(*args)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backends/_backend_tk.py", line 253, in idle_draw
-    self.draw()
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backends/backend_tkagg.py", line 9, in draw
-    super(FigureCanvasTkAgg, self).draw()
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backends/backend_agg.py", line 407, in draw
-    self.figure.draw(self.renderer)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backend_bases.py", line 1544, in _draw
-    def _draw(renderer): raise Done(renderer)
-matplotlib.backend_bases._get_renderer.<locals>.Done: <matplotlib.backends.backend_agg.RendererAgg object at 0x7f8d5c88bfd0>
-
--------- Timestamp: nan
+-------- Local timestamp: nan
 
  local timestamp not available
-times:  0
-days:  0
-file ids:  []
+times:  7197
+days:  2
+file ids:  [418 419]
 
  local timestamp from location not available
-times:  58865
-days:  11
-file ids:  [  0   5  10  12  78 166 167 321 399 400 377 378 401]
+times:  66062
+days:  13
+file ids:  [  0   5  10  12  78 166 167 321 399 400 418 419 377 378 401]
 
  local timestamp OR local timestamp from location not available
-times:  58865
-days:  11
-file ids:  [  0   5  10  12  78 166 167 321 399 400 377 378 401]
+times:  66062
+days:  13
+file ids:  [  0   5  10  12  78 166 167 321 399 400 418 419 377 378 401]
 
  local timestamp AND local timestamp from location not available
-times:  0
-days:  0
-file ids:  []
-DROPPED: 0 files with 0 nan local timestamps (both meta and loc)
+times:  7197
+days:  2
+file ids:  [418 419]
 
--------- Timestamp error
+-------- Local timestamp: error
 
  local timestamp does not equal local timestamp from location (excl. nans)
 times:  35068
@@ -4957,14 +4702,11 @@ Dates for which this happens:  [datetime.date(2019, 2, 14) datetime.date(2019, 3
  datetime.date(2019, 5, 8) datetime.date(2019, 5, 9)
  datetime.date(2019, 10, 21)]
 
--------- Timestamp local combine
-
 --------------- DUPLICATES
 
 -------- Entire row duplicate
-CHECK if we remove entire file by removing duplicated entries, or if the file somehow continues on
-Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
- {}
+CHECK if we remove entire file by removing duplicated entries:  {}
+CHECK if there are glucose values in the duplicated entries:  {}
 DROPPED: 0 duplicate entries
 
 -------- Timestamp duplicate
@@ -4977,17 +4719,17 @@ file ids:  [289 298 308 311 315 317 319 323 326 328 330 331 335 337 339 343 346 
  391 403 404 408 411]
 
  duplicated local timestamps
-times:  308633
-days:  36
-file ids:  [289 298 308 311 315 317 319 323 326 328 330 331 335 337 339 343 346 348
- 351 352 354 356 358 360 361 363 365 368 384 292 294 296 300 302 381 385
- 386 391 403 404 408 411]
-CHECK if we remove entire file by removing duplicated timestamps, or if the file somehow continues on
-Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
- {288: [21282, 6738], 289: [17394, 6738], 291: [6460, 5707], 293: [14545, 8238], 295: [16381, 7388], 297: [4822, 3278], 298: [9868, 3278], 299: [21351, 11062], 301: [9120, 7370], 307: [12161, 12101], 308: [13005, 12101], 310: [625, 490], 311: [1011, 490], 314: [21205, 21019], 315: [21065, 21019], 316: [17303, 17213], 317: [17623, 17213], 318: [12352, 12334], 319: [12404, 12334], 322: [13221, 10527], 323: [10603, 10527], 325: [15731, 10329], 326: [11396, 10329], 327: [7843, 1322], 328: [11316, 1322], 329: [16005, 13148], 330: [17212, 16818], 331: [11786, 10154], 334: [14465, 8175], 335: [8993, 8175], 336: [15358, 2302], 337: [4828, 2302], 338: [16078, 10033], 339: [13243, 10033], 342: [18395, 4760], 343: [5754, 4760], 345: [10642, 8193], 346: [8238, 8193], 347: [3185, 2719], 348: [3746, 2719], 350: [4360, 3723], 351: [4202, 2065], 352: [3238, 1658], 353: [9716, 6662], 354: [6687, 6662], 355: [9267, 8060], 356: [8077, 8060], 357: [9531, 8804], 358: [8824, 8804], 359: [11709, 8649], 360: [7538, 7527], 361: [4647, 4647], 362: [11710, 11104], 363: [11140, 11104], 364: [8134, 5762], 365: [5770, 5762], 367: [7549, 6220], 368: [7500, 6220], 382: [11083, 9482], 383: [8482, 5560], 384: [6186, 6096], 387: [5407, 2761], 390: [7340, 6230], 402: [9741, 8023], 405: [10955, 9405], 409: [4, 4], 410: [9665, 7570], 292: [16204, 5707], 294: [9338, 8238], 296: [7855, 7388], 300: [11719, 11062], 302: [9102, 7370], 381: [20750, 9482], 385: [9939, 4668], 386: [11281, 2761], 391: [9810, 6230], 403: [10116, 8023], 404: [12312, 9405], 408: [8025, 4], 411: [16332, 7570]} 
- {288: False, 289: False, 291: False, 293: False, 295: False, 297: False, 298: False, 299: False, 301: False, 307: False, 308: False, 310: False, 311: False, 314: False, 315: False, 316: False, 317: False, 318: False, 319: False, 322: False, 323: False, 325: False, 326: False, 327: False, 328: False, 329: False, 330: False, 331: False, 334: False, 335: False, 336: False, 337: False, 338: False, 339: False, 342: False, 343: False, 345: False, 346: False, 347: False, 348: False, 350: False, 351: False, 352: False, 353: False, 354: False, 355: False, 356: False, 357: False, 358: False, 359: False, 360: False, 361: True, 362: False, 363: False, 364: False, 365: False, 367: False, 368: False, 382: False, 383: False, 384: False, 387: False, 390: False, 402: False, 405: False, 409: True, 410: False, 292: False, 294: False, 296: False, 300: False, 302: False, 381: False, 385: False, 386: False, 391: False, 403: False, 404: False, 408: False, 411: False}
+times:  317400
+days:  38
+file ids:  [169 289 298 308 311 315 317 319 323 326 328 330 331 335 337 339 343 346
+ 348 351 352 354 356 358 360 361 363 365 368 384 418 419 292 294 296 300
+ 302 381 385 386 391 403 404 408 411]
+CHECK if we remove entire file by removing duplicated timestamps
+Dupl file_id: [len file, len dupl ts of file]
+ {288: [21282, 6738], 289: [17394, 6738], 291: [6460, 5707], 293: [14545, 8238], 295: [16381, 7388], 297: [4822, 3278], 298: [9868, 3278], 299: [21351, 11062], 301: [9120, 7370], 307: [12161, 12101], 308: [13005, 12101], 310: [625, 490], 311: [1011, 490], 314: [21205, 21019], 315: [21065, 21019], 316: [17303, 17213], 317: [17623, 17213], 318: [12352, 12334], 319: [12404, 12334], 322: [13221, 10527], 323: [10603, 10527], 325: [15731, 10329], 326: [11396, 10329], 327: [7843, 1322], 328: [11316, 1322], 329: [16005, 13148], 330: [17212, 16818], 331: [11786, 10154], 334: [14465, 8175], 335: [8993, 8175], 336: [15358, 2302], 337: [4828, 2302], 338: [16078, 10033], 339: [13243, 10033], 342: [18395, 4760], 343: [5754, 4760], 345: [10642, 8193], 346: [8238, 8193], 347: [3185, 2719], 348: [3746, 2719], 350: [4360, 3723], 351: [4202, 2065], 352: [3238, 1658], 353: [9716, 6662], 354: [6687, 6662], 355: [9267, 8060], 356: [8077, 8060], 357: [9531, 8804], 358: [8824, 8804], 359: [11709, 7527], 360: [7538, 7527], 362: [11710, 11104], 363: [11140, 11104], 364: [8134, 5762], 365: [5770, 5762], 367: [7549, 4601], 368: [7500, 4601], 382: [11083, 9482], 383: [8482, 5560], 384: [6186, 6096], 387: [5407, 2761], 390: [7340, 6230], 402: [9741, 8023], 405: [10955, 9405], 409: [4, 4], 410: [9665, 7570], 292: [16204, 5707], 294: [9338, 8238], 296: [7855, 7388], 300: [11719, 11062], 302: [9102, 7370], 381: [20750, 9482], 385: [9939, 4668], 386: [11281, 2761], 391: [9810, 6230], 403: [10116, 8023], 404: [12312, 9405], 408: [8025, 4], 411: [16332, 7570]} 
+ {288: False, 289: False, 291: False, 293: False, 295: False, 297: False, 298: False, 299: False, 301: False, 307: False, 308: False, 310: False, 311: False, 314: False, 315: False, 316: False, 317: False, 318: False, 319: False, 322: False, 323: False, 325: False, 326: False, 327: False, 328: False, 329: False, 330: False, 331: False, 334: False, 335: False, 336: False, 337: False, 338: False, 339: False, 342: False, 343: False, 345: False, 346: False, 347: False, 348: False, 350: False, 351: False, 352: False, 353: False, 354: False, 355: False, 356: False, 357: False, 358: False, 359: False, 360: False, 362: False, 363: False, 364: False, 365: False, 367: False, 368: False, 382: False, 383: False, 384: False, 387: False, 390: False, 402: False, 405: False, 409: True, 410: False, 292: False, 294: False, 296: False, 300: False, 302: False, 381: False, 385: False, 386: False, 391: False, 403: False, 404: False, 408: False, 411: False}
 Percentage of missing columns per file
- {288: 0.14705882352941177, 289: 0.14705882352941177, 291: 0.14705882352941177, 293: 0.14705882352941177, 295: 0.14705882352941177, 297: 0.14705882352941177, 298: 0.38235294117647056, 299: 0.14705882352941177, 301: 0.14705882352941177, 307: 0.20588235294117646, 308: 0.35294117647058826, 310: 0.35294117647058826, 311: 0.35294117647058826, 314: 0.20588235294117646, 315: 0.14705882352941177, 316: 0.20588235294117646, 317: 0.14705882352941177, 318: 0.20588235294117646, 319: 0.14705882352941177, 322: 0.17647058823529413, 323: 0.17647058823529413, 325: 0.14705882352941177, 326: 0.17647058823529413, 327: 0.14705882352941177, 328: 0.17647058823529413, 329: 0.17647058823529413, 330: 0.14705882352941177, 331: 0.35294117647058826, 334: 0.17647058823529413, 335: 0.17647058823529413, 336: 0.17647058823529413, 337: 0.17647058823529413, 338: 0.14705882352941177, 339: 0.17647058823529413, 342: 0.17647058823529413, 343: 0.17647058823529413, 345: 0.38235294117647056, 346: 0.23529411764705882, 347: 0.17647058823529413, 348: 0.20588235294117646, 350: 0.20588235294117646, 351: 0.17647058823529413, 352: 0.17647058823529413, 353: 0.14705882352941177, 354: 0.20588235294117646, 355: 0.14705882352941177, 356: 0.20588235294117646, 357: 0.14705882352941177, 358: 0.20588235294117646, 359: 0.14705882352941177, 360: 0.20588235294117646, 361: 0.38235294117647056, 362: 0.14705882352941177, 363: 0.20588235294117646, 364: 0.14705882352941177, 365: 0.20588235294117646, 367: 0.17647058823529413, 368: 0.23529411764705882, 382: 0.14705882352941177, 383: 0.35294117647058826, 384: 0.38235294117647056, 387: 0.14705882352941177, 390: 0.14705882352941177, 402: 0.17647058823529413, 405: 0.17647058823529413, 409: 0.4117647058823529, 410: 0.38235294117647056, 292: 0.2647058823529412, 294: 0.2647058823529412, 296: 0.2647058823529412, 300: 0.2647058823529412, 302: 0.2647058823529412, 381: 0.38235294117647056, 385: 0.35294117647058826, 386: 0.35294117647058826, 391: 0.35294117647058826, 403: 0.35294117647058826, 404: 0.35294117647058826, 408: 0.35294117647058826, 411: 0.35294117647058826}
+ {288: 0.16129032258064516, 289: 0.16129032258064516, 291: 0.16129032258064516, 293: 0.16129032258064516, 295: 0.16129032258064516, 297: 0.16129032258064516, 298: 0.41935483870967744, 299: 0.16129032258064516, 301: 0.16129032258064516, 307: 0.22580645161290322, 308: 0.3870967741935484, 310: 0.3870967741935484, 311: 0.3870967741935484, 314: 0.22580645161290322, 315: 0.16129032258064516, 316: 0.22580645161290322, 317: 0.16129032258064516, 318: 0.22580645161290322, 319: 0.16129032258064516, 322: 0.1935483870967742, 323: 0.1935483870967742, 325: 0.16129032258064516, 326: 0.1935483870967742, 327: 0.16129032258064516, 328: 0.1935483870967742, 329: 0.1935483870967742, 330: 0.16129032258064516, 331: 0.3870967741935484, 334: 0.1935483870967742, 335: 0.1935483870967742, 336: 0.1935483870967742, 337: 0.1935483870967742, 338: 0.16129032258064516, 339: 0.1935483870967742, 342: 0.1935483870967742, 343: 0.1935483870967742, 345: 0.41935483870967744, 346: 0.25806451612903225, 347: 0.1935483870967742, 348: 0.22580645161290322, 350: 0.22580645161290322, 351: 0.1935483870967742, 352: 0.1935483870967742, 353: 0.16129032258064516, 354: 0.22580645161290322, 355: 0.16129032258064516, 356: 0.22580645161290322, 357: 0.16129032258064516, 358: 0.22580645161290322, 359: 0.16129032258064516, 360: 0.22580645161290322, 362: 0.16129032258064516, 363: 0.22580645161290322, 364: 0.16129032258064516, 365: 0.22580645161290322, 367: 0.1935483870967742, 368: 0.25806451612903225, 382: 0.16129032258064516, 383: 0.3870967741935484, 384: 0.41935483870967744, 387: 0.16129032258064516, 390: 0.16129032258064516, 402: 0.1935483870967742, 405: 0.1935483870967742, 409: 0.45161290322580644, 410: 0.41935483870967744, 292: 0.2903225806451613, 294: 0.2903225806451613, 296: 0.2903225806451613, 300: 0.2903225806451613, 302: 0.2903225806451613, 381: 0.41935483870967744, 385: 0.3870967741935484, 386: 0.3870967741935484, 391: 0.3870967741935484, 403: 0.3870967741935484, 404: 0.3870967741935484, 408: 0.3870967741935484, 411: 0.3870967741935484}
 Missing columns per file
  {288: Index(['glucose', 'time_from_course', 'compressed_speed_distance',
        'resistance', 'cycle_length'],
@@ -5117,11 +4859,6 @@ Missing columns per file
       dtype='object'), 360: Index(['left_pedal_smoothness', 'right_pedal_smoothness', 'glucose',
        'time_from_course', 'compressed_speed_distance', 'resistance',
        'cycle_length'],
-      dtype='object'), 361: Index(['heart_rate', 'cadence', 'power', 'left_pedal_smoothness',
-       'right_pedal_smoothness', 'left_torque_effectiveness',
-       'right_torque_effectiveness', 'left_right_balance', 'glucose',
-       'time_from_course', 'compressed_speed_distance', 'resistance',
-       'cycle_length'],
       dtype='object'), 362: Index(['heart_rate', 'time_from_course', 'compressed_speed_distance',
        'resistance', 'cycle_length'],
       dtype='object'), 363: Index(['left_pedal_smoothness', 'right_pedal_smoothness', 'glucose',
@@ -5217,23 +4954,23 @@ Missing columns per file
       dtype='object')}
 Duplicate timestamps in devices:
 
- device_ELEMNTBOLT
-times:  519575
+ ELEMNTBOLT
+times:  510568
 days:  36
 file ids:  [288 289 291 293 295 297 298 299 301 307 308 310 311 314 315 316 317 318
  319 322 323 325 326 327 328 329 330 331 334 335 336 337 338 339 342 343
- 345 346 347 348 350 351 352 353 354 355 356 357 358 359 360 361 362 363
- 364 365 367 368 382 383 384 387 390 402 405 409 410]
+ 345 346 347 348 350 351 352 353 354 355 356 357 358 359 360 362 363 364
+ 365 367 368 382 383 384 387 390 402 405 409 410]
 
- device_ELEMNTROAM
-times:  87908
-days:  13
-file ids:  [292 294 296 300 302 381 385 386 391 403 404 408 411]
-
- device_ZWIFT
+ ZWIFT
 times:  0
 days:  0
 file ids:  []
+
+ ELEMNTROAM
+times:  87908
+days:  13
+file ids:  [292 294 296 300 302 381 385 386 391 403 404 408 411]
 Duplicate timestamps in serialnumbers:
 
  1538848256.0
@@ -5242,18 +4979,18 @@ days:  0
 file ids:  []
 
  4162655872.0
-times:  200387
+times:  197646
 days:  22
 file ids:  [289 308 311 315 317 319 322 326 328 329 335 336 339 342 345 347 351 352
  353 355 357 359 362 364 367]
 
  3511514112.0
-times:  31749
-days:  6
-file ids:  [298 331 361 384 409 410]
+times:  27102
+days:  5
+file ids:  [298 331 384 409 410]
 
  1018149888.0
-times:  287439
+times:  285820
 days:  34
 file ids:  [288 291 293 295 297 299 301 307 310 314 316 318 323 325 327 330 334 337
  338 343 346 348 350 354 356 358 360 363 365 368 382 383 387 390 402 405]
@@ -5269,44 +5006,53 @@ days:  13
 file ids:  [292 294 296 300 302 381 385 386 391 403 404 408 411]
 Duplicate timestamps after potentially dropping devices: 
 
- device_ELEMNTBOLT
-times:  519575
-days:  36
-file ids:  [288 289 291 293 295 297 298 299 301 307 308 310 311 314 315 316 317 318
- 319 322 323 325 326 327 328 329 330 331 334 335 336 337 338 339 342 343
- 345 346 347 348 350 351 352 353 354 355 356 357 358 359 360 361 362 363
- 364 365 367 368 382 383 384 387 390 402 405 409 410]
-
- device_ZWIFT
+ ELEMNT
 times:  0
 days:  0
 file ids:  []
 
- device_ELEMNTROAM
+ ELEMNTBOLT
+times:  510568
+days:  36
+file ids:  [288 289 291 293 295 297 298 299 301 307 308 310 311 314 315 316 317 318
+ 319 322 323 325 326 327 328 329 330 331 334 335 336 337 338 339 342 343
+ 345 346 347 348 350 351 352 353 354 355 356 357 358 359 360 362 363 364
+ 365 367 368 382 383 384 387 390 402 405 409 410]
+
+ ZWIFT
+times:  0
+days:  0
+file ids:  []
+
+ ELEMNTROAM
 times:  87908
 days:  13
 file ids:  [292 294 296 300 302 381 385 386 391 403 404 408 411]
 Do the duplicate timestamps have the same data?
-                  timestamp   distance  heart_rate  cadence  ...  device_ELEMNTROAM  device_ZWIFT  keep_devices  error_local_timestamp
-3125449 2019-09-08 10:10:50  117613.18       131.0     78.0  ...              False         False          True                  False
-3132221 2019-09-08 10:10:50       0.00         NaN      NaN  ...              False         False          True                  False
-3125450 2019-09-08 10:10:51  117623.72       131.0     79.0  ...              False         False          True                  False
-3132222 2019-09-08 10:10:51       0.00         NaN      NaN  ...              False         False          True                  False
-3125451 2019-09-08 10:10:52  117635.73       131.0     81.0  ...              False         False          True                  False
-...                     ...        ...         ...      ...  ...                ...           ...           ...                    ...
-4717478 2019-11-24 12:39:05  103166.05       149.0      NaN  ...               True         False          True                  False
-4717479 2019-11-24 12:39:06  103174.66       149.0      NaN  ...               True         False          True                  False
-3979023 2019-11-24 12:39:06   33471.12         NaN      NaN  ...              False         False          True                  False
-3979024 2019-11-24 12:39:07   33471.12         NaN      NaN  ...              False         False          True                  False
-4717480 2019-11-24 12:39:07  103184.89       149.0      NaN  ...               True         False          True                  False
+                  timestamp   distance  heart_rate  cadence  ...  cycle_length    device_0  device_0_serialnumber  error_local_timestamp
+3125449 2019-09-08 10:10:50  117613.18       131.0     78.0  ...           NaN  ELEMNTBOLT           1.018150e+09                  False
+3132221 2019-09-08 10:10:50       0.00         NaN      NaN  ...           NaN  ELEMNTBOLT           4.162656e+09                  False
+3125450 2019-09-08 10:10:51  117623.72       131.0     79.0  ...           NaN  ELEMNTBOLT           1.018150e+09                  False
+3132222 2019-09-08 10:10:51       0.00         NaN      NaN  ...           NaN  ELEMNTBOLT           4.162656e+09                  False
+3125451 2019-09-08 10:10:52  117635.73       131.0     81.0  ...           NaN  ELEMNTBOLT           1.018150e+09                  False
+...                     ...        ...         ...      ...  ...           ...         ...                    ...                    ...
+3979022 2019-11-24 12:39:05   33471.12         NaN      NaN  ...           NaN  ELEMNTBOLT           3.511514e+09                  False
+3979023 2019-11-24 12:39:06   33471.12         NaN      NaN  ...           NaN  ELEMNTBOLT           3.511514e+09                  False
+4717479 2019-11-24 12:39:06  103174.66       149.0      NaN  ...           NaN  ELEMNTROAM           5.166546e+08                  False
+3979024 2019-11-24 12:39:07   33471.12         NaN      NaN  ...           NaN  ELEMNTBOLT           3.511514e+09                  False
+4717480 2019-11-24 12:39:07  103184.89       149.0      NaN  ...           NaN  ELEMNTROAM           5.166546e+08                  False
 
-[607483 rows x 34 columns]
+[598476 rows x 31 columns]
 /local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/frame.py:4312: SettingWithCopyWarning: 
 A value is trying to be set on a copy of a slice from a DataFrame
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   errors=errors,
-DROPPED: 42 files with 426077 duplicate timestamps
+DROPPED: 41 files with 421430 duplicate timestamps
+Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 39/39 [00:59<00:00,  1.52s/it, Completed]
+Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:15<00:00, 15.56s/it]
+Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.53it/s]
+Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 360.40it/s]
 
 ------------------------------- Athlete  13
 /local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (13) have mixed types.Specify dtype option on import or set low_memory=False.
@@ -5556,24 +5302,7 @@ Are there glucose values in the data that will be dropped with the device select
 
 --------------- TIMESTAMP
 
--------- Timestamp: impute zwift nan
-Exception in Tkinter callback
-Traceback (most recent call last):
-  File "/usr/lib/python3.7/tkinter/__init__.py", line 1705, in __call__
-    return self.func(*args)
-  File "/usr/lib/python3.7/tkinter/__init__.py", line 749, in callit
-    func(*args)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backends/_backend_tk.py", line 253, in idle_draw
-    self.draw()
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backends/backend_tkagg.py", line 9, in draw
-    super(FigureCanvasTkAgg, self).draw()
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backends/backend_agg.py", line 407, in draw
-    self.figure.draw(self.renderer)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backend_bases.py", line 1544, in _draw
-    def _draw(renderer): raise Done(renderer)
-matplotlib.backend_bases._get_renderer.<locals>.Done: <matplotlib.backends.backend_agg.RendererAgg object at 0x7f8d7acdab90>
-
--------- Timestamp: nan
+-------- Local timestamp: nan
 
  local timestamp not available
 times:  0
@@ -5596,9 +5325,8 @@ file ids:  [  9  11  12  15  19  21  22  23  24  25  27  28  30  32  58  68  70 
 times:  0
 days:  0
 file ids:  []
-DROPPED: 0 files with 0 nan local timestamps (both meta and loc)
 
--------- Timestamp error
+-------- Local timestamp: error
 
  local timestamp does not equal local timestamp from location (excl. nans)
 times:  111224
@@ -5613,14 +5341,11 @@ Dates for which this happens:  [datetime.date(2019, 2, 22) datetime.date(2019, 5
  datetime.date(2019, 10, 6) datetime.date(2019, 10, 17)
  datetime.date(2019, 10, 18) datetime.date(2019, 11, 18)]
 
--------- Timestamp local combine
-
 --------------- DUPLICATES
 
 -------- Entire row duplicate
-CHECK if we remove entire file by removing duplicated entries, or if the file somehow continues on
-Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
- {60: [5339, 5339], 61: [5339, 5339], 62: [11105, 11105], 63: [11105, 11105], 89: [18562, 2822], 90: [18562, 2822]}
+CHECK if we remove entire file by removing duplicated entries:  {60: True, 61: True, 62: True, 63: True, 89: False, 90: False}
+CHECK if there are glucose values in the duplicated entries:  {60: True, 61: True, 62: True, 63: True, 89: True, 90: True}
 DROPPED: 19266 duplicate entries
 
 -------- Timestamp duplicate
@@ -5634,12 +5359,12 @@ file ids:  [90]
 times:  15740
 days:  1
 file ids:  [90]
-CHECK if we remove entire file by removing duplicated timestamps, or if the file somehow continues on
-Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
+CHECK if we remove entire file by removing duplicated timestamps
+Dupl file_id: [len file, len dupl ts of file]
  {89: [18562, 15740], 90: [15740, 15740]} 
  {89: False, 90: True}
 Percentage of missing columns per file
- {89: 0.12903225806451613, 90: 0.12903225806451613}
+ {89: 0.13793103448275862, 90: 0.13793103448275862}
 Missing columns per file
  {89: Index(['combined_pedal_smoothness', 'left_pedal_smoothness',
        'right_pedal_smoothness', 'accumulated_power'],
@@ -5648,12 +5373,12 @@ Missing columns per file
       dtype='object')}
 Duplicate timestamps in devices:
 
- device_ELEMNTBOLT
+ ELEMNTBOLT
 times:  31480
 days:  1
 file ids:  [89 90]
 
- device_GARMIN
+ GARMIN
 times:  0
 days:  0
 file ids:  []
@@ -5675,31 +5400,50 @@ days:  0
 file ids:  []
 Duplicate timestamps after potentially dropping devices: 
 
- device_ELEMNTBOLT
+ ELEMNT
+times:  0
+days:  0
+file ids:  []
+
+ ELEMNTBOLT
 times:  31480
 days:  1
 file ids:  [89 90]
-Do the duplicate timestamps have the same data?
-                 timestamp  position_lat  position_long  ...  device_GARMIN  keep_devices  error_local_timestamp
-800623 2019-03-19 09:29:04     47.614244      18.771668  ...          False          True                  False
-819185 2019-03-19 09:29:04     47.614244      18.771668  ...          False          True                  False
-800624 2019-03-19 09:29:05     47.614296      18.771770  ...          False          True                  False
-819186 2019-03-19 09:29:05     47.614296      18.771770  ...          False          True                  False
-800625 2019-03-19 09:29:06     47.614349      18.771873  ...          False          True                  False
-...                    ...           ...            ...  ...            ...           ...                    ...
-816424 2019-03-19 14:04:07     47.515767      18.824226  ...          False          True                  False
-834987 2019-03-19 14:04:08     47.515737      18.824235  ...          False          True                  False
-816425 2019-03-19 14:04:08     47.515737      18.824235  ...          False          True                  False
-816426 2019-03-19 14:04:09     47.515717      18.824227  ...          False          True                  False
-834988 2019-03-19 14:04:09     47.515717      18.824227  ...          False          True                  False
 
-[31480 rows x 31 columns]
+ ZWIFT
+times:  0
+days:  0
+file ids:  []
+
+ ELEMNTROAM
+times:  0
+days:  0
+file ids:  []
+Do the duplicate timestamps have the same data?
+                 timestamp  position_lat  position_long  ...    device_0  device_0_serialnumber  error_local_timestamp
+800623 2019-03-19 09:29:04     47.614244      18.771668  ...  ELEMNTBOLT              316548096                  False
+819185 2019-03-19 09:29:04     47.614244      18.771668  ...  ELEMNTBOLT              316548096                  False
+800624 2019-03-19 09:29:05     47.614296      18.771770  ...  ELEMNTBOLT              316548096                  False
+819186 2019-03-19 09:29:05     47.614296      18.771770  ...  ELEMNTBOLT              316548096                  False
+800625 2019-03-19 09:29:06     47.614349      18.771873  ...  ELEMNTBOLT              316548096                  False
+...                    ...           ...            ...  ...         ...                    ...                    ...
+816424 2019-03-19 14:04:07     47.515767      18.824226  ...  ELEMNTBOLT              316548096                  False
+834987 2019-03-19 14:04:08     47.515737      18.824235  ...  ELEMNTBOLT              316548096                  False
+816425 2019-03-19 14:04:08     47.515737      18.824235  ...  ELEMNTBOLT              316548096                  False
+816426 2019-03-19 14:04:09     47.515717      18.824227  ...  ELEMNTBOLT              316548096                  False
+834988 2019-03-19 14:04:09     47.515717      18.824227  ...  ELEMNTBOLT              316548096                  False
+
+[31480 rows x 29 columns]
 /local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/frame.py:4312: SettingWithCopyWarning: 
 A value is trying to be set on a copy of a slice from a DataFrame
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   errors=errors,
 DROPPED: 1 files with 15740 duplicate timestamps
+Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 37/37 [00:36<00:00,  1.03it/s, Completed]
+Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:12<00:00, 12.98s/it]
+Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.48it/s]
+Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 347.04it/s]
 
 ------------------------------- Athlete  14
 /local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (18) have mixed types.Specify dtype option on import or set low_memory=False.
@@ -5937,24 +5681,7 @@ Are there glucose values in the data that will be dropped with the device select
 
 --------------- TIMESTAMP
 
--------- Timestamp: impute zwift nan
-Exception in Tkinter callback
-Traceback (most recent call last):
-  File "/usr/lib/python3.7/tkinter/__init__.py", line 1705, in __call__
-    return self.func(*args)
-  File "/usr/lib/python3.7/tkinter/__init__.py", line 749, in callit
-    func(*args)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backends/_backend_tk.py", line 253, in idle_draw
-    self.draw()
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backends/backend_tkagg.py", line 9, in draw
-    super(FigureCanvasTkAgg, self).draw()
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backends/backend_agg.py", line 407, in draw
-    self.figure.draw(self.renderer)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backend_bases.py", line 1544, in _draw
-    def _draw(renderer): raise Done(renderer)
-matplotlib.backend_bases._get_renderer.<locals>.Done: <matplotlib.backends.backend_agg.RendererAgg object at 0x7f8d76e9be50>
-
--------- Timestamp: nan
+-------- Local timestamp: nan
 
  local timestamp not available
 times:  0
@@ -5975,9 +5702,8 @@ file ids:  [  4  50  67 116 119 121 123 130 135 139 209 262 266]
 times:  0
 days:  0
 file ids:  []
-DROPPED: 0 files with 0 nan local timestamps (both meta and loc)
 
--------- Timestamp error
+-------- Local timestamp: error
 
  local timestamp does not equal local timestamp from location (excl. nans)
 times:  93943
@@ -5992,14 +5718,11 @@ Dates for which this happens:  [datetime.date(2018, 12, 22) datetime.date(2018, 
  datetime.date(2019, 8, 11) datetime.date(2019, 8, 12)
  datetime.date(2019, 10, 17)]
 
--------- Timestamp local combine
-
 --------------- DUPLICATES
 
 -------- Entire row duplicate
-CHECK if we remove entire file by removing duplicated entries, or if the file somehow continues on
-Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
- {}
+CHECK if we remove entire file by removing duplicated entries:  {}
+CHECK if there are glucose values in the duplicated entries:  {}
 DROPPED: 0 duplicate entries
 
 -------- Timestamp duplicate
@@ -6013,12 +5736,12 @@ file ids:  [303]
 times:  1771
 days:  1
 file ids:  [303]
-CHECK if we remove entire file by removing duplicated timestamps, or if the file somehow continues on
-Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
+CHECK if we remove entire file by removing duplicated timestamps
+Dupl file_id: [len file, len dupl ts of file]
  {283: [1819, 1771], 303: [1853, 1771]} 
  {283: False, 303: False}
 Percentage of missing columns per file
- {283: 0.25, 303: 0.21875}
+ {283: 0.26666666666666666, 303: 0.23333333333333334}
 Missing columns per file
  {283: Index(['altitude', 'gps_accuracy', 'speed', 'grade', 'left_right_balance',
        'combined_pedal_smoothness', 'battery_soc', 'glucose'],
@@ -6027,12 +5750,12 @@ Missing columns per file
       dtype='object')}
 Duplicate timestamps in devices:
 
- device_ELEMNTBOLT
+ ELEMNTBOLT
 times:  0
 days:  0
 file ids:  []
 
- device_GARMIN
+ GARMIN
 times:  3542
 days:  1
 file ids:  [283 303]
@@ -6059,13 +5782,28 @@ days:  0
 file ids:  []
 Duplicate timestamps after potentially dropping devices: 
 
- device_ELEMNTBOLT
+ ELEMNT
+times:  0
+days:  0
+file ids:  []
+
+ ELEMNTBOLT
+times:  0
+days:  0
+file ids:  []
+
+ ZWIFT
+times:  0
+days:  0
+file ids:  []
+
+ ELEMNTROAM
 times:  0
 days:  0
 file ids:  []
 Do the duplicate timestamps have the same data?
 Empty DataFrame
-Columns: [timestamp, enhanced_altitude, altitude, position_lat, position_long, gps_accuracy, distance, heart_rate, enhanced_speed, speed, temperature, grade, local_timestamp, file_id, cadence, power, left_right_balance, combined_pedal_smoothness, left_torque_effectiveness, right_torque_effectiveness, left_pedal_smoothness, right_pedal_smoothness, battery_soc, glucose, accumulated_power, fractional_cadence, device_0, device_0_serialnumber, device_ELEMNTBOLT, device_GARMIN, keep_devices, error_local_timestamp]
+Columns: [timestamp, enhanced_altitude, altitude, position_lat, position_long, gps_accuracy, distance, heart_rate, enhanced_speed, speed, temperature, grade, local_timestamp, local_timestamp_loc, file_id, cadence, power, left_right_balance, combined_pedal_smoothness, left_torque_effectiveness, right_torque_effectiveness, left_pedal_smoothness, right_pedal_smoothness, battery_soc, glucose, accumulated_power, fractional_cadence, device_0, device_0_serialnumber, error_local_timestamp]
 Index: []
 /local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/frame.py:4312: SettingWithCopyWarning: 
 A value is trying to be set on a copy of a slice from a DataFrame
@@ -6073,6 +5811,10 @@ A value is trying to be set on a copy of a slice from a DataFrame
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   errors=errors,
 DROPPED: 1 files with 1853 duplicate timestamps
+Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 38/38 [00:48<00:00,  1.29s/it, Completed]
+Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:13<00:00, 13.96s/it]
+Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.55it/s]
+Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 128.73it/s]
 
 ------------------------------- Athlete  15
 /local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (16) have mixed types.Specify dtype option on import or set low_memory=False.
@@ -6363,24 +6105,7 @@ Are there glucose values in the data that will be dropped with the device select
 
 --------------- TIMESTAMP
 
--------- Timestamp: impute zwift nan
-Exception in Tkinter callback
-Traceback (most recent call last):
-  File "/usr/lib/python3.7/tkinter/__init__.py", line 1705, in __call__
-    return self.func(*args)
-  File "/usr/lib/python3.7/tkinter/__init__.py", line 749, in callit
-    func(*args)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backends/_backend_tk.py", line 253, in idle_draw
-    self.draw()
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backends/backend_tkagg.py", line 9, in draw
-    super(FigureCanvasTkAgg, self).draw()
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backends/backend_agg.py", line 407, in draw
-    self.figure.draw(self.renderer)
-  File "/local/home/evanweenen/.local/lib/python3.7/site-packages/matplotlib/backend_bases.py", line 1544, in _draw
-    def _draw(renderer): raise Done(renderer)
-matplotlib.backend_bases._get_renderer.<locals>.Done: <matplotlib.backends.backend_agg.RendererAgg object at 0x7f8d5fb16dd0>
-
--------- Timestamp: nan
+-------- Local timestamp: nan
 
  local timestamp not available
 times:  0
@@ -6403,9 +6128,8 @@ file ids:  [  2  26  35  41  47  49  54  76  78  79  80  84  89 121 137 138 248 
 times:  0
 days:  0
 file ids:  []
-DROPPED: 0 files with 0 nan local timestamps (both meta and loc)
 
--------- Timestamp error
+-------- Local timestamp: error
 
  local timestamp does not equal local timestamp from location (excl. nans)
 times:  31481
@@ -6414,14 +6138,11 @@ file ids:  [ 75 286 297 302]
 Dates for which this happens:  [datetime.date(2019, 2, 22) datetime.date(2019, 10, 7)
  datetime.date(2019, 10, 17) datetime.date(2019, 11, 9)]
 
--------- Timestamp local combine
-
 --------------- DUPLICATES
 
 -------- Entire row duplicate
-CHECK if we remove entire file by removing duplicated entries, or if the file somehow continues on
-Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
- {}
+CHECK if we remove entire file by removing duplicated entries:  {}
+CHECK if there are glucose values in the duplicated entries:  {}
 DROPPED: 0 duplicate entries
 
 -------- Timestamp duplicate
@@ -6435,8 +6156,8 @@ file ids:  []
 times:  0
 days:  0
 file ids:  []
-CHECK if we remove entire file by removing duplicated timestamps, or if the file somehow continues on
-Dupl file_id: [len(df for file_id), len(df_dupl for file_id)]
+CHECK if we remove entire file by removing duplicated timestamps
+Dupl file_id: [len file, len dupl ts of file]
  {} 
  {}
 Percentage of missing columns per file
@@ -6445,7 +6166,7 @@ Missing columns per file
  {}
 Duplicate timestamps in devices:
 
- device_ELEMNTBOLT
+ ELEMNTBOLT
 times:  0
 days:  0
 file ids:  []
@@ -6472,13 +6193,28 @@ days:  0
 file ids:  []
 Duplicate timestamps after potentially dropping devices: 
 
- device_ELEMNTBOLT
+ ELEMNT
+times:  0
+days:  0
+file ids:  []
+
+ ELEMNTBOLT
+times:  0
+days:  0
+file ids:  []
+
+ ZWIFT
+times:  0
+days:  0
+file ids:  []
+
+ ELEMNTROAM
 times:  0
 days:  0
 file ids:  []
 Do the duplicate timestamps have the same data?
 Empty DataFrame
-Columns: [timestamp, position_lat, position_long, gps_accuracy, distance, enhanced_speed, speed, enhanced_altitude, altitude, grade, cadence, power, combined_pedal_smoothness, left_torque_effectiveness, right_torque_effectiveness, left_right_balance, temperature, local_timestamp, file_id, heart_rate, battery_soc, left_pedal_smoothness, right_pedal_smoothness, glucose, device_0, device_0_serialnumber, device_ELEMNTBOLT, keep_devices, error_local_timestamp]
+Columns: [timestamp, position_lat, position_long, gps_accuracy, distance, enhanced_speed, speed, enhanced_altitude, altitude, grade, cadence, power, combined_pedal_smoothness, left_torque_effectiveness, right_torque_effectiveness, left_right_balance, temperature, local_timestamp, local_timestamp_loc, file_id, heart_rate, battery_soc, left_pedal_smoothness, right_pedal_smoothness, glucose, device_0, device_0_serialnumber, error_local_timestamp]
 Index: []
 /local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/frame.py:4312: SettingWithCopyWarning: 
 A value is trying to be set on a copy of a slice from a DataFrame
@@ -6486,7 +6222,10 @@ A value is trying to be set on a copy of a slice from a DataFrame
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   errors=errors,
 DROPPED: 0 files with 0 duplicate timestamps
-
+Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 35/35 [00:46<00:00,  1.34s/it, Completed]
+Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:12<00:00, 12.41s/it]
+Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.66it/s]
+Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 371.57it/s]
 
 
 ------------------------------- Athlete  1

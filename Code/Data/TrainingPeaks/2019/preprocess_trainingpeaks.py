@@ -233,27 +233,24 @@ for i in athletes:
 							'zwift':'ZWIFT',
 							'bkool BKOOL Website':'BKOOL',
 							'virtualtraining Rouvy':'ROUVY'}}, inplace=True)
-	df = pd.concat([df, pd.get_dummies(df['device_0'], prefix='device', dtype=bool)], axis=1)
 	print("Devices used:\n", df.groupby('file_id').first().device_0.value_counts())
 
 	# sort by device and timestamp for duplicates later
-	df = df.sort_values(by=['device_0', 'device_0_serialnumber', 'local_timestamp'], 
+	df = df.sort_values(by=['device_0', 'device_0_serialnumber', 'timestamp'], 
 		key=lambda x: x.map({'ELEMNTBOLT':0, 'ELEMENTROAM':1, 'ELEMNT':2, 'ZWIFT':3}))
 	df.reset_index(drop=True, inplace=True)
-	devices = [x for x in df.columns[df.columns.str.startswith('device_')] if x != 'device_0' and x != 'device_0_serialnumber']
 
 	# select devices to keep: ELEMNT (BOLT/ROAM) and ZWIFT
 	# note that often they also use garmin devices, but there is a large difference between the files of garmin and of ELEMNT, 
 	# so maybe we should use an entirely different package to parse them
-	keep_devices = ['device_ELEMNT', 'device_ELEMNTBOLT', 'device_ELEMNTROAM', 'device_ZWIFT']
-	keep_devices = set(keep_devices) & set(devices)
-	df['keep_devices'] = df[keep_devices].sum(axis=1) > 0
+	devices = set(df['device_0'].unique())
+	keep_devices = set(['ELEMNT', 'ELEMNTBOLT', 'ELEMNTROAM', 'ZWIFT'])
 	
 	print("Fraction of data dropped with device selection: ", 
-		(~df['keep_devices']).sum()/df.shape[0])
+		(~df['device_0'].isin(keep_devices)).sum()/df.shape[0])
 	if 'glucose' in df:
 		print("Are there glucose values in the data that will be dropped with the device selection? ",
-			not df[~df['keep_devices']]['glucose'].dropna().empty)
+			not df[~df['device_0'].isin(keep_devices)]['glucose'].dropna().empty)
 	else:
 		print("There are no glucose values in the data at all.")
 
@@ -263,42 +260,8 @@ for i in athletes:
 	df['local_timestamp'] = pd.to_datetime(df['local_timestamp'])
 	df['local_timestamp_loc'] = pd.to_datetime(df['local_timestamp_loc'])
 
-	# fix zwift timestamps
-	print("\n-------- Timestamp: impute zwift nan")
-	if 'device_ZWIFT' in df:
-		ts_zwift = df.loc[df['device_ZWIFT'] & df['local_timestamp'].isna() & df['local_timestamp_loc'].isna(), 'timestamp'].dt.date.unique()
-		print("Get timezone of Zwift files for the following dates: ")
-		for ts in ts_zwift:
-			print(ts)
-			ts_range = [ts-datetime.timedelta(days=2), ts-datetime.timedelta(days=1), ts, ts+datetime.timedelta(days=1), ts+datetime.timedelta(days=2)]
-			df_ts_zwift = df[df['timestamp'].dt.date.isin(ts_range)]
-			tz_zwift = pd.concat([(df_ts_zwift['local_timestamp'] - df_ts_zwift['timestamp']),
-								  (df_ts_zwift['local_timestamp_loc'] - df_ts_zwift['timestamp'])], axis=1)
-			tz_meta = pd.DataFrame(tz_zwift[0].unique()).dropna().to_numpy()[0]
-			tz_loc = pd.DataFrame(tz_zwift[1].unique()).dropna().to_numpy()[0]
-			# make sure no difference in ts_range and we have tz both from meta and loc
-			if len(tz_meta) == 1 and len(tz_loc) == 1:
-				df.loc[df['device_ZWIFT'] & (df.timestamp.dt.date == ts), 'local_timestamp_loc'] = \
-				df.loc[df['device_ZWIFT'] & (df.timestamp.dt.date == ts), 'timestamp'] + tz_loc[0]
-				print("local_timestamp_loc changed to UTC offset: ", tz_loc[0].astype('timedelta64[h]'))
-				df.loc[df['device_ZWIFT'] & (df.timestamp.dt.date == ts), 'local_timestamp'] = \
-				df.loc[df['device_ZWIFT'] & (df.timestamp.dt.date == ts), 'timestamp'] + tz_meta[0]
-				print("local_timestamp changed to UTC offset: ", tz_meta[0].astype('timedelta64[h]'))
-			else:
-				print("local_timestamp_loc not changed because of difference in timezones in the range of two days before until two days after")
-
-	# distribution of timezones
-	plt.hist([(df.local_timestamp_loc - df.timestamp).astype('timedelta64[h]').to_numpy(),
-			  (df.local_timestamp - df.timestamp).astype('timedelta64[h]').to_numpy()],
-			  label=['position', 'metadata'])
-	plt.xlabel('UTC offset (hours)')
-	plt.legend()
-	plt.savefig('../../../Descriptives/hist_timezone_%s.pdf'%i, bbox_inches='tight')
-	plt.savefig('../../../Descriptives/hist_timezone_%s.png'%i, dpi=300, bbox_inches='tight')
-	plt.close()
-
 	# print nans local_timestamp and local_timestamp_loc
-	print("\n-------- Timestamp: nan")
+	print("\n-------- Local timestamp: nan")
 	print_times_dates("local timestamp not available", 
 		df, df['local_timestamp'].isna())
 	print_times_dates("local timestamp from location not available", 
@@ -307,13 +270,8 @@ for i in athletes:
 		df, df['local_timestamp'].isna() | df['local_timestamp_loc'].isna())
 	print_times_dates("local timestamp AND local timestamp from location not available", 
 		df, df['local_timestamp'].isna() & df['local_timestamp_loc'].isna())
-	
-	#df['drop_nan_timestamp'] = df['local_timestamp'].isna() & df['local_timestamp_loc'].isna()
-	df_nan_ts = df[df['local_timestamp'].isna() & df['local_timestamp_loc'].isna()]
-	df.drop(df_nan_ts.index, inplace=True) 
-	print("DROPPED: %s files with %s nan local timestamps (both meta and loc)"%(len(df_nan_ts.file_id.unique()), len(df_nan_ts)))
-	
-	print("\n-------- Timestamp error")
+		
+	print("\n-------- Local timestamp: error")
 	# print how often local_timestamp does not equal local_timestamp_loc
 	# Note: this is mainly around the time that the clock is switched from summertime to wintertime. Find out what to do with it!
 	nan_llts = df['local_timestamp'].isna() | df['local_timestamp_loc'].isna()
@@ -321,29 +279,20 @@ for i in athletes:
 		df[~nan_llts], df[~nan_llts]['local_timestamp'] != df[~nan_llts]['local_timestamp_loc'])
 	print("Dates for which this happens: ", 
 		df[~nan_llts][df[~nan_llts]['local_timestamp'] != df[~nan_llts]['local_timestamp_loc']].timestamp.dt.date.unique())
-
 	df['error_local_timestamp'] = df[~nan_llts]['local_timestamp'] != df[~nan_llts]['local_timestamp_loc']
-	#df.drop(df[~nan_llts][df[~nan_llts]['local_timestamp'] != df[~nan_llts]['local_timestamp_loc']].index, inplace=True)
-	#print("DROPPED: discrepancy local timestamps")
-
-	print("\n-------- Timestamp local combine")
-	# combine both local timestamps
-	# keep timestamp from location as the primary timestamp
-	df['local_timestamp_loc'].fillna(df['local_timestamp'], inplace=True)
-	df.drop('local_timestamp', axis=1, inplace=True)
-	df.rename(columns={'local_timestamp_loc':'local_timestamp'}, inplace=True)
 
 	print("\n--------------- DUPLICATES")
 	print("\n-------- Entire row duplicate")
-	# check if one of the files continues on, or if it's simply a complete file that we drop
-	len_dupl = {}
 	dupl = df.duplicated(set(df.columns)-set(['file_id']), keep=False)
-	for f in df[dupl].file_id.unique():
-		len_dupl.update({f:[len(df[df.file_id == f]), 
-							len(df[dupl & (df.file_id == f)])]})
-	print("CHECK if we remove entire file by removing duplicated entries")
-	print("Dupl file_id: [len file, len dupl ts of file]\n",
-		len_dupl, "\n", dict(zip(len_dupl, [l==m for key, [l,m] in len_dupl.items()])))
+
+	# check if one of the files continues on, or if it's simply a complete file that we drop
+	len_dupl = { f:[len(df[df.file_id == f]), len(df[dupl & (df.file_id == f)])] for f in df[dupl].file_id.unique()}
+	dupl_entire_file = dict(zip(len_dupl, [l==m for key, [l,m] in len_dupl.items()]))
+	print("CHECK if we remove entire file by removing duplicated entries: ", dupl_entire_file)
+
+	# check if we would drop glucose values
+	dupl_glucose = {f: df[df.file_id == f].glucose.notna().sum() != 0 for f in df[dupl].file_id.unique()}
+	print("CHECK if there are glucose values in the duplicated entries: ", dupl_glucose)
 
 	print("DROPPED: %s duplicate entries"%df.duplicated(set(df.columns)-set(['file_id'])).sum())
 	df.drop_duplicates(subset=set(df.columns)-set(['file_id']), keep='first', inplace=True)
@@ -354,8 +303,8 @@ for i in athletes:
 	print_times_dates("duplicated local timestamps", 
 		df, df['local_timestamp'].duplicated(), ts='local_timestamp')
 
-	dupl_timestamp_both = df['local_timestamp'].duplicated(keep=False)
-	dupl_timestamp = df['local_timestamp'].duplicated(keep='first')
+	dupl_timestamp_both = df['timestamp'].duplicated(keep=False)
+	dupl_timestamp = df['timestamp'].duplicated(keep='first')
 
 	# check if dupl timestamps cover entire file, or only part of it
 	len_dupl_ts = {}
@@ -378,40 +327,33 @@ for i in athletes:
 	# check if duplicate timestamps are caused by using multiple devices at the same time
 	print("Duplicate timestamps in devices:")
 	for dev in devices:
-		print_times_dates(dev, df, dupl_timestamp_both & df[dev], ts='local_timestamp')
+		print_times_dates(dev, df, dupl_timestamp_both & (df.device_0 == dev), ts='timestamp')
 
 	print("Duplicate timestamps in serialnumbers:")
 	for ser in df['device_0_serialnumber'].unique():
-		print_times_dates(str(ser), df, dupl_timestamp_both & (df['device_0_serialnumber'] == ser), ts='local_timestamp')
+		print_times_dates(str(ser), df, dupl_timestamp_both & (df['device_0_serialnumber'] == ser), ts='timestamp')
 
 	print("Duplicate timestamps after potentially dropping devices: ")
 	for dev in keep_devices:
-		print_times_dates(dev, df, dupl_timestamp_both & df[dev], ts='local_timestamp')
+		print_times_dates(dev, df, dupl_timestamp_both & (df.device_0 == dev), ts='timestamp')
 
 	print("Do the duplicate timestamps have the same data?")
-	print(df[dupl_timestamp_both & df['keep_devices']].sort_values('local_timestamp'))
+	print(df[dupl_timestamp_both & df['device_0'].isin(keep_devices)].sort_values('timestamp'))
 	# Answer: sometimes. Maybe find way to select faulty values and remove them
 	# For now, keep identifyer in them so that we know we should do something with it
 	# Note: what can happen here is that two devices are recording at the same time for some reason
 	# but one of the two devices may not contain all the information.
 
-	# TODO: look into dropping duplicate timestamps for which the local timestamp is incorrect
-	# maybe sort by error timestamps as well?
-	#print("Error timestamps in duplicate timestamps: ",
-	#	df[dupl_timestamp_both & df['keep_devices']].error_local_timestamp.sum() != 0)
-	#print("DROPPED: duplicate timestamps for which the local timestamp is possibly incorrect")
-	# TODO: for each file, check whether it's duplicate has more nans (so for missing files, check percentage of nans)
-
 	# Drop entire file associated with a duplicate timestamp
 	# Due to the ordering of the data by device, the data from less desired devices is dropped
 	# Copy duplicate timestamps to a separate files, in case we want to use it for imputation
 	df_dupl = df[df.file_id.isin(df[dupl_timestamp].file_id.unique())]
-	df_dupl.drop(['device_0', 'device_0_serialnumber'], axis=1, inplace=True)
+	df_dupl.drop(['device_0_serialnumber'], axis=1, inplace=True)
 	df_dupl.to_csv(path+'clean/'+str(i)+'/'+str(i)+'_data_dupl.csv', index_label=False)
 	df.drop(df_dupl.index, inplace=True)
 	print("DROPPED: %s files with %s duplicate timestamps"%(len(df_dupl.file_id.unique()), len(df_dupl)))
 
-	df.drop(['device_0', 'device_0_serialnumber'], axis=1, inplace=True)
+	df.drop(['device_0_serialnumber'], axis=1, inplace=True)
 
 	# save df to file
 	df.to_csv(path+'clean/'+str(i)+'/'+str(i)+'_data.csv', index_label=False)
@@ -435,7 +377,7 @@ for i in athletes:
 	df['timestamp'] = pd.to_datetime(df['timestamp'])
 	df['local_timestamp'] = pd.to_datetime(df['local_timestamp'])
 
-	df = df.sort_values('local_timestamp')
+	df = df.sort_values('timestamp')
 
 	print("\n-------- select devices")
 	# -------------------- Select devices
@@ -443,9 +385,9 @@ for i in athletes:
 	drop_devices = set(cols_devices) - set(['device_ELEMNT', 'device_ELEMNTBOLT', 'device_ELEMNTROAM', 'device_ZWIFT'])
 
 	print("DROPPED: %s files with %s entries from devices %s"\
-		%(len(df[~df['keep_devices']].file_id.unique()), (~df['keep_devices']).sum(), drop_devices))
-	df = df[df['keep_devices']]
-	df.drop(['keep_devices', *list(drop_devices)], axis=1, inplace=True)
+		%(len(df[~df['device_0'].isin(keep_devices)].file_id.unique()), (~df['device_0'].isin(keep_devices)).sum(), drop_devices))
+	df = df[df['device_0'].isin(keep_devices)]
+	#df.drop(['keep_devices', *list(drop_devices)], axis=1, inplace=True)
 
 	print("\n-------- cleaning features")
 	# -------------------- Empty cols
@@ -531,6 +473,28 @@ for i in athletes:
 	profile.to_file(path+'clean2/%s/%s_report.html'%(i,i))
 
 	del df
+
+# --------------------- visualize errors
+df = pd.read_csv(path_merge+'trainingpeaks_dexcom.csv', index_col=0)
+df.local_timestamp = pd.to_datetime(df.local_timestamp)
+df.timestamp = pd.to_datetime(df.timestamp)
+
+# error local timestamp
+df_error_ts = df[df['error_local_timestamp'] == True]
+df_error_ts['date'] = df_error_ts.local_timestamp.dt.date
+df_error_ts[['RIDER','date']].drop_duplicates().set_index('RIDER').to_csv(path_merge+'./error_local_ts.csv')
+
+# glucose in trainingpeaks
+df['date'] = df.local_timestamp.dt.date
+df[df.glucose.notna()][['RIDER', 'date']].drop_duplicates().set_index('RIDER').to_csv('./tpglucose.csv')
+df[df.glucose.isna()][['RIDER', 'date']].drop_duplicates().set_index('RIDER').to_csv('./notpglucose.csv')
+
+# timezone shift
+df['timezone'] = df.local_timestamp - df.timestamp
+tz_count = df.groupby('RIDER')['timezone'].value_counts()#.apply(lambda x: x.unique())
+tz_count.to_csv('./tz_count.csv')
+
+
 
 # TODO: filter out training sessions for which a whole column is missing
 # TODO: remove training sessions for which there is no distance at all
