@@ -1,3 +1,38 @@
+
+
+# when timezone_loc == nan and timezone != nan
+#df_tz.loc[df_tz['timezone_loc'].isna() & df_tz['timezone'].notna(), 'timezone_combine'] = df_tz['timezone']
+
+# when timezone == nan and timezone_loc != nan
+#df_tz.loc[df_tz['timezone'].isna() & df_tz['timezone_loc'].notna(), 'timezone_combine'] = df_tz['timezone_loc']
+
+# when timezone == nan and timezone_loc == nan
+df_tz['timezone_change'] = (df_tz['timezone'].diff() != '0d') & df_tz['timezone'].diff().notna()
+df_tz['timezone_change_loc'] = (df_tz['timezone_loc'].diff() != '0d') & df_tz['timezone_loc'].diff().notna()
+
+df_tz.loc[df_tz['timezone_change'] & df_tz.timezone_combine.isna(), 'timezone_combine'] = df_tz['timezone']
+df_tz.loc[df_tz['timezone_change_loc'] & df_tz.timezone_combine.isna(), 'timezone_combine'] = df_tz['timezone_loc']
+
+# fix zwift files (assume they don't take zwift for travelling so only use at home)
+# note: they are all only wintertime, so just lazy solution here
+# note: also ZWIFT measurements that are not nan are used for everyone at least once in wintertime
+print("NAN tz before: ", df_tz.timezone_combine.isna().sum())
+nan_zwift = df_tz.loc[df_tz.timezone_combine.isna() & (df_tz.device_0 == 'ZWIFT'), ['RIDER', 'file_id', 'date']]
+tz_zwift = df_tz.loc[df_tz.device_0 == 'ZWIFT', ['RIDER', 'timezone_combine']].dropna()\
+	.groupby('RIDER').agg({'timezone_combine':'min'})
+for _, (i, f, d) in nan_zwift.iterrows():
+	mask = (df_tz.RIDER == i) & (df_tz.file_id == f)
+	df_tz.loc[mask, 'timezone_combine'] = tz_zwift.loc[i][0]
+print("NAN tz after: ", df_tz.timezone_combine.isna().sum())
+
+# TODO: note is not always going to work, might differ 1 hour roughly.
+df_tz['timezone_combine'] = df_tz['timezone_combine'].fillna(method='ffill')
+
+df_tz['timezone_change_combine'] = df_tz['timezone_combine'].diff() != '0d'
+df_tz['timezone_diff_combine'] = df_tz['timezone_combine'].diff()
+
+
+
 	# fix zwift timestamps
 	print("\n-------- Timestamp: impute zwift nan")
 	if 'device_ZWIFT' in df:
