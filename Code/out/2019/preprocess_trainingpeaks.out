@@ -30,12 +30,23 @@ device_0 manufacturer is file_id manufacturer:  True
 device_0 product is file_id product:  False
 
 ------------------------------- Athlete  2
+Geopy country:  United Arab Emirates
+Geopy country:  United Arab Emirates
+Geopy country:  United Arab Emirates
+Geopy country:  United Arab Emirates
+Geopy country:  United Arab Emirates
+Geopy country:  Denmark
 DROPPED:  ('units', 'ant_device_num')
 WARNING: Cols outside of 'device' that have a high number of nans, and that we should look at:  [('session', 'left_right_balance'), ('session', 'sub_sport'), ('units', 'ant_sensor_id')]
 device_0 manufacturer is file_id manufacturer:  True
 device_0 product is file_id product:  False
 
 ------------------------------- Athlete  3
+Geopy country:  Spain
+Geopy country:  Spain
+Geopy country:  Spain
+Geopy country:  Spain
+Geopy country:  Spain
 DROPPED:  ('file_id', 'unknown_7')
 DROPPED:  ('session', 'avg_combined_pedal_smoothness')
 DROPPED:  ('session', 'avg_left_pco')
@@ -65,6 +76,11 @@ device_0 manufacturer is file_id manufacturer:  True
 device_0 product is file_id product:  False
 
 ------------------------------- Athlete  4
+Geopy country:  United Arab Emirates
+Geopy country:  United Arab Emirates
+Geopy country:  United Arab Emirates
+Geopy country:  United Arab Emirates
+Geopy country:  Denmark
 DROPPED:  ('file_id', 'unknown_7')
 DROPPED:  ('session', 'avg_combined_pedal_smoothness')
 DROPPED:  ('session', 'avg_left_pco')
@@ -88,6 +104,7 @@ device_0 manufacturer is file_id manufacturer:  True
 device_0 product is file_id product:  False
 
 ------------------------------- Athlete  5
+Geopy country:  Solomon Islands
 DROPPED:  ('file_id', 'unknown_7')
 DROPPED:  ('session', 'avg_combined_pedal_smoothness')
 DROPPED:  ('session', 'avg_left_pco')
@@ -107,6 +124,18 @@ device_0 manufacturer is file_id manufacturer:  True
 device_0 product is file_id product:  False
 
 ------------------------------- Athlete  6
+Geopy country:  Australia
+Geopy country:  Australia
+Geopy country:  Australia
+Geopy country:  Australia
+Geopy country:  Australia
+Geopy country:  Australia
+Geopy country:  Australia
+Geopy country:  Australia
+Geopy country:  Australia
+Geopy country:  Australia
+Geopy country:  Australia
+Geopy country:  Australia
 DROPPED:  ('units', 'ant_device_num')
 DROPPED:  ('units', 'travel_assist_level')
 WARNING: Cols outside of 'device' that have a high number of nans, and that we should look at:  [('session', 'left_right_balance'), ('session', 'sub_sport'), ('units', 'ant_sensor_id')]
@@ -114,6 +143,13 @@ device_0 manufacturer is file_id manufacturer:  True
 device_0 product is file_id product:  False
 
 ------------------------------- Athlete  10
+Geopy country:  United Arab Emirates
+Geopy country:  United Arab Emirates
+Geopy country:  United Arab Emirates
+Geopy country:  United Arab Emirates
+Geopy country:  Isle of Man
+Geopy country:  Isle of Man
+Geopy country:  Isle of Man
 DROPPED:  ('file_id', 'unknown_7')
 DROPPED:  ('session', 'avg_combined_pedal_smoothness')
 DROPPED:  ('session', 'avg_left_pco')
@@ -133,6 +169,7 @@ device_0 manufacturer is file_id manufacturer:  True
 device_0 product is file_id product:  False
 
 ------------------------------- Athlete  12
+Geopy country:  Spain
 DROPPED:  ('units', 'ant_device_num')
 DROPPED:  ('units', 'travel_assist_level')
 WARNING: Cols outside of 'device' that have a high number of nans, and that we should look at:  [('activity', 'event_group'), ('file_id', 'number'), ('session', 'event_group'), ('session', 'first_lap_index'), ('session', 'left_right_balance'), ('session', 'message_index'), ('session', 'nec_lat'), ('session', 'nec_long'), ('session', 'start_position_lat'), ('session', 'start_position_long'), ('session', 'sub_sport'), ('session', 'swc_lat'), ('session', 'swc_long'), ('session', 'total_cycles'), ('session', 'total_fat_calories'), ('session', 'total_training_effect'), ('session', 'trigger'), ('units', 'ant_sensor_id')]
@@ -140,6 +177,9 @@ device_0 manufacturer is file_id manufacturer:  True
 device_0 product is file_id product:  False
 
 ------------------------------- Athlete  13
+Geopy country:  United Arab Emirates
+Geopy country:  United Arab Emirates
+Geopy country:  United Arab Emirates
 DROPPED:  ('activity', 'event_group')
 DROPPED:  ('file_id', 'number')
 DROPPED:  ('file_id', 'unknown_7')
@@ -184,6 +224,7 @@ device_0 manufacturer is file_id manufacturer:  True
 device_0 product is file_id product:  False
 
 ------------------------------- Athlete  14
+Geopy country:  Denmark
 DROPPED:  ('activity', 'event_group')
 DROPPED:  ('activity', 'unknown_7')
 DROPPED:  ('file_id', 'number')
@@ -233,6 +274,12 @@ device_0 manufacturer is file_id manufacturer:  True
 device_0 product is file_id product:  False
 
 ------------------------------- Athlete  15
+Geopy country:  United Arab Emirates
+Geopy country:  United Arab Emirates
+Geopy country:  United Arab Emirates
+Geopy country:  United Arab Emirates
+Geopy country:  United Arab Emirates
+Geopy country:  Denmark
 DROPPED:  ('units', 'ant_device_num')
 WARNING: Cols outside of 'device' that have a high number of nans, and that we should look at:  [('session', 'sub_sport')]
 device_0 manufacturer is file_id manufacturer:  True
@@ -677,22 +724,22 @@ Missing columns per file
       dtype='object')}
 Duplicate timestamps in devices:
 
- ELEMNT
-times:  14180
-days:  2
-file ids:  [221 222]
+ ZWIFT
+times:  0
+days:  0
+file ids:  []
 
  ELEMNTBOLT
 times:  14180
 days:  2
 file ids:  [220 223]
 
- GARMIN
-times:  0
-days:  0
-file ids:  []
+ ELEMNT
+times:  14180
+days:  2
+file ids:  [221 222]
 
- ZWIFT
+ GARMIN
 times:  0
 days:  0
 file ids:  []
@@ -724,22 +771,22 @@ days:  0
 file ids:  []
 Duplicate timestamps after potentially dropping devices: 
 
- ELEMNT
-times:  14180
-days:  2
-file ids:  [221 222]
+ ELEMNTROAM
+times:  0
+days:  0
+file ids:  []
 
  ELEMNTBOLT
 times:  14180
 days:  2
 file ids:  [220 223]
 
- ZWIFT
-times:  0
-days:  0
-file ids:  []
+ ELEMNT
+times:  14180
+days:  2
+file ids:  [221 222]
 
- ELEMNTROAM
+ ZWIFT
 times:  0
 days:  0
 file ids:  []
@@ -764,10 +811,16 @@ A value is trying to be set on a copy of a slice from a DataFrame
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   errors=errors,
 DROPPED: 2 files with 14737 duplicate timestamps
-Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 42/42 [00:56<00:00,  1.35s/it, Completed]
-Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:15<00:00, 15.40s/it]
-Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.13it/s]
-Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 333.20it/s]
+Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 42/42 [00:50<00:00,  1.21s/it, Completed]
+Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:13<00:00, 13.18s/it]
+Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.42it/s]
+Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 374.12it/s]
+
+-------- export glucose
+/local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/__main__.py:173: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
 
 ------------------------------- Athlete  2
 /local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (18) have mixed types.Specify dtype option on import or set low_memory=False.
@@ -776,7 +829,7 @@ Export report to file: 100%|█████████████████�
 --------------- NAN
 
 -------- Remove rows fully nan
-DROPPED: 54 rows dropped due to being empty
+DROPPED: 61 rows dropped due to being empty
 Timestamps before and after nanrows: 
                  timestamp  enhanced_altitude  altitude  heart_rate  ...  battery_soc  left_pedal_smoothness  right_pedal_smoothness  glucose
 52145  2018-12-06 14:40:56                4.0       4.0        93.0  ...          NaN                    NaN                     NaN      NaN
@@ -942,170 +995,212 @@ Timestamps before and after nanrows:
 [3 rows x 25 columns]
                    timestamp  enhanced_altitude  altitude  ...  left_pedal_smoothness  right_pedal_smoothness  glucose
 1653180  2019-04-30 13:56:44               -0.6      -0.6  ...                    NaN                     NaN      NaN
-1653181  2019-05-31 06:57:02                NaN       NaN  ...                    NaN                     NaN      NaN
-1653182  2019-05-31 06:57:03               59.2      59.2  ...                    NaN                     NaN      NaN
+1653181  2019-05-01 06:09:13                NaN       NaN  ...                    NaN                     NaN      NaN
+1653182  2019-05-01 06:09:14                NaN       NaN  ...                    NaN                     NaN      NaN
 
 [3 rows x 25 columns]
                    timestamp  enhanced_altitude  altitude  ...  left_pedal_smoothness  right_pedal_smoothness  glucose
-1699902  2019-06-02 11:59:13                4.6       4.6  ...                   12.5                    40.5      NaN
-1699903  2019-06-03 04:58:02                NaN       NaN  ...                    NaN                     NaN      NaN
-1699904  2019-06-03 04:58:03               29.0      29.0  ...                    NaN                     NaN      NaN
+1701078  2019-05-05 19:30:44               85.8      85.8  ...                    NaN                     NaN      NaN
+1701079  2019-05-06 17:05:03                NaN       NaN  ...                    NaN                     NaN      NaN
+1701080  2019-05-06 17:05:04               91.2      91.2  ...                    NaN                     NaN      NaN
 
 [3 rows x 25 columns]
                    timestamp  enhanced_altitude  altitude  ...  left_pedal_smoothness  right_pedal_smoothness  glucose
-1704586  2019-06-03 06:17:57               25.2      25.2  ...                    NaN                     NaN      NaN
-1704587  2019-06-04 06:42:00                NaN       NaN  ...                    NaN                     NaN      NaN
-1704588  2019-06-04 06:42:01                6.0       6.0  ...                    NaN                     NaN      NaN
+1732293  2019-05-08 20:29:05               91.4      91.4  ...                    0.0                     0.0      NaN
+1732294  2019-05-09 16:30:40                NaN       NaN  ...                    NaN                     NaN      NaN
+1732295  2019-05-09 16:30:41                NaN       NaN  ...                    NaN                     NaN      NaN
 
 [3 rows x 25 columns]
                    timestamp  enhanced_altitude  altitude  ...  left_pedal_smoothness  right_pedal_smoothness  glucose
-1721022  2019-06-04 11:38:41                3.8       3.8  ...                    NaN                     NaN      NaN
-1721023  2019-06-05 05:46:46                NaN       NaN  ...                    NaN                     NaN      NaN
-1721024  2019-06-05 05:46:47                NaN       NaN  ...                    NaN                     NaN      NaN
+1757687  2019-05-11 19:20:35                1.8       1.8  ...                    NaN                     NaN      NaN
+1757688  2019-05-12 21:12:52                NaN       NaN  ...                    NaN                     NaN      NaN
+1757689  2019-05-12 21:12:53                3.8       3.8  ...                    0.0                     0.0      NaN
 
 [3 rows x 25 columns]
                    timestamp  enhanced_altitude  altitude  ...  left_pedal_smoothness  right_pedal_smoothness  glucose
-1750488  2019-06-07 06:35:13                NaN       NaN  ...                    NaN                     NaN      NaN
-1750489  2019-06-07 06:35:14                NaN       NaN  ...                    NaN                     NaN      NaN
-1750490  2019-06-07 06:35:15                NaN       NaN  ...                    NaN                     NaN      NaN
+1911502  2019-05-23 14:11:29               22.4      22.4  ...                    0.0                     0.0      NaN
+1911503  2019-05-24 08:01:22                NaN       NaN  ...                    NaN                     NaN      NaN
+1911504  2019-05-24 08:01:23               71.2      71.2  ...                    NaN                     NaN    183.0
 
 [3 rows x 25 columns]
                    timestamp  enhanced_altitude  altitude  ...  left_pedal_smoothness  right_pedal_smoothness  glucose
-1798270  2019-06-09 11:43:20                1.0       1.0  ...                    0.0                     0.0      NaN
-1798271  2019-06-11 06:05:09                NaN       NaN  ...                    NaN                     NaN      NaN
-1798272  2019-06-11 06:05:10                NaN       NaN  ...                    NaN                     NaN      NaN
+1947883  2019-05-28 09:49:51               12.0      12.0  ...                    NaN                     NaN      NaN
+1947884  2019-05-29 09:34:20                NaN       NaN  ...                    NaN                     NaN      NaN
+1947885  2019-05-29 09:34:21                NaN       NaN  ...                    NaN                     NaN      NaN
 
 [3 rows x 25 columns]
                    timestamp  enhanced_altitude  altitude  ...  left_pedal_smoothness  right_pedal_smoothness  glucose
-1820498  2019-06-12 17:03:21               21.4      21.4  ...                    NaN                     NaN      NaN
-1820499  2019-06-13 04:32:08                NaN       NaN  ...                    NaN                     NaN      NaN
-1820500  2019-06-13 04:32:09                NaN       NaN  ...                    NaN                     NaN      NaN
+1953528  2019-05-29 14:02:22                NaN       NaN  ...                    0.0                    17.5      NaN
+1953529  2019-05-30 10:08:57                NaN       NaN  ...                    NaN                     NaN      NaN
+1953530  2019-05-30 10:08:58               29.6      29.6  ...                    NaN                     NaN      NaN
 
 [3 rows x 25 columns]
                    timestamp  enhanced_altitude  altitude  ...  left_pedal_smoothness  right_pedal_smoothness  glucose
-1842099  2019-06-13 10:47:09               35.4      35.4  ...                    NaN                     NaN      NaN
-1842100  2019-06-14 06:32:35                NaN       NaN  ...                    NaN                     NaN      NaN
-1842101  2019-06-14 06:32:36                NaN       NaN  ...                    NaN                     NaN      NaN
+1960731  2019-05-30 12:21:38               26.6      26.6  ...                    NaN                     NaN      NaN
+1960732  2019-05-31 06:57:02                NaN       NaN  ...                    NaN                     NaN      NaN
+1960733  2019-05-31 06:57:03               59.2      59.2  ...                    NaN                     NaN      NaN
 
 [3 rows x 25 columns]
                    timestamp  enhanced_altitude  altitude  ...  left_pedal_smoothness  right_pedal_smoothness  glucose
-1899227  2019-06-19 14:43:30              224.0     224.0  ...                    NaN                     NaN      NaN
-1899228  2019-06-20 09:19:51                NaN       NaN  ...                    NaN                     NaN      NaN
-1899229  2019-06-20 09:19:52              266.2     266.2  ...                    NaN                     NaN      NaN
+2007453  2019-06-02 11:59:13                4.6       4.6  ...                   12.5                    40.5      NaN
+2007454  2019-06-03 04:58:02                NaN       NaN  ...                    NaN                     NaN      NaN
+2007455  2019-06-03 04:58:03               29.0      29.0  ...                    NaN                     NaN      NaN
 
 [3 rows x 25 columns]
                    timestamp  enhanced_altitude  altitude  ...  left_pedal_smoothness  right_pedal_smoothness  glucose
-1913578  2019-06-20 13:22:12              251.0     251.0  ...                    0.0                     0.0      NaN
-1913579  2019-06-21 08:50:11                NaN       NaN  ...                    NaN                     NaN      NaN
-1913580  2019-06-21 08:50:12              230.4     230.4  ...                    NaN                     NaN      NaN
+2012137  2019-06-03 06:17:57               25.2      25.2  ...                    NaN                     NaN      NaN
+2012138  2019-06-04 06:42:00                NaN       NaN  ...                    NaN                     NaN      NaN
+2012139  2019-06-04 06:42:01                6.0       6.0  ...                    NaN                     NaN      NaN
 
 [3 rows x 25 columns]
                    timestamp  enhanced_altitude  altitude  ...  left_pedal_smoothness  right_pedal_smoothness  glucose
-2193051  2019-07-17 11:09:56             1029.6    1029.6  ...                    NaN                     NaN      NaN
-2193052  2019-07-18 07:54:04                NaN       NaN  ...                    NaN                     NaN      NaN
-2193053  2019-07-18 07:54:05                NaN       NaN  ...                    NaN                     NaN      NaN
+2028573  2019-06-04 11:38:41                3.8       3.8  ...                    NaN                     NaN      NaN
+2028574  2019-06-05 05:46:46                NaN       NaN  ...                    NaN                     NaN      NaN
+2028575  2019-06-05 05:46:47                NaN       NaN  ...                    NaN                     NaN      NaN
 
 [3 rows x 25 columns]
                    timestamp  enhanced_altitude  altitude  ...  left_pedal_smoothness  right_pedal_smoothness  glucose
-2238791  2019-07-21 10:13:11               46.4      46.4  ...                    NaN                     NaN      NaN
-2238792  2019-07-22 06:50:40                NaN       NaN  ...                    NaN                     NaN      NaN
-2238793  2019-07-22 06:50:41                NaN       NaN  ...                    NaN                     NaN      NaN
+2058039  2019-06-07 06:35:13                NaN       NaN  ...                    NaN                     NaN      NaN
+2058040  2019-06-07 06:35:14                NaN       NaN  ...                    NaN                     NaN      NaN
+2058041  2019-06-07 06:35:15                NaN       NaN  ...                    NaN                     NaN      NaN
 
 [3 rows x 25 columns]
                    timestamp  enhanced_altitude  altitude  ...  left_pedal_smoothness  right_pedal_smoothness  glucose
-2460092  2019-08-08 17:24:30              908.4     908.4  ...                    0.0                     0.0      NaN
-2460093  2019-08-09 10:21:58                NaN       NaN  ...                    NaN                     NaN      NaN
-2460094  2019-08-09 10:21:59              937.0     937.0  ...                    NaN                     NaN      NaN
+2105821  2019-06-09 11:43:20                1.0       1.0  ...                    0.0                     0.0      NaN
+2105822  2019-06-11 06:05:09                NaN       NaN  ...                    NaN                     NaN      NaN
+2105823  2019-06-11 06:05:10                NaN       NaN  ...                    NaN                     NaN      NaN
 
 [3 rows x 25 columns]
                    timestamp  enhanced_altitude  altitude  ...  left_pedal_smoothness  right_pedal_smoothness  glucose
-2513797  2019-08-14 10:30:44             1032.6    1032.6  ...                    NaN                     NaN      NaN
-2513798  2019-08-15 06:08:10                NaN       NaN  ...                    NaN                     NaN      NaN
-2513799  2019-08-15 06:08:11                NaN       NaN  ...                    NaN                     NaN      NaN
+2128049  2019-06-12 17:03:21               21.4      21.4  ...                    NaN                     NaN      NaN
+2128050  2019-06-13 04:32:08                NaN       NaN  ...                    NaN                     NaN      NaN
+2128051  2019-06-13 04:32:09                NaN       NaN  ...                    NaN                     NaN      NaN
 
 [3 rows x 25 columns]
                    timestamp  enhanced_altitude  altitude  ...  left_pedal_smoothness  right_pedal_smoothness  glucose
-2595073  2019-08-22 14:23:36               37.8      37.8  ...                    NaN                     NaN      NaN
-2595074  2019-08-22 14:37:55                NaN       NaN  ...                    NaN                     NaN      NaN
-2595075  2019-08-22 14:37:56               27.0      27.0  ...                    NaN                     NaN    115.0
+2149650  2019-06-13 10:47:09               35.4      35.4  ...                    NaN                     NaN      NaN
+2149651  2019-06-14 06:32:35                NaN       NaN  ...                    NaN                     NaN      NaN
+2149652  2019-06-14 06:32:36                NaN       NaN  ...                    NaN                     NaN      NaN
 
 [3 rows x 25 columns]
                    timestamp  enhanced_altitude  altitude  ...  left_pedal_smoothness  right_pedal_smoothness  glucose
-2859512  2019-09-14 12:31:45             1018.2    1018.2  ...                    0.0                     NaN      NaN
-2859513  2019-09-15 07:23:01                NaN       NaN  ...                    NaN                     NaN      NaN
-2859514  2019-09-15 07:23:02                NaN       NaN  ...                    NaN                     NaN      NaN
+2206778  2019-06-19 14:43:30              224.0     224.0  ...                    NaN                     NaN      NaN
+2206779  2019-06-20 09:19:51                NaN       NaN  ...                    NaN                     NaN      NaN
+2206780  2019-06-20 09:19:52              266.2     266.2  ...                    NaN                     NaN      NaN
 
 [3 rows x 25 columns]
                    timestamp  enhanced_altitude  altitude  ...  left_pedal_smoothness  right_pedal_smoothness  glucose
-2888898  2019-09-18 10:42:34              494.4     494.4  ...                    NaN                     NaN      NaN
-2888899  2019-09-18 14:56:59                NaN       NaN  ...                    NaN                     NaN      NaN
-2888900  2019-09-18 14:57:00                NaN       NaN  ...                    NaN                     NaN      NaN
+2221129  2019-06-20 13:22:12              251.0     251.0  ...                    0.0                     0.0      NaN
+2221130  2019-06-21 08:50:11                NaN       NaN  ...                    NaN                     NaN      NaN
+2221131  2019-06-21 08:50:12              230.4     230.4  ...                    NaN                     NaN      NaN
 
 [3 rows x 25 columns]
                    timestamp  enhanced_altitude  altitude  ...  left_pedal_smoothness  right_pedal_smoothness  glucose
-2990806  2019-09-29 11:49:58                3.0       3.0  ...                   16.5                     NaN      NaN
-2990807  2019-09-30 07:32:37                NaN       NaN  ...                    NaN                     NaN      NaN
-2990808  2019-09-30 07:32:38                NaN       NaN  ...                    NaN                     NaN      NaN
+2500602  2019-07-17 11:09:56             1029.6    1029.6  ...                    NaN                     NaN      NaN
+2500603  2019-07-18 07:54:04                NaN       NaN  ...                    NaN                     NaN      NaN
+2500604  2019-07-18 07:54:05                NaN       NaN  ...                    NaN                     NaN      NaN
 
 [3 rows x 25 columns]
                    timestamp  enhanced_altitude  altitude  ...  left_pedal_smoothness  right_pedal_smoothness  glucose
-3020842  2019-10-02 09:53:18                9.0       9.0  ...                    NaN                     NaN      NaN
-3020843  2019-10-03 08:11:22                NaN       NaN  ...                    NaN                     NaN      NaN
-3020844  2019-10-03 08:11:23                NaN       NaN  ...                    NaN                     NaN      NaN
+2546342  2019-07-21 10:13:11               46.4      46.4  ...                    NaN                     NaN      NaN
+2546343  2019-07-22 06:50:40                NaN       NaN  ...                    NaN                     NaN      NaN
+2546344  2019-07-22 06:50:41                NaN       NaN  ...                    NaN                     NaN      NaN
 
 [3 rows x 25 columns]
                    timestamp  enhanced_altitude  altitude  ...  left_pedal_smoothness  right_pedal_smoothness  glucose
-3086653  2019-10-10 03:46:27               14.8      14.8  ...                    NaN                     NaN      NaN
-3086654  2019-10-11 03:01:06                NaN       NaN  ...                    NaN                     NaN      NaN
-3086655  2019-10-11 03:01:07               13.8      13.8  ...                    NaN                     NaN      NaN
+2767643  2019-08-08 17:24:30              908.4     908.4  ...                    0.0                     0.0      NaN
+2767644  2019-08-09 10:21:58                NaN       NaN  ...                    NaN                     NaN      NaN
+2767645  2019-08-09 10:21:59              937.0     937.0  ...                    NaN                     NaN      NaN
 
 [3 rows x 25 columns]
                    timestamp  enhanced_altitude  altitude  ...  left_pedal_smoothness  right_pedal_smoothness  glucose
-3124086  2019-10-14 05:09:06               61.2      61.2  ...                    0.0                     0.0      NaN
-3124087  2019-10-15 02:05:59                NaN       NaN  ...                    NaN                     NaN      NaN
-3124088  2019-10-15 02:06:00               20.8      20.8  ...                    NaN                     NaN      NaN
+2821348  2019-08-14 10:30:44             1032.6    1032.6  ...                    NaN                     NaN      NaN
+2821349  2019-08-15 06:08:10                NaN       NaN  ...                    NaN                     NaN      NaN
+2821350  2019-08-15 06:08:11                NaN       NaN  ...                    NaN                     NaN      NaN
 
 [3 rows x 25 columns]
                    timestamp  enhanced_altitude  altitude  ...  left_pedal_smoothness  right_pedal_smoothness  glucose
-3130074  2019-10-15 03:51:01               25.4      25.4  ...                    NaN                     NaN      NaN
-3130075  2019-11-04 08:32:56                NaN       NaN  ...                    NaN                     NaN      NaN
-3130076  2019-11-04 08:32:57                NaN       NaN  ...                    NaN                     NaN      NaN
+2902624  2019-08-22 14:23:36               37.8      37.8  ...                    NaN                     NaN      NaN
+2902625  2019-08-22 14:37:55                NaN       NaN  ...                    NaN                     NaN      NaN
+2902626  2019-08-22 14:37:56               27.0      27.0  ...                    NaN                     NaN    115.0
 
 [3 rows x 25 columns]
                    timestamp  enhanced_altitude  altitude  ...  left_pedal_smoothness  right_pedal_smoothness  glucose
-3138936  2019-11-04 11:14:13               20.0      20.0  ...                    NaN                     NaN      NaN
-3138937  2019-11-05 07:48:38                NaN       NaN  ...                    NaN                     NaN      NaN
-3138938  2019-11-05 07:48:39                NaN       NaN  ...                    NaN                     NaN      NaN
+3167063  2019-09-14 12:31:45             1018.2    1018.2  ...                    0.0                     NaN      NaN
+3167064  2019-09-15 07:23:01                NaN       NaN  ...                    NaN                     NaN      NaN
+3167065  2019-09-15 07:23:02                NaN       NaN  ...                    NaN                     NaN      NaN
 
 [3 rows x 25 columns]
                    timestamp  enhanced_altitude  altitude  ...  left_pedal_smoothness  right_pedal_smoothness  glucose
-3186418  2019-11-12 09:17:14                NaN       NaN  ...                    NaN                     NaN      NaN
-3186419  2019-11-12 09:17:15                NaN       NaN  ...                    NaN                     NaN      NaN
-3186420  2019-11-12 09:17:16                NaN       NaN  ...                    NaN                     NaN      NaN
+3196449  2019-09-18 10:42:34              494.4     494.4  ...                    NaN                     NaN      NaN
+3196450  2019-09-18 14:56:59                NaN       NaN  ...                    NaN                     NaN      NaN
+3196451  2019-09-18 14:57:00                NaN       NaN  ...                    NaN                     NaN      NaN
 
 [3 rows x 25 columns]
                    timestamp  enhanced_altitude  altitude  ...  left_pedal_smoothness  right_pedal_smoothness  glucose
-3229462  2019-11-16 12:03:13               -4.0      -4.0  ...                    NaN                     NaN      NaN
-3229463  2019-11-17 16:00:40                NaN       NaN  ...                    NaN                     NaN      NaN
-3229464  2019-11-17 16:00:41                NaN       NaN  ...                    NaN                     NaN      NaN
+3298357  2019-09-29 11:49:58                3.0       3.0  ...                   16.5                     NaN      NaN
+3298358  2019-09-30 07:32:37                NaN       NaN  ...                    NaN                     NaN      NaN
+3298359  2019-09-30 07:32:38                NaN       NaN  ...                    NaN                     NaN      NaN
 
 [3 rows x 25 columns]
                    timestamp  enhanced_altitude  altitude  ...  left_pedal_smoothness  right_pedal_smoothness  glucose
-3249343  2019-11-19 12:51:33                NaN       NaN  ...                    NaN                     NaN      NaN
-3249344  2019-11-20 07:42:38                NaN       NaN  ...                    NaN                     NaN      NaN
-3249345  2019-11-20 07:42:39                NaN       NaN  ...                    NaN                     NaN      NaN
+3328393  2019-10-02 09:53:18                9.0       9.0  ...                    NaN                     NaN      NaN
+3328394  2019-10-03 08:11:22                NaN       NaN  ...                    NaN                     NaN      NaN
+3328395  2019-10-03 08:11:23                NaN       NaN  ...                    NaN                     NaN      NaN
 
 [3 rows x 25 columns]
                    timestamp  enhanced_altitude  altitude  ...  left_pedal_smoothness  right_pedal_smoothness  glucose
-3318194  2019-11-28 11:47:00               -5.6      -5.6  ...                    NaN                     NaN      NaN
-3318195  2019-11-29 08:54:23                NaN       NaN  ...                    NaN                     NaN      NaN
-3318196  2019-11-29 08:54:24                NaN       NaN  ...                    NaN                     NaN      NaN
+3394204  2019-10-10 03:46:27               14.8      14.8  ...                    NaN                     NaN      NaN
+3394205  2019-10-11 03:01:06                NaN       NaN  ...                    NaN                     NaN      NaN
+3394206  2019-10-11 03:01:07               13.8      13.8  ...                    NaN                     NaN      NaN
+
+[3 rows x 25 columns]
+                   timestamp  enhanced_altitude  altitude  ...  left_pedal_smoothness  right_pedal_smoothness  glucose
+3431637  2019-10-14 05:09:06               61.2      61.2  ...                    0.0                     0.0      NaN
+3431638  2019-10-15 02:05:59                NaN       NaN  ...                    NaN                     NaN      NaN
+3431639  2019-10-15 02:06:00               20.8      20.8  ...                    NaN                     NaN      NaN
+
+[3 rows x 25 columns]
+                   timestamp  enhanced_altitude  altitude  ...  left_pedal_smoothness  right_pedal_smoothness  glucose
+3437625  2019-10-15 03:51:01               25.4      25.4  ...                    NaN                     NaN      NaN
+3437626  2019-11-04 08:32:56                NaN       NaN  ...                    NaN                     NaN      NaN
+3437627  2019-11-04 08:32:57                NaN       NaN  ...                    NaN                     NaN      NaN
+
+[3 rows x 25 columns]
+                   timestamp  enhanced_altitude  altitude  ...  left_pedal_smoothness  right_pedal_smoothness  glucose
+3446487  2019-11-04 11:14:13               20.0      20.0  ...                    NaN                     NaN      NaN
+3446488  2019-11-05 07:48:38                NaN       NaN  ...                    NaN                     NaN      NaN
+3446489  2019-11-05 07:48:39                NaN       NaN  ...                    NaN                     NaN      NaN
+
+[3 rows x 25 columns]
+                   timestamp  enhanced_altitude  altitude  ...  left_pedal_smoothness  right_pedal_smoothness  glucose
+3493969  2019-11-12 09:17:14                NaN       NaN  ...                    NaN                     NaN      NaN
+3493970  2019-11-12 09:17:15                NaN       NaN  ...                    NaN                     NaN      NaN
+3493971  2019-11-12 09:17:16                NaN       NaN  ...                    NaN                     NaN      NaN
+
+[3 rows x 25 columns]
+                   timestamp  enhanced_altitude  altitude  ...  left_pedal_smoothness  right_pedal_smoothness  glucose
+3537013  2019-11-16 12:03:13               -4.0      -4.0  ...                    NaN                     NaN      NaN
+3537014  2019-11-17 16:00:40                NaN       NaN  ...                    NaN                     NaN      NaN
+3537015  2019-11-17 16:00:41                NaN       NaN  ...                    NaN                     NaN      NaN
+
+[3 rows x 25 columns]
+                   timestamp  enhanced_altitude  altitude  ...  left_pedal_smoothness  right_pedal_smoothness  glucose
+3556894  2019-11-19 12:51:33                NaN       NaN  ...                    NaN                     NaN      NaN
+3556895  2019-11-20 07:42:38                NaN       NaN  ...                    NaN                     NaN      NaN
+3556896  2019-11-20 07:42:39                NaN       NaN  ...                    NaN                     NaN      NaN
+
+[3 rows x 25 columns]
+                   timestamp  enhanced_altitude  altitude  ...  left_pedal_smoothness  right_pedal_smoothness  glucose
+3625745  2019-11-28 11:47:00               -5.6      -5.6  ...                    NaN                     NaN      NaN
+3625746  2019-11-29 08:54:23                NaN       NaN  ...                    NaN                     NaN      NaN
+3625747  2019-11-29 08:54:24                NaN       NaN  ...                    NaN                     NaN      NaN
 
 [3 rows x 25 columns]
 
 --------------- DEVICE
 Devices used:
- ELEMNTBOLT    303
+ ELEMNTBOLT    330
 Name: device_0, dtype: int64
 Fraction of data dropped with device selection:  0.0
 Are there glucose values in the data that will be dropped with the device selection?  False
@@ -1120,16 +1215,16 @@ days:  0
 file ids:  []
 
  local timestamp from location not available
-times:  186517
-days:  30
-file ids:  [  1   8  12  20  26  28  39  41  48  57  58  64  67  76  87  89  90  93
-  95 110 126 127 131 132 137 148 232 259 289 291 296 301]
+times:  138289
+days:  27
+file ids:  [  1   8  12  20  26  28  39  41  48  57  58  64  67  76 110 126 127 131
+ 132 137 148 167 174 175 286 316 318 323 328]
 
  local timestamp OR local timestamp from location not available
-times:  186517
-days:  30
-file ids:  [  1   8  12  20  26  28  39  41  48  57  58  64  67  76  87  89  90  93
-  95 110 126 127 131 132 137 148 232 259 289 291 296 301]
+times:  138289
+days:  27
+file ids:  [  1   8  12  20  26  28  39  41  48  57  58  64  67  76 110 126 127 131
+ 132 137 148 167 174 175 286 316 318 323 328]
 
  local timestamp AND local timestamp from location not available
 times:  0
@@ -1139,11 +1234,13 @@ file ids:  []
 -------- Local timestamp: error
 
  local timestamp does not equal local timestamp from location (excl. nans)
-times:  47908
-days:  6
-file ids:  [ 86  97  98 114 150 279]
+times:  75405
+days:  10
+file ids:  [ 86  97  98 114 153 169 170 173 176 177 306]
 Dates for which this happens:  [datetime.date(2019, 2, 22) datetime.date(2019, 3, 4)
  datetime.date(2019, 3, 5) datetime.date(2019, 3, 22)
+ datetime.date(2019, 5, 5) datetime.date(2019, 5, 23)
+ datetime.date(2019, 5, 28) datetime.date(2019, 5, 30)
  datetime.date(2019, 5, 31) datetime.date(2019, 11, 4)]
 
 --------------- DUPLICATES
@@ -1191,7 +1288,7 @@ days:  0
 file ids:  []
 Duplicate timestamps after potentially dropping devices: 
 
- ELEMNT
+ ELEMNTROAM
 times:  0
 days:  0
 file ids:  []
@@ -1201,12 +1298,12 @@ times:  0
 days:  0
 file ids:  []
 
- ZWIFT
+ ELEMNT
 times:  0
 days:  0
 file ids:  []
 
- ELEMNTROAM
+ ZWIFT
 times:  0
 days:  0
 file ids:  []
@@ -1220,10 +1317,16 @@ A value is trying to be set on a copy of a slice from a DataFrame
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   errors=errors,
 DROPPED: 0 files with 0 duplicate timestamps
-Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 35/35 [00:46<00:00,  1.33s/it, Completed]
-Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:12<00:00, 12.90s/it]
-Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.56it/s]
-Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 339.65it/s]
+Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 35/35 [00:49<00:00,  1.40s/it, Completed]
+Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:12<00:00, 12.40s/it]
+Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.62it/s]
+Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 191.40it/s]
+
+-------- export glucose
+/local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/__main__.py:173: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
 
 ------------------------------- Athlete  3
 /local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (13,18,19) have mixed types.Specify dtype option on import or set low_memory=False.
@@ -1943,6 +2046,11 @@ Missing columns per file
       dtype='object')}
 Duplicate timestamps in devices:
 
+ ZWIFT
+times:  2
+days:  1
+file ids:  [62]
+
  ELEMNTBOLT
 times:  17993
 days:  7
@@ -1952,11 +2060,6 @@ file ids:  [257 258 266 267 293 296 306]
 times:  77187
 days:  11
 file ids:  [318 319 326 337 353 354 356 357 359 360 362 363 364 365 368]
-
- ZWIFT
-times:  2
-days:  1
-file ids:  [62]
 Duplicate timestamps in serialnumbers:
 
  2927509504.0
@@ -1985,7 +2088,7 @@ days:  4
 file ids:  [318 319 326 337]
 Duplicate timestamps after potentially dropping devices: 
 
- ELEMNT
+ ELEMNTROAM
 times:  0
 days:  0
 file ids:  []
@@ -1995,15 +2098,15 @@ times:  17993
 days:  7
 file ids:  [257 258 266 267 293 296 306]
 
+ ELEMNT
+times:  0
+days:  0
+file ids:  []
+
  ZWIFT
 times:  2
 days:  1
 file ids:  [62]
-
- ELEMNTROAM
-times:  0
-days:  0
-file ids:  []
 Do the duplicate timestamps have the same data?
                   timestamp  position_lat  position_long  ...    device_0  device_0_serialnumber  error_local_timestamp
 2950021 2019-01-29 19:10:05    -11.645443     166.958417  ...       ZWIFT                    NaN                    NaN
@@ -2025,10 +2128,16 @@ A value is trying to be set on a copy of a slice from a DataFrame
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   errors=errors,
 DROPPED: 12 files with 57880 duplicate timestamps
-Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 42/42 [01:02<00:00,  1.49s/it, Completed]
-Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:18<00:00, 18.54s/it]
-Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.39it/s]
-Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 429.74it/s]
+Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 42/42 [00:52<00:00,  1.25s/it, Completed]
+Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:14<00:00, 14.26s/it]
+Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.53it/s]
+Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 357.72it/s]
+
+-------- export glucose
+/local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/__main__.py:173: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
 
 ------------------------------- Athlete  4
 /local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (13,19,20) have mixed types.Specify dtype option on import or set low_memory=False.
@@ -2037,7 +2146,7 @@ Export report to file: 100%|█████████████████�
 --------------- NAN
 
 -------- Remove rows fully nan
-DROPPED: 71 rows dropped due to being empty
+DROPPED: 89 rows dropped due to being empty
 Timestamps before and after nanrows: 
 Empty DataFrame
 Columns: [timestamp, position_lat, position_long, gps_accuracy, enhanced_altitude, altitude, distance, heart_rate, cadence, enhanced_speed, speed, power, left_right_balance, combined_pedal_smoothness, left_torque_effectiveness, right_torque_effectiveness, grade, temperature, local_timestamp, local_timestamp_loc, file_id, battery_soc, left_pedal_smoothness, right_pedal_smoothness, glucose, time_from_course, compressed_speed_distance, resistance, cycle_length, fractional_cadence]
@@ -2391,86 +2500,194 @@ Index: []
 
 [3 rows x 30 columns]
                    timestamp  position_lat  position_long  ...  resistance  cycle_length  fractional_cadence
-3138821  2019-10-31 02:00:34    -32.951321     151.722122  ...         NaN           NaN                 NaN
-3138822  2019-11-01 03:57:06           NaN            NaN  ...         NaN           NaN                 NaN
-3138823  2019-11-01 03:57:07           NaN            NaN  ...         NaN           NaN                 NaN
+3164253  2019-09-04 10:03:06     40.047995     116.613487  ...         NaN           NaN                 NaN
+3164254  2019-09-06 02:36:45           NaN            NaN  ...         NaN           NaN                 NaN
+3164255  2019-09-06 02:36:46     42.271938     117.093117  ...         NaN           NaN                 NaN
 
 [3 rows x 30 columns]
                    timestamp  position_lat  position_long  ...  resistance  cycle_length  fractional_cadence
-3138823  2019-11-01 03:57:07           NaN            NaN  ...         NaN           NaN                 NaN
-3138824  2019-11-01 03:57:08           NaN            NaN  ...         NaN           NaN                 NaN
-3138825  2019-11-01 03:57:09           NaN            NaN  ...         NaN           NaN                 NaN
+3178717  2019-09-07 03:37:31     42.272328     117.092845  ...         NaN           NaN                 NaN
+3178718  2019-09-08 01:52:43           NaN            NaN  ...         NaN           NaN                 NaN
+3178719  2019-09-08 01:52:44     42.230653     117.269227  ...         NaN           NaN                 NaN
 
 [3 rows x 30 columns]
                    timestamp  position_lat  position_long  ...  resistance  cycle_length  fractional_cadence
-3138824  2019-11-01 03:57:08           NaN            NaN  ...         NaN           NaN                 NaN
-3138825  2019-11-01 03:57:09           NaN            NaN  ...         NaN           NaN                 NaN
-3138826  2019-11-01 03:57:10           NaN            NaN  ...         NaN           NaN                 NaN
+3183419  2019-09-08 03:43:34     42.272285     117.092703  ...         NaN           NaN                 NaN
+3183420  2019-09-10 00:35:57           NaN            NaN  ...         NaN           NaN                 NaN
+3183421  2019-09-10 00:35:58     30.201238     115.039187  ...         NaN           NaN                 NaN
 
 [3 rows x 30 columns]
                    timestamp  position_lat  position_long  ...  resistance  cycle_length  fractional_cadence
-3138825  2019-11-01 03:57:09           NaN            NaN  ...         NaN           NaN                 NaN
-3138826  2019-11-01 03:57:10           NaN            NaN  ...         NaN           NaN                 NaN
-3138827  2019-11-01 03:57:11           NaN            NaN  ...         NaN           NaN                 NaN
+3199162  2019-09-10 05:44:27     30.200752     115.038687  ...         NaN           NaN                 NaN
+3199163  2019-09-10 23:40:52           NaN            NaN  ...         NaN           NaN                 NaN
+3199164  2019-09-10 23:40:53           NaN            NaN  ...         NaN           NaN                 NaN
 
 [3 rows x 30 columns]
                    timestamp  position_lat  position_long  ...  resistance  cycle_length  fractional_cadence
-3138826  2019-11-01 03:57:10           NaN            NaN  ...         NaN           NaN                 NaN
-3138827  2019-11-01 03:57:11           NaN            NaN  ...         NaN           NaN                 NaN
-3138828  2019-11-01 03:57:12           NaN            NaN  ...         NaN           NaN                 NaN
+3199164  2019-09-10 23:40:53           NaN            NaN  ...         NaN           NaN                 NaN
+3199165  2019-09-10 23:40:54           NaN            NaN  ...         NaN           NaN                 NaN
+3199166  2019-09-10 23:40:55           NaN            NaN  ...         NaN           NaN                 NaN
 
 [3 rows x 30 columns]
                    timestamp  position_lat  position_long  ...  resistance  cycle_length  fractional_cadence
-3138827  2019-11-01 03:57:11           NaN            NaN  ...         NaN           NaN                 NaN
-3138828  2019-11-01 03:57:12           NaN            NaN  ...         NaN           NaN                 NaN
-3138829  2019-11-01 03:57:13           NaN            NaN  ...         NaN           NaN                 NaN
+3199165  2019-09-10 23:40:54           NaN            NaN  ...         NaN           NaN                 NaN
+3199166  2019-09-10 23:40:55           NaN            NaN  ...         NaN           NaN                 NaN
+3199167  2019-09-10 23:40:56           NaN            NaN  ...         NaN           NaN                 NaN
 
 [3 rows x 30 columns]
                    timestamp  position_lat  position_long  ...  resistance  cycle_length  fractional_cadence
-3138828  2019-11-01 03:57:12           NaN            NaN  ...         NaN           NaN                 NaN
-3138829  2019-11-01 03:57:13           NaN            NaN  ...         NaN           NaN                 NaN
-3138830  2019-11-01 03:57:14           NaN            NaN  ...         NaN           NaN                 NaN
+3213902  2019-09-11 04:33:04     30.431804     111.729139  ...         NaN           NaN                 NaN
+3213903  2019-09-11 04:43:46           NaN            NaN  ...         NaN           NaN                 NaN
+3213904  2019-09-11 04:43:47     30.436932     111.734480  ...         NaN           NaN                 NaN
 
 [3 rows x 30 columns]
                    timestamp  position_lat  position_long  ...  resistance  cycle_length  fractional_cadence
-3138829  2019-11-01 03:57:13           NaN            NaN  ...         NaN           NaN                 NaN
-3138830  2019-11-01 03:57:14           NaN            NaN  ...         NaN           NaN                 NaN
-3138831  2019-11-01 03:57:15           NaN            NaN  ...         NaN           NaN                 NaN
+3227418  2019-09-14 01:53:50     25.594093     111.934417  ...         NaN           NaN                 NaN
+3227419  2019-09-14 02:00:46           NaN            NaN  ...         NaN           NaN                 NaN
+3227420  2019-09-14 02:00:47     25.593920     111.934357  ...         NaN           NaN                 NaN
 
 [3 rows x 30 columns]
                    timestamp  position_lat  position_long  ...  resistance  cycle_length  fractional_cadence
-3242701  2019-11-10 22:46:56    -32.756809     151.775986  ...         NaN           NaN                 NaN
-3242702  2019-11-11 20:56:00           NaN            NaN  ...         NaN           NaN                 NaN
-3242703  2019-11-11 20:56:01    -32.756504     151.775833  ...         NaN           NaN                 NaN
+3238084  2019-09-14 05:08:34     25.366576     111.973965  ...         NaN           NaN                 NaN
+3238085  2019-09-14 05:24:41           NaN            NaN  ...         NaN           NaN                 NaN
+3238086  2019-09-14 05:24:42     25.364252     111.973927  ...         NaN           NaN                 NaN
 
 [3 rows x 30 columns]
                    timestamp  position_lat  position_long  ...  resistance  cycle_length  fractional_cadence
-3262510  2019-11-12 23:31:43    -32.920258     151.749374  ...         NaN           NaN                 NaN
-3262511  2019-11-13 21:54:24           NaN            NaN  ...         NaN           NaN                 NaN
-3262512  2019-11-13 21:54:25    -32.920502     151.580353  ...         NaN           NaN                 NaN
+3272623  2019-09-19 01:55:01     26.248499     105.964948  ...         NaN           NaN                 NaN
+3272624  2019-09-19 02:00:31           NaN            NaN  ...         NaN           NaN                 NaN
+3272625  2019-09-19 02:00:32     26.247427     105.963042  ...         NaN           NaN                 NaN
 
 [3 rows x 30 columns]
                    timestamp  position_lat  position_long  ...  resistance  cycle_length  fractional_cadence
-3275713  2019-11-14 01:47:13    -32.920628     151.580597  ...         NaN           NaN                 NaN
-3275714  2019-11-14 20:02:19           NaN            NaN  ...         NaN           NaN                 NaN
-3275715  2019-11-14 20:02:20    -32.904057     151.709488  ...         NaN           NaN                 NaN
+3283315  2019-09-19 05:07:28           NaN            NaN  ...         NaN           NaN                 NaN
+3283316  2019-09-21 01:57:17           NaN            NaN  ...         NaN           NaN                 NaN
+3283317  2019-09-21 02:04:59     30.097601     103.109975  ...         NaN           NaN                 NaN
 
 [3 rows x 30 columns]
                    timestamp  position_lat  position_long  ...  resistance  cycle_length  fractional_cadence
-3330115  2019-11-22 23:35:41    -32.756886     151.776047  ...         NaN           NaN                 NaN
-3330116  2019-11-25 20:46:14           NaN            NaN  ...         NaN           NaN                 NaN
-3330117  2019-11-25 20:46:15    -32.756943     151.776032  ...         NaN           NaN                 NaN
+3302646  2019-09-22 04:16:19     30.074022     103.098822  ...         NaN           NaN                 NaN
+3302647  2019-09-24 21:12:09           NaN            NaN  ...         NaN           NaN                 NaN
+3302648  2019-09-24 21:12:10    -32.756967     151.776007  ...         NaN           NaN                 NaN
+
+[3 rows x 30 columns]
+                   timestamp  position_lat  position_long  ...  resistance  cycle_length  fractional_cadence
+3314384  2019-09-26 01:02:01    -32.756580     151.775803  ...         NaN           NaN                 NaN
+3314385  2019-09-26 22:25:21           NaN            NaN  ...         NaN           NaN                 NaN
+3314386  2019-09-26 22:25:22    -32.756992     151.776047  ...         NaN           NaN                 NaN
+
+[3 rows x 30 columns]
+                   timestamp  position_lat  position_long  ...  resistance  cycle_length  fractional_cadence
+3323544  2019-09-27 01:00:42    -32.756649     151.775879  ...         NaN           NaN                 NaN
+3323545  2019-09-27 22:48:29           NaN            NaN  ...         NaN           NaN                 NaN
+3323546  2019-09-27 22:48:30    -32.757027     151.775848  ...         NaN           NaN                 NaN
+
+[3 rows x 30 columns]
+                   timestamp  position_lat  position_long  ...  resistance  cycle_length  fractional_cadence
+3409194  2019-10-08 04:50:42      31.53042      120.26017  ...         NaN           NaN                 NaN
+3409195  2019-10-09 00:22:21           NaN            NaN  ...         NaN           NaN                 NaN
+3409196  2019-10-09 00:22:22           NaN            NaN  ...         NaN           NaN                 NaN
+
+[3 rows x 30 columns]
+                   timestamp  position_lat  position_long  ...  resistance  cycle_length  fractional_cadence
+3445265  2019-10-12 04:41:46     31.027374     119.907120  ...         NaN           NaN                 NaN
+3445266  2019-10-13 01:46:53           NaN            NaN  ...         NaN           NaN                 NaN
+3445267  2019-10-13 01:46:54     31.147192     120.643654  ...         NaN           NaN                 NaN
+
+[3 rows x 30 columns]
+                   timestamp  position_lat  position_long  ...  resistance  cycle_length  fractional_cadence
+3456443  2019-10-13 05:40:10     31.138720     120.588150  ...         NaN           NaN                 NaN
+3456444  2019-10-14 01:44:11           NaN            NaN  ...         NaN           NaN                 NaN
+3456445  2019-10-14 01:44:12     31.853821     119.100388  ...         NaN           NaN                 NaN
+
+[3 rows x 30 columns]
+                   timestamp  position_lat  position_long  ...  resistance  cycle_length  fractional_cadence
+3457058  2019-10-14 01:56:28     31.856977     119.098267  ...         NaN           NaN                 NaN
+3457059  2019-10-14 02:05:11           NaN            NaN  ...         NaN           NaN                 NaN
+3457060  2019-10-14 02:05:12     31.858267     119.097885  ...         NaN           NaN                 NaN
+
+[3 rows x 30 columns]
+                   timestamp  position_lat  position_long  ...  resistance  cycle_length  fractional_cadence
+3501422  2019-10-31 02:00:34    -32.951321     151.722122  ...         NaN           NaN                 NaN
+3501423  2019-11-01 03:57:06           NaN            NaN  ...         NaN           NaN                 NaN
+3501424  2019-11-01 03:57:07           NaN            NaN  ...         NaN           NaN                 NaN
+
+[3 rows x 30 columns]
+                   timestamp  position_lat  position_long  ...  resistance  cycle_length  fractional_cadence
+3501424  2019-11-01 03:57:07           NaN            NaN  ...         NaN           NaN                 NaN
+3501425  2019-11-01 03:57:08           NaN            NaN  ...         NaN           NaN                 NaN
+3501426  2019-11-01 03:57:09           NaN            NaN  ...         NaN           NaN                 NaN
+
+[3 rows x 30 columns]
+                   timestamp  position_lat  position_long  ...  resistance  cycle_length  fractional_cadence
+3501425  2019-11-01 03:57:08           NaN            NaN  ...         NaN           NaN                 NaN
+3501426  2019-11-01 03:57:09           NaN            NaN  ...         NaN           NaN                 NaN
+3501427  2019-11-01 03:57:10           NaN            NaN  ...         NaN           NaN                 NaN
+
+[3 rows x 30 columns]
+                   timestamp  position_lat  position_long  ...  resistance  cycle_length  fractional_cadence
+3501426  2019-11-01 03:57:09           NaN            NaN  ...         NaN           NaN                 NaN
+3501427  2019-11-01 03:57:10           NaN            NaN  ...         NaN           NaN                 NaN
+3501428  2019-11-01 03:57:11           NaN            NaN  ...         NaN           NaN                 NaN
+
+[3 rows x 30 columns]
+                   timestamp  position_lat  position_long  ...  resistance  cycle_length  fractional_cadence
+3501427  2019-11-01 03:57:10           NaN            NaN  ...         NaN           NaN                 NaN
+3501428  2019-11-01 03:57:11           NaN            NaN  ...         NaN           NaN                 NaN
+3501429  2019-11-01 03:57:12           NaN            NaN  ...         NaN           NaN                 NaN
+
+[3 rows x 30 columns]
+                   timestamp  position_lat  position_long  ...  resistance  cycle_length  fractional_cadence
+3501428  2019-11-01 03:57:11           NaN            NaN  ...         NaN           NaN                 NaN
+3501429  2019-11-01 03:57:12           NaN            NaN  ...         NaN           NaN                 NaN
+3501430  2019-11-01 03:57:13           NaN            NaN  ...         NaN           NaN                 NaN
+
+[3 rows x 30 columns]
+                   timestamp  position_lat  position_long  ...  resistance  cycle_length  fractional_cadence
+3501429  2019-11-01 03:57:12           NaN            NaN  ...         NaN           NaN                 NaN
+3501430  2019-11-01 03:57:13           NaN            NaN  ...         NaN           NaN                 NaN
+3501431  2019-11-01 03:57:14           NaN            NaN  ...         NaN           NaN                 NaN
+
+[3 rows x 30 columns]
+                   timestamp  position_lat  position_long  ...  resistance  cycle_length  fractional_cadence
+3501430  2019-11-01 03:57:13           NaN            NaN  ...         NaN           NaN                 NaN
+3501431  2019-11-01 03:57:14           NaN            NaN  ...         NaN           NaN                 NaN
+3501432  2019-11-01 03:57:15           NaN            NaN  ...         NaN           NaN                 NaN
+
+[3 rows x 30 columns]
+                   timestamp  position_lat  position_long  ...  resistance  cycle_length  fractional_cadence
+3605302  2019-11-10 22:46:56    -32.756809     151.775986  ...         NaN           NaN                 NaN
+3605303  2019-11-11 20:56:00           NaN            NaN  ...         NaN           NaN                 NaN
+3605304  2019-11-11 20:56:01    -32.756504     151.775833  ...         NaN           NaN                 NaN
+
+[3 rows x 30 columns]
+                   timestamp  position_lat  position_long  ...  resistance  cycle_length  fractional_cadence
+3625111  2019-11-12 23:31:43    -32.920258     151.749374  ...         NaN           NaN                 NaN
+3625112  2019-11-13 21:54:24           NaN            NaN  ...         NaN           NaN                 NaN
+3625113  2019-11-13 21:54:25    -32.920502     151.580353  ...         NaN           NaN                 NaN
+
+[3 rows x 30 columns]
+                   timestamp  position_lat  position_long  ...  resistance  cycle_length  fractional_cadence
+3638314  2019-11-14 01:47:13    -32.920628     151.580597  ...         NaN           NaN                 NaN
+3638315  2019-11-14 20:02:19           NaN            NaN  ...         NaN           NaN                 NaN
+3638316  2019-11-14 20:02:20    -32.904057     151.709488  ...         NaN           NaN                 NaN
+
+[3 rows x 30 columns]
+                   timestamp  position_lat  position_long  ...  resistance  cycle_length  fractional_cadence
+3692716  2019-11-22 23:35:41    -32.756886     151.776047  ...         NaN           NaN                 NaN
+3692717  2019-11-25 20:46:14           NaN            NaN  ...         NaN           NaN                 NaN
+3692718  2019-11-25 20:46:15    -32.756943     151.776032  ...         NaN           NaN                 NaN
 
 [3 rows x 30 columns]
 
 --------------- DEVICE
 Devices used:
- ELEMNTBOLT    184
-ELEMNT        135
+ ELEMNTBOLT    217
+ELEMNT        174
 GARMIN         13
-ZWIFT           6
+ZWIFT           7
 Name: device_0, dtype: int64
-Fraction of data dropped with device selection:  0.015306636407320138
+Fraction of data dropped with device selection:  0.013839611471189592
 Are there glucose values in the data that will be dropped with the device selection?  False
 
 --------------- TIMESTAMP
@@ -2478,37 +2695,46 @@ Are there glucose values in the data that will be dropped with the device select
 -------- Local timestamp: nan
 
  local timestamp not available
-times:  37293
-days:  6
-file ids:  [ 62 333 334 335 336 337]
+times:  40902
+days:  8
+file ids:  [ 62 405 406 407 408 409 410]
 
  local timestamp from location not available
-times:  96867
+times:  79105
 days:  18
-file ids:  [ 39  60  74  85  90  91  92  95  99 101 276 281 283 125 133  62 333 334
- 335 336 337]
+file ids:  [ 39  60  74  85  99 101 276 283 125 133  62 405 406 407 408 409 410]
 
  local timestamp OR local timestamp from location not available
-times:  96867
+times:  79105
 days:  18
-file ids:  [ 39  60  74  85  90  91  92  95  99 101 276 281 283 125 133  62 333 334
- 335 336 337]
+file ids:  [ 39  60  74  85  99 101 276 283 125 133  62 405 406 407 408 409 410]
 
  local timestamp AND local timestamp from location not available
-times:  37293
-days:  6
-file ids:  [ 62 333 334 335 336 337]
+times:  40902
+days:  8
+file ids:  [ 62 405 406 407 408 409 410]
 
 -------- Local timestamp: error
 
  local timestamp does not equal local timestamp from location (excl. nans)
-times:  58261
-days:  7
-file ids:  [  8  87  88 119 298 135]
+times:  222196
+days:  26
+file ids:  [  8  87  88 119 295 296 299 300 301 317 318 319 325 326 341 342 343 344
+ 345 370 135 297 298 302 303 304 305 306 307 308 309 310 311 312 313 314
+ 315 316 320 321 330 331 340]
 Dates for which this happens:  [datetime.date(2018, 12, 9) datetime.date(2019, 2, 22)
  datetime.date(2019, 2, 23) datetime.date(2019, 3, 25)
+ datetime.date(2019, 9, 4) datetime.date(2019, 9, 6)
+ datetime.date(2019, 9, 8) datetime.date(2019, 9, 16)
+ datetime.date(2019, 9, 21) datetime.date(2019, 10, 7)
+ datetime.date(2019, 10, 8) datetime.date(2019, 10, 9)
  datetime.date(2019, 11, 5) datetime.date(2019, 4, 6)
- datetime.date(2019, 4, 7)]
+ datetime.date(2019, 4, 7) datetime.date(2019, 9, 7)
+ datetime.date(2019, 9, 10) datetime.date(2019, 9, 11)
+ datetime.date(2019, 9, 12) datetime.date(2019, 9, 14)
+ datetime.date(2019, 9, 15) datetime.date(2019, 9, 17)
+ datetime.date(2019, 9, 24) datetime.date(2019, 9, 25)
+ datetime.date(2019, 9, 26) datetime.date(2019, 10, 5)]
 
 --------------- DUPLICATES
 
@@ -2520,20 +2746,20 @@ DROPPED: 15293 duplicate entries
 -------- Timestamp duplicate
 
  duplicated timestamps
-times:  10624
-days:  3
-file ids:  [333 336 320]
+times:  14080
+days:  5
+file ids:  [405 408 409 392]
 
  duplicated local timestamps
-times:  37825
+times:  41434
 days:  2
-file ids:  [ 62 333 334 335 336 337 320]
+file ids:  [ 62 405 406 407 408 409 410 392]
 CHECK if we remove entire file by removing duplicated timestamps
 Dupl file_id: [len file, len dupl ts of file]
- {8: [3606, 3566], 31: [12607, 6525], 156: [15006, 533], 333: [3617, 3566], 336: [6612, 6525], 320: [600, 533]} 
- {8: False, 31: False, 156: False, 333: False, 336: False, 320: False}
+ {8: [3606, 3566], 31: [12607, 6525], 156: [15006, 533], 339: [3567, 3456], 405: [3617, 3566], 408: [6612, 6525], 409: [3609, 3456], 392: [600, 533]} 
+ {8: False, 31: False, 156: False, 339: False, 405: False, 408: False, 409: False, 392: False}
 Percentage of missing columns per file
- {8: 0.2727272727272727, 31: 0.21212121212121213, 156: 0.21212121212121213, 333: 0.6363636363636364, 336: 0.6363636363636364, 320: 0.48484848484848486}
+ {8: 0.2727272727272727, 31: 0.21212121212121213, 156: 0.21212121212121213, 339: 0.21212121212121213, 405: 0.6363636363636364, 408: 0.6363636363636364, 409: 0.6363636363636364, 392: 0.48484848484848486}
 Missing columns per file
  {8: Index(['battery_soc', 'left_pedal_smoothness', 'right_pedal_smoothness',
        'glucose', 'time_from_course', 'compressed_speed_distance',
@@ -2544,21 +2770,31 @@ Missing columns per file
       dtype='object'), 156: Index(['combined_pedal_smoothness', 'glucose', 'time_from_course',
        'compressed_speed_distance', 'resistance', 'cycle_length',
        'fractional_cadence'],
-      dtype='object'), 333: Index(['gps_accuracy', 'distance', 'left_right_balance',
+      dtype='object'), 339: Index(['combined_pedal_smoothness', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length',
+       'fractional_cadence'],
+      dtype='object'), 405: Index(['gps_accuracy', 'distance', 'left_right_balance',
        'combined_pedal_smoothness', 'left_torque_effectiveness',
        'right_torque_effectiveness', 'grade', 'temperature', 'local_timestamp',
        'local_timestamp_loc', 'battery_soc', 'left_pedal_smoothness',
        'right_pedal_smoothness', 'glucose', 'time_from_course',
        'compressed_speed_distance', 'resistance', 'cycle_length',
        'fractional_cadence', 'device_0_serialnumber', 'error_local_timestamp'],
-      dtype='object'), 336: Index(['gps_accuracy', 'distance', 'left_right_balance',
+      dtype='object'), 408: Index(['gps_accuracy', 'distance', 'left_right_balance',
        'combined_pedal_smoothness', 'left_torque_effectiveness',
        'right_torque_effectiveness', 'grade', 'temperature', 'local_timestamp',
        'local_timestamp_loc', 'battery_soc', 'left_pedal_smoothness',
        'right_pedal_smoothness', 'glucose', 'time_from_course',
        'compressed_speed_distance', 'resistance', 'cycle_length',
        'fractional_cadence', 'device_0_serialnumber', 'error_local_timestamp'],
-      dtype='object'), 320: Index(['gps_accuracy', 'heart_rate', 'power', 'left_right_balance',
+      dtype='object'), 409: Index(['gps_accuracy', 'distance', 'left_right_balance',
+       'combined_pedal_smoothness', 'left_torque_effectiveness',
+       'right_torque_effectiveness', 'grade', 'temperature', 'local_timestamp',
+       'local_timestamp_loc', 'battery_soc', 'left_pedal_smoothness',
+       'right_pedal_smoothness', 'glucose', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length',
+       'fractional_cadence', 'device_0_serialnumber', 'error_local_timestamp'],
+      dtype='object'), 392: Index(['gps_accuracy', 'heart_rate', 'power', 'left_right_balance',
        'combined_pedal_smoothness', 'left_torque_effectiveness',
        'right_torque_effectiveness', 'grade', 'battery_soc',
        'left_pedal_smoothness', 'right_pedal_smoothness', 'glucose',
@@ -2567,25 +2803,25 @@ Missing columns per file
       dtype='object')}
 Duplicate timestamps in devices:
 
- ELEMNT
-times:  0
-days:  0
-file ids:  []
+ ZWIFT
+times:  13547
+days:  4
+file ids:  [405 408 409]
 
  ELEMNTBOLT
 times:  10624
 days:  3
 file ids:  [  8  31 156]
 
+ ELEMNT
+times:  3456
+days:  2
+file ids:  [339]
+
  GARMIN
 times:  533
 days:  1
-file ids:  [320]
-
- ZWIFT
-times:  10091
-days:  2
-file ids:  [333 336]
+file ids:  [392]
 Duplicate timestamps in serialnumbers:
 
  2290548736.0
@@ -2594,9 +2830,9 @@ days:  3
 file ids:  [  8  31 156]
 
  4167528448.0
-times:  0
-days:  0
-file ids:  []
+times:  3456
+days:  2
+file ids:  [339]
 
  nan
 times:  0
@@ -2606,10 +2842,10 @@ file ids:  []
  3933472023.0
 times:  533
 days:  1
-file ids:  [320]
+file ids:  [392]
 Duplicate timestamps after potentially dropping devices: 
 
- ELEMNT
+ ELEMNTROAM
 times:  0
 days:  0
 file ids:  []
@@ -2619,40 +2855,46 @@ times:  10624
 days:  3
 file ids:  [  8  31 156]
 
- ZWIFT
-times:  10091
+ ELEMNT
+times:  3456
 days:  2
-file ids:  [333 336]
+file ids:  [339]
 
- ELEMNTROAM
-times:  0
-days:  0
-file ids:  []
+ ZWIFT
+times:  13547
+days:  4
+file ids:  [405 408 409]
 Do the duplicate timestamps have the same data?
                   timestamp  position_lat  position_long  ...    device_0  device_0_serialnumber  error_local_timestamp
 82577   2018-12-09 07:04:45    -32.756443     151.775870  ...  ELEMNTBOLT           2.290549e+09                   True
-3368056 2018-12-09 07:04:45    -11.640043     166.942846  ...       ZWIFT                    NaN                    NaN
-3368057 2018-12-09 07:04:46    -11.640087     166.942770  ...       ZWIFT                    NaN                    NaN
+3730639 2018-12-09 07:04:45    -11.640043     166.942846  ...       ZWIFT                    NaN                    NaN
+3730640 2018-12-09 07:04:46    -11.640087     166.942770  ...       ZWIFT                    NaN                    NaN
 82578   2018-12-09 07:04:46    -32.756443     151.775870  ...  ELEMNTBOLT           2.290549e+09                   True
 82579   2018-12-09 07:04:47    -32.756443     151.775870  ...  ELEMNTBOLT           2.290549e+09                   True
 ...                     ...           ...            ...  ...         ...                    ...                    ...
-1410006 2019-04-24 22:51:57    -32.835529     151.449976  ...  ELEMNTBOLT           2.290549e+09                  False
-1410007 2019-04-24 22:51:58    -32.835481     151.450067  ...  ELEMNTBOLT           2.290549e+09                  False
-1410012 2019-04-24 22:52:03    -32.835250     151.450503  ...  ELEMNTBOLT           2.290549e+09                  False
-1410015 2019-04-24 22:52:06    -32.835128     151.450738  ...  ELEMNTBOLT           2.290549e+09                  False
-1410021 2019-04-24 22:54:08    -32.835043     151.451002  ...  ELEMNTBOLT           2.290549e+09                  False
+3758863 2019-10-05 00:31:26     40.769955     -73.977336  ...       ZWIFT                    NaN                    NaN
+3547284 2019-10-05 00:31:27    -32.756474     151.775864  ...      ELEMNT           4.167528e+09                  False
+3758864 2019-10-05 00:31:27     40.769955     -73.977336  ...       ZWIFT                    NaN                    NaN
+3547285 2019-10-05 00:31:28    -32.756474     151.775864  ...      ELEMNT           4.167528e+09                  False
+3758865 2019-10-05 00:31:28     40.769955     -73.977336  ...       ZWIFT                    NaN                    NaN
 
-[20715 rows x 33 columns]
+[27627 rows x 33 columns]
 /local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/frame.py:4312: SettingWithCopyWarning: 
 A value is trying to be set on a copy of a slice from a DataFrame
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   errors=errors,
-DROPPED: 3 files with 10829 duplicate timestamps
-Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 41/41 [00:51<00:00,  1.24s/it, Completed]
-Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:13<00:00, 13.71s/it]
-Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.32it/s]
-Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 383.46it/s]
+DROPPED: 4 files with 14438 duplicate timestamps
+Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 41/41 [00:53<00:00,  1.30s/it, Completed]
+Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:15<00:00, 15.35s/it]
+Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.62it/s]
+Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 422.69it/s]
+
+-------- export glucose
+/local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/__main__.py:173: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
 
 ------------------------------- Athlete  5
 /local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (19,20,23) have mixed types.Specify dtype option on import or set low_memory=False.
@@ -2661,7 +2903,7 @@ Export report to file: 100%|█████████████████�
 --------------- NAN
 
 -------- Remove rows fully nan
-DROPPED: 33 rows dropped due to being empty
+DROPPED: 43 rows dropped due to being empty
 Timestamps before and after nanrows: 
 Empty DataFrame
 Columns: [timestamp, cadence, power, temperature, battery_soc, left_pedal_smoothness, right_pedal_smoothness, left_torque_effectiveness, right_torque_effectiveness, position_lat, position_long, gps_accuracy, distance, enhanced_speed, speed, enhanced_altitude, altitude, grade, local_timestamp, local_timestamp_loc, file_id, heart_rate, left_right_balance, time_from_course, compressed_speed_distance, resistance, cycle_length, glucose, fractional_cadence, accumulated_power]
@@ -2775,97 +3017,157 @@ Index: []
 
 [3 rows x 30 columns]
                    timestamp  cadence  power  temperature  ...  cycle_length  glucose  fractional_cadence  accumulated_power
-1315718  2019-07-31 12:28:44      NaN    NaN         23.0  ...           NaN      NaN                 NaN                NaN
-1315719  2019-08-01 15:44:03      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
-1315720  2019-08-01 15:44:04      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+1287250  2019-04-30 15:04:21      0.0    0.0         13.0  ...           NaN      NaN                 NaN                NaN
+1287251  2019-05-01 10:36:59      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+1287252  2019-05-01 10:37:00      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
 
 [3 rows x 30 columns]
                    timestamp  cadence  power  temperature  ...  cycle_length  glucose  fractional_cadence  accumulated_power
-1340744  2019-08-03 17:00:27      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
-1340745  2019-08-04 12:27:06      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
-1340746  2019-08-04 12:27:07      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+1333600  2019-05-04 16:48:54     67.0   18.0          8.0  ...           NaN      NaN                 NaN                NaN
+1333601  2019-05-05 07:26:02      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+1333602  2019-05-05 07:26:03      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
 
 [3 rows x 30 columns]
                    timestamp  cadence  power  temperature  ...  cycle_length  glucose  fractional_cadence  accumulated_power
-1423632  2019-08-09 11:23:15      0.0    0.0         32.0  ...           NaN      NaN                 NaN                NaN
-1423633  2019-08-11 12:16:06      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
-1423634  2019-08-11 12:16:07      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+1395998  2019-05-11 12:33:39      0.0    0.0          NaN  ...           NaN      NaN                 NaN                NaN
+1395999  2019-05-12 12:39:19      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+1396000  2019-05-12 12:39:20     70.0   69.0          NaN  ...           NaN      NaN                 NaN                NaN
 
 [3 rows x 30 columns]
                    timestamp  cadence  power  temperature  ...  cycle_length  glucose  fractional_cadence  accumulated_power
-1438977  2019-08-13 10:08:09     62.0    0.0         18.0  ...           NaN      NaN                 NaN                NaN
-1438978  2019-08-14 13:50:05      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
-1438979  2019-08-14 13:50:06      NaN    NaN         24.0  ...           NaN      NaN                 NaN                NaN
+1522960  2019-05-26 11:51:38      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+1522961  2019-05-26 11:51:39      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+1522962  2019-05-26 11:51:40      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
 
 [3 rows x 30 columns]
                    timestamp  cadence  power  temperature  ...  cycle_length  glucose  fractional_cadence  accumulated_power
-1460449  2019-08-15 11:52:30      NaN    NaN         18.0  ...           NaN      NaN                 NaN                NaN
-1460450  2019-08-17 10:52:38      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
-1460451  2019-08-17 10:52:39      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+1522961  2019-05-26 11:51:39      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+1522962  2019-05-26 11:51:40      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+1522963  2019-05-26 11:51:41      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
 
 [3 rows x 30 columns]
                    timestamp  cadence  power  temperature  ...  cycle_length  glucose  fractional_cadence  accumulated_power
-1460451  2019-08-17 10:52:39      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
-1460452  2019-08-17 10:52:40      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
-1460453  2019-08-17 10:52:41      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+1522962  2019-05-26 11:51:40      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+1522963  2019-05-26 11:51:41      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+1522964  2019-05-26 11:51:42      NaN    NaN         21.0  ...           NaN      NaN                 NaN                NaN
 
 [3 rows x 30 columns]
                    timestamp  cadence  power  temperature  ...  cycle_length  glucose  fractional_cadence  accumulated_power
-1460452  2019-08-17 10:52:40      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
-1460453  2019-08-17 10:52:41      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
-1460454  2019-08-17 10:52:42      0.0    0.0         18.0  ...           NaN      NaN                 NaN                NaN
+1542206  2019-05-28 14:47:24      0.0    0.0          NaN  ...           NaN      NaN                 NaN                NaN
+1542207  2019-05-29 12:13:02      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+1542208  2019-05-29 12:13:03      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
 
 [3 rows x 30 columns]
                    timestamp  cadence  power  temperature  ...  cycle_length  glucose  fractional_cadence  accumulated_power
-1569981  2019-08-25 13:50:23      NaN    NaN         29.0  ...           NaN      NaN                 NaN                NaN
-1569982  2019-08-26 12:50:34      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
-1569983  2019-08-26 12:50:35      NaN    NaN         39.0  ...           NaN      NaN                 NaN                NaN
+1607599  2019-06-02 12:29:19      0.0    0.0         32.0  ...           NaN      NaN                 NaN                NaN
+1607600  2019-06-02 08:35:22      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+1607601  2019-06-02 08:35:23      NaN    NaN         23.0  ...           NaN      NaN                 NaN                NaN
 
 [3 rows x 30 columns]
                    timestamp  cadence  power  temperature  ...  cycle_length  glucose  fractional_cadence  accumulated_power
-1673998  2019-09-03 15:08:12      NaN    NaN         18.0  ...           NaN      NaN                 NaN                NaN
-1673999  2019-09-04 07:38:58      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
-1674000  2019-09-04 07:38:59      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+1843059  2019-06-22 13:30:40      NaN    NaN         25.0  ...           NaN      NaN                 NaN                NaN
+1843060  2019-06-23 08:49:59      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+1843061  2019-06-23 08:50:00      NaN    NaN          NaN  ...           NaN    111.0                 NaN                NaN
 
 [3 rows x 30 columns]
                    timestamp  cadence  power  temperature  ...  cycle_length  glucose  fractional_cadence  accumulated_power
-1772746  2019-09-14 15:17:58      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
-1772747  2019-09-15 10:44:55      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
-1772748  2019-09-15 10:44:56      NaN    NaN         21.0  ...           NaN      NaN                 NaN                NaN
+1867211  2019-06-25 19:47:23      0.0    0.0         27.0  ...           NaN      NaN                 NaN                NaN
+1867212  2019-06-26 10:33:38      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+1867213  2019-06-26 10:33:39      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
 
 [3 rows x 30 columns]
                    timestamp  cadence  power  temperature  ...  cycle_length  glucose  fractional_cadence  accumulated_power
-1899595  2019-09-28 15:48:57      0.0    0.0         14.0  ...           NaN      NaN                 NaN                NaN
-1899596  2019-10-01 08:37:32      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
-1899597  2019-10-01 08:37:33      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+2159866  2019-07-31 12:28:44      NaN    NaN         23.0  ...           NaN      NaN                 NaN                NaN
+2159867  2019-08-01 15:44:03      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+2159868  2019-08-01 15:44:04      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
 
 [3 rows x 30 columns]
                    timestamp  cadence  power  temperature  ...  cycle_length  glucose  fractional_cadence  accumulated_power
-1997619  2019-10-13 11:19:56      NaN    NaN         14.0  ...           NaN      NaN                 NaN                NaN
-1997620  2019-10-14 10:31:05      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
-1997621  2019-10-14 10:31:06      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+2184892  2019-08-03 17:00:27      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+2184893  2019-08-04 12:27:06      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+2184894  2019-08-04 12:27:07      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
 
 [3 rows x 30 columns]
                    timestamp  cadence  power  temperature  ...  cycle_length  glucose  fractional_cadence  accumulated_power
-2054030  2019-10-20 06:13:25      NaN    NaN         21.0  ...           NaN      NaN                 NaN                NaN
-2054031  2019-11-11 07:05:26      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
-2054032  2019-11-11 07:05:27      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+2267780  2019-08-09 11:23:15      0.0    0.0         32.0  ...           NaN      NaN                 NaN                NaN
+2267781  2019-08-11 12:16:06      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+2267782  2019-08-11 12:16:07      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
 
 [3 rows x 30 columns]
                    timestamp  cadence  power  temperature  ...  cycle_length  glucose  fractional_cadence  accumulated_power
-2127618  2019-11-20 13:06:50      NaN    NaN         -1.0  ...           NaN      NaN                 NaN                NaN
-2127619  2019-11-21 12:25:59      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
-2127620  2019-11-21 12:26:00      0.0    0.0         18.0  ...           NaN      NaN                 NaN                NaN
+2283125  2019-08-13 10:08:09     62.0    0.0         18.0  ...           NaN      NaN                 NaN                NaN
+2283126  2019-08-14 13:50:05      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+2283127  2019-08-14 13:50:06      NaN    NaN         24.0  ...           NaN      NaN                 NaN                NaN
+
+[3 rows x 30 columns]
+                   timestamp  cadence  power  temperature  ...  cycle_length  glucose  fractional_cadence  accumulated_power
+2304597  2019-08-15 11:52:30      NaN    NaN         18.0  ...           NaN      NaN                 NaN                NaN
+2304598  2019-08-17 10:52:38      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+2304599  2019-08-17 10:52:39      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+
+[3 rows x 30 columns]
+                   timestamp  cadence  power  temperature  ...  cycle_length  glucose  fractional_cadence  accumulated_power
+2304599  2019-08-17 10:52:39      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+2304600  2019-08-17 10:52:40      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+2304601  2019-08-17 10:52:41      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+
+[3 rows x 30 columns]
+                   timestamp  cadence  power  temperature  ...  cycle_length  glucose  fractional_cadence  accumulated_power
+2304600  2019-08-17 10:52:40      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+2304601  2019-08-17 10:52:41      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+2304602  2019-08-17 10:52:42      0.0    0.0         18.0  ...           NaN      NaN                 NaN                NaN
+
+[3 rows x 30 columns]
+                   timestamp  cadence  power  temperature  ...  cycle_length  glucose  fractional_cadence  accumulated_power
+2414129  2019-08-25 13:50:23      NaN    NaN         29.0  ...           NaN      NaN                 NaN                NaN
+2414130  2019-08-26 12:50:34      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+2414131  2019-08-26 12:50:35      NaN    NaN         39.0  ...           NaN      NaN                 NaN                NaN
+
+[3 rows x 30 columns]
+                   timestamp  cadence  power  temperature  ...  cycle_length  glucose  fractional_cadence  accumulated_power
+2518146  2019-09-03 15:08:12      NaN    NaN         18.0  ...           NaN      NaN                 NaN                NaN
+2518147  2019-09-04 07:38:58      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+2518148  2019-09-04 07:38:59      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+
+[3 rows x 30 columns]
+                   timestamp  cadence  power  temperature  ...  cycle_length  glucose  fractional_cadence  accumulated_power
+2616894  2019-09-14 15:17:58      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+2616895  2019-09-15 10:44:55      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+2616896  2019-09-15 10:44:56      NaN    NaN         21.0  ...           NaN      NaN                 NaN                NaN
+
+[3 rows x 30 columns]
+                   timestamp  cadence  power  temperature  ...  cycle_length  glucose  fractional_cadence  accumulated_power
+2743743  2019-09-28 15:48:57      0.0    0.0         14.0  ...           NaN      NaN                 NaN                NaN
+2743744  2019-10-01 08:37:32      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+2743745  2019-10-01 08:37:33      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+
+[3 rows x 30 columns]
+                   timestamp  cadence  power  temperature  ...  cycle_length  glucose  fractional_cadence  accumulated_power
+2841767  2019-10-13 11:19:56      NaN    NaN         14.0  ...           NaN      NaN                 NaN                NaN
+2841768  2019-10-14 10:31:05      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+2841769  2019-10-14 10:31:06      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+
+[3 rows x 30 columns]
+                   timestamp  cadence  power  temperature  ...  cycle_length  glucose  fractional_cadence  accumulated_power
+2898178  2019-10-20 06:13:25      NaN    NaN         21.0  ...           NaN      NaN                 NaN                NaN
+2898179  2019-11-11 07:05:26      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+2898180  2019-11-11 07:05:27      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+
+[3 rows x 30 columns]
+                   timestamp  cadence  power  temperature  ...  cycle_length  glucose  fractional_cadence  accumulated_power
+2971766  2019-11-20 13:06:50      NaN    NaN         -1.0  ...           NaN      NaN                 NaN                NaN
+2971767  2019-11-21 12:25:59      NaN    NaN          NaN  ...           NaN      NaN                 NaN                NaN
+2971768  2019-11-21 12:26:00      0.0    0.0         18.0  ...           NaN      NaN                 NaN                NaN
 
 [3 rows x 30 columns]
 
 --------------- DEVICE
 Devices used:
- ELEMNTBOLT    198
-ZWIFT          30
+ ELEMNTBOLT    277
+ZWIFT          31
 GARMIN          3
 Name: device_0, dtype: int64
-Fraction of data dropped with device selection:  0.0044878317438218785
+Fraction of data dropped with device selection:  0.0032928163870160196
 Are there glucose values in the data that will be dropped with the device selection?  False
 
 --------------- TIMESTAMP
@@ -2873,36 +3175,36 @@ Are there glucose values in the data that will be dropped with the device select
 -------- Local timestamp: nan
 
  local timestamp not available
-times:  156606
-days:  24
-file ids:  [ 12 202 203 204 205 206 207 208 209 210 211 212 213 214 215 216 217 218
- 219 220 221 222 223 224 225 226 227 228 229 230]
+times:  163832
+days:  25
+file ids:  [ 12 281 282 283 284 285 286 287 288 289 290 291 292 293 294 295 296 297
+ 298 299 300 301 302 303 304 305 306 307 308 309 310]
 
  local timestamp from location not available
-times:  156630
-days:  24
-file ids:  [ 54  12 202 203 204 205 206 207 208 209 210 211 212 213 214 215 216 217
- 218 219 220 221 222 223 224 225 226 227 228 229 230]
+times:  163856
+days:  25
+file ids:  [ 54  12 281 282 283 284 285 286 287 288 289 290 291 292 293 294 295 296
+ 297 298 299 300 301 302 303 304 305 306 307 308 309 310]
 
  local timestamp OR local timestamp from location not available
-times:  156630
-days:  24
-file ids:  [ 54  12 202 203 204 205 206 207 208 209 210 211 212 213 214 215 216 217
- 218 219 220 221 222 223 224 225 226 227 228 229 230]
+times:  163856
+days:  25
+file ids:  [ 54  12 281 282 283 284 285 286 287 288 289 290 291 292 293 294 295 296
+ 297 298 299 300 301 302 303 304 305 306 307 308 309 310]
 
  local timestamp AND local timestamp from location not available
-times:  156606
-days:  24
-file ids:  [ 12 202 203 204 205 206 207 208 209 210 211 212 213 214 215 216 217 218
- 219 220 221 222 223 224 225 226 227 228 229 230]
+times:  163832
+days:  25
+file ids:  [ 12 281 282 283 284 285 286 287 288 289 290 291 292 293 294 295 296 297
+ 298 299 300 301 302 303 304 305 306 307 308 309 310]
 
 -------- Local timestamp: error
 
  local timestamp does not equal local timestamp from location (excl. nans)
-times:  0
-days:  0
-file ids:  []
-Dates for which this happens:  []
+times:  8795
+days:  1
+file ids:  [146]
+Dates for which this happens:  [datetime.date(2019, 5, 26)]
 
 --------------- DUPLICATES
 
@@ -2914,21 +3216,21 @@ DROPPED: 0 duplicate entries
 -------- Timestamp duplicate
 
  duplicated timestamps
-times:  21320
-days:  4
-file ids:  [209 210 213 229]
+times:  33639
+days:  5
+file ids:  [153 288 289 292 308]
 
  duplicated local timestamps
-times:  156605
-days:  1
-file ids:  [ 12 202 203 204 205 206 207 208 209 210 211 212 213 214 215 216 217 218
- 219 220 221 222 223 224 225 226 227 228 229 230]
+times:  176150
+days:  2
+file ids:  [153  12 281 282 283 284 285 286 287 288 289 290 291 292 293 294 295 296
+ 297 298 299 300 301 302 303 304 305 306 307 308 309 310]
 CHECK if we remove entire file by removing duplicated timestamps
 Dupl file_id: [len file, len dupl ts of file]
- {48: [3879, 3675], 50: [9909, 9751], 53: [5432, 4879], 196: [3095, 3015], 209: [3758, 3675], 210: [10846, 9751], 213: [7207, 4879], 229: [9022, 3015]} 
- {48: False, 50: False, 53: False, 196: False, 209: False, 210: False, 213: False, 229: False}
+ {48: [3879, 3675], 50: [9909, 9751], 53: [5432, 4879], 152: [12332, 12319], 153: [12345, 12319], 275: [3095, 3015], 288: [3758, 3675], 289: [10846, 9751], 292: [7207, 4879], 308: [9022, 3015]} 
+ {48: False, 50: False, 53: False, 152: False, 153: False, 275: False, 288: False, 289: False, 292: False, 308: False}
 Percentage of missing columns per file
- {48: 0.21212121212121213, 50: 0.24242424242424243, 53: 0.24242424242424243, 196: 0.30303030303030304, 209: 0.6363636363636364, 210: 0.6363636363636364, 213: 0.6363636363636364, 229: 0.6363636363636364}
+ {48: 0.21212121212121213, 50: 0.24242424242424243, 53: 0.24242424242424243, 152: 0.2727272727272727, 153: 0.42424242424242425, 275: 0.30303030303030304, 288: 0.6363636363636364, 289: 0.6363636363636364, 292: 0.6363636363636364, 308: 0.6363636363636364}
 Missing columns per file
  {48: Index(['time_from_course', 'compressed_speed_distance', 'resistance',
        'cycle_length', 'glucose', 'fractional_cadence', 'accumulated_power'],
@@ -2938,32 +3240,40 @@ Missing columns per file
       dtype='object'), 53: Index(['heart_rate', 'time_from_course', 'compressed_speed_distance',
        'resistance', 'cycle_length', 'glucose', 'fractional_cadence',
        'accumulated_power'],
-      dtype='object'), 196: Index(['right_pedal_smoothness', 'right_torque_effectiveness',
+      dtype='object'), 152: Index(['left_pedal_smoothness', 'right_pedal_smoothness', 'time_from_course',
+       'compressed_speed_distance', 'resistance', 'cycle_length', 'glucose',
+       'fractional_cadence', 'accumulated_power'],
+      dtype='object'), 153: Index(['cadence', 'power', 'left_pedal_smoothness', 'right_pedal_smoothness',
+       'left_torque_effectiveness', 'right_torque_effectiveness',
        'left_right_balance', 'time_from_course', 'compressed_speed_distance',
        'resistance', 'cycle_length', 'glucose', 'fractional_cadence',
        'accumulated_power'],
-      dtype='object'), 209: Index(['temperature', 'battery_soc', 'left_pedal_smoothness',
+      dtype='object'), 275: Index(['right_pedal_smoothness', 'right_torque_effectiveness',
+       'left_right_balance', 'time_from_course', 'compressed_speed_distance',
+       'resistance', 'cycle_length', 'glucose', 'fractional_cadence',
+       'accumulated_power'],
+      dtype='object'), 288: Index(['temperature', 'battery_soc', 'left_pedal_smoothness',
        'right_pedal_smoothness', 'left_torque_effectiveness',
        'right_torque_effectiveness', 'gps_accuracy', 'distance', 'grade',
        'local_timestamp', 'local_timestamp_loc', 'left_right_balance',
        'time_from_course', 'compressed_speed_distance', 'resistance',
        'cycle_length', 'glucose', 'fractional_cadence', 'accumulated_power',
        'device_0_serialnumber', 'error_local_timestamp'],
-      dtype='object'), 210: Index(['temperature', 'battery_soc', 'left_pedal_smoothness',
+      dtype='object'), 289: Index(['temperature', 'battery_soc', 'left_pedal_smoothness',
        'right_pedal_smoothness', 'left_torque_effectiveness',
        'right_torque_effectiveness', 'gps_accuracy', 'distance', 'grade',
        'local_timestamp', 'local_timestamp_loc', 'left_right_balance',
        'time_from_course', 'compressed_speed_distance', 'resistance',
        'cycle_length', 'glucose', 'fractional_cadence', 'accumulated_power',
        'device_0_serialnumber', 'error_local_timestamp'],
-      dtype='object'), 213: Index(['temperature', 'battery_soc', 'left_pedal_smoothness',
+      dtype='object'), 292: Index(['temperature', 'battery_soc', 'left_pedal_smoothness',
        'right_pedal_smoothness', 'left_torque_effectiveness',
        'right_torque_effectiveness', 'gps_accuracy', 'distance', 'grade',
        'local_timestamp', 'local_timestamp_loc', 'left_right_balance',
        'time_from_course', 'compressed_speed_distance', 'resistance',
        'cycle_length', 'glucose', 'fractional_cadence', 'accumulated_power',
        'device_0_serialnumber', 'error_local_timestamp'],
-      dtype='object'), 229: Index(['temperature', 'battery_soc', 'left_pedal_smoothness',
+      dtype='object'), 308: Index(['temperature', 'battery_soc', 'left_pedal_smoothness',
        'right_pedal_smoothness', 'left_torque_effectiveness',
        'right_torque_effectiveness', 'gps_accuracy', 'distance', 'grade',
        'local_timestamp', 'local_timestamp_loc', 'left_right_balance',
@@ -2973,20 +3283,20 @@ Missing columns per file
       dtype='object')}
 Duplicate timestamps in devices:
 
- ELEMNTBOLT
+ ZWIFT
 times:  21320
 days:  4
-file ids:  [ 48  50  53 196]
+file ids:  [288 289 292 308]
+
+ ELEMNTBOLT
+times:  45958
+days:  5
+file ids:  [ 48  50  53 152 153 275]
 
  GARMIN
 times:  0
 days:  0
 file ids:  []
-
- ZWIFT
-times:  21320
-days:  4
-file ids:  [209 210 213 229]
 Duplicate timestamps in serialnumbers:
 
  3086909952.0
@@ -2995,14 +3305,14 @@ days:  0
 file ids:  []
 
  935778304.0
-times:  0
-days:  0
-file ids:  []
+times:  12319
+days:  1
+file ids:  [153]
 
  1725529088.0
-times:  21320
-days:  4
-file ids:  [ 48  50  53 196]
+times:  33639
+days:  5
+file ids:  [ 48  50  53 152 275]
 
  nan
 times:  0
@@ -3015,50 +3325,56 @@ days:  0
 file ids:  []
 Duplicate timestamps after potentially dropping devices: 
 
- ELEMNT
+ ELEMNTROAM
 times:  0
 days:  0
 file ids:  []
 
  ELEMNTBOLT
-times:  21320
-days:  4
-file ids:  [ 48  50  53 196]
+times:  45958
+days:  5
+file ids:  [ 48  50  53 152 153 275]
+
+ ELEMNT
+times:  0
+days:  0
+file ids:  []
 
  ZWIFT
 times:  21320
 days:  4
-file ids:  [209 210 213 229]
-
- ELEMNTROAM
-times:  0
-days:  0
-file ids:  []
+file ids:  [288 289 292 308]
 Do the duplicate timestamps have the same data?
                   timestamp  cadence  power  temperature  ...  accumulated_power    device_0  device_0_serialnumber  error_local_timestamp
 519104  2019-01-30 19:01:40    100.0  350.0          NaN  ...                NaN  ELEMNTBOLT           1.725529e+09                  False
-2221466 2019-01-30 19:01:40      0.0  372.0          NaN  ...                NaN       ZWIFT                    NaN                    NaN
-2221467 2019-01-30 19:01:41      0.0  352.0          NaN  ...                NaN       ZWIFT                    NaN                    NaN
+3065604 2019-01-30 19:01:40      0.0  372.0          NaN  ...                NaN       ZWIFT                    NaN                    NaN
 519105  2019-01-30 19:01:41    102.0  350.0          NaN  ...                NaN  ELEMNTBOLT           1.725529e+09                  False
+3065605 2019-01-30 19:01:41      0.0  352.0          NaN  ...                NaN       ZWIFT                    NaN                    NaN
 519106  2019-01-30 19:01:42    103.0  342.0          NaN  ...                NaN  ELEMNTBOLT           1.725529e+09                  False
 ...                     ...      ...    ...          ...  ...                ...         ...                    ...                    ...
-2158379 2019-11-26 14:13:41      NaN    NaN         19.0  ...                NaN  ELEMNTBOLT           1.725529e+09                  False
-2318501 2019-11-26 14:13:42      0.0    0.0          NaN  ...                NaN       ZWIFT                    NaN                    NaN
-2158380 2019-11-26 14:13:42      NaN    NaN         19.0  ...                NaN  ELEMNTBOLT           1.725529e+09                  False
-2158381 2019-11-26 14:13:43      NaN    NaN         19.0  ...                NaN  ELEMNTBOLT           1.725529e+09                  False
-2318502 2019-11-26 14:13:43      0.0    0.0          NaN  ...                NaN       ZWIFT                    NaN                    NaN
+3002517 2019-11-26 14:13:41      NaN    NaN         19.0  ...                NaN  ELEMNTBOLT           1.725529e+09                  False
+3002518 2019-11-26 14:13:42      NaN    NaN         19.0  ...                NaN  ELEMNTBOLT           1.725529e+09                  False
+3162639 2019-11-26 14:13:42      0.0    0.0          NaN  ...                NaN       ZWIFT                    NaN                    NaN
+3002519 2019-11-26 14:13:43      NaN    NaN         19.0  ...                NaN  ELEMNTBOLT           1.725529e+09                  False
+3162640 2019-11-26 14:13:43      0.0    0.0          NaN  ...                NaN       ZWIFT                    NaN                    NaN
 
-[42640 rows x 33 columns]
+[67278 rows x 33 columns]
 /local/home/evanweenen/.local/lib/python3.7/site-packages/pandas/core/frame.py:4312: SettingWithCopyWarning: 
 A value is trying to be set on a copy of a slice from a DataFrame
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   errors=errors,
-DROPPED: 4 files with 30833 duplicate timestamps
-Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 41/41 [00:37<00:00,  1.09it/s, Completed]
-Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:16<00:00, 16.34s/it]
-Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.43it/s]
-Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 339.13it/s]
+DROPPED: 5 files with 43178 duplicate timestamps
+Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 41/41 [00:50<00:00,  1.22s/it, Completed]
+Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:14<00:00, 14.62s/it]
+Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.38it/s]
+Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 345.75it/s]
+
+-------- export glucose
+/local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/__main__.py:173: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
 
 ------------------------------- Athlete  6
 /local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (17,21) have mixed types.Specify dtype option on import or set low_memory=False.
@@ -3603,7 +3919,7 @@ days:  1
 file ids:  [287]
 Duplicate timestamps after potentially dropping devices: 
 
- ELEMNT
+ ELEMNTROAM
 times:  0
 days:  0
 file ids:  []
@@ -3613,12 +3929,12 @@ times:  76028
 days:  3
 file ids:  [122 123 173 174 286 287]
 
- ZWIFT
+ ELEMNT
 times:  0
 days:  0
 file ids:  []
 
- ELEMNTROAM
+ ZWIFT
 times:  0
 days:  0
 file ids:  []
@@ -3643,10 +3959,16 @@ A value is trying to be set on a copy of a slice from a DataFrame
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   errors=errors,
 DROPPED: 3 files with 44953 duplicate timestamps
-Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 36/36 [00:44<00:00,  1.24s/it, Completed]
-Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:12<00:00, 12.80s/it]
-Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.58it/s]
-Export report to file: 100%|███████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 79.95it/s]
+Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 36/36 [00:49<00:00,  1.38s/it, Completed]
+Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:16<00:00, 16.88s/it]
+Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.55it/s]
+Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 462.79it/s]
+
+-------- export glucose
+/local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/__main__.py:173: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
 
 ------------------------------- Athlete  10
 /local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (13,18,19) have mixed types.Specify dtype option on import or set low_memory=False.
@@ -4013,16 +4335,14 @@ days:  4
 file ids:  [234 359 360 361 362 363]
 
  local timestamp from location not available
-times:  120153
-days:  18
-file ids:  [  7  15  21  68  91  93  96  98 203 209 259 292 333 359 360 361 362 363
- 339 340]
+times:  62974
+days:  11
+file ids:  [  7  15  21  68 209 259 292 333 359 360 361 362 363]
 
  local timestamp OR local timestamp from location not available
-times:  127684
-days:  19
-file ids:  [  7  15  21  68  91  93  96  98 203 209 234 259 292 333 359 360 361 362
- 363 339 340]
+times:  70505
+days:  12
+file ids:  [  7  15  21  68 209 234 259 292 333 359 360 361 362 363]
 
  local timestamp AND local timestamp from location not available
 times:  15045
@@ -4032,22 +4352,22 @@ file ids:  [359 360 361 362 363]
 -------- Local timestamp: error
 
  local timestamp does not equal local timestamp from location (excl. nans)
-times:  186604
-days:  23
-file ids:  [ 67  69  90  92 101 128 140 157 184 185 186 187 211 244 245 246 247 277
- 278 279 284 297 298 299]
+times:  192574
+days:  24
+file ids:  [ 67  69  90  91  92 101 128 140 157 184 185 186 187 211 244 245 246 247
+ 277 278 279 284 297 298 299]
 Dates for which this happens:  [datetime.date(2019, 1, 29) datetime.date(2019, 1, 31)
- datetime.date(2019, 2, 22) datetime.date(2019, 2, 24)
- datetime.date(2019, 3, 5) datetime.date(2019, 4, 6)
- datetime.date(2019, 4, 18) datetime.date(2019, 5, 5)
- datetime.date(2019, 5, 30) datetime.date(2019, 5, 31)
- datetime.date(2019, 6, 1) datetime.date(2019, 6, 2)
- datetime.date(2019, 6, 27) datetime.date(2019, 7, 29)
- datetime.date(2019, 7, 30) datetime.date(2019, 7, 31)
- datetime.date(2019, 8, 1) datetime.date(2019, 9, 17)
- datetime.date(2019, 9, 18) datetime.date(2019, 9, 23)
- datetime.date(2019, 10, 7) datetime.date(2019, 10, 8)
- datetime.date(2019, 10, 9)]
+ datetime.date(2019, 2, 22) datetime.date(2019, 2, 23)
+ datetime.date(2019, 2, 24) datetime.date(2019, 3, 5)
+ datetime.date(2019, 4, 6) datetime.date(2019, 4, 18)
+ datetime.date(2019, 5, 5) datetime.date(2019, 5, 30)
+ datetime.date(2019, 5, 31) datetime.date(2019, 6, 1)
+ datetime.date(2019, 6, 2) datetime.date(2019, 6, 27)
+ datetime.date(2019, 7, 29) datetime.date(2019, 7, 30)
+ datetime.date(2019, 7, 31) datetime.date(2019, 8, 1)
+ datetime.date(2019, 9, 17) datetime.date(2019, 9, 18)
+ datetime.date(2019, 9, 23) datetime.date(2019, 10, 7)
+ datetime.date(2019, 10, 8) datetime.date(2019, 10, 9)]
 
 --------------- DUPLICATES
 
@@ -4077,17 +4397,17 @@ Missing columns per file
  {}
 Duplicate timestamps in devices:
 
+ ZWIFT
+times:  0
+days:  0
+file ids:  []
+
  ELEMNTBOLT
 times:  0
 days:  0
 file ids:  []
 
  GARMIN
-times:  0
-days:  0
-file ids:  []
-
- ZWIFT
 times:  0
 days:  0
 file ids:  []
@@ -4114,7 +4434,7 @@ days:  0
 file ids:  []
 Duplicate timestamps after potentially dropping devices: 
 
- ELEMNT
+ ELEMNTROAM
 times:  0
 days:  0
 file ids:  []
@@ -4124,12 +4444,12 @@ times:  0
 days:  0
 file ids:  []
 
- ZWIFT
+ ELEMNT
 times:  0
 days:  0
 file ids:  []
 
- ELEMNTROAM
+ ZWIFT
 times:  0
 days:  0
 file ids:  []
@@ -4143,10 +4463,16 @@ A value is trying to be set on a copy of a slice from a DataFrame
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   errors=errors,
 DROPPED: 0 files with 0 duplicate timestamps
-Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 41/41 [00:55<00:00,  1.36s/it, Completed]
-Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:13<00:00, 13.37s/it]
-Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.50it/s]
-Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 122.96it/s]
+Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 41/41 [01:02<00:00,  1.54s/it, Completed]
+Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:16<00:00, 16.55s/it]
+Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.33it/s]
+Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 403.53it/s]
+
+-------- export glucose
+/local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/__main__.py:173: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
 
 ------------------------------- Athlete  12
 /local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (23) have mixed types.Specify dtype option on import or set low_memory=False.
@@ -4954,6 +5280,11 @@ Missing columns per file
       dtype='object')}
 Duplicate timestamps in devices:
 
+ ZWIFT
+times:  0
+days:  0
+file ids:  []
+
  ELEMNTBOLT
 times:  510568
 days:  36
@@ -4961,11 +5292,6 @@ file ids:  [288 289 291 293 295 297 298 299 301 307 308 310 311 314 315 316 317 
  319 322 323 325 326 327 328 329 330 331 334 335 336 337 338 339 342 343
  345 346 347 348 350 351 352 353 354 355 356 357 358 359 360 362 363 364
  365 367 368 382 383 384 387 390 402 405 409 410]
-
- ZWIFT
-times:  0
-days:  0
-file ids:  []
 
  ELEMNTROAM
 times:  87908
@@ -5006,10 +5332,10 @@ days:  13
 file ids:  [292 294 296 300 302 381 385 386 391 403 404 408 411]
 Duplicate timestamps after potentially dropping devices: 
 
- ELEMNT
-times:  0
-days:  0
-file ids:  []
+ ELEMNTROAM
+times:  87908
+days:  13
+file ids:  [292 294 296 300 302 381 385 386 391 403 404 408 411]
 
  ELEMNTBOLT
 times:  510568
@@ -5019,15 +5345,15 @@ file ids:  [288 289 291 293 295 297 298 299 301 307 308 310 311 314 315 316 317 
  345 346 347 348 350 351 352 353 354 355 356 357 358 359 360 362 363 364
  365 367 368 382 383 384 387 390 402 405 409 410]
 
- ZWIFT
+ ELEMNT
 times:  0
 days:  0
 file ids:  []
 
- ELEMNTROAM
-times:  87908
-days:  13
-file ids:  [292 294 296 300 302 381 385 386 391 403 404 408 411]
+ ZWIFT
+times:  0
+days:  0
+file ids:  []
 Do the duplicate timestamps have the same data?
                   timestamp   distance  heart_rate  cadence  ...  cycle_length    device_0  device_0_serialnumber  error_local_timestamp
 3125449 2019-09-08 10:10:50  117613.18       131.0     78.0  ...           NaN  ELEMNTBOLT           1.018150e+09                  False
@@ -5049,10 +5375,16 @@ A value is trying to be set on a copy of a slice from a DataFrame
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   errors=errors,
 DROPPED: 41 files with 421430 duplicate timestamps
-Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 39/39 [00:59<00:00,  1.52s/it, Completed]
-Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:15<00:00, 15.56s/it]
-Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.53it/s]
-Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 360.40it/s]
+Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 39/39 [01:21<00:00,  2.09s/it, Completed]
+Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:25<00:00, 25.12s/it]
+Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.47it/s]
+Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 265.29it/s]
+
+-------- export glucose
+/local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/__main__.py:173: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
 
 ------------------------------- Athlete  13
 /local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (13) have mixed types.Specify dtype option on import or set low_memory=False.
@@ -5310,16 +5642,14 @@ days:  0
 file ids:  []
 
  local timestamp from location not available
-times:  96233
-days:  21
-file ids:  [  9  11  12  15  19  21  22  23  24  25  27  28  30  32  58  68  70  73
-  76  88 270]
+times:  70701
+days:  18
+file ids:  [  9  11  12  15  19  21  22  23  24  25  27  28  30  32  58  76  88 270]
 
  local timestamp OR local timestamp from location not available
-times:  96233
-days:  21
-file ids:  [  9  11  12  15  19  21  22  23  24  25  27  28  30  32  58  68  70  73
-  76  88 270]
+times:  70701
+days:  18
+file ids:  [  9  11  12  15  19  21  22  23  24  25  27  28  30  32  58  76  88 270]
 
  local timestamp AND local timestamp from location not available
 times:  0
@@ -5400,7 +5730,7 @@ days:  0
 file ids:  []
 Duplicate timestamps after potentially dropping devices: 
 
- ELEMNT
+ ELEMNTROAM
 times:  0
 days:  0
 file ids:  []
@@ -5410,12 +5740,12 @@ times:  31480
 days:  1
 file ids:  [89 90]
 
- ZWIFT
+ ELEMNT
 times:  0
 days:  0
 file ids:  []
 
- ELEMNTROAM
+ ZWIFT
 times:  0
 days:  0
 file ids:  []
@@ -5440,10 +5770,16 @@ A value is trying to be set on a copy of a slice from a DataFrame
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   errors=errors,
 DROPPED: 1 files with 15740 duplicate timestamps
-Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 37/37 [00:36<00:00,  1.03it/s, Completed]
-Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:12<00:00, 12.98s/it]
-Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.48it/s]
-Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 347.04it/s]
+Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 37/37 [00:49<00:00,  1.34s/it, Completed]
+Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:14<00:00, 14.95s/it]
+Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.19it/s]
+Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 393.98it/s]
+
+-------- export glucose
+/local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/__main__.py:173: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
 
 ------------------------------- Athlete  14
 /local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (18) have mixed types.Specify dtype option on import or set low_memory=False.
@@ -5689,14 +6025,14 @@ days:  0
 file ids:  []
 
  local timestamp from location not available
-times:  51999
-days:  13
-file ids:  [  4  50  67 116 119 121 123 130 135 139 209 262 266]
+times:  35867
+days:  12
+file ids:  [  4  50  67 116 119 121 123 130 135 139 209 266]
 
  local timestamp OR local timestamp from location not available
-times:  51999
-days:  13
-file ids:  [  4  50  67 116 119 121 123 130 135 139 209 262 266]
+times:  35867
+days:  12
+file ids:  [  4  50  67 116 119 121 123 130 135 139 209 266]
 
  local timestamp AND local timestamp from location not available
 times:  0
@@ -5782,7 +6118,7 @@ days:  0
 file ids:  []
 Duplicate timestamps after potentially dropping devices: 
 
- ELEMNT
+ ELEMNTROAM
 times:  0
 days:  0
 file ids:  []
@@ -5792,12 +6128,12 @@ times:  0
 days:  0
 file ids:  []
 
- ZWIFT
+ ELEMNT
 times:  0
 days:  0
 file ids:  []
 
- ELEMNTROAM
+ ZWIFT
 times:  0
 days:  0
 file ids:  []
@@ -5811,10 +6147,16 @@ A value is trying to be set on a copy of a slice from a DataFrame
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   errors=errors,
 DROPPED: 1 files with 1853 duplicate timestamps
-Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 38/38 [00:48<00:00,  1.29s/it, Completed]
-Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:13<00:00, 13.96s/it]
-Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.55it/s]
-Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 128.73it/s]
+Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 38/38 [00:54<00:00,  1.43s/it, Completed]
+Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:15<00:00, 15.22s/it]
+Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.39it/s]
+Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 346.87it/s]
+
+-------- export glucose
+/local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/__main__.py:173: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
 
 ------------------------------- Athlete  15
 /local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (16) have mixed types.Specify dtype option on import or set low_memory=False.
@@ -6113,16 +6455,14 @@ days:  0
 file ids:  []
 
  local timestamp from location not available
-times:  87347
-days:  15
-file ids:  [  2  26  35  41  47  49  54  76  78  79  80  84  89 121 137 138 248 304
- 307 308]
+times:  45324
+days:  11
+file ids:  [  2  26  35  41  47  49  54  89 121 137 138 304 307 308]
 
  local timestamp OR local timestamp from location not available
-times:  87347
-days:  15
-file ids:  [  2  26  35  41  47  49  54  76  78  79  80  84  89 121 137 138 248 304
- 307 308]
+times:  45324
+days:  11
+file ids:  [  2  26  35  41  47  49  54  89 121 137 138 304 307 308]
 
  local timestamp AND local timestamp from location not available
 times:  0
@@ -6193,7 +6533,7 @@ days:  0
 file ids:  []
 Duplicate timestamps after potentially dropping devices: 
 
- ELEMNT
+ ELEMNTROAM
 times:  0
 days:  0
 file ids:  []
@@ -6203,12 +6543,12 @@ times:  0
 days:  0
 file ids:  []
 
- ZWIFT
+ ELEMNT
 times:  0
 days:  0
 file ids:  []
 
- ELEMNTROAM
+ ZWIFT
 times:  0
 days:  0
 file ids:  []
@@ -6222,352 +6562,13 @@ A value is trying to be set on a copy of a slice from a DataFrame
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
   errors=errors,
 DROPPED: 0 files with 0 duplicate timestamps
-Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 35/35 [00:46<00:00,  1.34s/it, Completed]
-Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:12<00:00, 12.41s/it]
-Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.66it/s]
-Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 371.57it/s]
+Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 35/35 [00:59<00:00,  1.71s/it, Completed]
+Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:18<00:00, 18.71s/it]
+Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.15it/s]
+Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 355.90it/s]
 
+-------- export glucose
+/local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/__main__.py:173: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
 
-------------------------------- Athlete  1
-/local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (18,36) have mixed types.Specify dtype option on import or set low_memory=False.
-  interactivity=interactivity, compiler=compiler, result=result)
-
--------- select devices
-DROPPED: 45 files with 414287 entries from devices {'device_GARMIN'}
-
--------- cleaning features
-DROPPED:  fractional_cadence  (empty)
-DROPPED:  time_from_course  (empty)
-DROPPED:  compressed_speed_distance  (empty)
-DROPPED:  resistance  (empty)
-DROPPED:  cycle_length  (empty)
-DROPPED:  accumulated_power  (empty)
-CLEAN: left-right balance
-CHECK: enhanced altitude does not equal altitude 0 times
-DROPPED: altitude (equals enhanced_altitude)
-CHECK: enhanced speed does not equal speed 0 times
-DROPPED: speed (equals enhanced_speed)
-CREATED: elevation gain
-CREATED: acceleration
-CREATED: accumulated power
-CREATED: time training
-/local/home/evanweenen/bicyclediabetes/Code/plot.py:63: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
-  plt.show()
-Max training length (min):  478.01666666666665
-Number of trainings that last shorter than 10 min:  8
-Number of trainings that last shorter than 20 min:  20
-CHECK: Negative distance diffs:  0
-Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 39/39 [00:25<00:00,  1.52it/s, Completed]
-Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:13<00:00, 13.78s/it]
-Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.31it/s]
-Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 311.98it/s]
-
-------------------------------- Athlete  2
-/local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (18,27) have mixed types.Specify dtype option on import or set low_memory=False.
-  interactivity=interactivity, compiler=compiler, result=result)
-
--------- select devices
-DROPPED: 0 files with 0 entries from devices set()
-
--------- cleaning features
-CLEAN: left-right balance
-CHECK: enhanced altitude does not equal altitude 0 times
-DROPPED: altitude (equals enhanced_altitude)
-CHECK: enhanced speed does not equal speed 0 times
-DROPPED: speed (equals enhanced_speed)
-CREATED: elevation gain
-CREATED: acceleration
-CREATED: accumulated power
-CREATED: time training
-/local/home/evanweenen/bicyclediabetes/Code/plot.py:63: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
-  plt.show()
-Max training length (min):  435.6
-Number of trainings that last shorter than 10 min:  1
-Number of trainings that last shorter than 20 min:  3
-CHECK: Negative distance diffs:  0
-Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 36/36 [00:30<00:00,  1.18it/s, Completed]
-Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:12<00:00, 12.42s/it]
-Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.68it/s]
-Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 483.33it/s]
-
-------------------------------- Athlete  3
-/local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (13,35) have mixed types.Specify dtype option on import or set low_memory=False.
-  interactivity=interactivity, compiler=compiler, result=result)
-
--------- select devices
-DROPPED: 43 files with 351966 entries from devices {'device_GARMIN'}
-
--------- cleaning features
-DROPPED:  fractional_cadence  (empty)
-DROPPED:  time_from_course  (empty)
-DROPPED:  compressed_speed_distance  (empty)
-DROPPED:  resistance  (empty)
-DROPPED:  cycle_length  (empty)
-DROPPED:  accumulated_power  (empty)
-CLEAN: left-right balance
-CHECK: enhanced altitude does not equal altitude 0 times
-DROPPED: altitude (equals enhanced_altitude)
-CHECK: enhanced speed does not equal speed 0 times
-DROPPED: speed (equals enhanced_speed)
-CREATED: elevation gain
-CREATED: acceleration
-CREATED: accumulated power
-CREATED: time training
-/local/home/evanweenen/bicyclediabetes/Code/plot.py:63: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
-  plt.show()
-Max training length (min):  493.3
-Number of trainings that last shorter than 10 min:  8
-Number of trainings that last shorter than 20 min:  20
-CHECK: Negative distance diffs:  0
-Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 38/38 [00:29<00:00,  1.27it/s, Completed]
-Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:13<00:00, 13.38s/it]
-Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.65it/s]
-Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 525.47it/s]
-
-------------------------------- Athlete  4
-/local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (13,35) have mixed types.Specify dtype option on import or set low_memory=False.
-  interactivity=interactivity, compiler=compiler, result=result)
-
--------- select devices
-DROPPED: 12 files with 52278 entries from devices {'device_GARMIN'}
-
--------- cleaning features
-DROPPED:  fractional_cadence  (empty)
-DROPPED:  time_from_course  (empty)
-DROPPED:  compressed_speed_distance  (empty)
-DROPPED:  resistance  (empty)
-DROPPED:  cycle_length  (empty)
-CLEAN: left-right balance
-CHECK: enhanced altitude does not equal altitude 0 times
-DROPPED: altitude (equals enhanced_altitude)
-CHECK: enhanced speed does not equal speed 0 times
-DROPPED: speed (equals enhanced_speed)
-CREATED: elevation gain
-CREATED: acceleration
-CREATED: accumulated power
-CREATED: time training
-/local/home/evanweenen/bicyclediabetes/Code/plot.py:63: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
-  plt.show()
-Max training length (min):  401.7
-Number of trainings that last shorter than 10 min:  6
-Number of trainings that last shorter than 20 min:  14
-CHECK: Negative distance diffs:  5
-Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 39/39 [00:34<00:00,  1.13it/s, Completed]
-Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:14<00:00, 14.42s/it]
-Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.60it/s]
-Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 461.47it/s]
-
-------------------------------- Athlete  5
-/local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (22,34) have mixed types.Specify dtype option on import or set low_memory=False.
-  interactivity=interactivity, compiler=compiler, result=result)
-
--------- select devices
-DROPPED: 3 files with 10528 entries from devices {'device_GARMIN'}
-
--------- cleaning features
-DROPPED:  fractional_cadence  (empty)
-DROPPED:  time_from_course  (empty)
-DROPPED:  compressed_speed_distance  (empty)
-DROPPED:  resistance  (empty)
-DROPPED:  cycle_length  (empty)
-DROPPED:  accumulated_power  (empty)
-CLEAN: left-right balance
-CHECK: enhanced altitude does not equal altitude 0 times
-DROPPED: altitude (equals enhanced_altitude)
-CHECK: enhanced speed does not equal speed 0 times
-DROPPED: speed (equals enhanced_speed)
-CREATED: elevation gain
-CREATED: acceleration
-CREATED: accumulated power
-CREATED: time training
-/local/home/evanweenen/bicyclediabetes/Code/plot.py:63: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
-  plt.show()
-Max training length (min):  404.21666666666664
-Number of trainings that last shorter than 10 min:  2
-Number of trainings that last shorter than 20 min:  9
-CHECK: Negative distance diffs:  0
-Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 37/37 [00:21<00:00,  1.75it/s, Completed]
-Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:12<00:00, 12.24s/it]
-Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.71it/s]
-Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 524.94it/s]
-
-------------------------------- Athlete  6
-/local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (17,27) have mixed types.Specify dtype option on import or set low_memory=False.
-  interactivity=interactivity, compiler=compiler, result=result)
-
--------- select devices
-DROPPED: 0 files with 0 entries from devices set()
-
--------- cleaning features
-CLEAN: left-right balance
-CHECK: enhanced altitude does not equal altitude 0 times
-DROPPED: altitude (equals enhanced_altitude)
-CHECK: enhanced speed does not equal speed 0 times
-DROPPED: speed (equals enhanced_speed)
-CREATED: elevation gain
-CREATED: acceleration
-CREATED: accumulated power
-CREATED: time training
-/local/home/evanweenen/bicyclediabetes/Code/plot.py:63: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
-  plt.show()
-Max training length (min):  387.01666666666665
-Number of trainings that last shorter than 10 min:  17
-Number of trainings that last shorter than 20 min:  27
-CHECK: Negative distance diffs:  0
-Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 37/37 [00:30<00:00,  1.21it/s, Completed]
-Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:15<00:00, 15.52s/it]
-Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.38it/s]
-Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 439.06it/s]
-
-------------------------------- Athlete  10
-/local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (13,35) have mixed types.Specify dtype option on import or set low_memory=False.
-  interactivity=interactivity, compiler=compiler, result=result)
-
--------- select devices
-DROPPED: 21 files with 194404 entries from devices {'device_GARMIN'}
-
--------- cleaning features
-DROPPED:  fractional_cadence  (empty)
-DROPPED:  time_from_course  (empty)
-DROPPED:  compressed_speed_distance  (empty)
-DROPPED:  resistance  (empty)
-DROPPED:  cycle_length  (empty)
-DROPPED:  accumulated_power  (empty)
-CLEAN: left-right balance
-CHECK: enhanced altitude does not equal altitude 0 times
-DROPPED: altitude (equals enhanced_altitude)
-CHECK: enhanced speed does not equal speed 0 times
-DROPPED: speed (equals enhanced_speed)
-CREATED: elevation gain
-CREATED: acceleration
-CREATED: accumulated power
-CREATED: time training
-/local/home/evanweenen/bicyclediabetes/Code/plot.py:63: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
-  plt.show()
-Max training length (min):  440.1166666666667
-Number of trainings that last shorter than 10 min:  0
-Number of trainings that last shorter than 20 min:  6
-CHECK: Negative distance diffs:  0
-Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 38/38 [00:34<00:00,  1.10it/s, Completed]
-Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:15<00:00, 15.12s/it]
-Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.39it/s]
-Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 436.41it/s]
-
-------------------------------- Athlete  12
-/local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (22,32) have mixed types.Specify dtype option on import or set low_memory=False.
-  interactivity=interactivity, compiler=compiler, result=result)
-
--------- select devices
-DROPPED: 0 files with 0 entries from devices set()
-
--------- cleaning features
-DROPPED:  time_from_course  (empty)
-DROPPED:  compressed_speed_distance  (empty)
-DROPPED:  resistance  (empty)
-DROPPED:  cycle_length  (empty)
-CLEAN: left-right balance
-CHECK: enhanced altitude does not equal altitude 0 times
-DROPPED: altitude (equals enhanced_altitude)
-CHECK: enhanced speed does not equal speed 0 times
-DROPPED: speed (equals enhanced_speed)
-CREATED: elevation gain
-CREATED: acceleration
-CREATED: accumulated power
-CREATED: time training
-/local/home/evanweenen/bicyclediabetes/Code/plot.py:63: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
-  plt.show()
-Max training length (min):  471.98333333333335
-Number of trainings that last shorter than 10 min:  2
-Number of trainings that last shorter than 20 min:  6
-CHECK: Negative distance diffs:  0
-Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 38/38 [00:48<00:00,  1.27s/it, Completed]
-Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:16<00:00, 16.27s/it]
-Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.22it/s]
-Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 530.39it/s]
-
-------------------------------- Athlete  13
-/local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (13,29) have mixed types.Specify dtype option on import or set low_memory=False.
-  interactivity=interactivity, compiler=compiler, result=result)
-
--------- select devices
-DROPPED: 5 files with 12134 entries from devices {'device_GARMIN'}
-
--------- cleaning features
-DROPPED:  accumulated_power  (empty)
-CLEAN: left-right balance
-CHECK: enhanced altitude does not equal altitude 0 times
-DROPPED: altitude (equals enhanced_altitude)
-CHECK: enhanced speed does not equal speed 0 times
-DROPPED: speed (equals enhanced_speed)
-CREATED: elevation gain
-CREATED: acceleration
-CREATED: accumulated power
-CREATED: time training
-/local/home/evanweenen/bicyclediabetes/Code/plot.py:63: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
-  plt.show()
-Max training length (min):  405.73333333333335
-Number of trainings that last shorter than 10 min:  0
-Number of trainings that last shorter than 20 min:  0
-CHECK: Negative distance diffs:  0
-Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 37/37 [00:24<00:00,  1.51it/s, Completed]
-Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:12<00:00, 12.59s/it]
-Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.59it/s]
-Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 437.82it/s]
-
-------------------------------- Athlete  14
-/local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (17,30) have mixed types.Specify dtype option on import or set low_memory=False.
-  interactivity=interactivity, compiler=compiler, result=result)
-
--------- select devices
-DROPPED: 53 files with 419785 entries from devices {'device_GARMIN'}
-
--------- cleaning features
-DROPPED:  fractional_cadence  (empty)
-DROPPED:  accumulated_power  (empty)
-CLEAN: left-right balance
-CHECK: enhanced altitude does not equal altitude 0 times
-DROPPED: altitude (equals enhanced_altitude)
-CHECK: enhanced speed does not equal speed 0 times
-DROPPED: speed (equals enhanced_speed)
-CREATED: elevation gain
-CREATED: acceleration
-CREATED: accumulated power
-CREATED: time training
-/local/home/evanweenen/bicyclediabetes/Code/plot.py:63: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
-  plt.show()
-Max training length (min):  430.26666666666665
-Number of trainings that last shorter than 10 min:  3
-Number of trainings that last shorter than 20 min:  11
-CHECK: Negative distance diffs:  0
-Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 36/36 [00:26<00:00,  1.37it/s, Completed]
-Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:13<00:00, 13.35s/it]
-Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.42it/s]
-Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 454.27it/s]
-
-------------------------------- Athlete  15
-/local/home/evanweenen/.local/lib/python3.7/site-packages/IPython/core/interactiveshell.py:3147: DtypeWarning: Columns (16,27) have mixed types.Specify dtype option on import or set low_memory=False.
-  interactivity=interactivity, compiler=compiler, result=result)
-
--------- select devices
-DROPPED: 0 files with 0 entries from devices set()
-
--------- cleaning features
-CLEAN: left-right balance
-CHECK: enhanced altitude does not equal altitude 0 times
-DROPPED: altitude (equals enhanced_altitude)
-CHECK: enhanced speed does not equal speed 0 times
-DROPPED: speed (equals enhanced_speed)
-CREATED: elevation gain
-CREATED: acceleration
-CREATED: accumulated power
-CREATED: time training
-/local/home/evanweenen/bicyclediabetes/Code/plot.py:63: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
-  plt.show()
-Max training length (min):  429.8666666666667
-Number of trainings that last shorter than 10 min:  4
-Number of trainings that last shorter than 20 min:  6
-CHECK: Negative distance diffs:  0
-Summarize dataset: 100%|██████████████████████████████████████████████████████████████████████| 36/36 [00:39<00:00,  1.11s/it, Completed]
-Generate report structure: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:16<00:00, 16.11s/it]
-Render HTML: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.21it/s]
-Export report to file: 100%|██████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 238.19it/s]
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
