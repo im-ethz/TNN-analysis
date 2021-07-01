@@ -1,6 +1,7 @@
 # TODO: include units in column names (not possible for now, maybe saved units wrong..)
 # TODO: remove duplicate timestamps
 # TODO: instead of deleting data for which both local timestamps are not incorrect, try finding out which one is the right one (if you overlap it with Libre)
+# TODO: THE SORTING PROBABLY DOESN"T WORK
 import os
 import sys
 sys.path.append(os.path.abspath('../../../'))
@@ -13,7 +14,11 @@ matplotlib.use('Agg')
 from pandas_profiling import ProfileReport
 
 import datetime
+import geopy
 import pytz
+from pytz import country_names, country_timezones
+country_names_inv = {v:k for k,v in country_names.items()}
+
 from tzwhere import tzwhere
 tzwhere = tzwhere.tzwhere()
 
@@ -54,7 +59,23 @@ def cleaning_per_file(df_data, df_info, j):
 
 	# get local timestamp from location
 	if 'position_lat' in df_data and 'position_long' in df_data:
+		# use tzwhere to obtain timezone from coordinates
 		tz_loc_name = tzwhere.tzNameAt(df_data['position_lat'].dropna().iloc[0], df_data['position_long'].dropna().iloc[0])
+
+		# if tzwhere does not work, use geopy with OpenStreetMap to look up country from coordinates
+		# and use this to get timezone (provided there is only one timezone in a country)
+		if tz_loc_name is None:
+			geo = geopy.geocoders.Nominatim(user_agent="trainingpeaks_locations")
+			country = geo.reverse(query=str(df_data['position_lat'].dropna().iloc[0])+", "+str(df_data['position_long'].dropna().iloc[0]),
+				language='en', zoom=0).raw['address']['country']
+			if country is not None:
+				print("Geopy country: ", country)
+				country_code = country_names_inv[country]
+				if country_code is not None:
+					country_tz = country_timezones[country_code]
+					if len(country_tz) == 1:
+						tz_loc_name = country_tz[0]
+
 		if tz_loc_name is not None:
 			tz_loc = pytz.timezone(tz_loc_name).utcoffset(df_data['timestamp'][0])
 			df_data['local_timestamp_loc'] = df_data['timestamp'] + tz_loc
@@ -237,7 +258,7 @@ for i in athletes:
 
 	# sort by device and timestamp for duplicates later
 	df = df.sort_values(by=['device_0', 'device_0_serialnumber', 'timestamp'], 
-		key=lambda x: x.map({'ELEMNTBOLT':0, 'ELEMENTROAM':1, 'ELEMNT':2, 'ZWIFT':3}))
+		key=lambda x: x.map({'ELEMNTBOLT':0, 'ELEMENTROAM':1, 'ELEMNT':2, 'ZWIFT':3})) 
 	df.reset_index(drop=True, inplace=True)
 
 	# select devices to keep: ELEMNT (BOLT/ROAM) and ZWIFT
@@ -362,6 +383,13 @@ for i in athletes:
 	profile = ProfileReport(df, title='pandas profiling report', minimal=True)
 	profile.to_file(path+'clean/%s/%s_report.html'%(i,i))
 
+	# save glucose
+	df = df.sort_values('timestamp')
+	print("\n-------- export glucose")
+	df_glucose = df[['timestamp', 'local_timestamp', 'local_timestamp_loc', 'error_local_timestamp', 'file_id', 'device_0', 'glucose']]
+	df_glucose.dropna(subset=['glucose'], inplace=True)
+	df_glucose.to_csv(path+'clean/'+str(i)+'/'+str(i)+'_glucose.csv', index_label=False)
+
 	del df, df_information
 
 # TODO: check if there are training sessions that should be merged
@@ -375,14 +403,16 @@ for i in athletes:
 	df = pd.read_csv(path+'clean/'+str(i)+'/'+str(i)+'_data.csv', index_col=0)
 
 	df['timestamp'] = pd.to_datetime(df['timestamp'])
-	df['local_timestamp'] = pd.to_datetime(df['local_timestamp'])
+
+	df.drop(['local_timestamp', 'local_timestamp_loc', 'error_local_timestamp'], axis=1, inplace=True)
 
 	df = df.sort_values('timestamp')
 
 	print("\n-------- select devices")
 	# -------------------- Select devices
-	cols_devices = df.columns[df.columns.str.startswith('device_')]
-	drop_devices = set(cols_devices) - set(['device_ELEMNT', 'device_ELEMNTBOLT', 'device_ELEMNTROAM', 'device_ZWIFT'])
+	devices = set(df.device_0.unique())
+	keep_devices = set(['ELEMNT', 'ELEMNTBOLT', 'ELEMNTROAM', 'ZWIFT'])
+	drop_devices = devices - keep_devices
 
 	print("DROPPED: %s files with %s entries from devices %s"\
 		%(len(df[~df['device_0'].isin(keep_devices)].file_id.unique()), (~df['device_0'].isin(keep_devices)).sum(), drop_devices))
@@ -401,6 +431,8 @@ for i in athletes:
 	# there are some strings in this column for some reason (e.g. 'mask', 'right')
 	df.left_right_balance = pd.to_numeric(df.left_right_balance, errors='coerce')
 	print("CLEAN: left-right balance")
+
+	# TODO: combined_pedal_smoothness
 
 	# -------------------- Zeros power meter
 	# TODO: figure out what to do with zeros from power meter
@@ -447,7 +479,7 @@ for i in athletes:
 	# create column time in training
 	df['time_training'] = np.nan
 	for fid in df.file_id.unique():
-		df.loc[df.file_id == fid, 'time_training'] = df[df.file_id == fid].local_timestamp - df[df.file_id == fid].local_timestamp.min()
+		df.loc[df.file_id == fid, 'time_training'] = df[df.file_id == fid].timestamp - df[df.file_id == fid].timestamp.min()
 	df['time_training'] = df['time_training'] / np.timedelta64(1,'s')
 	print("CREATED: time training")
 
