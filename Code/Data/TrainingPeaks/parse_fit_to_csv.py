@@ -1,3 +1,4 @@
+# TODO: some laps might be missng due to a bug!!
 """
 Parse Garmin FIT files to CSV
 Makes use of the library https://github.com/dtcooper/python-fitparse
@@ -64,7 +65,7 @@ df = dict()
 if args.verbose:
 	print("Creating info file ...")
 
-df.update({'info': pd.Series(dtype=object)})
+df['info'] = pd.Series(dtype=object)
 
 # file id
 for message in data['file_id']:
@@ -143,21 +144,21 @@ def unpack_messages(messages):
 	return df
 
 # record
-df.update({'data' : unpack_messages(data['record'])})
+df['data'] = unpack_messages(data['record'])
 message_types.remove('record')
 
 # None
 try:
-	df.update({'nan' : unpack_messages(data[None])})
+	df['nan'] = unpack_messages(data[None])
 	message_types.remove(None)
 except ValueError:
 	pass
 
 # device
 try:
-	df.update({'device' : unpack_messages(data['device_info'])})
+	df['device'] = unpack_messages(data['device_info'])
 except ValueError:
-	df.update({'device' : pd.DataFrame()})
+	df['device'] = pd.DataFrame()
 	for i, message in enumerate(data['device_info']):
 		for field in message.fields:
 			try:
@@ -176,12 +177,12 @@ else:
 message_types.remove('device_info')
 
 # event
-df.update({'startstop' : unpack_messages(data['event'])})
+df['startstop'] = unpack_messages(data['event'])
 message_types.remove('event')
 
 # laps
-if 'laps' in data:
-	df.update({'laps' : pd.DataFrame()})
+if 'lap' in data:
+	df['laps'] = pd.DataFrame()
 	for i, message in enumerate(data['lap']):
 		for field in message.fields:
 			if type(field.value) != tuple:
