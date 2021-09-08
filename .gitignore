@@ -22,14 +22,20 @@
 *.pyc
 
 /Code/Data/Dexcom/*.csv
-/Code/Data/Dexcom/TNN_CGM_2019.xlsx
+/Code/Data/Dexcom/TNN_CGM_2019_EU_exported_20210224.xlsx
 /Code/Data/Dexcom/_bin/*
+/Code/Data/Dexcom/_archive/*
+/Code/Data/Dexcom/_backup/*
+/Code/Data/Dexcom/drop/*
+/Code/Data/Dexcom/export_eva/*
 
 /Code/Data/LibreView/clean/*
 /Code/Data/LibreView/raw_anonymous/*
 /Code/Data/LibreView/raw/*
 /Code/Data/LibreView/_bin/*
 
+/Code/Data/TrainingPeaks/2019/glucose/*
+/Code/Data/TrainingPeaks/2019/timezone/*
 /Code/Data/TrainingPeaks/2019/clean2/*
 /Code/Data/TrainingPeaks/2019/clean/*
 /Code/Data/TrainingPeaks/2019/combine/*
@@ -56,16 +62,14 @@
 /Code/Data/TrainingPeaks+LibreView/raw/*
 /Code/Data/TrainingPeaks+LibreView/_bin/*
 
-/Code/Data/calendar/calendar_2019_anonymous.csv
-/Code/Data/calendar/2019_WorkoutsSummary.xls
+/Code/Data/camp_california/*
+
+/Code/Data/calendar/*.csv
+/Code/Data/calendar/*.xls
 
 /Code/Data/fitness/fitness_analysis_2019_anonymous.csv
 /Code/Data/fitness/TEST ANALYSIS Dec_2018.xlsx
 
 /Code/Data/info/*
 
-/Doc/*.log
-/Doc/*.aux
-/Doc/*.out
-/Doc/*.cut
-
+/Code/Data/_archive/*
