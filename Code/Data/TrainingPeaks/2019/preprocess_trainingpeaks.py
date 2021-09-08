@@ -22,6 +22,9 @@ country_names_inv = {v:k for k,v in country_names.items()}
 from tzwhere import tzwhere
 tzwhere = tzwhere.tzwhere()
 
+from config import rider_mapping
+rider_mapping_inv = {v:k for k, v in rider_mapping.items()}
+
 from plot import *
 from helper import *
 
@@ -163,7 +166,7 @@ for i in athletes:
 		df = df.append(df_data, ignore_index=True, verify_integrity=True)
 
 	# -------------------- Move nan-info from df to df_nan
-	# remove unknown columns from into nans file TODO: process later
+	# remove unknown columns into nans file TODO: process later
 	cols_unk = df.columns[df.columns.str.startswith('unknown')]
 	df_nan = df_nan.append(df[['timestamp']+list(cols_unk)].dropna(subset=cols_unk, how='all'))
 	df.drop(cols_unk, axis=1, inplace=True)
@@ -383,17 +386,39 @@ for i in athletes:
 	profile = ProfileReport(df, title='pandas profiling report', minimal=True)
 	profile.to_file(path+'clean/%s/%s_report.html'%(i,i))
 
-	# save glucose
-	df = df.sort_values('timestamp')
-	print("\n-------- export glucose")
-	df_glucose = df[['timestamp', 'local_timestamp', 'local_timestamp_loc', 'error_local_timestamp', 'file_id', 'device_0', 'glucose']]
-	df_glucose.dropna(subset=['glucose'], inplace=True)
-	df_glucose.to_csv(path+'clean/'+str(i)+'/'+str(i)+'_glucose.csv', index_label=False)
-
 	del df, df_information
 
 # TODO: check if there are training sessions that should be merged
+# TODO: should we check 
 # second stage cleaning
+
+# Note: this is probably going to be renamed later
+# List of actual travels calculated with preprocess_timezone_{trainingpeaks}_{dexcom}.py files
+df_tz = pd.read_csv('../../TrainingPeaks+Dexcom/timezone/travel_check_Kristina.csv', index_col=0)
+
+df_tz.RIDER = df_tz.RIDER.map(rider_mapping)
+df_tz['n'] = df_tz.groupby('RIDER').cumcount()
+
+df_tz.local_timestamp_min = pd.to_datetime(df_tz.local_timestamp_min)
+df_tz.local_timestamp_max = pd.to_datetime(df_tz.local_timestamp_max)
+df_tz.timezone = pd.to_timedelta(df_tz.timezone)
+
+df_tz['timestamp_min'] = df_tz['local_timestamp_min'] - df_tz['timezone']
+df_tz['timestamp_max'] = df_tz['local_timestamp_max'] - df_tz['timezone']
+
+df_tz = df_tz[['RIDER', 'n', 'timestamp_min', 'timestamp_max', 'timezone']]
+df_tz.set_index(['RIDER', 'n'], inplace=True)
+
+# Read in dexcom glucose
+df_dc = pd.read_csv('../../Dexcom/dexcom_clean_sections.csv', index_col=0)
+df_dc.timestamp = pd.to_datetime(df_dc.timestamp)
+df_dc.local_timestamp = pd.to_datetime(df_dc.local_timestamp)
+
+athletes = sorted([int(i.rstrip('.csv')) for i in os.listdir(path+'clean/')])
+
+if not os.path.exists(path+'glucose/'):
+	os.mkdir(path+'glucose/')
+
 for i in athletes:
 	print("\n------------------------------- Athlete ", i)
 
@@ -404,12 +429,56 @@ for i in athletes:
 
 	df['timestamp'] = pd.to_datetime(df['timestamp'])
 
+	# sort by timestamp
 	df.drop(['local_timestamp', 'local_timestamp_loc', 'error_local_timestamp'], axis=1, inplace=True)
-
 	df = df.sort_values('timestamp')
 
+	# calculate correct local timestamp
+	print("\n-------- calculate correct local timestamp")
+	for n, (ts_min, ts_max, tz) in df_tz.loc[i].iterrows():
+		if pd.isnull(ts_min):
+			ts_min = pd.to_datetime('2018-11-30 00:00:00')
+		if pd.isnull(ts_max):
+			ts_max = pd.to_datetime('2019-12-01 23:59:59')
+
+		ts_mask = (df.timestamp >= ts_min) & (df.timestamp <= ts_max)
+		df.loc[ts_mask, 'local_timestamp'] = df.loc[ts_mask, 'timestamp'] + tz
+
+	# get glucose out of trainingpeaks files
+	print("\n-------- export glucose")
+	#df_glucose = df[['timestamp', 'local_timestamp', 'local_timestamp_loc', 'error_local_timestamp', 'file_id', 'device_0', 'glucose']]
+	df_glucose = df.dropna(subset=['glucose'])
+	df_glucose.to_csv(path+'clean2/'+str(i)+'/'+str(i)+'_glucose.csv', index_label=False)
+
+	# find out where the glucose belongs
+
+	matplotlib.use('TkAgg')
+	df_glucose['date'] = df_glucose.timestamp.dt.date
+	for d in df_glucose['date'].unique():
+		fig, ax = plt.subplots(figsize=(15,6))
+		mask = (df_dc.RIDER == i) & (df_dc['timestamp'].dt.date == d)
+		sns.lineplot(df_dc.loc[mask, 'timestamp'], df_dc.loc[mask, 'Glucose Value (mg/dL)'], 
+			ax=ax, marker='o', dashes=False, label='Dexcom', alpha=.8)
+
+		sns.lineplot(df_glucose.loc[df_glucose['date'] == d, 'timestamp'],
+				df_glucose.loc[df_glucose['date'] == d, 'glucose'], 
+				ax=ax, marker='o', dashes=False, label='TP', alpha=.8)
+
+		ax.set_xticklabels(pd.to_datetime(ax.get_xticks(), unit='D').strftime('%H:%M'))
+		plt.xlabel('UTC (hh:mm)')
+
+		plt.title("RIDER %s - %s"%(i, d.strftime('%d-%m-%Y')))
+		plt.savefig(path+'glucose/glucose_%s_%s.pdf'%(i,d.strftime('%Y%m%d')), bbox_inches='tight')
+		plt.savefig(path+'glucose/glucose_%s_%s.png'%(i,d.strftime('%Y%m%d')), dpi=300, bbox_inches='tight')
+		
+		plt.title("%s - %s"%(rider_mapping_inv[i], d.strftime('%d-%m-%Y')))
+		plt.savefig(path+'glucose/glucose_%s_%s_NAME.pdf'%(i,d.strftime('%Y%m%d')), bbox_inches='tight')
+		plt.savefig(path+'glucose/glucose_%s_%s_NAME.png'%(i,d.strftime('%Y%m%d')), dpi=300, bbox_inches='tight')
+
+		plt.close()
+
 	print("\n-------- select devices")
-	# -------------------- Select devices
+	# select devices
 	devices = set(df.device_0.unique())
 	keep_devices = set(['ELEMNT', 'ELEMNTBOLT', 'ELEMNTROAM', 'ZWIFT'])
 	drop_devices = devices - keep_devices
