@@ -178,12 +178,8 @@ df.to_csv('./timezone/timezone_combine2.csv')
 # EXCEPTIONS:
 
 # 3 (clancy) 2019-10-19 366 can't travel to japan spain japan in one day
-# 5 (kamstra) 2019-01-17 207 did he travel back to the netherlands these 4 days or did he take the zwift for travelling?
-# 10 (brand) 2019-04-06 128 did he travel to spain for 4 days
 # 12 (lozano) 2019-09-26 a lot of travelling between spain and italy, is this possible?
 # 12 (lozano) 2019-10-13 can't travel between china spain and back to china in one day
-# TODO: do they take the zwift when travelling?
-# TODO: get home locations for zwift
 
 # --------------------- save files for Fede to check
 
@@ -223,7 +219,7 @@ df_check.to_csv('./timezone/timezone_check_filled_easy.csv')
 print("\n---------------- Final file ----------------")
 df = pd.read_csv('./timezone/timezone_combine2.csv', index_col=0)
 
-df = df[['RIDER', 'timestamp_min', 'timestamp_max', 'date', 'timezone_combine', 'location']]
+df = df[['RIDER', 'file_id', 'timestamp_min', 'timestamp_max', 'date', 'timezone_combine', 'location']]
 df.rename(columns={'timezone_combine':'timezone'}, inplace=True)
 
 df.to_csv('./timezone/timezone_list_final.csv')
