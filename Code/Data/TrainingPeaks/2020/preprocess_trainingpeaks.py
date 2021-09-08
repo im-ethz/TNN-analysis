@@ -33,11 +33,10 @@ def cleaning_per_file(df_data, df_info, j):
 	df_data.drop('Unnamed: 0', axis=1, inplace=True)
 
 	# convert latitude and longitude from semicircles to degrees
-	try:
+	if 'position_long' in data:
 		df_data['position_long'] = df_data['position_long'] * (180 / 2**31)
+	if 'position_lat' in data:
 		df_data['position_lat'] = df_data['position_lat'] * (180 / 2**31)
-	except KeyError:
-		pass
 
 	# get local timestamp
 	df_data['timestamp'] = pd.to_datetime(df_data['timestamp'])
@@ -130,37 +129,6 @@ for i in athletes:
 
 		df = df.append(df_data, ignore_index=True, verify_integrity=True)
 
-	df['Zwift'] = False
-
-	# -------------------- Virtual (Zwift)
-	if os.path.exists(path+'csv/'+str(i)+'/Zwift/data'):
-		files_virtual = sorted(os.listdir(path+'csv/'+str(i)+'/Zwift/data'))
-		for j, f in enumerate(files_virtual):
-			name = f.rstrip('_data.csv')
-
-			df_data = pd.read_csv(path+'csv/'+str(i)+'/Zwift/data/'+f)
-			df_info = pd.read_csv(path+'csv/'+str(i)+'/Zwift/info/'+name+'_info.csv', index_col=(0,1))
-
-			df_data, df_info = cleaning_per_file(df_data, df_info, j+len(files))
-
-			filename_date.update({f:df_data['timestamp'].dt.date.unique()}) # update filelist
-			fileid_filename.update({j+len(files):f})
-
-			# create df_information file
-			df_info = df_info.T.rename(index={'0':j+len(files)})
-			df_information = df_information.append(df_info, verify_integrity=True)
-
-			# open all other files and check for missing info
-			try:
-				df_n = pd.read_csv(path+'csv/'+str(i)+'/Zwift/nan/'+name+'_nan.csv', index_col=0)
-				df_nan = df_nan.append(df_n, ignore_index=True, verify_integrity=True)
-			except FileNotFoundError:
-				pass
-
-			df = df.append(df_data, ignore_index=True, verify_integrity=True)
-
-		df['Zwift'].fillna(True, inplace=True)
-
 	# -------------------- Move nan-info from df to df_nan
 	# remove unknown columns from into nans file TODO: process later
 	cols_unk = df.columns[df.columns.str.startswith('unknown')]
@@ -219,10 +187,10 @@ for i in athletes:
 	print("\n------------------------------- Athlete ", i)
 	df = pd.read_csv(path+'combine/'+str(i)+'/'+str(i)+'_data.csv', index_col=0)
 	df_information = pd.read_csv(path+'clean/'+str(i)+'/'+str(i)+'_info.csv', header=[0,1], index_col=0)
-	fileid_filename = pd.read_csv(path+'clean/'+str(i)+'/'+str(i)+'_fileid_filename.csv', index_col=0)
 
 	# -------------------- Clean df_data
 	# drop empty rows
+	# TODO: add battery_soc
 	cols_ignore = set(['timestamp', 'local_timestamp', 'local_timestamp_loc', 'file_id', 'Zwift'])
 	nanrows = df.shape[0] - df.dropna(how='all', subset=set(df.columns)-cols_ignore).shape[0]
 	if nanrows > 0:
@@ -253,19 +221,22 @@ for i in athletes:
 					   'device_wahoo_fitness ELEMNT':'device_ELEMNT',
 					   'device_wahoo_fitness ELEMNT ROAM':'device_ELEMNTROAM',
 					   'device_bkool BKOOL Website':'device_bkool'}, inplace=True)
-
-	# check if df['Zwift'] equals df['device_0'] == 'zwift'
-	if not (df['Zwift'] == (df['device_0'] == 'zwift')).all():
-		print("WARNING: zwift not correctly identified")
-		print("Number of times filename is called Zwift: ", df['Zwift'].sum())
-		print("Number of times device is Zwift: ", (df['device_0'] == 'zwift').sum())
-		if df['Zwift'].sum() > (df['device_0'] == 'zwift').sum():
-			print("Devices when filename is zwift and device is not zwift: ", df[(df['Zwift']) & (df['device_0'] != 'zwift')].device_0.value_counts())
-		else:
-			print("Filenames when device is zwift and filename is not zwift: ", [fileid_filename.loc[x][0] for x in df[(~df['Zwift']) & (df['device_0'] == 'zwift')].file_id.unique()])
-	# TODO: change bool Zwift to zwift device?
+	""" TODO: replace lines above with
+	df.replace({'device_0':{'wahoo_fitness ELEMNT':'ELEMNT',
+							'wahoo_fitness ELEMNT BOLT':'ELEMNTBOLT',
+							'wahoo_fitness ELEMNT ROAM':'ELEMNTROAM',
+							'garmin':'GARMIN',
+							'zwift':'ZWIFT',
+							'bkool BKOOL Website':'BKOOL',
+							'virtualtraining Rouvy':'ROUVY'}}, inplace=True)
+	df = pd.concat([df, pd.get_dummies(df['device_0'], prefix='device', dtype=bool)], axis=1)
+	"""
 
 	df = df.sort_values(by=['device_0', 'device_0_serialnumber', 'local_timestamp'], key=lambda x: x.map({'ELEMNTBOLT':0, 'zwift':1})) # sort for duplicates later
+	""" TODO: replace line above with
+	df = df.sort_values(by=['device_0', 'device_0_serialnumber', 'local_timestamp'], 
+		key=lambda x: x.map({'ELEMNTBOLT':0, 'ELEMENTROAM':1, 'ELEMNT':2, 'ZWIFT':3}))
+	"""
 	df.reset_index(drop=True, inplace=True)
 	devices = [x for x in df.columns[df.columns.str.startswith('device_')] if x != 'device_0' and x != 'device_0_serialnumber']
 
@@ -288,7 +259,12 @@ for i in athletes:
 	#df['drop_nan_timestamp'] = df['local_timestamp'].isna() & df['local_timestamp_loc'].isna()
 	df.drop(df[df['local_timestamp'].isna() & df['local_timestamp_loc'].isna()].index, inplace=True)
 	print("DROPPED: NaN local timestamps (if both are NaN)")
-	
+	""" TODO: change above lines to
+	df['error_local_timestamp'] = df[~nan_llts]['local_timestamp'] != df[~nan_llts]['local_timestamp_loc']
+	#df.drop(df[~nan_llts][df[~nan_llts]['local_timestamp'] != df[~nan_llts]['local_timestamp_loc']].index, inplace=True)
+	#print("DROPPED: discrepancy local timestamps")
+	"""
+
 	# print how often local_timestamp does not equal local_timestamp_loc
 	# TODO: find other solution than dropping
 	# TODO: this is mainly around the time that the clock is switched from summertime to wintertime. Find out what to do with it!
@@ -306,9 +282,19 @@ for i in athletes:
 	# combine both local timestamps
 	df['local_timestamp'].fillna(df['local_timestamp_loc'], inplace=True)
 	df.drop('local_timestamp_loc', axis=1, inplace=True)
+	""" TODO: change above lines to
+	df['local_timestamp_loc'].fillna(df['local_timestamp'], inplace=True)
+	df.drop('local_timestamp', axis=1, inplace=True)
+	df.rename(columns={'local_timestamp_loc':'local_timestamp'}, inplace=True)
+	"""
 
 	# print duplicate timestamps
 	print("Number of duplicated entries: ", df.duplicated().sum())
+	""" TODO: change above lines to
+	print("Number of duplicated entries: ", df.duplicated(set(df.columns)-set(['file_id'])).sum())
+	df.drop_duplicates(subset=set(df.columns)-set(['file_id']), keep='first', inplace=True)
+	print("DROPPED: duplicate entries")
+	"""
 
 	print("\n--------------- Timestamp DUPLICATE")
 	print_times_dates("duplicated timestamps", 
@@ -334,20 +320,22 @@ for i in athletes:
 	df['keep_devices'] = False
 	drop_devices = []
 	for k in keep_devices:
-		try:
+		if k in df:
 			df['keep_devices'] |= df[k]
-		except KeyError:
+		else:
 			drop_devices.append(k)
-			continue
 	keep_devices = list(set(keep_devices) - set(drop_devices))
-	
+	""" TODO: change above lines to
+	keep_devices = ['device_ELEMNT', 'device_ELEMNTBOLT', 'device_ELEMNTROAM', 'device_zwift']
+	keep_devices = set(keep_devices) & set(devices)
+	df['keep_devices'] = df[keep_devices].sum(axis=1) > 0
+	"""
+
 	print("Fraction of data dropped with device selection: ", 
 		(~df['keep_devices']).sum()/df.shape[0])
-	try:
+	if 'glucose' in df:
 		print("Are there glucose values in the data that will be dropped with the device selection? ",
 			not df[~df['keep_devices']]['glucose'].dropna().empty)
-	except KeyError:
-		pass
 
 	print("Duplicate timestamps after dropping devices: ")
 	for dev in keep_devices:
