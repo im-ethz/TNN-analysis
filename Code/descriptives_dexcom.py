@@ -1,3 +1,8 @@
+# TODO: figures in local time
+# TODO: race and training days
+# TODO: amoung of hypo and hyper during each part of the day
+# Can also make a flat distribution diagram for this
+
 import numpy as np
 import pandas as pd
 import datetime
@@ -13,7 +18,6 @@ path = 'Data/Dexcom/'
 savepath = 'Descriptives/dexcom/'
 
 # -------------------------- Read data
-
 rider_mapping_inv = {v:k for k, v in rider_mapping.items()}
 
 df_glucose = pd.read_csv(path+'dexcom_clean.csv', index_col=0)
@@ -26,13 +30,6 @@ athletes = df_glucose.RIDER.unique()
 
 # select glucose measurements
 df_glucose = df_glucose[df_glucose['Event Type'] == 'EGV']
-
-# glucose divided in day sections
-df_glucose_ = { 'day     '	: pd.read_csv(path+'dexcom_clean.csv', index_col=0),
-				'wake    '	: pd.read_csv(path+'dexcom_clean_wake.csv', index_col=0),
-				'training'	: pd.read_csv(path+'dexcom_clean_training.csv', index_col=0),
-				'after   '	: pd.read_csv(path+'dexcom_clean_after.csv', index_col=0),
-				'sleep   '	: pd.read_csv(path+'dexcom_clean_sleep.csv', index_col=0)}
 
 # -------------------------- Glucose availability (1)
 # create calendar with glucose availability
@@ -96,6 +93,8 @@ plt.close()
 # TODO: 70% selection?
 
 # -------------------------- Glucose distributions
+col = 'Glucose Value (mg/dL)'
+
 def plot_hist_glucose_settings(ax, ax0, col, xlim=(20,410), ylabel='Probability', loc_legend=(0.98, 0.93)):
 	ax.set_xlim((20, 410))
 	ax.set_xlabel(col)
@@ -105,8 +104,6 @@ def plot_hist_glucose_settings(ax, ax0, col, xlim=(20,410), ylabel='Probability'
 	ax0.yaxis.set_visible(False)
 	ax0.set_ylabel('')
 	plt.legend(loc='upper right', bbox_to_anchor=loc_legend, prop={'family': 'DejaVu Sans Mono'})
-
-col = 'Glucose Value (mg/dL)'
 
 # plot all glucose data that we have
 fig, ax0 = plt.subplots()
