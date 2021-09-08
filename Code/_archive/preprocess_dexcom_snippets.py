@@ -1,3 +1,59 @@
+
+
+
+# identify dup (these make the timezone switch a little more hard)
+#df_changes['dup'] = df_changes.groupby('RIDER')['timezone'].transform(lambda x: x.diff() < '0s')
+df_changes['WARNING'] = df_changes['local_timestamp_max'].shift(1) > df_changes['local_timestamp_min']
+df_changes.loc[df_changes.index.get_level_values(1) == 0, 'WARNING'] = False
+
+# calculate gaps and dups
+# note that a timezone change does not necessarily have to be a gap or a dup
+df.loc[df['Event Type'] == 'EGV', 'local_timestamp_diff'] = df.loc[df['Event Type'] == 'EGV', 'local_timestamp'].diff()
+df.loc[df['Event Type'] == 'EGV', 'transmitter_diff'] = df.loc[df['Event Type'] == 'EGV', 'Transmitter Time (Long Integer)'].diff()
+
+df['timediff'] = df['local_timestamp_diff'] - pd.to_timedelta(df['transmitter_diff'], 'sec')
+df.loc[df['transmitter_order'].diff() != 0, 'timediff'] = np.nan # correct for transmitter change
+
+df['gap'] = (df['timediff'] > '5min')
+print("Number of gaps: ", df['gap'].sum())
+
+df['dup'] = (df['timediff'] < '-5min')
+print("Number of dups: ", df['dup'].sum())
+
+
+n_max = df_changes.groupby('RIDER').count()['local_timestamp_min']
+prev_idx_max = 0
+for (i,n), (t_min, t_max, tz, _) in df_changes.iterrows():
+	# check whether there was a duplicate before or during
+	dup_min = df_changes.loc[(i,n), 'WARNING'] # after dup
+	dup_max = False # before dup
+	if n != n_max[i] - 1:
+		dup_max = df_changes.loc[(i,n+1), 'WARNING']
+
+	# min index
+	if dup_min: # after dup
+		idx_min = df[(df.RIDER == i) & df['dup'] & (df.local_timestamp == t_min)].index[0]
+	else:
+		# use that they are sorted and thus idx_min > prev_idx_max
+		idx_min = df[(df.RIDER == i) & (df.local_timestamp >= t_min)].loc[prev_idx_max:].index[0]
+
+	# max index
+	if dup_max: # before dup
+		idx_max = df[(df.RIDER == i) & df['dup'].shift(-1).fillna(False) & (df.local_timestamp == t_max)].index[0]
+	else:
+		idx_max = df[(df.RIDER == i) & (df.local_timestamp <= t_max)].index[-1]
+
+	print(i, n, idx_min, idx_max)
+
+	df.loc[idx_min:idx_max, 'timestamp'] = df.loc[idx_min:idx_max, 'local_timestamp'] - tz
+
+	prev_idx_max = idx_max
+	del idx_max, idx_min
+
+
+
+
+
 # Figure out actual timezone changes
 df_tz = pd.read_csv('../TrainingPeaks/2019/timezone/timezone_final.csv', index_col=[0,1])
 df_tz.timezone = pd.to_timedelta(df_tz.timezone)
