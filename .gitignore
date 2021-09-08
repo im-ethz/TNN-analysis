@@ -28,6 +28,7 @@
 /Code/Data/Dexcom/_backup/*
 /Code/Data/Dexcom/drop/*
 /Code/Data/Dexcom/export_eva/*
+/Code/Data/Dexcom/timezone/*.csv
 
 /Code/Data/LibreView/clean/*
 /Code/Data/LibreView/raw_anonymous/*
@@ -57,6 +58,7 @@
 /Code/Data/TrainingPeaks+Dexcom/*.csv
 /Code/Data/TrainingPeaks+Dexcom/_bin/*
 /Code/Data/TrainingPeaks+Dexcom/_backup/*
+/Code/Data/TrainingPeaks+Dexcom/timezone/*.csv
 
 /Code/Data/TrainingPeaks+LibreView/resample_1min/*
 /Code/Data/TrainingPeaks+LibreView/1sec/*
