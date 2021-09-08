@@ -56,6 +56,7 @@
 
 /Code/Data/TrainingPeaks+Dexcom/*.csv
 /Code/Data/TrainingPeaks+Dexcom/_bin/*
+/Code/Data/TrainingPeaks+Dexcom/_backup/*
 
 /Code/Data/TrainingPeaks+LibreView/resample_1min/*
 /Code/Data/TrainingPeaks+LibreView/1sec/*
