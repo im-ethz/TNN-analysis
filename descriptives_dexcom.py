@@ -416,3 +416,33 @@ for k, sec in enumerate(df_glucose_.keys()):
 		plt.xlabel('Local time (hh:mm:ss)')
 		plt.ylabel(col)
 		plt.show()
+
+
+"""
+	# find out where the glucose belongs
+
+	matplotlib.use('TkAgg')
+	df_glucose['date'] = df_glucose.timestamp.dt.date
+	for d in df_glucose['date'].unique():
+		fig, ax = plt.subplots(figsize=(15,6))
+		mask = (df_dc.RIDER == i) & (df_dc['timestamp'].dt.date == d)
+		sns.lineplot(df_dc.loc[mask, 'timestamp'], df_dc.loc[mask, 'Glucose Value (mg/dL)'], 
+			ax=ax, marker='o', dashes=False, label='Dexcom', alpha=.8)
+
+		sns.lineplot(df_glucose.loc[df_glucose['date'] == d, 'timestamp'],
+				df_glucose.loc[df_glucose['date'] == d, 'glucose'], 
+				ax=ax, marker='o', dashes=False, label='TP', alpha=.8)
+
+		ax.set_xticklabels(pd.to_datetime(ax.get_xticks(), unit='D').strftime('%H:%M'))
+		plt.xlabel('UTC (hh:mm)')
+
+		plt.title("RIDER %s - %s"%(i, d.strftime('%d-%m-%Y')))
+		plt.savefig(path+'glucose/glucose_%s_%s.pdf'%(i,d.strftime('%Y%m%d')), bbox_inches='tight')
+		plt.savefig(path+'glucose/glucose_%s_%s.png'%(i,d.strftime('%Y%m%d')), dpi=300, bbox_inches='tight')
+		
+		plt.title("%s - %s"%(rider_mapping_inv[i], d.strftime('%d-%m-%Y')))
+		plt.savefig(path+'glucose/glucose_%s_%s_NAME.pdf'%(i,d.strftime('%Y%m%d')), bbox_inches='tight')
+		plt.savefig(path+'glucose/glucose_%s_%s_NAME.png'%(i,d.strftime('%Y%m%d')), dpi=300, bbox_inches='tight')
+
+		plt.close()
+"""
