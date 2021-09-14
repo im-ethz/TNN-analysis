@@ -84,7 +84,7 @@ df['timestamp'] = pd.to_datetime(df['timestamp'])
 df['local_timestamp'] = pd.to_datetime(df['local_timestamp'])
 
 # -------------------------- Glucose availability (2) : during training sessions
-df_training = pd.read_csv('training.csv', index_col=0)
+df_training = pd.read_csv(path+'training.csv', index_col=0)
 df_training['timestamp_min'] = pd.to_datetime(df_training['timestamp_min'])
 df_training['timestamp_max'] = pd.to_datetime(df_training['timestamp_max'])
 df_training['local_timestamp_min'] = pd.to_datetime(df_training['local_timestamp_min'])
