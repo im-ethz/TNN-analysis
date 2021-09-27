@@ -25,4 +25,4 @@
 
 /data/
 
-config.py
+secret.py

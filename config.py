@@ -1,0 +1,1 @@
+DATA_PATH = '/mnt/mtec-home/hype/data/'
