@@ -7,33 +7,34 @@ import numpy as np
 import pandas as pd
 import datetime
 import os
+from copy import copy
 
 from plot import *
 from helper import month_mapping, month_firstday
 from calc import glucose_levels, mmoll_mgdl, mgdl_mmoll
-from copy import copy
+from config import DATA_PATH as RAW_PATH
 
-from config import rider_mapping
+from secret import rider_mapping
 rider_mapping_inv = {v:k for k, v in rider_mapping.items()}
 
-path = 'data/'
-savepath = 'descriptives/dexcom/'
+DATA_PATH = 'data/'
+SAVE_PATH = 'descriptives/dexcom/'
 
-if not os.path.exists(savepath):
-	os.mkdir(savepath)
-if not os.path.exists(savepath+'availability/'):
-	os.mkdir(savepath+'availability/')
-if not os.path.exists(savepath+'hist/'):
-	os.mkdir(savepath+'hist/')
-if not os.path.exists(savepath+'boxplot/'):
-	os.mkdir(savepath+'boxplot/')
-if not os.path.exists(savepath+'time_in_zone/'):
-	os.mkdir(savepath+'time_in_zone/')
-if not os.path.exists(savepath+'time_training/'):
-	os.mkdir(savepath+'time_training/')
+if not os.path.exists(SAVE_PATH):
+	os.mkdir(SAVE_PATH)
+if not os.path.exists(SAVE_PATH+'availability/'):
+	os.mkdir(SAVE_PATH+'availability/')
+if not os.path.exists(SAVE_PATH+'hist/'):
+	os.mkdir(SAVE_PATH+'hist/')
+if not os.path.exists(SAVE_PATH+'boxplot/'):
+	os.mkdir(SAVE_PATH+'boxplot/')
+if not os.path.exists(SAVE_PATH+'time_in_zone/'):
+	os.mkdir(SAVE_PATH+'time_in_zone/')
+if not os.path.exists(SAVE_PATH+'time_training/'):
+	os.mkdir(SAVE_PATH+'time_training/')
 
 # -------------------------- Read data
-df = pd.read_csv(path+'dexcom.csv', index_col=0)
+df = pd.read_csv(RAW_PATH+'dexcom.csv', index_col=0)
 df.drop('local_timestamp_raw', axis=1, inplace=True)
 
 df['timestamp'] = pd.to_datetime(df['timestamp'])
@@ -70,21 +71,21 @@ ax2.set_yticklabels((df_avail.loc['Dexcom CLARITY EU'].clip(0,1).fillna(0) + df_
 """
 plt.xticks(ticks=[d+15 for d in month_firstday.values()], labels=[list(month_firstday.keys())[-1]]+list(month_firstday.keys())[:-1], rotation=0)
 plt.ylabel('rider')
-plt.savefig(savepath+'availability/glucose_availability.pdf', bbox_inches='tight')
-plt.savefig(savepath+'availability/glucose_availability.png', dpi=300, bbox_inches='tight')
+plt.savefig(SAVE_PATH+'availability/glucose_availability.pdf', bbox_inches='tight')
+plt.savefig(SAVE_PATH+'availability/glucose_availability.png', dpi=300, bbox_inches='tight')
 ax.set_yticklabels([rider_mapping_inv[int(i.get_text())] for i in ax.get_yticklabels()], rotation=0)
-plt.savefig(savepath+'availability/glucose_availability_NAME.pdf', bbox_inches='tight')
-plt.savefig(savepath+'availability/glucose_availability_NAME.png', dpi=300, bbox_inches='tight')
+plt.savefig(SAVE_PATH+'availability/glucose_availability_NAME.pdf', bbox_inches='tight')
+plt.savefig(SAVE_PATH+'availability/glucose_availability_NAME.png', dpi=300, bbox_inches='tight')
 plt.show()
 plt.close()
 
 # -------------------------- Read CGM data : resampled + completeness selection + incl sections
-df = pd.read_csv(path+'dexcom_resampled_selectcompleteness.csv', index_col=0)
+df = pd.read_csv(DATA_PATH+'dexcom_resampled_selectcompleteness.csv', index_col=0)
 df['timestamp'] = pd.to_datetime(df['timestamp'])
 df['local_timestamp'] = pd.to_datetime(df['local_timestamp'])
 
 # -------------------------- Glucose availability (2) : during training sessions
-df_training = pd.read_csv(path+'training.csv', index_col=0)
+df_training = pd.read_csv(DATA_PATH+'training.csv', index_col=0)
 df_training['timestamp_min'] = pd.to_datetime(df_training['timestamp_min'])
 df_training['timestamp_max'] = pd.to_datetime(df_training['timestamp_max'])
 df_training['local_timestamp_min'] = pd.to_datetime(df_training['local_timestamp_min'])
@@ -114,11 +115,11 @@ plt.ylabel('Rider')
 plt.xticks(ticks=training_avail.columns[::6], 
 	labels=pd.to_datetime(training_avail.columns[::6]*5, unit='m').strftime('%H:%M'), rotation=0)
 plt.xlim((0,100))
-plt.savefig(savepath+'availability/glucose_availability_training.pdf', bbox_inches='tight')
-plt.savefig(savepath+'availability/glucose_availability_training.png', dpi=300, bbox_inches='tight')
+plt.savefig(SAVE_PATH+'availability/glucose_availability_training.pdf', bbox_inches='tight')
+plt.savefig(SAVE_PATH+'availability/glucose_availability_training.png', dpi=300, bbox_inches='tight')
 ax.set_yticklabels([rider_mapping_inv[int(i.get_text())] for i in ax.get_yticklabels()], rotation=0)
-plt.savefig(savepath+'availability/glucose_availability_training_NAME.pdf', bbox_inches='tight')
-plt.savefig(savepath+'availability/glucose_availability_training_NAME.png', dpi=300, bbox_inches='tight')
+plt.savefig(SAVE_PATH+'availability/glucose_availability_training_NAME.pdf', bbox_inches='tight')
+plt.savefig(SAVE_PATH+'availability/glucose_availability_training_NAME.png', dpi=300, bbox_inches='tight')
 plt.show()
 plt.close()
 
@@ -142,7 +143,6 @@ palette_sec = {	'wake'	: sns.color_palette('Blues', n_colors=11),
 palette_ath = sns.color_palette("tab10")+[(0.106, 0.62, 0.467)]#sns.color_palette("viridis_r", n_colors=11)
 color_race = {'normal':color_palette[8], 'race':(0.8455062527192158, 0.21363575247920147, 0.4145075850498335)}
 
-
 def plot_hist_glucose_settings(ax, ax0, col='Glucose Value (mg/dL)', xlim=(20,410), ylabel='Probability', loc_legend=(1., 0.96)):
 	ax.set_xlim((20, 410))
 	ax.set_xlabel(col)
@@ -163,8 +163,8 @@ sns.kdeplot(df[col], ax=ax, linewidth=2,
 	.format(df[col].mean(), df[col].std()/df[col].mean()*100))
 plot_hist_glucose_settings(ax, ax0, col)
 ax.set_xlabel(col)
-plt.savefig(savepath+'hist/hist_glucose.pdf', bbox_inches='tight')
-plt.savefig(savepath+'hist/hist_glucose.png', dpi=300, bbox_inches='tight')
+plt.savefig(SAVE_PATH+'hist/hist_glucose.pdf', bbox_inches='tight')
+plt.savefig(SAVE_PATH+'hist/hist_glucose.png', dpi=300, bbox_inches='tight')
 plt.show()
 plt.close()
 
@@ -176,8 +176,8 @@ for k, sec in enumerate(sections):
 	sns.kdeplot(df[df[sec]][col], ax=ax, linewidth=2, color=color_sec[sec],
 		label=sec+r' ($\mu = {:.1f}$ $\sigma/\mu = {:.0f}\%$)'.format(df[df[sec]][col].mean(), df[df[sec]][col].std()/df[df[sec]][col].mean()*100))
 plot_hist_glucose_settings(ax, ax0, col)
-plt.savefig(savepath+'hist/hist_glucose_sec.pdf', bbox_inches='tight')
-plt.savefig(savepath+'hist/hist_glucose_sec.png', dpi=300, bbox_inches='tight')
+plt.savefig(SAVE_PATH+'hist/hist_glucose_sec.pdf', bbox_inches='tight')
+plt.savefig(SAVE_PATH+'hist/hist_glucose_sec.png', dpi=300, bbox_inches='tight')
 plt.show()
 plt.close()
 
@@ -197,14 +197,14 @@ for i in df.RIDER.unique():
 		.format(i, len(df[df.RIDER == i][col])/(365*24*60/5)*100,
 				df[df.RIDER == i][col].mean(),
 				df[df.RIDER == i][col].std()/df[df.RIDER == i][col].mean()*100), y=1.06)
-	plt.savefig(savepath+'hist/hist_glucose_sec_%s.pdf'%i, bbox_inches='tight')
-	plt.savefig(savepath+'hist/hist_glucose_sec_%s.png'%i, dpi=300, bbox_inches='tight')
+	plt.savefig(SAVE_PATH+'hist/hist_glucose_sec_%s.pdf'%i, bbox_inches='tight')
+	plt.savefig(SAVE_PATH+'hist/hist_glucose_sec_%s.png'%i, dpi=300, bbox_inches='tight')
 	plt.title(r'$\bf{:s}$ - completeness $= {:.0f}\%$ $\mu = {:.1f}$ $\sigma/\mu = {:.0f}\%$'\
 		.format(rider_mapping_inv[i], len(df[df.RIDER == i][col])/(365*24*60/5)*100,
 				df[df.RIDER == i][col].mean(),
 				df[df.RIDER == i][col].std()/df[df.RIDER == i][col].mean()*100), y=1.06)
-	plt.savefig(savepath+'hist/hist_glucose_sec_NAME_%s.pdf'%i, bbox_inches='tight')
-	plt.savefig(savepath+'hist/hist_glucose_sec_NAME_%s.png'%i, dpi=300, bbox_inches='tight')	
+	plt.savefig(SAVE_PATH+'hist/hist_glucose_sec_NAME_%s.pdf'%i, bbox_inches='tight')
+	plt.savefig(SAVE_PATH+'hist/hist_glucose_sec_NAME_%s.png'%i, dpi=300, bbox_inches='tight')	
 	plt.show()
 	plt.close()
 
@@ -221,13 +221,13 @@ for c, i in enumerate(athletes):
 plot_hist_glucose_settings(ax, ax0, col)
 for text in ax.get_legend().get_texts(): # smaller fontsize
 	text.set_fontsize(6)
-plt.savefig(savepath+'hist/hist_glucose_riders.pdf', bbox_inches='tight')
-plt.savefig(savepath+'hist/hist_glucose_riders.png', dpi=300, bbox_inches='tight')
+plt.savefig(SAVE_PATH+'hist/hist_glucose_riders.pdf', bbox_inches='tight')
+plt.savefig(SAVE_PATH+'hist/hist_glucose_riders.png', dpi=300, bbox_inches='tight')
 for c, i in enumerate(athletes):
 	text = ax.get_legend().get_texts()[c].get_text().split()
 	ax.get_legend().get_texts()[c].set_text(rider_mapping_inv[int(text[0])]+' '+' '.join(text[1:]))
-plt.savefig(savepath+'hist/hist_glucose_riders_NAME.pdf', bbox_inches='tight')
-plt.savefig(savepath+'hist/hist_glucose_riders_NAME.png', dpi=300, bbox_inches='tight')
+plt.savefig(SAVE_PATH+'hist/hist_glucose_riders_NAME.pdf', bbox_inches='tight')
+plt.savefig(SAVE_PATH+'hist/hist_glucose_riders_NAME.png', dpi=300, bbox_inches='tight')
 plt.show()
 plt.close()
 
@@ -244,8 +244,8 @@ for k, sec in enumerate(sections):
 					df[df[sec]][df[df[sec]].RIDER == i][col].std()/df[df[sec]][df[df[sec]].RIDER == i][col].mean()*100))
 	plot_hist_glucose_settings(ax, ax0, col)
 	plt.title(sec, y=1.06)
-	plt.savefig(savepath+'hist/hist_glucose_sec_%s.pdf'%sec, bbox_inches='tight')
-	plt.savefig(savepath+'hist/hist_glucose_sec_%s.png'%sec, dpi=300, bbox_inches='tight')
+	plt.savefig(SAVE_PATH+'hist/hist_glucose_sec_%s.pdf'%sec, bbox_inches='tight')
+	plt.savefig(SAVE_PATH+'hist/hist_glucose_sec_%s.png'%sec, dpi=300, bbox_inches='tight')
 	plt.show()
 	plt.close()
 
@@ -284,8 +284,8 @@ ax.legend(handles=legend_elements, loc='center right', bbox_to_anchor=(1.5, 0.5)
 ax.yaxis.grid(True)
 sns.despine(left=True, bottom=True, right=True)
 
-plt.savefig(savepath+'time_in_zone/time_in_glucoselevel.pdf', bbox_inches='tight')
-plt.savefig(savepath+'time_in_zone/time_in_glucoselevel.png', dpi=300, bbox_inches='tight')
+plt.savefig(SAVE_PATH+'time_in_zone/time_in_glucoselevel.pdf', bbox_inches='tight')
+plt.savefig(SAVE_PATH+'time_in_zone/time_in_glucoselevel.png', dpi=300, bbox_inches='tight')
 plt.show()
 plt.close()
 
@@ -309,14 +309,14 @@ for i in athletes:
 		.format(i, len(df[df.RIDER == i][col])/(365*24*60/5)*100,
 				df[df.RIDER == i][col].mean(),
 				df[df.RIDER == i][col].std()/df[df.RIDER == i][col].mean()*100))
-	plt.savefig(savepath+'time_in_zone/time_in_glucoselevel_%s.pdf'%i, bbox_inches='tight')
-	plt.savefig(savepath+'time_in_zone/time_in_glucoselevel_%s.png'%i, dpi=300, bbox_inches='tight')
+	plt.savefig(SAVE_PATH+'time_in_zone/time_in_glucoselevel_%s.pdf'%i, bbox_inches='tight')
+	plt.savefig(SAVE_PATH+'time_in_zone/time_in_glucoselevel_%s.png'%i, dpi=300, bbox_inches='tight')
 	plt.title(r'$\bf{:s}$ - completeness $= {:.0f}\%$ $\mu = {:.1f}$ $\sigma/\mu = {:.0f}\%$'\
 		.format(rider_mapping_inv[i], len(df[df.RIDER == i][col])/(365*24*60/5)*100,
 				df[df.RIDER == i][col].mean(),
 				df[df.RIDER == i][col].std()/df[df.RIDER == i][col].mean()*100))
-	plt.savefig(savepath+'time_in_zone/time_in_glucoselevel_%s_NAME.pdf'%i, bbox_inches='tight')
-	plt.savefig(savepath+'time_in_zone/time_in_glucoselevel_%s_NAME.png'%i, dpi=300, bbox_inches='tight')
+	plt.savefig(SAVE_PATH+'time_in_zone/time_in_glucoselevel_%s_NAME.pdf'%i, bbox_inches='tight')
+	plt.savefig(SAVE_PATH+'time_in_zone/time_in_glucoselevel_%s_NAME.png'%i, dpi=300, bbox_inches='tight')
 	plt.show()
 	plt.close()
 
@@ -338,11 +338,11 @@ ax.legend(handles=legend_elements, loc='center right', bbox_to_anchor=(1.2, 0.5)
 ax.yaxis.grid(True)
 sns.despine(left=True, bottom=True, right=True)
 
-plt.savefig(savepath+'time_in_zone/time_in_glucoselevel_riders.pdf', bbox_inches='tight')
-plt.savefig(savepath+'time_in_zone/time_in_glucoselevel_riders.png', dpi=300, bbox_inches='tight')
+plt.savefig(SAVE_PATH+'time_in_zone/time_in_glucoselevel_riders.pdf', bbox_inches='tight')
+plt.savefig(SAVE_PATH+'time_in_zone/time_in_glucoselevel_riders.png', dpi=300, bbox_inches='tight')
 ax.set_xticklabels([rider_mapping_inv[int(i.get_text())] for i in ax.get_xticklabels()], rotation=90)
-plt.savefig(savepath+'time_in_zone/time_in_glucoselevel_riders_NAME.pdf', bbox_inches='tight')
-plt.savefig(savepath+'time_in_zone/time_in_glucoselevel_riders_NAME.png', dpi=300, bbox_inches='tight')
+plt.savefig(SAVE_PATH+'time_in_zone/time_in_glucoselevel_riders_NAME.pdf', bbox_inches='tight')
+plt.savefig(SAVE_PATH+'time_in_zone/time_in_glucoselevel_riders_NAME.png', dpi=300, bbox_inches='tight')
 plt.show()
 plt.close()
 
@@ -365,8 +365,8 @@ ax.legend(handles=legend_elements, loc='center right', bbox_to_anchor=(1.5, 0.5)
 ax.yaxis.grid(True)
 sns.despine(left=True, bottom=True, right=True)
 
-plt.savefig(savepath+'time_in_zone/time_in_glucoselevel_race.pdf', bbox_inches='tight')
-plt.savefig(savepath+'time_in_zone/time_in_glucoselevel_race.png', dpi=300, bbox_inches='tight')
+plt.savefig(SAVE_PATH+'time_in_zone/time_in_glucoselevel_race.pdf', bbox_inches='tight')
+plt.savefig(SAVE_PATH+'time_in_zone/time_in_glucoselevel_race.png', dpi=300, bbox_inches='tight')
 plt.show()
 plt.close()
 
@@ -390,14 +390,14 @@ for i in athletes:
 		.format(i, len(df[df.RIDER == i][col])/(365*24*60/5)*100,
 				df[df.RIDER == i][col].mean(),
 				df[df.RIDER == i][col].std()/df[df.RIDER == i][col].mean()*100))
-	plt.savefig(savepath+'time_in_zone/time_in_glucoselevel_%s.pdf'%i, bbox_inches='tight')
-	plt.savefig(savepath+'time_in_zone/time_in_glucoselevel_%s.png'%i, dpi=300, bbox_inches='tight')
+	plt.savefig(SAVE_PATH+'time_in_zone/time_in_glucoselevel_%s.pdf'%i, bbox_inches='tight')
+	plt.savefig(SAVE_PATH+'time_in_zone/time_in_glucoselevel_%s.png'%i, dpi=300, bbox_inches='tight')
 	plt.title(r'$\bf{:s}$ - completeness $= {:.0f}\%$ $\mu = {:.1f}$ $\sigma/\mu = {:.0f}\%$'\
 		.format(rider_mapping_inv[i], len(df[df.RIDER == i][col])/(365*24*60/5)*100,
 				df[df.RIDER == i][col].mean(),
 				df[df.RIDER == i][col].std()/df[df.RIDER == i][col].mean()*100))
-	plt.savefig(savepath+'time_in_zone/time_in_glucoselevel_race_%s_NAME.pdf'%i, bbox_inches='tight')
-	plt.savefig(savepath+'time_in_zone/time_in_glucoselevel_race_%s_NAME.png'%i, dpi=300, bbox_inches='tight')
+	plt.savefig(SAVE_PATH+'time_in_zone/time_in_glucoselevel_race_%s_NAME.pdf'%i, bbox_inches='tight')
+	plt.savefig(SAVE_PATH+'time_in_zone/time_in_glucoselevel_race_%s_NAME.png'%i, dpi=300, bbox_inches='tight')
 	plt.show()
 	plt.close()
 
@@ -426,8 +426,8 @@ plt.ylabel(col)
 plt.legend(handles=[Patch(facecolor=nc, edgecolor='white', hatch='///', label='normal'+r' ($n = {:.0f}$)'.format(n_nc)),
 					Patch(facecolor=rc, edgecolor='white', hatch='\\\\\\', label='race'r' ($n = {:.0f}$)'.format(n_rc))], 
 			loc='upper right')
-plt.savefig(savepath+'boxplot/box_glucose_sections.pdf', bbox_inches='tight')
-plt.savefig(savepath+'boxplot/box_glucose_sections.png', dpi=300, bbox_inches='tight')
+plt.savefig(SAVE_PATH+'boxplot/box_glucose_sections.pdf', bbox_inches='tight')
+plt.savefig(SAVE_PATH+'boxplot/box_glucose_sections.png', dpi=300, bbox_inches='tight')
 plt.show()
 plt.close()
 
@@ -450,14 +450,14 @@ for i in athletes:
 		.format(i, len(df[df.RIDER == i][col])/(365*24*60/5)*100,
 				df[df.RIDER == i][col].mean(),
 				df[df.RIDER == i][col].std()/df[df.RIDER == i][col].mean()*100))
-	plt.savefig(savepath+'boxplot/box_glucose_sections_%s.pdf'%i, bbox_inches='tight')
-	plt.savefig(savepath+'boxplot/box_glucose_sections_%s.png'%i, dpi=300, bbox_inches='tight')
+	plt.savefig(SAVE_PATH+'boxplot/box_glucose_sections_%s.pdf'%i, bbox_inches='tight')
+	plt.savefig(SAVE_PATH+'boxplot/box_glucose_sections_%s.png'%i, dpi=300, bbox_inches='tight')
 	plt.title(r'$\bf{:s}$ - completeness $= {:.0f}\%$ $\mu = {:.1f}$ $\sigma/\mu = {:.0f}\%$'\
 		.format(rider_mapping_inv[i], len(df[df.RIDER == i][col])/(365*24*60/5)*100,
 				df[df.RIDER == i][col].mean(),
 				df[df.RIDER == i][col].std()/df[df.RIDER == i][col].mean()*100))
-	plt.savefig(savepath+'boxplot/box_glucose_sections_%s_NAME.pdf'%i, bbox_inches='tight')
-	plt.savefig(savepath+'boxplot/box_glucose_sections_%s_NAME.png'%i, dpi=300, bbox_inches='tight')
+	plt.savefig(SAVE_PATH+'boxplot/box_glucose_sections_%s_NAME.pdf'%i, bbox_inches='tight')
+	plt.savefig(SAVE_PATH+'boxplot/box_glucose_sections_%s_NAME.png'%i, dpi=300, bbox_inches='tight')
 	plt.show()
 	plt.close()
 
@@ -486,8 +486,8 @@ sns.despine(bottom=True, right=True, top=True, ax=ax[1])
 ax[1].set(xlabel=None, xticks=[])
 plt.ylim((0,350))
 ax[0].set_xlim((0, t_max))
-plt.savefig(savepath+'time_training/glucose_training.pdf', bbox_inches='tight')
-plt.savefig(savepath+'time_training/glucose_training.png', dpi=300, bbox_inches='tight')
+plt.savefig(SAVE_PATH+'time_training/glucose_training.pdf', bbox_inches='tight')
+plt.savefig(SAVE_PATH+'time_training/glucose_training.png', dpi=300, bbox_inches='tight')
 plt.show()
 plt.close()
 
@@ -512,14 +512,14 @@ for i in athletes:
 		.format(i, len(df[df.RIDER == i][col])/(365*24*60/5)*100,
 				df[df.RIDER == i][col].mean(),
 				df[df.RIDER == i][col].std()/df[df.RIDER == i][col].mean()*100))
-	plt.savefig(savepath+'time_training/glucose_training_%s.pdf'%i, bbox_inches='tight')
-	plt.savefig(savepath+'time_training/glucose_training_%s.png'%i, dpi=300, bbox_inches='tight')
+	plt.savefig(SAVE_PATH+'time_training/glucose_training_%s.pdf'%i, bbox_inches='tight')
+	plt.savefig(SAVE_PATH+'time_training/glucose_training_%s.png'%i, dpi=300, bbox_inches='tight')
 	ax[0].set_title(r'$\bf{:s}$ - completeness $= {:.0f}\%$ $\mu = {:.1f}$ $\sigma/\mu = {:.0f}\%$'\
 		.format(rider_mapping_inv[i], len(df[df.RIDER == i][col])/(365*24*60/5)*100,
 				df[df.RIDER == i][col].mean(),
 				df[df.RIDER == i][col].std()/df[df.RIDER == i][col].mean()*100))
-	plt.savefig(savepath+'time_training/glucose_training_%s_NAME.pdf'%i, bbox_inches='tight')
-	plt.savefig(savepath+'time_training/glucose_training_%s_NAME.png'%i, dpi=300, bbox_inches='tight')
+	plt.savefig(SAVE_PATH+'time_training/glucose_training_%s_NAME.pdf'%i, bbox_inches='tight')
+	plt.savefig(SAVE_PATH+'time_training/glucose_training_%s_NAME.png'%i, dpi=300, bbox_inches='tight')
 	plt.show()
 	plt.close()
 
@@ -531,7 +531,7 @@ for i in athletes:
 # IPAQ score (MET min week-1)
 # Mean km/year travelled (cycling) in daily life
 # TODO: elevation gain up/down
-fitness = pd.read_csv(path+'./fitness.csv', index_col=[0,1], header=[0,1])
+fitness = pd.read_csv(RAW_PATH+'./fitness.csv', index_col=[0,1], header=[0,1])
 fitness = fitness[fitness.index.get_level_values(0).isin(athletes)]
 
 cols = [('ID and ANTROPOMETRY', 'Age'),
@@ -552,7 +552,7 @@ fitness.rename(columns={'Age'		: 'Age (years)',
 
 stats_fit = fitness.apply(['mean', 'std', 'min', 'max'])
 
-trainingpeaks = pd.read_csv(path+'./trainingpeaks_day.csv', index_col=[0,1])
+trainingpeaks = pd.read_csv(DATA_PATH+'./trainingpeaks_day.csv', index_col=[0,1])
 stats_train_session = trainingpeaks[['training_stress_score', 'intensity_factor']].apply(['mean', 'std', 'min', 'max'])
 
 stats_train_year = trainingpeaks.groupby('RIDER')[['timestamp_count', 'race', 'distance_max']].sum()
