@@ -4,10 +4,15 @@ import datetime
 import os
 import gc
 
-path = 'data/'
+import sys
+sys.path.append(os.path.abspath('../'))
+
+from config import DATA_PATH
+
+SAVE_PATH = './'
 
 # -------------------------- Read data
-df = pd.read_csv(path+'dexcom.csv', index_col=0)
+df = pd.read_csv(DATA_PATH+'dexcom.csv', index_col=0)
 df.drop('local_timestamp_raw', axis=1, inplace=True)
 
 df['timestamp'] = pd.to_datetime(df['timestamp'])
@@ -15,15 +20,14 @@ df['local_timestamp'] = pd.to_datetime(df['local_timestamp'])
 
 # select glucose measurements
 df = df[df['Event Type'] == 'EGV']
-df = df[['RIDER', 'timestamp', 'local_timestamp', 'Source Device ID', 'Glucose Value (mg/dL)',
-		 'Transmitter ID', 'Transmitter Time (Long Integer)', 'source']]
+df = df[['RIDER', 'timestamp', 'local_timestamp', 'Glucose Value (mg/dL)']]
 
 # -------------------------- read trainingpeaks info
 """
 df_training = {}
 for i in df.RIDER.unique():
 	print(i)
-	df_i = pd.read_csv(path+'trainingpeaks/%s_data.csv'%i)
+	df_i = pd.read_csv(DATA_PATH+'trainingpeaks/%s_data.csv'%i)
 
 	df_i['timestamp'] = pd.to_datetime(df_i['timestamp'])
 	df_i['local_timestamp'] = pd.to_datetime(df_i['local_timestamp'])
@@ -39,31 +43,50 @@ for i in df.RIDER.unique():
 df_training = pd.concat(df_training)
 df_training.columns = [c1+'_'+c2 for c1, c2 in df_training.columns]
 df_training = df_training.reset_index().rename(columns={'level_0':'RIDER'})
-df_training.to_csv('training.csv', index_label=False)
+df_training.to_csv(SAVE_PATH+'training.csv', index_label=False)
 """
-df_training = pd.read_csv(path+'training.csv', index_col=0)
+df_training = pd.read_csv(SAVE_PATH+'training.csv', index_col=0)
 df_training['timestamp_min'] = pd.to_datetime(df_training['timestamp_min'])
 df_training['timestamp_max'] = pd.to_datetime(df_training['timestamp_max'])
+df_training['local_timestamp_min'] = pd.to_datetime(df_training['local_timestamp_min'])
+df_training['local_timestamp_max'] = pd.to_datetime(df_training['local_timestamp_max'])
 
-# -------------------------- identify different parts of the day
+# -------------------------- resample to remove duplicates from TrainingPeaks
+# resample every 5 min
+df['timezone'] = df['local_timestamp'] - df['timestamp']
+df = df.set_index('timestamp').groupby('RIDER').resample('5min').apply({'timezone'				:'first',
+																		'Glucose Value (mg/dL)'	:'mean'})
+
+# note: also could have used asfreq probably
+# ensure there is for every 5 min a timestamp
+ts_range = pd.date_range(start='2018-11-30 07:00:00', end='2019-11-30 23:55:00', freq='5min').to_series().rename('timestamp')
+ts_index = pd.MultiIndex.from_product([df.index.get_level_values(0).unique(), ts_range], names=['RIDER', 'timestamp'])
+df = df.reindex(ts_index)
+df.reset_index(inplace=True)
+
+# get local timestamp from resampling
+df['timezone'] = df['timezone'].fillna(method='ffill').fillna(method='bfill')
+df['local_timestamp'] = df['timestamp'] + df['timezone']
+df.drop('timezone', axis=1, inplace=True)
+
+df.to_csv(SAVE_PATH+'dexcom_resampled.csv', index_label=False)
+
+# -------------------------- identify sections
+# TODO: should we exclude post if it's part of a new training session?
 df['train'] = False
-df['after'] = False
+df['post'] = False
 for _, (i, ts_min, ts_max) in df_training[['RIDER', 'timestamp_min', 'timestamp_max']].iterrows():
 	# identify during training
 	df.loc[(df.RIDER == i) & (df.timestamp >= ts_min) & (df.timestamp <= ts_max), 'train'] = True
 
-	# identify after training
-	df.loc[(df.RIDER == i) & (df.timestamp > ts_max) & (df.timestamp <= ts_max + pd.to_timedelta('4h')), 'after'] = True
-
-# TODO: should we exclude after if it's part of a new training session?
+	# identify post training
+	df.loc[(df.RIDER == i) & (df.timestamp > ts_max) & (df.timestamp <= ts_max + pd.to_timedelta('4h')), 'post'] = True
 
 df['wake'] = (df.local_timestamp.dt.time >= datetime.time(6)) & (df.local_timestamp.dt.time <= datetime.time(23,59,59))
 df['sleep'] = (df.local_timestamp.dt.time < datetime.time(6)) & (df.local_timestamp.dt.time >= datetime.time(0))
 
-del df_training
-
 # -------------------------- identify race and travel days
-calendar = pd.read_csv(path+'trainingpeaks_day.csv')
+calendar = pd.read_csv(SAVE_PATH+'trainingpeaks_day.csv')
 calendar = calendar[['RIDER', 'date', 'race', 'travel']]
 calendar['date'] = pd.to_datetime(calendar['date']).dt.date
 
@@ -72,51 +95,29 @@ df['date'] = df.local_timestamp.dt.date
 df = pd.merge(df, calendar, how='left', on=['RIDER', 'date'])
 df.drop('date', axis=1, inplace=True)
 
-df.to_csv(path+'dexcom_sections.csv', index_label=False)
-
-# -------------------------- resample to remove duplicates from TrainingPeaks
-# resample every 5 min
-df['timezone'] = df['local_timestamp'] - df['timestamp']
-df = df.set_index('timestamp').groupby('RIDER').resample('5min').apply({'timezone'							:'first',
-																		'Source Device ID'					:'first',
-																		'Glucose Value (mg/dL)'				:'mean',
-																		'Transmitter ID'					:'first',
-																		'Transmitter Time (Long Integer)'	:'mean',
-																		'source'							:'first',
-																		'train'								:'first',
-																		'after'								:'first',
-																		'wake'								:'first',
-																		'sleep'								:'first',
-																		'race'								:'first',
-																		'travel'							:'first'})
-df.dropna(subset=['Glucose Value (mg/dL)'], inplace=True)
-df.reset_index(inplace=True)
-df['local_timestamp'] = df['timestamp'] + df['timezone']
-df.drop('timezone', axis=1, inplace=True)
-df.to_csv(path+'dexcom_resampled.csv', index_label=False)
+df.to_csv(SAVE_PATH+'dexcom_sections.csv', index_label=False)
 
 # -------------------------- identify days for which completeness is higher than 70%
 # USE TIMESTAMP HERE
-df['date'] = df.timestamp.dt.date
+df['date'] = pd.to_datetime(df.timestamp.dt.date)
 
-# TODO: change according to hypex-noc-hypo
 # calculate completeness
-max_readings = 24*60/5
-df_comp = df.groupby(['RIDER', 'date'])['Glucose Value (mg/dL)'].count().to_frame()
-df_comp /= max_readings
-df_comp['keep'] = df_comp >= 0.7
-df_comp.reset_index(inplace=True)
-df_comp.rename(columns={'Glucose Value (mg/dL)':'completeness'}, inplace=True)
-
-# select only data with day completeness above 70%
+df_comp = df.groupby(['RIDER', 'date']).apply(lambda x: x['Glucose Value (mg/dL)'].count() / x['timestamp'].count()).rename('completeness')
 df = pd.merge(df, df_comp, how='left', on=['RIDER', 'date'])
-df = df[df['keep']]
-df.drop(['date', 'completeness', 'keep'], axis=1, inplace=True)
+df.drop('date', axis=1, inplace=True)
+df.to_csv(SAVE_PATH+'dexcom_clean.csv', index_label=False)
 
-df.to_csv(path+'dexcom_resampled_selectcompleteness.csv', index_label=False)
+# -------------------------- remove compression errors
+df = pd.read_csv(SAVE_PATH+'dexcom_clean.csv', index_col=0)
+df.timestamp = pd.to_datetime(df.timestamp)
+df.local_timestamp = pd.to_datetime(df.local_timestamp)
 
-# check if the dropping rate is anywhere higher than 1.5 mmol/L/5min = 27 mg/dL/5min
+# remove compression lows (i.e. if dropping rate is higher than 1.5 mmol/L/5min = 27 mg/dL/5min)
 df['glucose_diff'] = df.groupby('RIDER')['Glucose Value (mg/dL)'].transform(lambda x: x.diff())
 df['timestamp_diff'] = df.groupby('RIDER')['timestamp'].transform(lambda x: x.diff())
 df['glucose_rate'] = df['glucose_diff'] / (df['timestamp_diff'] / pd.to_timedelta('5min'))
-(df['glucose_rate'].abs() > 27).sum()
+df.loc[df['glucose_rate'] < -27, 'Glucose Value (mg/dL)'] = np.nan
+df.loc[df['glucose_rate'] < -27, 'glucose_rate'] = np.nan
+df.drop(['glucose_diff', 'timestamp_diff'], axis=1, inplace=True)
+
+df.to_csv(SAVE_PATH+'dexcom_clean_nocomp.csv', index_label=False)
