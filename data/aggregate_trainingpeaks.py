@@ -135,6 +135,7 @@ for _, (i, d_start, d_end) in cal_travel.iterrows():
 df_agg.to_csv(SAVE_PATH+'trainingpeaks_day.csv', index_label=False)
 
 # ----------------------- modalities
+df_agg = pd.read_csv(SAVE_PATH+'trainingpeaks_day.csv', index_col=0)
 # TODO: split up and down?
 df_agg = df_agg.set_index(['RIDER', 'date'])
 
@@ -149,7 +150,6 @@ modalities.update({k:'CALENDAR' for k in ['race', 'travel']})
 # HR
 modalities.update({k:'HR' for k in df_agg.columns[df_agg.columns.str.startswith('time_in_hr')]})
 modalities.update({k:'HR' for k in df_agg.columns[df_agg.columns.str.startswith('heart_rate')]})
-modalities['efficiency_factor'] = 'HR'
 
 # POWER
 modalities.update({k:'POWER' for k in df_agg.columns[df_agg.columns.str.startswith('time_in_power')]})
@@ -162,6 +162,7 @@ modalities['normalised_power'] = 'POWER'
 modalities['intensity_factor'] = 'POWER'
 modalities['training_stress_score'] = 'POWER'
 modalities['variability_index'] = 'POWER'
+modalities['efficiency_factor'] = 'POWER'
 modalities['chronic_training_load'] = 'POWER'
 modalities['acute_training_load'] = 'POWER'
 modalities['training_stress_balance'] = 'POWER'
