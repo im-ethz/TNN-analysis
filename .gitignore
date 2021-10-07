@@ -23,6 +23,7 @@
 
 /descriptives/
 
-/data/
+/data/*.csv
+/data/_archive/*.csv
 
 secret.py
