@@ -7,8 +7,6 @@ import gc
 import sys
 sys.path.append(os.path.abspath('../'))
 
-from calc import calc_hr_zones, calc_power_zones
-
 from config import DATA_PATH
 
 SAVE_PATH = './'
