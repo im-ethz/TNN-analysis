@@ -172,7 +172,6 @@ df_agg['travel'] = True
 for _, (i, d_start, d_end) in cal_travel.iterrows():
 	df_agg.loc[(df_agg.RIDER == i) & (df_agg.date > d_start) & (df_agg.date < d_end), 'travel'] = False
 
-
 # fill up dates for which we don't have an entry to do some aggregations
 df_agg['date'] = pd.to_datetime(df_agg['date'])
 date_range = pd.date_range(start='2018-11-30', end='2019-11-30', freq='1d')
@@ -184,6 +183,8 @@ df_agg['travel_7d_any'] = df_agg.groupby('RIDER').rolling(7, min_periods=1)['tra
 
 df_agg['race_3d_mean'] = df_agg.groupby('RIDER').rolling(3, min_periods=1)['race'].agg(lambda x: x.mean()).reset_index(drop=True)
 df_agg['race_7d_mean'] = df_agg.groupby('RIDER').rolling(7, min_periods=1)['race'].agg(lambda x: x.mean()).reset_index(drop=True)
+
+df_agg.dropna(subset=['timestamp_min'], inplace=True)
 
 df_agg.to_csv(SAVE_PATH+'trainingpeaks_day.csv', index_label=False)
 
