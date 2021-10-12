@@ -3,15 +3,46 @@ import pandas as pd
 
 from flirt.stats.common import FUNCTIONS as flirt_functions
 
+# keep only a selected number of functions to reduce data size
+del flirt_functions['ptp'] # remove because of multicollinearity
+del flirt_functions['skewness'], flirt_functions['kurtosis'] # redundant
+del flirt_functions['lineintegral'] # mostly nan
+del flirt_functions['n_above_mean'], flirt_functions['n_below_mean'],\
+	flirt_functions['n_sign_changes'], flirt_functions['iqr_5_95'], \
+	flirt_functions['pct_5'], flirt_functions['pct_95'] # redundant
+
+# the following functions should be left: mean, std, min, max, sum, energy, iqr, line_integral
+
 # glucose levels in mg/dL
 glucose_levels = {'hypo L2': (0,53),
 				  'hypo L1': (54,69),
-				  'normal' : (70,180),
+				  'target' : (70,180),
 				  'hyper L1': (181,250),
 				  'hyper L2': (251,10000)}
 
 mmoll_mgdl = 18#.018
 mgdl_mmoll = 0.0555
+
+def symmetric_scale(X, unit='mgdl'):
+	# symmetric scaling for blood glucose
+	if unit == 'mgdl':
+		return 1.509*(np.log(X)**1.084 - 5.381)
+	elif unit == 'mmoll':
+		return 1.794*(np.log(X)**1.026 - 1.861)
+
+def LBGI(X):
+	# https://doi.org/10.2337/diacare.21.11.1870
+	return symmetric_scale(X).apply(lambda x: 10*x**2 if x < 0 else 0).mean()
+
+def HBGI(X):
+	# https://doi.org/10.2337/dc06-1085
+	return symmetric_scale(X).apply(lambda x: 10*x**2 if x >= 0 else 0).mean()
+
+def time_in_level(x, level):
+	glucose_levels0 = {	'hypo'		:(glucose_levels['hypo L2'][0], glucose_levels['hypo L1'][1]),
+						'normal'	:glucose_levels['normal'],
+						'hyper'		:(glucose_levels['hyper L1'][0], glucose_levels['hyper L2'][1])}
+	return ((x >= glucose_levels0[level][0]) & (x <= glucose_levels0[level][1])).sum()
 
 def calc_hr_zones(LTHR:float) -> list:
 	# Coggan power zones
@@ -21,7 +52,6 @@ def calc_hr_zones(LTHR:float) -> list:
 	# 3 - Tempo
 	# 4 - Lactate Threshold
 	# 5 - VO2Max
-	LTHR = LTHR[0]
 	return [0.69*LTHR, 0.84*LTHR, 0.95*LTHR, 1.06*LTHR]
 
 def calc_power_zones(FTP:float) -> list:
@@ -33,7 +63,6 @@ def calc_power_zones(FTP:float) -> list:
 	# 4 - Lactate Threshold
 	# 5 - VO2Max
 	# 6 - Anaerobic Capacity
-	FTP = FTP[0]
 	return [0.56*FTP, 0.76*FTP, 0.91*FTP, 1.06*FTP, 1.21*FTP]
 
 def time_in_zone(X:pd.Series, zones:list) -> list:
@@ -50,23 +79,6 @@ def elevation_gain(altitude: pd.Series):
 def elevation_loss(altitude: pd.Series):
 	# calculate the total elevation loss during a workout
 	return altitude.diff()[altitude.diff() < 0].sum()
-
-"""
-def grade(altitude, distance):
-	# TODO
-	# calculate the difference between distance travelled vertically and horizontally expressed as a percentage
-	return
-
-def velocity_ascended_in_mph(elevation_gain, t, grade):
-	# calculate velocity ascended in m/h (VAM), which measures how fast you are climbing a hill
-	# using elevation_gain (meters ascended/hour), t (duration in seconds) and grade (% increase)
-	return (elevation_gain/(t/3600))/(200+10*(grade*100))
-
-def work(power: pd.Series):
-	# W = integral P dt
-	# TODO: make sure there are no missing values here
-	return power.sum()
-"""
 
 def normalised_power(power: pd.Series) -> float:
 	# TODO: should I ignore 0s?
