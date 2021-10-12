@@ -32,23 +32,31 @@ def custom_colormap(base, cmin, cmax, n):
 	cmap_custom = cmap_base.from_list(base+str(n), cmap_base(np.linspace(cmin, cmax, n)), n)
 	return cmap_custom
 
-def plot_glucose_levels(ax, color=True):
+def plot_glucose_levels(ax, color=True, orient='vertical', text=True, subtext=True):
 	if color:
 		glucose_palette = sns.diverging_palette(10, 50, n=5)[:3] + sns.diverging_palette(10, 50, n=7)[4:6]
 	else:
 		glucose_palette = sns.diverging_palette(10, 10, s=0, n=5)
+
 	# annotate glucose levels
 	for i, (g, l) in enumerate(glucose_levels.items()):
-		ax.axvspan(l[0], l[1], alpha=0.2, color=glucose_palette[i])
+		if orient == 'vertical':
+			ax.axvspan(l[0], l[1]+0.99, alpha=0.2, color=glucose_palette[i], lw=0)
+		elif orient == 'horizontal':
+			ax.axhspan(l[0], l[1]+0.99, alpha=0.2, color=glucose_palette[i], lw=0)
 
-	ax.text(glucose_levels['hypo L2'][0]+25, 1.03, 'hypo', color=glucose_palette[0])
-	ax.text(glucose_levels['hyper L1'][0]+35, 1.03, 'hyper', color=glucose_palette[4])
-	ax.text(glucose_levels['normal'][0]+25, 1.03, 'normal', color=tuple([c*0.5 for c in glucose_palette[2]]))
+	# text: hypo - target - hyper
+	if text:
+		ax.text(glucose_levels['hypo L2'][0]+25, 1.03, 'hypo', color=glucose_palette[0])
+		ax.text(glucose_levels['hyper L1'][0]+35, 1.03, 'hyper', color=glucose_palette[4])
+		ax.text(glucose_levels['target'][0]+25, 1.03, 'target', color=tuple([c*0.5 for c in glucose_palette[2]]))
 
-	ax.annotate('L2', xy=(glucose_levels['hypo L2'][0]+25, .95), color=glucose_palette[0])
-	ax.annotate('L1', xy=(glucose_levels['hypo L1'][0], .95), color=glucose_palette[1])
-	ax.annotate('L1', xy=(glucose_levels['hyper L1'][0]+25, .95), color=glucose_palette[3])
-	ax.annotate('L2', xy=(glucose_levels['hyper L2'][0]+80, .95), color=glucose_palette[4])
+	# text: L2 L1
+	if subtext:
+		ax.annotate('L2', xy=(glucose_levels['hypo L2'][0]+25, .95), color=glucose_palette[0])
+		ax.annotate('L1', xy=(glucose_levels['hypo L1'][0], .95), color=glucose_palette[1])
+		ax.annotate('L1', xy=(glucose_levels['hyper L1'][0]+25, .95), color=glucose_palette[3])
+		ax.annotate('L2', xy=(glucose_levels['hyper L2'][0]+80, .95), color=glucose_palette[4])
 	return ax
 
 class PlotPreprocess:
