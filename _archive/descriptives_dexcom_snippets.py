@@ -1,3 +1,76 @@
+# -------------------------- Glucose availability (1)
+# create calendar with glucose availability
+max_readings = 24*60/5+1
+df_frame = pd.DataFrame(index=pd.MultiIndex.from_product([df.source.unique(), df.RIDER.unique()]))
+df_avail = df.groupby(['source', 'RIDER', df.timestamp.dt.date])['Glucose Value (mg/dL)'].count().unstack() / max_readings
+df_avail = pd.concat([df_frame, df_avail], axis=1)
+
+# plot glucose availability per day
+fig, ax = plt.subplots(figsize=(15,6))
+ax = sns.heatmap(df_avail.loc['Dexcom CLARITY EU'], cmap='Greys', vmax=1, alpha=1, cbar_kws=dict(label='fraction of possible CGM readings per day'))
+ax = sns.heatmap(df_avail.loc['TrainingPeaks'].clip(1), cmap='Reds', vmin=0, cbar=False)
+ax = sns.heatmap(df_avail.loc['Dexcom CLARITY EU'], cmap='Blues', vmax=1, cbar=False)
+ax = sns.heatmap(df_avail.loc['Dexcom CLARITY US'], cmap='Greens', vmax=1, cbar=False)
+
+plt.legend(handles=[Patch(color=matplotlib.cm.Blues(360), label='Dexcom CLARITY EU'),
+					Patch(color=matplotlib.cm.Greens(360), label='Dexcom CLARITY US'),
+					Patch(color=matplotlib.cm.Reds(360), label='Proof missing data exists elsewhere (TrainingPeaks)')], 
+			ncol=3, loc='lower center', bbox_to_anchor=(0.5, 1.01))
+""" try to plot completeness
+ax2 = ax.twinx()
+ax2.set_yticklabels((df_avail.loc['Dexcom CLARITY EU'].clip(0,1).fillna(0) + df_avail.loc['Dexcom CLARITY US'].clip(0,1).fillna(0)).mean(axis=1).tolist())
+"""
+plt.xticks(ticks=[d+15 for d in month_firstday.values()], labels=[list(month_firstday.keys())[-1]]+list(month_firstday.keys())[:-1], rotation=0)
+plt.ylabel('rider')
+plt.savefig(SAVE_PATH+'availability/glucose_availability.pdf', bbox_inches='tight')
+plt.savefig(SAVE_PATH+'availability/glucose_availability.png', dpi=300, bbox_inches='tight')
+ax.set_yticklabels([rider_mapping_inv[int(i.get_text())] for i in ax.get_yticklabels()], rotation=0)
+plt.savefig(SAVE_PATH+'availability/glucose_availability_NAME.pdf', bbox_inches='tight')
+plt.savefig(SAVE_PATH+'availability/glucose_availability_NAME.png', dpi=300, bbox_inches='tight')
+plt.show()
+plt.close()
+
+
+# -------------------------- Glucose availability (2) : during training sessions
+df_training = pd.read_csv(DATA_PATH+'training.csv', index_col=0)
+df_training['timestamp_min'] = pd.to_datetime(df_training['timestamp_min'])
+df_training['timestamp_max'] = pd.to_datetime(df_training['timestamp_max'])
+df_training['local_timestamp_min'] = pd.to_datetime(df_training['local_timestamp_min'])
+df_training['local_timestamp_max'] = pd.to_datetime(df_training['local_timestamp_max'])
+
+df_training['timestamp_min_r'] = df_training['timestamp_min'].round('5min')
+df_training['timestamp_max_r'] = df_training['timestamp_max'].round('5min')
+df_training['local_timestamp_min_r'] = df_training['local_timestamp_min'].round('5min')
+df_training['local_timestamp_max_r'] = df_training['local_timestamp_max'].round('5min')
+
+df_training.set_index(['RIDER', 'file_id'], inplace=True)
+
+max_time = (df_training['timestamp_max_r'] - df_training['timestamp_min_r']).max()
+
+training_avail = pd.DataFrame(index=df_training.index, columns=np.arange(max_time/'5min'))
+for (i, n), (t_min, t_max) in df_training[['timestamp_min_r', 'timestamp_max_r']].iterrows():
+	glucose = df[(df.RIDER == i) & (df.timestamp >= t_min) & (df.timestamp <= t_max)]
+	glucose.set_index((glucose['timestamp'] - t_min)/pd.to_timedelta('5min'), inplace=True)
+	training_avail.loc[(i,n)] = glucose['Glucose Value (mg/dL)'].notna()
+
+training_avail = training_avail.groupby(level=0, axis=0).sum()
+
+fig, ax = plt.subplots(figsize=(15,6))
+sns.heatmap(training_avail, cmap='Blues', cbar_kws=dict(label='number of CGM readings'))
+plt.xlabel('Time in training session (min)')
+plt.ylabel('Rider')
+plt.xticks(ticks=training_avail.columns[::6], 
+	labels=pd.to_datetime(training_avail.columns[::6]*5, unit='m').strftime('%H:%M'), rotation=0)
+plt.xlim((0,100))
+plt.savefig(SAVE_PATH+'availability/glucose_availability_training.pdf', bbox_inches='tight')
+plt.savefig(SAVE_PATH+'availability/glucose_availability_training.png', dpi=300, bbox_inches='tight')
+ax.set_yticklabels([rider_mapping_inv[int(i.get_text())] for i in ax.get_yticklabels()], rotation=0)
+plt.savefig(SAVE_PATH+'availability/glucose_availability_training_NAME.pdf', bbox_inches='tight')
+plt.savefig(SAVE_PATH+'availability/glucose_availability_training_NAME.png', dpi=300, bbox_inches='tight')
+plt.show()
+plt.close()
+
+
 
 dates_2019 = pd.date_range(start='12/1/2018', end='11/30/2019').date
 df_avail = pd.DataFrame(index=df.RIDER.unique(), columns=dates_2019)
