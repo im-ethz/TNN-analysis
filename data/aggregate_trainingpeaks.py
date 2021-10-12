@@ -106,7 +106,7 @@ for i in athletes:
 	
 	# split out columns in ascent and descent
 	df['descent'] = df.groupby('file_id')['altitude'].transform(lambda x: x.interpolate(method='linear').diff() < 0)
-	for col in ['altitude', 'speed', 'distance', 'heart_rate', 'power', 'cadence', 'acceleration']:
+	for col in ['altitude', 'speed', 'distance', 'heart_rate', 'power', 'cadence', 'acceleration', 'elevation_gain']:
 		df[col+'_up'] = df.loc[~df['descent'], col]
 		df[col+'_down'] = df.loc[df['descent'], col]
 	df.drop('descent', axis=1, inplace=True)
