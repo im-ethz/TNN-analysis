@@ -432,8 +432,10 @@ kws_box = {'race':	dict(boxprops=dict(color='w', facecolor=rc, hatch='\\\\\\'),
 						 medianprops=dict(color='w', linewidth=2),
 						 whiskerprops=dict(color=nc), capprops=dict(color=nc))}
 
-n_nc = len(df.loc[df['race'] == False, 'local_timestamp'].dt.date.unique())
-n_rc = len(df.loc[df['race'] == True, 'local_timestamp'].dt.date.unique())
+df['date'] = df['local_timestamp'].dt.date
+
+n_nc = len(df.loc[df['race'] == False, ['RIDER', 'date']].drop_duplicates())
+n_rc = len(df.loc[df['race'] == True, ['RIDER', 'date']].drop_duplicates())
 
 fig, ax = plt.subplots(figsize=(5,3.5))
 for k, sec in enumerate(sections):
@@ -483,6 +485,9 @@ for i in df.RIDER.unique():
 	plt.show()
 	plt.close()
 
+n_nc = len(df.loc[df['race'] == False, ['RIDER', 'date']].drop_duplicates())
+n_rc = len(df.loc[df['race'] == True, ['RIDER', 'date']].drop_duplicates())
+
 # hue: athlete
 fig, ax = plt.subplots(figsize=(10,4))
 for n, i in enumerate(df.RIDER.unique()):
@@ -526,8 +531,8 @@ for j, ((i,n), (t_min, t_max)) in enumerate(df_training[['local_timestamp_min_r'
 
 df['t'] = df['t'].dt.seconds / 60 # time in minutes
 
-n_nc = len(df.loc[df['race'] == False, 'local_timestamp'].dt.date.unique())
-n_rc = len(df.loc[df['race'] == True, 'local_timestamp'].dt.date.unique())
+n_nc = len(df.loc[df['race'] == False, ['RIDER', 'date']].drop_duplicates())
+n_rc = len(df.loc[df['race'] == True, ['RIDER', 'date']].drop_duplicates())
 
 t_max = df['t'].max()
 
