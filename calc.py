@@ -20,8 +20,8 @@ glucose_levels = {'hypo L2': (0,53),
 				  'hyper L1': (181,250),
 				  'hyper L2': (251,10000)}
 
-mmoll_mgdl = 18#.018
-mgdl_mmoll = 0.0555
+mmoll_mgdl = 18
+mgdl_mmoll = 1/mmoll_mgdl
 
 def symmetric_scale(X, unit='mgdl'):
 	# symmetric scaling for blood glucose
@@ -40,13 +40,14 @@ def HBGI(X):
 
 def time_in_level(x, level):
 	glucose_levels0 = {	'hypo'		:(glucose_levels['hypo L2'][0], glucose_levels['hypo L1'][1]),
-						'normal'	:glucose_levels['normal'],
+						'target'	:glucose_levels['target'],
 						'hyper'		:(glucose_levels['hyper L1'][0], glucose_levels['hyper L2'][1])}
 	return ((x >= glucose_levels0[level][0]) & (x <= glucose_levels0[level][1])).sum()
 
 def calc_hr_zones(LTHR:float) -> list:
-	# Coggan power zones
+	# Coggan HR zones
 	# https://www.trainingpeaks.com/blog/power-training-levels/
+	# https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.111.3820&rep=rep1&type=pdf
 	# 1 - Active Recovery
 	# 2 - Endurance
 	# 3 - Tempo
@@ -57,12 +58,14 @@ def calc_hr_zones(LTHR:float) -> list:
 def calc_power_zones(FTP:float) -> list:
 	# Coggan power zones
 	# https://www.trainingpeaks.com/blog/power-training-levels/
+	# https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.111.3820&rep=rep1&type=pdf
 	# 1 - Active Recovery
 	# 2 - Endurance
 	# 3 - Tempo
 	# 4 - Lactate Threshold
 	# 5 - VO2Max
 	# 6 - Anaerobic Capacity
+	# Note: the numbers below define the starts of the zones
 	return [0.56*FTP, 0.76*FTP, 0.91*FTP, 1.06*FTP, 1.21*FTP]
 
 def time_in_zone(X:pd.Series, zones:list) -> list:
