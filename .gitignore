@@ -21,9 +21,9 @@
 */__pycache__/
 *.pyc
 
+*.yml
+
 /descriptives/
 
 /data/*.csv
 /data/_archive/*.csv
-
-secret.py
