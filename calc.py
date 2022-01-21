@@ -75,6 +75,9 @@ def time_in_zone(X:pd.Series, zones:list) -> list:
 		time_in_zone[n] = ((X >= z_min) & (X < z_max)).sum()
 	return time_in_zone
 
+def combine_pedal_smoothness(left, right, balance):
+	return left*(balance.clip(0,100)/100) + right*(1-balance.clip(0,100)/100)
+
 def elevation_gain(altitude: pd.Series):
 	# calculate the total elevation gain during a workout
 	return altitude.diff()[altitude.diff() > 0].sum()
