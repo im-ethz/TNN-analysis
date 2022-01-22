@@ -61,8 +61,7 @@ info = pd.merge(info, fitness, how='outer', on='RIDER')
 info['height'] = info['height_y'].fillna(info['height_x'])
 info = info.drop(['height_x', 'height_y'], axis=1)
 info = info.set_index('RIDER')
-
-#info.to_csv(SAVE_PATH+'info.csv', index_label=False)
+info.to_csv(SAVE_PATH+'info.csv', index_label=False)
 
 # ----------------------- zones
 # calculate HR and Power zones
