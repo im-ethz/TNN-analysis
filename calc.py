@@ -38,11 +38,11 @@ def HBGI(X):
 	# https://doi.org/10.2337/dc06-1085
 	return symmetric_scale(X).apply(lambda x: 10*x**2 if x >= 0 else 0).mean()
 
-def time_in_level(x, level):
-	glucose_levels0 = {	'hypo'		:(glucose_levels['hypo L2'][0], glucose_levels['hypo L1'][1]),
-						'target'	:glucose_levels['target'],
-						'hyper'		:(glucose_levels['hyper L1'][0], glucose_levels['hyper L2'][1])}
-	return ((x >= glucose_levels0[level][0]) & (x <= glucose_levels0[level][1])).sum()
+def time_in_level(x, l):
+	levels = glucose_levels
+	levels['hypo'] = (glucose_levels['hypo L2'][0], glucose_levels['hypo L1'][1])
+	levels['hyper'] = (glucose_levels['hyper L1'][0], glucose_levels['hyper L2'][1])
+	return ((x >= levels[l][0]) & (x <= levels[l][1])).sum()
 
 def calc_hr_zones(LTHR:float) -> list:
 	# Coggan HR zones
