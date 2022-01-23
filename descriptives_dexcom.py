@@ -55,8 +55,15 @@ df = df[['RIDER', 'timestamp', 'local_timestamp', 'Source Device ID', 'Glucose V
 max_readings = 24*60/5+1
 df_avail = df.groupby(['RIDER', df.timestamp.dt.date])['Glucose Value (mg/dL)'].count().unstack() / max_readings
 
+"""
+dates = pd.date_range('2016-01-01', '2021-12-31')
+df_empty = pd.DataFrame(index=dates, columns=df.RIDER.unique()).T
+df_avail = df_empty.fillna(df_avail).fillna(0)
+"""
+
 # plot glucose availability per day
 fig, ax = plt.subplots(figsize=(15,6))
+# fig, ax = plt.subplots(figsize=(30,6))
 ax = sns.heatmap(df_avail, cmap='Blues', vmin=0, vmax=1)
 
 # put total percentage on RHS
@@ -73,6 +80,7 @@ cbar_ax.set_yticks([0, .2, .4, .6, .8, 1.])
 cbar_ax.set_yticklabels(["{:.0f}%".format(i*100) for i in [0, .2, .4, .6, .8, 1.]])
 cbar_ax.text(3., 0.5, 'Percentage of max. CGM readings per day', va='center', rotation=270)
 
+#plt.xticks(ticks=np.arange(0, len(dates)-1, 90), labels=dates[::90].strftime('%Y-%b'), rotation=45)
 plt.xticks(ticks=[d+15 for d in month_firstday.values()], labels=[list(month_firstday.keys())[-1]]+list(month_firstday.keys())[:-1], rotation=0)
 plt.ylabel('rider')
 plt.title('CGM availability', fontweight='bold', fontsize=12)
@@ -599,13 +607,6 @@ dict_stats = {'age'								: 'Age (yr)',
 			  'diabetes_duration'				: 'Diabetes duration (yr)',
 			  'HbA1c'							: 'HbA_{1c} (%)',
 			  'cgm_days'						: 'Days with CGM coverage >70 %',
-			  'cgm_mean'						: 'Mean glucose (mg/dL)',
-			  'cgm_cv'							: 'Glycemic variability (%)',
-			  'hypo L2'							: 'hypoglycemia L2 (<54 mg/dL)',
-			  'hypo L1'							: 'hypoglycemia L1 (54-69 mg/dL)',
-			  'target'							: 'target range (70-180 mg/dL)',
-			  'hyper L1'						: 'hyperglycemia L1 (181-250 mg/dL)',
-			  'hyper L2'						: 'hyperglycemia L2 (>250 mg/dL)',
 			  'FTP_per_kg'						: 'Functional threshold power (W/kg)',
 			  'LTHR'							: 'Lactate threshold heart rate (bpm)',
 			  'HRmax'							: 'HR_{max} (bpm)',
@@ -616,6 +617,14 @@ dict_stats = {'age'								: 'Age (yr)',
 			  'hours_cycled_per_cycling_day'	: 'Mean time cycled (h/day)',
 			  'km_cycled_per_cycling_day'		: 'Mean distance cycled (km/day)',
 			  'km_ascended_per_cycling_day'		: 'Mean distance ascended (km/day)'}
+
+dict_cgm = {  'cgm_mean'						: 'Mean glucose (mg/dL)',
+			  'cgm_cv'							: 'Glycemic variability (%)',
+			  'hypo L2'							: 'hypoglycemia L2 (<54 mg/dL)',
+			  'hypo L1'							: 'hypoglycemia L1 (54-69 mg/dL)',
+			  'target'							: 'target range (70-180 mg/dL)',
+			  'hyper L1'						: 'hyperglycemia L1 (181-250 mg/dL)',
+			  'hyper L2'						: 'hyperglycemia L2 (>250 mg/dL)'}
 
 glucose_levels = {'hypo L2': (0,53),
 				  'hypo L1': (54,69),
@@ -633,12 +642,8 @@ cols_info = ['age', 'height', 'weight', 'bf(%)']
 cols_diabetes = ['diabetes_duration', 'HbA1c']
 cols_ex = ['FTP_per_kg', 'LTHR', 'HRmax', 'VO2max']
 
-# cgm
-cgm_avail = df.groupby(['RIDER', df.timestamp.dt.date])['Glucose Value (mg/dL)'].count().unstack().count(axis=1).rename('cgm_days')
-cgm_mean = df.groupby(['RIDER'])['Glucose Value (mg/dL)'].mean().rename('cgm_mean')
-cgm_cv = df.groupby('RIDER')['Glucose Value (mg/dL)'].apply(lambda x: x.std()/x.mean()*100).rename('cgm_cv')
-cgm_times = df.groupby(['RIDER']).apply(lambda x: get_percinlevel(x)).apply(pd.Series)
-stats_cgm = pd.concat([cgm_avail, cgm_mean, cgm_cv, cgm_times], axis=1)
+# diabetes
+stats_diabetes = df.groupby(['RIDER', df.timestamp.dt.date])['Glucose Value (mg/dL)'].count().unstack().count(axis=1).rename('cgm_days')
 
 # trainingpeaks
 tp = pd.read_csv(DATA_PATH+'./trainingpeaks_day.csv', index_col=[0,1])
@@ -658,8 +663,25 @@ stats_cycling_day = tp.groupby('RIDER').agg({ 'timestamp_count'			:lambda x: x.m
 											 'elevation_gain_up_sum'	:'km_ascended_per_cycling_day'})
 
 # combine
-descriptives = pd.concat([info[cols_info], info[cols_diabetes], stats_cgm, info[cols_ex], stats_cycling_year, stats_cycling_day], axis=1)
+descriptives = pd.concat([info[cols_info], info[cols_diabetes], stats_diabetes, info[cols_ex], stats_cycling_year, stats_cycling_day], axis=1)
 descriptives_sum = pd.concat([descriptives.mean(), descriptives.std()], axis=1)
 descriptives_sum = descriptives_sum.round(1).apply(lambda x: '%s $\pm$ %s'%(x[0], x[1]), axis=1).rename(index=dict_stats)
 with open(SAVE_PATH+"descriptives.tex", 'w') as file:
 	file.write(descriptives_sum.to_latex(column_format='c'))
+
+
+df['total'] = True
+descriptives_cgm = {}
+for sec in list(sections)+['total']:
+	cgm_mean = df[df[sec]].groupby(['RIDER'])['Glucose Value (mg/dL)'].mean().rename('cgm_mean')
+	cgm_cv = df[df[sec]].groupby('RIDER')['Glucose Value (mg/dL)'].apply(lambda x: x.std()/x.mean()*100).rename('cgm_cv')
+	cgm_times = df[df[sec]].groupby(['RIDER']).apply(lambda x: get_percinlevel(x)).apply(pd.Series)
+	stats_cgm = pd.concat([cgm_mean, cgm_cv, cgm_times], axis=1)
+	descriptives_cgm[sec] = pd.concat([stats_cgm.mean(), stats_cgm.std()], axis=1)
+	descriptives_cgm[sec] = descriptives_cgm[sec].round(1).apply(lambda x: '%s $\pm$ %s'%(x[0], x[1]), axis=1).rename(index=dict_cgm)
+descriptives_cgm = pd.concat(descriptives_cgm, axis=1)
+
+descriptives_cgm = descriptives_cgm[['total', 'wake', 'sleep', 'ex', 'post-ex']]
+
+with open(SAVE_PATH+"descriptives_cgm.tex", 'w') as file:
+	file.write(descriptives_cgm.to_latex(column_format='c'))
