@@ -55,15 +55,22 @@ def stat_func(x, sec=''):
 			'hypo_'+sec 			: x['hypo'].any(),
 			'hyper_'+sec 			: x['hyper'].any()}
 
-def select_times(df, w, ref=None):
+def select_times(df, w, x):
 	"""
-	select a time window over which we want to apply the stat_func
+	Select data over which we want to apply the stat_func, using a time window before midnight.
+
+	Note that this window can extend the group x (limited to one rider and one date), 
+	that is why we need to pass the entire dataframe as well to select data.
+
+	Note that we make the selection using timestamp (UTC) instead of local_timestamp. 
+	In that way we do not select more data than specified by w, e.g. due to travelling.
+	
+	Arguments:
+		x 		(pd.DataFrame) group of data
+		df 		(pd.DataFrame) entire data
+		w 		(str) window length
 	"""
-	# make the selection with timestamp instead of local_timestamp such that we don't select more time than w specified
-	ref = ref if ref is not None else df # TODO: remove this line
-	t_max = ref.timestamp.max()
-	i = ref.RIDER.unique()[0]
-	return df.loc[(df.RIDER == i) & (df.timestamp > t_max-pd.to_timedelta(w)) & (df.timestamp <= t_max)]
+	return df.loc[(df.RIDER == x.RIDER.unique()[0]) & (df.timestamp > x.timestamp.max()-pd.to_timedelta(w)) & (df.timestamp <= x.timestamp.max())]
 
 # stats for individual sections
 df_sec = pd.concat([df[df[sec]].groupby(['RIDER', 'date']).apply(stat_func, sec=sec).apply(pd.Series) for sec in sections], axis=1)
