@@ -20,10 +20,10 @@
 
 */__pycache__/
 *.pyc
+/.ipynb_checkpoints/
 
 *.yml
 
 /descriptives/
 
-/data/*.csv
-/data/_archive/*.csv
+/data/
