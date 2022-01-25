@@ -36,6 +36,7 @@ df['glucose_rate'] = df[col] / (df['timestamp'].diff()/pd.to_timedelta('5min'))
 sections = ('exercise', 'recovery', 'wake', 'sleep')
 windows = ('1h', '3h', '6h', '12h', '18', '1d', '3d', '7d')
 
+# TODO: change time_in_level to perc in level??
 def stat_func(x, sec=''):
 	return {'time_in_hypo_'+sec 	: time_in_level(x[col], 'hypo'),
 			'time_in_hypoL2_'+sec 	: time_in_level(x[col], 'hypo L2'),
