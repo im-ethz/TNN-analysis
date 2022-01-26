@@ -142,6 +142,26 @@ def agg_zones(X:pd.DataFrame, hr_zones:list, power_zones:list):
 	time_in_power_zone = {'time_in_power_zone%s'%(n+1):t for n, t in enumerate(time_in_zone(X['power'], power_zones))}
 	return pd.Series({**time_in_hr_zone, **time_in_power_zone})
 
+def stats_cgm(x, sec='', col='Glucose Value (mg/dL)'):
+	return {'time_in_hypo_'+sec 	: time_in_level(x[col], 'hypo'),
+			'time_in_hypoL2_'+sec 	: time_in_level(x[col], 'hypo L2'),
+			'time_in_hypoL1_'+sec 	: time_in_level(x[col], 'hypo L1'),
+			'time_in_target_'+sec 	: time_in_level(x[col], 'target'),
+			'time_in_hyper_'+sec 	: time_in_level(x[col], 'hyper'),
+			'time_in_hyperL1_'+sec 	: time_in_level(x[col], 'hyper L1'),
+			'time_in_hyperL2_'+sec 	: time_in_level(x[col], 'hyper L2'),
+			'glucose_mean_'+sec 	: x[col].mean(),
+			'glucose_std_'+sec 		: x[col].std(),
+			'glucose_cv_'+sec 		: x[col].std() / x[col].mean(),
+			'glucose_rate_'+sec		: x['glucose_rate'].mean(),
+			'completeness_'+sec 	: x[col].count() / x['timestamp'].count(),
+			'count_'+sec 			: x[col].count(),
+			'LBGI_'+sec 			: LBGI(x[col]),
+			'HBGI_'+sec 			: HBGI(x[col]),
+			'AUC_'+sec 				: np.trapz(y=x[col], x=x['timestamp']) / np.timedelta64(5, 'm'),
+			'hypo_'+sec 			: x['hypo'].any(),
+			'hyper_'+sec 			: x['hyper'].any()}
+
 def agg_stats(X:pd.DataFrame):
 	# apply flirt statistics to every column of data
 	results = {}
