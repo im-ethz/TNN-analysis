@@ -1,36 +1,101 @@
 # TODO:
-# Glucose distribution plot: - stratify by athlete and stratify by time during/after training
 # Glycaemic control (HbA1C) over the course of a season per athlete
 import numpy as np
 import pandas as pd
 import seaborn as sns
 
-import matplotlib
 from matplotlib import pyplot as plt
-from matplotlib import cm
 from matplotlib import dates as mdates
 from matplotlib.patches import Patch
 
 from mpl_toolkits.axes_grid1 import host_subplot
 from mpl_toolkits import axisartist as AA
 
-from statsmodels.graphics.tsaplots import plot_acf
+from statsmodels.graphics.tsaplots import plot_acf # TODO
 
 from colorsys import rgb_to_hls
 
 from calc import glucose_levels
-# TODO: adjust plotsize plot interp_subplots
-# TODO: ylabel interp plot
-# TODO: legend interp individual plot
+from config import SAVE_PATH, rider_mapping_inv
 
 sns.set()
 sns.set_context('paper')
 sns.set_style('white')
 
-def custom_colormap(base, cmin, cmax, n):
-	cmap_base = plt.cm.get_cmap(base)
-	cmap_custom = cmap_base.from_list(base+str(n), cmap_base(np.linspace(cmin, cmax, n)), n)
-	return cmap_custom
+color_sec = {'wake'	: sns.color_palette("Set1")[1],
+			 'exercise': sns.color_palette("Set1")[4],
+			 'recovery': sns.color_palette("Set1")[2],
+			 'sleep': sns.color_palette("Set1")[3]}
+
+color_race = {'train': sns.color_palette("Set1")[8],
+              'race':(0.8455062527192158, 0.21363575247920147, 0.4145075850498335)} #'#d8366a'
+
+palette_ath = sns.color_palette('inferno', n_colors=7)+sns.color_palette('YlGnBu', n_colors=7) # alternatives for YlGnBu: viridis_r, mako_r
+
+def savefig(path, i='', dtype='Dexcom', legend=None, title=None, xticks=None, yticks=None, **titlekwargs):
+    if title is not None:
+        plt.title(r'$\bf{Rider}$ '+r'$\bf{:d}$ - '.format(i)+title, **titlekwargs)
+    if legend is not None:
+        for text in legend:
+            text.set_fontsize(6)
+    
+    plt.savefig(f'{SAVE_PATH}{dtype}/{path}_{i}.pdf', bbox_inches='tight')
+    plt.savefig(f'{SAVE_PATH}{dtype}/{path}_{i}.png', dpi=300, bbox_inches='tight')
+    
+    if title is not None:
+        plt.title(r'$\bf{:s}$ '.format(rider_mapping_inv[i])+title, **titlekwargs)
+    if legend is not None:
+        for leg in legend:
+            text = leg.get_text().split()
+            leg.set_text(rider_mapping_inv[int(text[0])]+' '+' '.join(text[1:]))
+    if xticks is not None:
+        xticks.set_xticklabels([rider_mapping_inv[int(j.get_text())] for j in xticks.get_xticklabels()], rotation=90)
+    if yticks is not None:
+        yticks.set_yticklabels([rider_mapping_inv[int(j.get_text())] for j in yticks.get_yticklabels()], rotation=0)
+    
+    if title is not None or legend is not None or xticks is not None or yticks is not None:
+        plt.savefig(f'{SAVE_PATH}{dtype}/{path}_NAME_{i}.pdf', bbox_inches='tight')
+        plt.savefig(f'{SAVE_PATH}{dtype}/{path}_NAME_{i}.png', dpi=300, bbox_inches='tight')
+    plt.show()
+    plt.close()
+
+def plot_availability(df_avail, cmap='Blues', rot_months=0, itv_months=1, vmin=0, vmax=1, plot_percentage=True, plot_colorbar=True):
+    fig, ax = plt.subplots(figsize=(15,6))
+    ax = sns.heatmap(df_avail, cmap=cmap, vmin=vmin, vmax=vmax)
+
+    if plot_percentage:
+        # put total percentage on RHS
+        ax2 = ax.secondary_yaxis("right")
+        ax2.set_yticks(np.arange(len(df_avail.index))+0.5)
+        ax2.set_yticklabels([r"$\bf{:.0f}\%$".format(i) for i in df_avail.sum(axis=1)/df_avail.notna().sum(axis=1)*100])
+        ax2.tick_params(axis='y', length=0)
+        ax2.spines['right'].set_visible(False)
+        ax.text(0.99, 1.02, r'$\bf{:s}$'.format('Total (\%)'), ha='left', transform=ax.transAxes)
+
+    if plot_colorbar:
+        # adjust ticks colorbar
+        cbar_ax = fig.get_axes()[1]
+        cbar_ax.set_yticks([0, .2, .4, .6, .8, 1.])
+        cbar_ax.set_yticklabels(["{:.0f}%".format(i*100) for i in [0, .2, .4, .6, .8, 1.]])
+        cbar_ax.text(3., 0.5, 'Percentage of max. CGM readings per day', va='center', rotation=270)
+
+    monthyear = df_avail.columns.strftime("%b '%y")
+    ticksloc = np.where(monthyear.to_series().shift() != monthyear.to_series())[0][1::itv_months]
+    plt.xticks(ticks=ticksloc, labels=monthyear[ticksloc], rotation=rot_months)
+    plt.xlabel('date')
+    plt.ylabel('rider')
+    return ax
+
+def plot_hist_glucose_settings(ax, ax0, col='Glucose Value (mg/dL)', xlim=(20,410), ylabel='Probability', loc_legend=(1., 0.96)):
+	ax.set_xlim((20, 410))
+	ax.set_xlabel(col)
+	ax.xaxis.set_visible(True)
+	ax.set_ylabel(ylabel)
+	ax.yaxis.set_ticks_position('left')
+	ax.yaxis.set_label_position('left')
+	ax0.yaxis.set_visible(False)
+	ax0.set_ylabel('')
+	plt.legend(loc='upper right', bbox_to_anchor=loc_legend, prop={'family': 'DejaVu Sans Mono', 'size':8})
 
 def plot_glucose_levels(ax, color=True, orient='vertical', text=True, subtext=True):
 	if color:
@@ -59,6 +124,14 @@ def plot_glucose_levels(ax, color=True, orient='vertical', text=True, subtext=Tr
 		ax.annotate('L2', xy=(glucose_levels['hyper L2'][0]+80, .95), color=glucose_palette[4])
 	return ax
 
+def plot_bar(data, x, width=.8, colors=dict(h_neg=10, h_pos=10, s=0, l=50)):
+	hatch = ('\\\\', '\\\\', None, '//', '//')
+	color_palette = sns.diverging_palette(**colors, n=5)
+	bottom = 0
+	for sec, (label, y) in enumerate(data.items()):
+		plt.bar(x=x, height=y, width=width, bottom=bottom, color=color_palette[sec], hatch=hatch[sec])
+		bottom += y
+
 class PlotPreprocess:
 	def __init__(self, savedir, savetext='', athlete='all'):
 		sns.set()
@@ -74,57 +147,6 @@ class PlotPreprocess:
 		plt.xlabel(xname)
 		plt.savefig(self.savedir+xname+'_'+self.athlete+'.pdf', bbox_inches='tight')
 		plt.savefig(self.savedir+xname+'_'+self.athlete+'.pdf', bbox_inches='tight')
-		plt.show()
-		plt.close()
-
-	def plot_smoothing(self, df, col, pfirst=5, cmap='viridis', kwargs={}, skwargs={}):
-		cmap = matplotlib.cm.get_cmap(cmap, len(df.file_id.unique()[:pfirst]))
-		ax = plt.subplot()
-		for c, idx in enumerate(df.file_id.unique()[:pfirst]): #for date in df.date.unique():
-			df[df.file_id == idx].plot(ax=ax, x='time_training', y=col+'_smooth',
-				color=cmap(c), legend=False, **skwargs)
-			df[df.file_id == idx].plot(ax=ax, x='time_training', y=col,
-				color=cmap(c), legend=False, **kwargs)
-		plt.ylabel(col)
-		plt.savefig(self.savedir+self.athlete+'_smooth_'+col+'.pdf', bbox_inches='tight')
-		plt.savefig(self.savedir+self.athlete+'_smooth_'+col+'.png', dpi=300, bbox_inches='tight')
-		plt.show()
-		plt.close()
-
-	def plot_interp(self, df, col, pfirst=5, cmap='viridis', kwargs={}, ikwargs={}):
-		cmap = matplotlib.cm.get_cmap(cmap, len(df.file_id.unique()[:pfirst]))
-		ax = plt.subplot()
-		for c, idx in enumerate(df.file_id.unique()[:pfirst]): #for date in df.date.unique():
-			df[df.file_id == idx].plot(ax=ax, x='time_training', y=col+'_ilin',
-				color=cmap(c), legend=False, **kwargs)
-			df[df.file_id == idx].plot(ax=ax, x='time_training', y=col,
-				color=cmap(c), legend=False, **ikwargs)
-		plt.ylabel(col)
-		plt.savefig(self.savedir+self.athlete+'_interp_'+col+'.pdf', bbox_inches='tight')
-		plt.savefig(self.savedir+self.athlete+'_interp_'+col+'.png', dpi=300, bbox_inches='tight')
-		plt.show()
-		plt.close()
-
-	def plot_hist_glucose(self, df, cols_glucose, binwidth=10):
-		type_palette = sns.color_palette("viridis")
-		
-		patch_count = [0]
-		fig, ax0 = plt.subplots()
-		ax0 = plot_glucose_levels(ax0)
-		ax = ax0.twinx()
-
-		for i, col in enumerate(cols_glucose):
-			sns.histplot(df[col], label=col, ax=ax,
-				stat='density', kde=True, color=type_palette[i*2],
-				binwidth=binwidth, alpha=0.3, line_kws={'lw':2.})
-
-		ax.set_xlim((20, df[cols_glucose].max().max()+30))
-		ax0.set_xlabel('Glucose mg/dL')
-		ax0.set_ylabel('Probability')
-		ax.set_ylabel('')
-		plt.legend()
-		plt.savefig(self.savedir+'preprocess_hist_glucose.pdf', bbox_inches='tight')
-		plt.savefig(self.savedir+'preprocess_hist_glucose.png', dpi=300, bbox_inches='tight')
 		plt.show()
 		plt.close()
 
@@ -475,53 +497,5 @@ class PlotData:
 		sns.heatmap(df_split, cmap=sns.color_palette('Greens', K+1))
 		plt.savefig(self.savedir+'data_split.pdf', bbox_inches='tight')
 		plt.savefig(self.savedir+'data_split.png', dpi=300, bbox_inches='tight')
-		plt.show()
-		plt.close()
-
-class PlotResults:
-	def __init__(self, savedir, savetext=''):
-		sns.set()
-		sns.set_context('paper')
-		sns.set_style('white')
-
-		self.savedir = savedir
-		self.savetext = savetext
-
-	def plot_metric_history(self, history, metric):
-		plt.plot(history[metric], label='loss')
-		plt.plot(history['val_'+metric], label='val_loss')
-		plt.xlabel('Epoch')
-		plt.ylabel(metric)
-		plt.legend()
-		plt.savefig(self.savedir+'_history_'+metric+'_'+self.savetext+'.pdf', bbox_inches='tight')
-		plt.savefig(self.savedir+'_history_'+metric+'_'+self.savetext+'.png', dpi=300, bbox_inches='tight')
-		plt.show()
-		plt.close()
-
-	def plot_avg_metric_history(self, history, metric):
-		sns.lineplot(data=history, x='epoch', y=metric, label='loss')
-		sns.lineplot(data=history, x='epoch', y='val_'+metric, label='val_loss')
-		plt.xlabel('Epoch')
-		plt.ylabel(metric)
-		plt.legend()
-		plt.savefig(self.savedir+'avghistory_'+metric+'_'+self.savetext+'.pdf', bbox_inches='tight')
-		plt.savefig(self.savedir+'avghistory_'+metric+'_'+self.savetext+'.png', dpi=300, bbox_inches='tight')
-		plt.show()
-		plt.close()
-
-	def plot_coef(self, model, cols_X, first=20):
-		try:
-			coef = pd.DataFrame(model.coef_, index=cols_X)
-		except AttributeError:
-			coef = pd.DataFrame(model.feature_importances_, index=cols_X)
-		coef['abs'] = coef[0].abs()
-		coef = coef.sort_values('abs', ascending=False).drop('abs', axis=1)
-
-		coef.iloc[:first].plot(kind='barh')
-		plt.title(m+' coefficients')
-		plt.axvline(x=0)
-		plt.subplots_adjust(left=.5)
-		plt.savefig(self.savedir+'coef.pdf', bbox_inches='tight')
-		plt.savefig(self.savedir+'coef.png', dpi=300, bbox_inches='tight')
 		plt.show()
 		plt.close()
