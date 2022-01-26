@@ -1,5 +1,3 @@
-# TODO: percentage in level
-# TODO: add 14 days as window
 import numpy as np
 import pandas as pd
 import datetime
@@ -36,7 +34,7 @@ df['glucose_rate'] = df[col] / (df['timestamp'].diff()/pd.to_timedelta('5min'))
 # TODO: skewness, kurtosis, risk index, FFT with 4 highest amplitudes and their frequencies
 
 sections = ('exercise', 'recovery', 'wake', 'sleep')
-windows = ('1h', '3h', '6h', '12h', '18', '1d', '3d', '7d')
+windows = ('1h', '3h', '6h', '12h', '18h', '1d', '3d', '7d', '14d')
 
 # TODO: change time_in_level to perc in level??
 def select_times(df, w, x):
