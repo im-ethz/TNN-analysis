@@ -13,6 +13,9 @@ del flirt_functions['n_above_mean'], flirt_functions['n_below_mean'],\
 
 # the following functions should be left: mean, std, min, max, sum, energy, iqr, line_integral
 
+def timestamp_to_seconds(timestamp:pd.Series):
+	return (pd.to_datetime(timestamp) - pd.to_datetime(pd.to_datetime(timestamp).dt.date)).dt.seconds
+
 # glucose levels in mg/dL
 glucose_levels = {'hypo L2': (0,53),
 				  'hypo L1': (54,69),
