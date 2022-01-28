@@ -11,6 +11,7 @@ import pandas as pd
 
 import datetime
 import pycountry
+from scipy.stats import zscore
 
 from calc import combine_pedal_smoothness
 from calc import calc_hr_zones, calc_power_zones
@@ -162,6 +163,10 @@ for i in athletes:
 	# ---------- power
 	# calculate power statistics
 	df = df.set_index('timestamp')
+
+	# remove zeros before calculating power #TODO: move to preprocess trainingpeaks??
+	df['power'] = df['power'].replace({0:np.nan})
+
 	df_power = df.groupby('date').apply(agg_power, FTP=info.loc[i, 'FTP'])
 
 	# fill up dates for which we don't have an entry to get ewm
