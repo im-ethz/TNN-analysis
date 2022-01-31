@@ -2,13 +2,12 @@
 # TODO: first remove training sessions with little info
 # NOTE: aggregation is by LOCAL timestamp date
 import os
-
 import numpy as np
 import pandas as pd
+import gc
 
 import datetime
 import pycountry
-from scipy.stats import zscore
 
 from calc import combine_pedal_smoothness
 from calc import calc_hr_zones, calc_power_zones
@@ -17,7 +16,8 @@ from calc import chronic_training_load, acute_training_load, training_stress_bal
 
 from config import DATA_PATH
 
-import gc
+import warnings
+warnings.filterwarnings("ignore", message="invalid value encountered in long_scalars")
 
 SAVE_PATH = DATA_PATH+'agg/'
 
@@ -99,6 +99,23 @@ for i in athletes:
 	df['local_timestamp'] = pd.to_datetime(df['local_timestamp'])
 	df['date'] = df['local_timestamp'].dt.date
 
+	# remove zeros before calculating averages
+	df['power'] = df['power'].replace({0:np.nan})
+	df['heart_rate'] = df['heart_rate'].replace({0:np.nan})
+
+	# remove zeros if all values of a feature in a file are zero
+	for col in ('distance', 'speed', 'grade', 'acceleration', 'elevation_gain', 'ascent', 'cadence',
+		'left_pedal_smoothness', 'right_pedal_smoothness', 'combined_pedal_smoothness',
+		'left_torque_effectiveness', 'right_torque_effectiveness', 'left_right_balance'):
+		frac_zero = df.groupby('file_id')[col].apply(lambda x: x[x==0].count() / x.count())
+		df.loc[df.file_id.isin(frac_zero[frac_zero == 1].index), col] = np.nan
+
+	cols_nan = ['temperature', 'altitude', 'position_lat', 'position_long', 'distance', 'speed', 
+		'grade', 'acceleration', 'elevation_gain', 'ascent', 'cadence', 'power', 'heart_rate', 
+		'left_pedal_smoothness', 'right_pedal_smoothness', 'combined_pedal_smoothness',
+		'left_torque_effectiveness', 'right_torque_effectiveness', 'left_right_balance']
+
+	df = df.dropna(subset=cols_nan, how='all')
 	"""
 	# combine pedal smoothness
 	if 'combined_pedal_smoothness' not in df:
@@ -160,9 +177,6 @@ for i in athletes:
 	# ---------- power
 	# calculate power statistics
 	df = df.set_index('timestamp')
-
-	# remove zeros before calculating power #TODO: move to preprocess trainingpeaks??
-	df['power'] = df['power'].replace({0:np.nan})
 
 	df_power = df.groupby('date').apply(agg_power, FTP=info.loc[i, 'FTP'])
 
