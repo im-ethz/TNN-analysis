@@ -191,6 +191,7 @@ for i in athletes:
 	df_power = df_power.loc[dates]
 
 	df_agg[i] = pd.concat([df_times, df_carbs, df_zones, df_power, df_stats], axis=1)
+	df_agg[i].to_csv(SAVE_PATH+f'trainingpeaks_day_{i}.csv')
 
 	del df, df_times, df_zones, df_carbs, df_power, df_stats ; gc.collect()
 
