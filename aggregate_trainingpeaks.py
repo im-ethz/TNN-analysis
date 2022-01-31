@@ -1,8 +1,5 @@
-# TODO: put features into different modalities
 # TODO: clean out extreme values in script before
 # TODO: first remove training sessions with little info
-# TODO: it seems sth is wrong with removing zeros
-# then remove variables with little info
 # NOTE: aggregation is by LOCAL timestamp date
 import os
 
