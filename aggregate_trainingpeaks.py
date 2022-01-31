@@ -104,18 +104,16 @@ for i in athletes:
 	df['heart_rate'] = df['heart_rate'].replace({0:np.nan})
 
 	# remove zeros if all values of a feature in a file are zero
-	for col in ('distance', 'speed', 'grade', 'acceleration', 'elevation_gain', 'ascent', 'cadence',
+	cols_zero = ('distance', 'speed', 'grade', 'acceleration', 'elevation_gain', 'ascent', 'cadence',
 		'left_pedal_smoothness', 'right_pedal_smoothness', 'combined_pedal_smoothness',
-		'left_torque_effectiveness', 'right_torque_effectiveness', 'left_right_balance'):
+		'left_torque_effectiveness', 'right_torque_effectiveness', 'left_right_balance')
+
+	for col in df.columns[df.columns.isin(cols_zero)]:
 		frac_zero = df.groupby('file_id')[col].apply(lambda x: x[x==0].count() / x.count())
 		df.loc[df.file_id.isin(frac_zero[frac_zero == 1].index), col] = np.nan
 
-	cols_nan = ['temperature', 'altitude', 'position_lat', 'position_long', 'distance', 'speed', 
-		'grade', 'acceleration', 'elevation_gain', 'ascent', 'cadence', 'power', 'heart_rate', 
-		'left_pedal_smoothness', 'right_pedal_smoothness', 'combined_pedal_smoothness',
-		'left_torque_effectiveness', 'right_torque_effectiveness', 'left_right_balance']
-
-	df = df.dropna(subset=cols_nan, how='all')
+	cols_nan = cols_zero + ('temperature', 'altitude', 'position_lat', 'position_long', 'power', 'heart_rate')
+	df = df.dropna(subset=df.columns[df.columns.isin(cols_nan)], how='all')
 	"""
 	# combine pedal smoothness
 	if 'combined_pedal_smoothness' not in df:
