@@ -74,5 +74,5 @@ df_comp = pd.concat([df[m].groupby(['RIDER', 'date']).apply(stats_cgm, sec=name)
 df_win = pd.concat([df.groupby(['RIDER', 'date'], as_index=False).apply(lambda x: pd.Series(stats_cgm(select_times(df, w, x), sec=w)))\
 	.set_index(['RIDER', 'date']) for w in windows], axis=1)
 
-df_agg = pd.concat([df_sec, df_win], axis=1).reset_index()
+df_agg = pd.concat([df_sec, df_comp, df_win], axis=1).reset_index()
 df_agg.to_csv(SAVE_PATH+'dexcom_day.csv', index_label=False)
