@@ -36,6 +36,12 @@ df['glucose_rate'] = df[col] / (df['timestamp'].diff()/pd.to_timedelta('5min'))
 sections = ('exercise', 'recovery', 'wake', 'sleep')
 windows = ('1h', '3h', '6h', '12h', '18h', '1d', '3d', '7d', '14d')
 
+# perform some adjustments to the glucose levels, so that floats don't fall in between glucose levels
+# e.g. 69.5 falls in between 69 and 70
+glucose_levels = {level: (lmin-(1-1e-8), lmax) if level.startswith('hyper') else (
+    (lmin, lmax+(1-1e-8)) if level.startswith('hypo') else (
+    (lmin, lmax))) for level, (lmin, lmax) in glucose_levels.items()}
+
 # TODO: change time_in_level to perc in level??
 def select_times(df, w, x):
 	"""
@@ -56,6 +62,13 @@ def select_times(df, w, x):
 
 # stats for individual sections
 df_sec = pd.concat([df[df[sec]].groupby(['RIDER', 'date']).apply(stats_cgm, sec=sec).apply(pd.Series) for sec in sections], axis=1)
+
+# stats for individual races and competitions
+masks = {'race'			: df['race'] & df['exercise'],
+		 'training'		: ~df['race'] & df['exercise'],
+		 'race_day'		: df['race'],
+		 'training_day' : ~df['race']}
+df_comp = pd.concat([df[m].groupby(['RIDER', 'date']).apply(stats_cgm, sec=name).apply(pd.Series) for name, m in masks.items()], axis=1)
 
 # stats for individual time windows
 df_win = pd.concat([df.groupby(['RIDER', 'date'], as_index=False).apply(lambda x: pd.Series(stats_cgm(select_times(df, w, x), sec=w)))\
