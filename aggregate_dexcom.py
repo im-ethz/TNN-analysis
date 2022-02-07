@@ -64,10 +64,10 @@ def select_times(df, w, x):
 df_sec = pd.concat([df[df[sec]].groupby(['RIDER', 'date']).apply(stats_cgm, sec=sec).apply(pd.Series) for sec in sections], axis=1)
 
 # stats for individual races and competitions
-masks = {'race'			: df['race'] & df['exercise'],
-		 'training'		: ~df['race'] & df['exercise'],
-		 'race_day'		: df['race'],
-		 'training_day' : ~df['race']}
+masks = {'competition'		: df['race'] & df['exercise'],
+		 'training'			: ~df['race'] & df['exercise'],
+		 'competition_day'	: df['race'],
+		 'training_day' 	: ~df['race']}
 df_comp = pd.concat([df[m].groupby(['RIDER', 'date']).apply(stats_cgm, sec=name).apply(pd.Series) for name, m in masks.items()], axis=1)
 
 # stats for individual time windows
