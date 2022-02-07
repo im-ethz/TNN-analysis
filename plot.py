@@ -22,6 +22,9 @@ sns.set()
 sns.set_context('paper')
 sns.set_style('white')
 
+plt.rcParams.update({'font.family':'sans-serif',
+					 'font.sans-serif':'Latin Modern Sans'})
+
 color_sec = {'wake'	: sns.color_palette("Set1")[1],
 			 'exercise': sns.color_palette("Set1")[4],
 			 'recovery': sns.color_palette("Set1")[2],
@@ -55,22 +58,26 @@ def savefig(path, i='', dtype='Dexcom', legend=None, title=None, xticks=None, yt
     
     if title is not None or legend is not None or xticks is not None or yticks is not None:
         plt.savefig(f'{SAVE_PATH}{dtype}/{path}_NAME_{i}.pdf', bbox_inches='tight')
-        plt.savefig(f'{SAVE_PATH}{dtype}/{path}_NAME_{i}.png', dpi=300, bbox_inches='tight')
+        plt.savefig(f'{SAVE_PATH}{dtype}/{path}_NAME_{i}.png', dpi=600, bbox_inches='tight')
     plt.show()
     plt.close()
 
-def plot_availability(df_avail, cmap='Blues', rot_months=0, itv_months=1, vmin=0, vmax=1, plot_percentage=True, plot_colorbar=True):
+def plot_availability(df_avail, cmap='Blues', rot_months=0, itv_months=1, vmin=0, vmax=1, plot_total=False, plot_colorbar=True):
     fig, ax = plt.subplots(figsize=(15,6))
     ax = sns.heatmap(df_avail, cmap=cmap, vmin=vmin, vmax=vmax)
 
-    if plot_percentage:
+    if plot_total:
         # put total percentage on RHS
         ax2 = ax.secondary_yaxis("right")
         ax2.set_yticks(np.arange(len(df_avail.index))+0.5)
-        ax2.set_yticklabels([r"$\bf{:.0f}\%$".format(i) for i in df_avail.sum(axis=1)/df_avail.notna().sum(axis=1)*100])
+        if plot_total == 'perc':
+            ax2.set_yticklabels([r"$\bf{:.0f}\%$".format(i) for i in df_avail.sum(axis=1)/df_avail.notna().sum(axis=1)*100])
+            ax.text(0.99, 1.02, r'$\bf{:s}$'.format('Total (\%)'), ha='left', transform=ax.transAxes)
+        if plot_total == 'count':
+            ax2.set_yticklabels([r"$\bf{:.0f}$".format(i) for i in df_avail.count(axis=1)])
+            ax.text(0.99, 1.02, r'$\bf{:s}$'.format('Days'), ha='left', transform=ax.transAxes)
         ax2.tick_params(axis='y', length=0)
         ax2.spines['right'].set_visible(False)
-        ax.text(0.99, 1.02, r'$\bf{:s}$'.format('Total (\%)'), ha='left', transform=ax.transAxes)
 
     if plot_colorbar:
         # adjust ticks colorbar
