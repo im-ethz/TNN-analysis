@@ -33,7 +33,7 @@ color_sec = {'wake'	: sns.color_palette("Set1")[1],
 color_race = {'train': sns.color_palette("Set1")[8],
               'race':(0.8455062527192158, 0.21363575247920147, 0.4145075850498335)} #'#d8366a'
 
-palette_ath = sns.color_palette('inferno', n_colors=7)+sns.color_palette('YlGnBu', n_colors=7) # alternatives for YlGnBu: viridis_r, mako_r
+palette_ath = sns.color_palette('inferno', n_colors=6)+sns.color_palette('YlGnBu', n_colors=6) # alternatives for YlGnBu: viridis_r, mako_r
 
 def savefig(path, i='', dtype='Dexcom', legend=None, title=None, xticks=None, yticks=None, **titlekwargs):
     if title is not None:
@@ -131,13 +131,20 @@ def plot_glucose_levels(ax, color=True, orient='vertical', text=True, subtext=Tr
 		ax.annotate('L2', xy=(glucose_levels['hyper L2'][0]+80, .95), color=glucose_palette[4])
 	return ax
 
-def plot_bar(data, x, width=.8, colors=dict(h_neg=10, h_pos=10, s=0, l=50)):
+def plot_bar(data, x, width=.8, colors=dict(h_neg=10, h_pos=10, s=0, l=50), ax=plt, plot_numbers=False, duration=None):
 	hatch = ('\\\\', '\\\\', None, '//', '//')
 	color_palette = sns.diverging_palette(**colors, n=5)
 	bottom = 0
 	for sec, (label, y) in enumerate(data.items()):
-		plt.bar(x=x, height=y, width=width, bottom=bottom, color=color_palette[sec], hatch=hatch[sec])
+		c = ax.bar(x=x, height=y, width=width, bottom=bottom, color=color_palette[sec], hatch=hatch[sec])
 		bottom += y
+		if plot_numbers and y >= 4:
+			if sec == 2:
+				ax.bar_label(c, fmt='%.0f', label_type='center', color='gray')
+			elif plot_numbers == 'full':
+				ax.bar_label(c, fmt='%.0f', label_type='center', fontweight='black', color='white')
+	if duration:
+		ax.text(x, -8, duration, ha='center', color='gray')
 
 class PlotPreprocess:
 	def __init__(self, savedir, savetext='', athlete='all'):
