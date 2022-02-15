@@ -33,7 +33,7 @@ color_sec = {'wake'	: sns.color_palette("Set1")[1],
 color_race = {'train': sns.color_palette("Set1")[8],
               'race':(0.8455062527192158, 0.21363575247920147, 0.4145075850498335)} #'#d8366a'
 
-palette_ath = sns.color_palette('inferno', n_colors=6)+sns.color_palette('YlGnBu', n_colors=6) # alternatives for YlGnBu: viridis_r, mako_r
+palette_ath = sns.color_palette('inferno', n_colors=7)[:6]+ sns.color_palette('YlGnBu', n_colors=7)[:6] # alternatives for YlGnBu: viridis_r, mako_r
 
 def savefig(path, i='', dtype='Dexcom', legend=None, title=None, xticks=None, yticks=None, **titlekwargs):
     if title is not None:
