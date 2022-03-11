@@ -1,3 +1,5 @@
+# TODO: skewness, kurtosis, risk index, FFT with 4 highest amplitudes and their frequencies
+# TODO: change time_in_level to perc in level??
 import numpy as np
 import pandas as pd
 import datetime
@@ -30,19 +32,28 @@ df['hyper'] = df.groupby('RIDER')[col].transform(lambda x: (x >= glucose_levels[
 # glucose rate
 df['glucose_rate'] = df[col] / (df['timestamp'].diff()/pd.to_timedelta('5min'))
 
+# section day
+df['day'] = True
+
 # ------------- aggregate to calculate CGM statistics
-# TODO: skewness, kurtosis, risk index, FFT with 4 highest amplitudes and their frequencies
-
-sections = ('exercise', 'recovery', 'wake', 'sleep')
-windows = ('1h', '3h', '6h', '12h', '18h', '1d', '3d', '7d', '14d')
-
 # perform some adjustments to the glucose levels, so that floats don't fall in between glucose levels
 # e.g. 69.5 falls in between 69 and 70
 glucose_levels = {level: (lmin-(1-1e-8), lmax) if level.startswith('hyper') else (
     (lmin, lmax+(1-1e-8)) if level.startswith('hypo') else (
     (lmin, lmax))) for level, (lmin, lmax) in glucose_levels.items()}
 
-# TODO: change time_in_level to perc in level??
+# stats for individual sections
+sections = ('exercise', 'recovery', 'wake', 'sleep', 'day')
+
+df_sec = pd.concat([df[df[sec]].groupby(['RIDER', 'date']).apply(stats_cgm, sec=sec).apply(pd.Series) for sec in sections], axis=1)
+df_sec.to_csv(SAVE_PATH+'dexcom_sec.csv', index_label=False)
+
+df_comp = pd.concat([df[df['race'] & df[sec]].groupby(['RIDER', 'date']).apply(stats_cgm, sec=sec).apply(pd.Series) for sec in sections], axis=1)
+df_comp.to_csv(SAVE_PATH+'dexcom_sec_comp.csv', index_label=False)
+
+df_nocomp = pd.concat([df[~df['race'] & df[sec]].groupby(['RIDER', 'date']).apply(stats_cgm, sec=sec).apply(pd.Series) for sec in sections], axis=1)
+df_nocomp.to_csv(SAVE_PATH+'dexcom_sec_nocomp.csv', index_label=False)
+
 def select_times(df, w, x):
 	"""
 	Select data over which we want to apply the stats_cgm, using a time window before midnight.
@@ -58,21 +69,15 @@ def select_times(df, w, x):
 		df 		(pd.DataFrame) entire data
 		w 		(str) window length
 	"""
-	return df.loc[(df.RIDER == x.RIDER.unique()[0]) & (df.timestamp > x.timestamp.max()-pd.to_timedelta(w)) & (df.timestamp <= x.timestamp.max())]
-
-# stats for individual sections
-df_sec = pd.concat([df[df[sec]].groupby(['RIDER', 'date']).apply(stats_cgm, sec=sec).apply(pd.Series) for sec in sections], axis=1)
-
-# stats for individual races and competitions
-masks = {'competition'		: df['race'] & df['exercise'],
-		 'training'			: ~df['race'] & df['exercise'],
-		 'competition_day'	: df['race'],
-		 'training_day' 	: ~df['race']}
-df_comp = pd.concat([df[m].groupby(['RIDER', 'date']).apply(stats_cgm, sec=name).apply(pd.Series) for name, m in masks.items()], axis=1)
+	raise NotImplementedError, "This code contains an error at the moment. Please do not use it."
+	# see example rider 4, 2018-12-09 (mostly when travelling happens)
+	tz = (x.local_timestamp - x.timestamp).iloc[-1]
+	ts_max = x.date.max() + pd.to_timedelta('23:55:00') - tz # get end of day in UTC time
+	return df.loc[(df.RIDER == x.RIDER.unique()[0]) & (df.timestamp > ts_max-pd.to_timedelta(w)) & (df.timestamp <= ts_max)]
 
 # stats for individual time windows
+windows = ('1h', '3h', '6h', '12h', '18h', '1d', '3d', '7d', '14d')
+
 df_win = pd.concat([df.groupby(['RIDER', 'date'], as_index=False).apply(lambda x: pd.Series(stats_cgm(select_times(df, w, x), sec=w)))\
 	.set_index(['RIDER', 'date']) for w in windows], axis=1)
-
-df_agg = pd.concat([df_sec, df_comp, df_win], axis=1).reset_index()
-df_agg.to_csv(SAVE_PATH+'dexcom_day.csv', index_label=False)
+df_win.to_csv(SAVE_PATH+'dexcom_win.csv', index_label=False)
