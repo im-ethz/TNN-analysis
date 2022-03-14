@@ -37,7 +37,7 @@ palette_ath = sns.color_palette('inferno', n_colors=7)[:6]+ sns.color_palette('Y
 
 def savefig(path, i='', dtype='Dexcom', legend=None, title=None, xticks=None, yticks=None, **titlekwargs):
     if title is not None:
-        plt.title(r'$\bf{Rider}$ '+r'$\bf{:d}$ - '.format(i)+title, **titlekwargs)
+        plt.title(r'$\bf{Cyclist}$ '+r'$\bf{:d}$ - '.format(i)+title, **titlekwargs)
     if legend is not None:
         for text in legend:
             text.set_fontsize(6)
@@ -131,7 +131,7 @@ def plot_glucose_levels(ax, color=True, orient='vertical', text=True, subtext=Tr
 		ax.annotate('L2', xy=(glucose_levels['hyper L2'][0]+80, .95), color=glucose_palette[4])
 	return ax
 
-def plot_bar(data, x, width=.8, colors=dict(h_neg=10, h_pos=10, s=0, l=50), ax=plt, plot_numbers=False, duration=None):
+def plot_bar(data, x, width=.8, colors=dict(h_neg=10, h_pos=10, s=0, l=50), ax=plt, plot_numbers=False, unit='', duration=None):
 	hatch = ('\\\\', '\\\\', None, '//', '//')
 	color_palette = sns.diverging_palette(**colors, n=5)
 	bottom = 0
@@ -140,9 +140,9 @@ def plot_bar(data, x, width=.8, colors=dict(h_neg=10, h_pos=10, s=0, l=50), ax=p
 		bottom += y
 		if plot_numbers and y >= 4:
 			if sec == 2:
-				ax.bar_label(c, fmt='%.0f', label_type='center', color='gray')
+				ax.bar_label(c, labels=['%.0f'%y+unit], label_type='center', color='gray')
 			elif plot_numbers == 'full':
-				ax.bar_label(c, fmt='%.0f', label_type='center', fontweight='black', color='white')
+				ax.bar_label(c, labels=['%.0f'%y+unit], label_type='center', fontweight='black', color='white')
 	if duration:
 		ax.text(x, -8, duration, ha='center', color='gray')
 
