@@ -46,13 +46,18 @@ glucose_levels = {level: (lmin-(1-1e-8), lmax) if level.startswith('hyper') else
 sections = ('exercise', 'recovery', 'wake', 'sleep', 'day')
 
 df_sec = pd.concat([df[df[sec]].groupby(['RIDER', 'date']).apply(stats_cgm, sec=sec).apply(pd.Series) for sec in sections], axis=1)
-df_sec.to_csv(SAVE_PATH+'dexcom_sec.csv', index_label=False)
+df_sec.reset_index().to_csv(SAVE_PATH+'dexcom_sec.csv', index_label=False)
 
 df_comp = pd.concat([df[df['race'] & df[sec]].groupby(['RIDER', 'date']).apply(stats_cgm, sec=sec).apply(pd.Series) for sec in sections], axis=1)
-df_comp.to_csv(SAVE_PATH+'dexcom_sec_comp.csv', index_label=False)
+df_comp.reset_index().to_csv(SAVE_PATH+'dexcom_sec_comp.csv', index_label=False)
 
 df_nocomp = pd.concat([df[~df['race'] & df[sec]].groupby(['RIDER', 'date']).apply(stats_cgm, sec=sec).apply(pd.Series) for sec in sections], axis=1)
-df_nocomp.to_csv(SAVE_PATH+'dexcom_sec_nocomp.csv', index_label=False)
+df_nocomp.reset_index().to_csv(SAVE_PATH+'dexcom_sec_nocomp.csv', index_label=False)
+
+# calculate completeness for day definition from 6am to 6am
+df['date_6h'] = pd.to_datetime((df.local_timestamp - pd.to_timedelta('6h')).dt.date)
+df_completeness = df.groupby(['RIDER', 'date_6h']).apply(lambda x: x[col].count() / x['timestamp'].count())
+df_completeness.reset_index().to_csv(SAVE_PATH+'dexcom_completeness_6h.csv', index_label=False)
 
 def select_times(df, w, x):
 	"""
