@@ -94,14 +94,10 @@ athletes = sorted([int(i) for i in os.listdir(DATA_PATH+'TrainingPeaks/clean/')]
 for i in athletes:
 	print("\n------------------------------- Athlete ", i)
 
-	df = pd.read_csv(DATA_PATH+f'TrainingPeaks/clean/{i}/{i}_data4.csv', index_col=0)
+	df = pd.read_csv(DATA_PATH+f'TrainingPeaks/clean/{i}/{i}_data5.csv', index_col=0)
 	df['timestamp'] = pd.to_datetime(df['timestamp'])
 	df['local_timestamp'] = pd.to_datetime(df['local_timestamp'])
 	df['date'] = df['local_timestamp'].dt.date
-
-	# remove zeros before calculating averages
-	df['power'] = df['power'].replace({0:np.nan})
-	df['heart_rate'] = df['heart_rate'].replace({0:np.nan})
 
 	# remove zeros if all values of a feature in a file are zero
 	cols_zero = ('distance', 'speed', 'grade', 'acceleration', 'elevation_gain', 'ascent', 'cadence',
@@ -122,15 +118,7 @@ for i in athletes:
 		df['combined_pedal_smoothness'] = df['combined_pedal_smoothness'].fillna( 
 			df[['left_pedal_smoothness', 'right_pedal_smoothness', 'left_right_balance']].apply(combine_pedal_smoothness))
 	"""
-	"""
-	# remove zeros for some features
-	for col in ['power', 'combined_pedal_smoothness', 'left_torque_effectiveness', 'right_torque_effectiveness',
-				'cadence', 'left_pedal_smoothness', 'right_pedal_smoothness']:
-		try:
-			df[col+'_n0'] = df[col].replace({0:np.nan})
-		except KeyError:
-			pass
-	"""
+
 	# split out columns in ascent and descent
 	df['descent'] = df.groupby('file_id')['altitude'].transform(lambda x: x.interpolate(method='linear').diff() < 0)
 	for col in ['distance', 'elevation_gain']:#'altitude', 'speed', 'heart_rate', 'power', 'cadence', 'acceleration']:
@@ -222,17 +210,17 @@ df_agg = df_agg.set_index(['RIDER', 'date'])
 # modalities
 modalities = {}
 
-modalities['TIME'] = ['timestamp_count', 'local_timestamp_min', 'local_timestamp_max']
+modalities['TIME'] = ['timestamp_count', 'local_timestamp_min', 'local_timestamp_max', 'file_id_unique_count']
 
 modalities['CALENDAR'] = ['race', 'travel', 'race_3d_mean', 'race_7d_mean', 'travel_3d_any', 'travel_7d_any', 'country_carbs']
 
 modalities['HR'] = df_agg.columns[df_agg.columns.str.startswith(('time_in_hr', 'heart_rate'))]
 
-modalities['POWER'] = df_agg.columns[df_agg.columns.str.startswith(('time_in_power', 'power', 'left_', 'right_', 'combined', 'cadence'))].to_list() + \
+modalities['POWER'] = df_agg.columns[df_agg.columns.str.startswith(('time_in_power', 'power', 'left_', 'right_', 'combined', 'cadence', 'compressed_accumulated_power'))].to_list() + \
 	['normalised_power', 'intensity_factor', 'training_stress_score', 'variability_index', 'efficiency_factor', 
 	'chronic_training_load', 'acute_training_load', 'training_stress_balance']
 
-modalities['LOC'] = df_agg.columns[df_agg.columns.str.startswith(('grade', 'altitude', 'distance', 'speed', 'acceleration', 'temperature', 'elevation_gain'))]
+modalities['LOC'] = df_agg.columns[df_agg.columns.str.startswith(('grade', 'ascent', 'vertical_speed', 'altitude', 'distance', 'speed', 'acceleration', 'temperature', 'elevation_gain'))]
 
 modalities = {v:k for k, values in modalities.items() for v in values}
 
