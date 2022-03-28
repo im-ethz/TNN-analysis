@@ -253,12 +253,12 @@ class PlotResults:
 			plt.savefig(f"{self.root}coefficients_{self.filename.lstrip('model_')}.png", bbox_inches='tight', dpi=600)
 
 	def plot_coefficients_per_sec(self, fe_hypo, fe_hyper, sec, transform, figsize=(8,5), savefig=True, **kws_sub):
-		fig, axs = plt.subplots(1,2, figsize=figsize, sharey=True, sharex=True)
+		fig, axs = plt.subplots(1,2, figsize=figsize, sharey=True, sharex=True, gridspec_kw=dict(wspace=0.6))
 		self.event = 'hypo'
 		self.subplot_coefficients(transform(fe_hypo)[sec], fig, axs[0], title=sec, **kws_sub)
 		self.event = 'hyper'
 		self.subplot_coefficients(transform(fe_hyper)[sec], fig, axs[1], title=sec, **kws_sub)
-		plt.tight_layout()
+		#plt.tight_layout()
 
 		if savefig:
 			plt.savefig(f"{self.root}coefficients_{self.filename.split('_')[2]}_{sec}.pdf", bbox_inches='tight')
