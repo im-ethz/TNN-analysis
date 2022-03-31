@@ -1,3 +1,4 @@
+import os
 from rpy2.robjects.packages import importr
 from rpy2 import robjects as ro
 from rpy2.robjects import pandas2ri
@@ -93,11 +94,14 @@ class Regress:
 		self.experiment = experiment
 		self.categories = categories
 		self.sorting = sorting
-		self.root = root
+		self.root = os.path.join(root,experiment)+'/'
 		self.verbose = verbose
 
 		self.filename = f"model_{self.experiment}_{self.family}_{self.event}"
 		self.sections = ('exercise', 'recovery', 'sleep')
+
+		if not os.path.exists(self.root):
+			os.makedirs(self.root)
 
 	def fit(self, data, x, name, **kwargs):
 		"""
@@ -217,7 +221,8 @@ class Regress:
 		# round off
 		cols_fe = ['Estimate', 'CI_lower', 'CI_upper']
 		fe[cols_fe] = fe[cols_fe].round(2)
-		fe['Pr(>|z|)'] = fe['Pr(>|z|)'].round(3)
+		fe['Pr(>|z|)'] = fe['Pr(>|z|)'].replace({' <2e-16':0.000})
+		fe['Pr(>|z|)'] = fe['Pr(>|z|)'].astype(float).round(3)
 		fe['Pr(>|z|)'] = fe['Pr(>|z|)'].replace({0.000: '<0.001'})
 		cols_fe += ['Pr(>|z|)']
 		
@@ -287,8 +292,9 @@ class Regress:
 		fe = pd.read_csv(f"{self.root}{self.filename}_fe.csv", index_col=0, header=[0,1])
 		fe = self.inv_transform_fe(fe)
 		for col in np.unique(fe.columns.get_level_values(0)):
-			fe.loc[:, (col,'Pr(>|z|)' )] = fe.loc[:, (col,'Pr(>|z|)' )].apply(lambda x: float(x) if not str(x).startswith('<') else x)
-		fe = fe.replace({np.nan: ''})
+			fe.loc[:, (col,'Pr(>|z|)')] = fe.loc[:, (col,'Pr(>|z|)')].apply(lambda x: float(x) if not str(x).startswith('<') else x)
+			fe.loc[:, (col,'Estimate')] = fe.loc[:, (col,'Estimate')].astype(float)
+			fe.loc[:, (col,'Sign')] = fe.loc[:, (col,'Sign')].replace({np.nan: ''})
 
 		re = pd.read_csv(f"{self.root}{self.filename}_re.csv", index_col=[0,1,2], header=[0,1])
 
