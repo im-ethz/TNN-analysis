@@ -8,6 +8,7 @@ from matplotlib import pyplot as plt
 from matplotlib import cm
 from matplotlib.patches import Patch
 from matplotlib.colors import ListedColormap
+from matplotlib.ticker import FormatStrFormatter
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 from colorsys import rgb_to_hls
@@ -241,6 +242,9 @@ class PlotResults:
 		if xlim:
 			ax.set_xlim(xlim)
 			ax0.set_xlim(xlim)
+
+		ax.set_xscale('log')
+		ax.xaxis.set_major_formatter(FormatStrFormatter('%.1f'))
 
 	def plot_coefficients(self, fe, transform, figsize=(12,5), savefig=True, **kws_sub):
 		fig, axs = plt.subplots(1,3, figsize=figsize, sharey=True, sharex=True)
