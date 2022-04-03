@@ -263,6 +263,9 @@ class Regress:
 		#fe_new = fe_new.iloc[1:]
 		return fe_new
 
+	def transform_co(self, co, output=''):
+		return pd.concat([pd.DataFrame(index=[''], columns=co.columns), co])
+
 	def inv_transform_fe(self, fe):
 		fe = fe.dropna(how='all')
 		return fe
@@ -285,7 +288,7 @@ class Regress:
 		self.categories = self.categories.sort_index(key=lambda x: x.map({col:i for i, col in enumerate(self.sorting)})).to_dict()
 
 	def inv_transform_cat(self):
-		self.categories = pd.Series({v:key for key,values in self.categories.items() for v in values}).rename(index=inv_rename_time).reset_index()
+		self.categories = pd.Series({v:key for key,values in self.categories.items() for v in values}).rename(index=self.inv_rename_time).reset_index()
 		self.categories = self.categories.groupby(0)['index'].apply(list).to_dict()
 
 	def read_tables(self):
