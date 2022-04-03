@@ -8,7 +8,7 @@ from matplotlib import pyplot as plt
 from matplotlib import cm
 from matplotlib.patches import Patch
 from matplotlib.colors import ListedColormap
-from matplotlib.ticker import FormatStrFormatter
+from matplotlib.ticker import LogLocator, FormatStrFormatter
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 from colorsys import rgb_to_hls
@@ -157,9 +157,10 @@ def plot_bar(data, x, width=.8, colors=dict(h_neg=10, h_pos=10, s=0, l=50), ax=p
 	if duration:
 		ax.text(x, -8, duration, ha='center', color='gray')
 
-class PlotResults:
+class PlotResults():
 	def __init__(self, regression):
 		vars(self).update(vars(regression))
+		self.regression = regression
 
 	def info_coefficients(self, x):
 		if pd.isnull(x['Pr(>|z|)']):
@@ -174,7 +175,7 @@ class PlotResults:
 			info += r"{:s}".format(x['Sign'])
 			return info
 
-	def subplot_coefficients(self, df, fig, ax, title='', textlocs=(0, 0.7), cmax=0.6, xlim=None, leq_sep=0.9, categories=True):
+	def subplot_coefficients(self, df, fig, ax, title='', textlocs=(0, 0.7), cmax=0.6, xlim=None, leq=1.9, categories=True):
 		cmap = cm.get_cmap('RdBu_r')#cut_cmap('Blues', 'Reds', cut=0)
 		if not cmax:
 			cmax = np.log(df['Estimate']).abs().max()
@@ -214,7 +215,7 @@ class PlotResults:
 		for n in x:
 			if not pd.isnull(df['Pr(>|z|)'].iloc[n]):
 				if str(df['Pr(>|z|)'].iloc[n]).startswith('<'):
-					ax0.text(xmax+(xmax-1)*leq_sep, n+0.06, r"$<$", color='gray', va='center')
+					ax0.text(xmax+(xmax-1)*leq, n+0.06, r"$<$", color='gray', va='center')
 
 		# arrowheads
 		ax.plot(1, 0, marker=9, color='black', markersize=5, transform=ax.transAxes, clip_on=False)
@@ -244,25 +245,48 @@ class PlotResults:
 			ax0.set_xlim(xlim)
 
 		ax.set_xscale('log')
+		ax.xaxis.set_major_locator(LogLocator(base=2, numticks=6))
+		ax.xaxis.set_minor_locator(LogLocator(base=100, numticks=1)) #we need this because somehow they are not turned off
 		ax.xaxis.set_major_formatter(FormatStrFormatter('%.1f'))
 
-	def plot_coefficients(self, fe, transform, figsize=(12,5), savefig=True, **kws_sub):
-		fig, axs = plt.subplots(1,3, figsize=figsize, sharey=True, sharex=True)
+	def plot_coefficients(self, fe, figsize=(15,6), wspace=.6, xlim=(0.4, 2.1), leq=1.9, savefig=True, **kws_sub):
+		fig, axs = plt.subplots(1,3, figsize=figsize, sharey=True, sharex=True, gridspec_kw=dict(wspace=wspace))
 		for i, sec in enumerate(self.sections):
-			self.subplot_coefficients(transform(fe)[sec], fig, axs[i], title=sec, **kws_sub)
-		plt.tight_layout()
+			self.subplot_coefficients(self.regression.transform_fe(fe)[sec], fig, axs[i], 
+				title=sec, xlim=xlim, leq=leq, **kws_sub)
 
 		if savefig:
 			plt.savefig(f"{self.root}coefficients_{self.filename.lstrip('model_')}.pdf", bbox_inches='tight')
 			plt.savefig(f"{self.root}coefficients_{self.filename.lstrip('model_')}.png", bbox_inches='tight', dpi=600)
 
-	def plot_coefficients_per_sec(self, fe_hypo, fe_hyper, sec, transform, figsize=(8,5), wspace=1, savefig=True, **kws_sub):
+	def plot_coefficients_env(self, co, figsize=(15,25), wspace=.7, xlim=(0.1, 10), leq=7, savefig=True, **kws_sub):
+		cols = co.index.get_level_values(0).unique()
+		fig, axs = plt.subplots(len(cols),3, figsize=figsize, sharey=True, sharex=True, gridspec_kw=dict(wspace=wspace))
+		for n, col in enumerate(cols):
+			for i, sec in enumerate(self.sections):
+				self.subplot_coefficients(self.regression.transform_co(co.loc[col])[sec], fig, axs[n, i], 
+					title=sec, xlim=xlim, leq=leq, **kws_sub)
+				for text in axs[n,i].texts:
+					if n != len(cols)-1:
+						text.set_visible(False)
+					else:
+						text.set_position((text.get_position()[0], text.get_position()[1]-0.4))
+				if n != 0:
+					axs[n,i].set_title('')
+			axs[n,0].set_ylabel(col[:18]+'\n'+col[18:])
+
+		if savefig:
+			plt.savefig(f"{self.root}coefficients_env_{self.filename.lstrip('model_')}.pdf", bbox_inches='tight')
+			plt.savefig(f"{self.root}coefficients_env_{self.filename.lstrip('model_')}.png", bbox_inches='tight', dpi=600)
+
+	def plot_coefficients_per_sec(self, fe_hypo, fe_hyper, sec, figsize=(7,5), wspace=1, xlim=(0.4, 2.1), leq=3.6, savefig=True, **kws_sub):
 		fig, axs = plt.subplots(1,2, figsize=figsize, sharey=True, sharex=True, gridspec_kw=dict(wspace=wspace))
 		self.event = 'hypo'
-		self.subplot_coefficients(transform(fe_hypo)[sec], fig, axs[0], title=sec, **kws_sub)
+		self.subplot_coefficients(self.regression.transform_fe(fe_hypo)[sec], fig, axs[0], 
+			title=sec, xlim=xlim, leq=leq, **kws_sub)
 		self.event = 'hyper'
-		self.subplot_coefficients(transform(fe_hyper)[sec], fig, axs[1], title=sec, **kws_sub)
-		#plt.tight_layout()
+		self.subplot_coefficients(self.regression.transform_fe(fe_hyper)[sec], fig, axs[1], 
+			title=sec, xlim=xlim, leq=leq, **kws_sub)
 
 		if savefig:
 			plt.savefig(f"{self.root}coefficients_{self.filename.split('_')[2]}_{sec}.pdf", bbox_inches='tight')
