@@ -23,9 +23,9 @@ sns.set_style('white')
 plt.rcParams.update({'font.family':'sans-serif',
 					 'font.sans-serif':'Latin Modern Sans'})
 
-color_sec = {'wake'	: sns.color_palette("Set1")[1],
-			 'exercise': sns.color_palette("Set1")[4],
-			 'recovery': sns.color_palette("Set1")[2],
+color_sec = {'wake'	: sns.color_palette("Set1")[4],#[1],
+			 'exercise': sns.color_palette("Set1")[2],#[4],
+			 'recovery': sns.color_palette("Set1")[1],#[2],
 			 'sleep': sns.color_palette("Set1")[3]}
 
 color_race = {'train': sns.color_palette("Set1")[8],
