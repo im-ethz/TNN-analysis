@@ -5,23 +5,18 @@ import pandas as pd
 import seaborn as sns
 
 from matplotlib import pyplot as plt
-from matplotlib import cm
+from matplotlib.cm import get_cmap
 from matplotlib.patches import Patch
 from matplotlib.colors import ListedColormap
 from matplotlib.ticker import LogLocator, FormatStrFormatter
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
-from colorsys import rgb_to_hls
+from colorsys import rgb_to_hls, hls_to_rgb
 
 from calc import glucose_levels
 from config import SAVE_PATH, rider_mapping_inv
 
-sns.set()
-sns.set_context('paper')
-sns.set_style('white')
-
-plt.rcParams.update({'font.family':'sans-serif',
-					 'font.sans-serif':'Latin Modern Sans'})
+plt.style.use('./diabetes_care.mplstyle')
 
 color_sec = {'wake'	: sns.color_palette("Set1")[4],#[1],
 			 'exercise': sns.color_palette("Set1")[2],#[4],
@@ -34,11 +29,11 @@ color_race = {'train': sns.color_palette("Set1")[8],
 palette_ath = sns.color_palette('inferno', n_colors=7)[:6]+ sns.color_palette('YlGnBu', n_colors=7)[:6] # alternatives for YlGnBu: viridis_r, mako_r
 
 def cut_cmap(cmap_left, cmap_right, cut=10, freq=100, grey=None):
-	left = cm.get_cmap(cmap_left+'_r', freq)
-	right = cm.get_cmap(cmap_right, freq)
+	left = get_cmap(cmap_left+'_r', freq)
+	right = get_cmap(cmap_right, freq)
 	if grey:
 		colors = np.vstack((left(np.linspace(0, 1-cut/freq/2, freq)),
-							cut*[cm.get_cmap('Greys')(grey)],
+							cut*[get_cmap('Greys')(grey)],
 							right(np.linspace(0+cut/freq/2, 1, freq))))
 	else:
 		colors = np.vstack((left(np.linspace(0, 1-cut/freq/2, freq)),
@@ -51,10 +46,10 @@ def savefig(path, i='', dtype='Dexcom', legend=None, title=None, xticks=None, yt
 		plt.title(r'$\bf{Cyclist}$ '+r'$\bf{:d}$ - '.format(i)+title, **titlekwargs)
 	if legend is not None:
 		for text in legend:
-			text.set_fontsize(6)
+			text.set_fontsize(8)
 	
 	plt.savefig(f'{SAVE_PATH}{dtype}/{path}_{i}.pdf', bbox_inches='tight')
-	plt.savefig(f'{SAVE_PATH}{dtype}/{path}_{i}.png', dpi=300, bbox_inches='tight')
+	plt.savefig(f'{SAVE_PATH}{dtype}/{path}_{i}.png', dpi=1000, bbox_inches='tight')
 	
 	if title is not None:
 		plt.title(r'$\bf{:s}$ '.format(rider_mapping_inv[i])+title, **titlekwargs)
@@ -69,7 +64,7 @@ def savefig(path, i='', dtype='Dexcom', legend=None, title=None, xticks=None, yt
 	
 	if title is not None or legend is not None or xticks is not None or yticks is not None:
 		plt.savefig(f'{SAVE_PATH}{dtype}/{path}_NAME_{i}.pdf', bbox_inches='tight')
-		plt.savefig(f'{SAVE_PATH}{dtype}/{path}_NAME_{i}.png', dpi=600, bbox_inches='tight')
+		plt.savefig(f'{SAVE_PATH}{dtype}/{path}_NAME_{i}.png', dpi=1000, bbox_inches='tight')
 	plt.show()
 	plt.close()
 
@@ -112,37 +107,37 @@ def plot_hist_glucose_settings(ax, ax0, col='Glucose Value (mg/dL)', xlim=(20,41
 	ax.yaxis.set_ticks_position('left')
 	ax.yaxis.set_label_position('left')
 	ax0.yaxis.set_visible(False)
+	sns.despine(ax=ax0, bottom=True, top=True, left=True, right=True)
 	ax0.set_ylabel('')
-	plt.legend(loc='upper right', bbox_to_anchor=loc_legend, prop={'family': 'DejaVu Sans Mono', 'size':8})
+	plt.legend(loc='upper right', bbox_to_anchor=loc_legend)
 
-def plot_glucose_levels(ax, color=True, orient='vertical', text=True, subtext=True):
-	if color:
-		glucose_palette = sns.diverging_palette(10, 50, n=5)[:3] + sns.diverging_palette(10, 50, n=7)[4:6]
-	else:
-		glucose_palette = sns.diverging_palette(10, 10, s=0, n=5)
+def plot_glucose_levels(ax, orient='vertical', shade=False, text=False, subtext=False):
+    assert orient in ('vertical', 'horizontal'), "Please pass either horizontal or vertical"
 
-	# annotate glucose levels
-	for i, (g, l) in enumerate(glucose_levels.items()):
-		if orient == 'vertical':
-			ax.axvspan(l[0], l[1]+0.99, alpha=0.2, color=glucose_palette[i], lw=0)
-		elif orient == 'horizontal':
-			ax.axhspan(l[0], l[1]+0.99, alpha=0.2, color=glucose_palette[i], lw=0)
+    if shade:
+        fn = ax.axvspan if orient == 'vertical' else ax.axhspan
+        for i, (g, l) in enumerate(glucose_levels.items()):
+            fn(l[0], l[1]+0.99, alpha=.2, color=sns.diverging_palette(10, 10, s=0, n=5)[i], lw=0)
+    else:
+        fn = ax.axvline if orient == 'vertical' else ax.axhline
+        for g, l in list(glucose_levels.items())[1:]:
+            fn(l[0], color='k', linewidth=.5, zorder=1)
 
-	# text: hypo - target - hyper
-	if text:
-		ax.text(glucose_levels['hypo L2'][0]+25, 1.03, 'hypo', color=glucose_palette[0])
-		ax.text(glucose_levels['hyper L1'][0]+35, 1.03, 'hyper', color=glucose_palette[4])
-		ax.text(glucose_levels['target'][0]+25, 1.03, 'target', color=tuple([c*0.5 for c in glucose_palette[2]]))
+    # text: hypo - target - hyper
+    if text:
+        ax.text(glucose_levels['hypo L2'][0]+25, 1.03, 'hypo')
+        ax.text(glucose_levels['hyper L1'][0]+35, 1.03, 'hyper')
+        ax.text(glucose_levels['target'][0]+25, 1.03, 'target')
 
-	# text: L2 L1
-	if subtext:
-		ax.annotate('L2', xy=(glucose_levels['hypo L2'][0]+25, .95), color=glucose_palette[0])
-		ax.annotate('L1', xy=(glucose_levels['hypo L1'][0], .95), color=glucose_palette[1])
-		ax.annotate('L1', xy=(glucose_levels['hyper L1'][0]+25, .95), color=glucose_palette[3])
-		ax.annotate('L2', xy=(glucose_levels['hyper L2'][0]+80, .95), color=glucose_palette[4])
-	return ax
+    # text: L2 L1
+    if subtext:
+        ax.annotate('L2', xy=(glucose_levels['hypo L2'][0]+25, .95), fontsize=8)
+        ax.annotate('L1', xy=(glucose_levels['hypo L1'][0], .95), fontsize=8)
+        ax.annotate('L1', xy=(glucose_levels['hyper L1'][0]+25, .95), fontsize=8)
+        ax.annotate('L2', xy=(glucose_levels['hyper L2'][0]+80, .95), fontsize=8)
+    return ax
 
-def plot_bar(data, x, width=.8, colors=dict(h_neg=10, h_pos=10, s=0, l=50), ax=plt, plot_numbers=False, unit='', duration=None):
+def plot_bar(data, x, width=.8, colors=dict(h_neg=10, h_pos=10, s=0, l=50), ax=plt, plot_numbers=False, labelsize=10, unit='', duration=None):
 	hatch = ('\\\\', '\\\\', None, '//', '//')
 	color_palette = sns.diverging_palette(**colors, n=5)
 	bottom = 0
@@ -151,11 +146,11 @@ def plot_bar(data, x, width=.8, colors=dict(h_neg=10, h_pos=10, s=0, l=50), ax=p
 		bottom += y
 		if plot_numbers and y >= 4:
 			if sec == 2:
-				ax.bar_label(c, labels=['%.0f'%y+unit], label_type='center', color='gray')
+				ax.bar_label(c, labels=['%.0f'%y+unit], label_type='center', fontsize=labelsize, color='black')
 			elif plot_numbers == 'full':
-				ax.bar_label(c, labels=['%.0f'%y+unit], label_type='center', fontweight='black', color='white')
+				ax.bar_label(c, labels=['%.0f'%y+unit], label_type='center', fontsize=labelsize, fontweight='bold', color='white')
 	if duration:
-		ax.text(x, -8, duration, ha='center', color='gray')
+		ax.text(x, -8, duration, ha='center', color='black')
 
 class PlotResults():
 	def __init__(self, regression):
@@ -176,7 +171,7 @@ class PlotResults():
 			return info
 
 	def subplot_coefficients(self, df, fig, ax, title='', textlocs=(0, 0.7), cmax=0.6, xlim=None, leq=1.9, categories=True):
-		cmap = cm.get_cmap('RdBu_r')#cut_cmap('Blues', 'Reds', cut=0)
+		cmap = get_cmap('RdBu_r')#cut_cmap('Blues', 'Reds', cut=0)
 		if not cmax:
 			cmax = np.log(df['Estimate']).abs().max()
 		colors = ((np.log(df['Estimate']) / cmax)+1)/2
@@ -257,7 +252,7 @@ class PlotResults():
 
 		if savefig:
 			plt.savefig(f"{self.root}coefficients_{self.filename.lstrip('model_')}.pdf", bbox_inches='tight')
-			plt.savefig(f"{self.root}coefficients_{self.filename.lstrip('model_')}.png", bbox_inches='tight', dpi=600)
+			plt.savefig(f"{self.root}coefficients_{self.filename.lstrip('model_')}.png", bbox_inches='tight', dpi=1000)
 
 	def plot_coefficients_env(self, co, figsize=(15,25), wspace=.7, xlim=(0.1, 10), leq=7, savefig=True, **kws_sub):
 		cols = co.index.get_level_values(0).unique()
@@ -277,7 +272,7 @@ class PlotResults():
 
 		if savefig:
 			plt.savefig(f"{self.root}coefficients_env_{self.filename.lstrip('model_')}.pdf", bbox_inches='tight')
-			plt.savefig(f"{self.root}coefficients_env_{self.filename.lstrip('model_')}.png", bbox_inches='tight', dpi=600)
+			plt.savefig(f"{self.root}coefficients_env_{self.filename.lstrip('model_')}.png", bbox_inches='tight', dpi=1000)
 
 	def plot_coefficients_per_sec(self, fe_hypo, fe_hyper, sec, figsize=(7,5), wspace=1, xlim=(0.4, 2.1), leq=3.6, savefig=True, **kws_sub):
 		fig, axs = plt.subplots(1,2, figsize=figsize, sharey=True, sharex=True, gridspec_kw=dict(wspace=wspace))
@@ -290,4 +285,4 @@ class PlotResults():
 
 		if savefig:
 			plt.savefig(f"{self.root}coefficients_{self.filename.split('_')[2]}_{sec}.pdf", bbox_inches='tight')
-			plt.savefig(f"{self.root}coefficients_{self.filename.split('_')[2]}_{sec}.png", bbox_inches='tight', dpi=600)
+			plt.savefig(f"{self.root}coefficients_{self.filename.split('_')[2]}_{sec}.png", bbox_inches='tight', dpi=1000)
