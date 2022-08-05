@@ -7,7 +7,7 @@ import seaborn as sns
 from matplotlib import pyplot as plt
 from matplotlib.cm import get_cmap
 from matplotlib.patches import Patch
-from matplotlib.colors import ListedColormap
+from matplotlib.colors import ListedColormap, LinearSegmentedColormap
 from matplotlib.ticker import LogLocator, FormatStrFormatter
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
@@ -43,7 +43,7 @@ def cut_cmap(cmap_left, cmap_right, cut=10, freq=100, grey=None):
 
 def savefig(path, i='', dtype='Dexcom', legend=None, title=None, xticks=None, yticks=None, **titlekwargs):
 	if title is not None:
-		plt.title(r'$\bf{Cyclist}$ '+r'$\bf{:d}$ - '.format(i)+title, **titlekwargs)
+		plt.title(r'$\bf{Participant}$ '+r'$\bf{:d}$ - '.format(i)+title, **titlekwargs)
 	if legend is not None:
 		for text in legend:
 			text.set_fontsize(8)
@@ -96,7 +96,7 @@ def plot_availability(df_avail, cmap='Blues', rot_months=0, itv_months=1, vmin=0
 	ticksloc = np.where(monthyear.to_series().shift() != monthyear.to_series())[0][1::itv_months]
 	plt.xticks(ticks=ticksloc, labels=monthyear[ticksloc], rotation=rot_months)
 	plt.xlabel('date')
-	plt.ylabel('rider')
+	plt.ylabel('participant')
 	return ax
 
 def plot_hist_glucose_settings(ax, ax0, col='Glucose Value (mg/dL)', xlim=(20,410), ylabel='Probability', loc_legend=(1., 0.96)):
@@ -161,7 +161,7 @@ class PlotResults():
 		if pd.isnull(x['Pr(>|z|)']):
 			return None
 		else:
-			info = r" {:.2f}  ({:.2f} - {:.2f})  ".format(x['Estimate'], x['CI_lower'], x['CI_upper'])
+			info = r" {:.2f}  [{:.2f}$-${:.2f}]  ".format(x['Estimate'], x['CI_lower'], x['CI_upper'])
 			if type(x['Pr(>|z|)']) == float:
 				info += r"   {:.3f}".format(x['Pr(>|z|)'])
 			else:
@@ -170,8 +170,13 @@ class PlotResults():
 			info += r"{:s}".format(x['Sign'])
 			return info
 
-	def subplot_coefficients(self, df, fig, ax, title='', textlocs=(0, 0.7), cmax=0.6, xlim=None, leq=1.9, categories=True):
-		cmap = get_cmap('RdBu_r')#cut_cmap('Blues', 'Reds', cut=0)
+	def subplot_coefficients(self, df, fig, ax, title='', 
+			textlocs=(-0.5, 0.7), xlim=None, leq=1.9, 
+			tickcolor = 'gray',
+			cmax=0.5, cmap_cut=30, categories=True):
+		#cmap = cut_cmap('Blues', 'Reds', cut=cmap_cut)#get_cmap('RdBu_r')#
+		palette = sns.color_palette("RdBu_r", n_colors=11)
+		cmap = LinearSegmentedColormap.from_list("", [palette[0], '#CCCCCC', palette[-1]])
 		if not cmax:
 			cmax = np.log(df['Estimate']).abs().max()
 		colors = ((np.log(df['Estimate']) / cmax)+1)/2
@@ -201,7 +206,7 @@ class PlotResults():
 		# ticks on RHS
 		ax0 = ax.twinx()
 		info_ticks = df.apply(self.info_coefficients, axis=1)
-		info_ticks[0] = "Odds ratio (95% CI)  p-value"
+		info_ticks[0] = "Odds ratio [95%CI] $p$-value"
 		ax0.set_yticks(x, info_ticks)
 		ax0.get_yticklabels()[0].set_fontweight('bold')
 
@@ -210,27 +215,29 @@ class PlotResults():
 		for n in x:
 			if not pd.isnull(df['Pr(>|z|)'].iloc[n]):
 				if str(df['Pr(>|z|)'].iloc[n]).startswith('<'):
-					ax0.text(xmax+(xmax-1)*leq, n+0.06, r"$<$", color='gray', va='center')
+					ax0.text(xmax+(xmax-1)*leq, n+0.06, r"$<$", color=tickcolor, va='center', fontsize=8)
 
 		# arrowheads
 		ax.plot(1, 0, marker=9, color='black', markersize=5, transform=ax.transAxes, clip_on=False)
 		ax.plot(0, 0, marker=8, color='black', markersize=5, transform=ax.transAxes, clip_on=False)
 
 		# xlabel
-		ax.set_xlabel(f'Odds ratio (95% CI) of {self.event}glycemia', labelpad=30)
+		ax.set_xlabel(f'Odds ratio [95% CI] of {self.event}glycemia', labelpad=30)
 		ax.text(textlocs[0], -1/ax.get_figure().get_size_inches()[1]*0.6+0.01, 
-				f'Decreased risk of\n {self.event}glycemia', color=cmap(0.05), fontsize=8, transform=ax.transAxes)
+				f'Decreased odds of\n {self.event}glycemia', 
+				color=cmap(0.01), fontsize=8, transform=ax.transAxes)
 		ax.text(textlocs[1], -1/ax.get_figure().get_size_inches()[1]*0.6+0.01, 
-				f'Increased risk of\n {self.event}glycemia', color=cmap(0.95), fontsize=8, transform=ax.transAxes)
+				f'Increased odds of\n {self.event}glycemia', 
+				color=cmap(0.99), fontsize=8, transform=ax.transAxes)
 
-		ax.set_title(title.upper(), x=1, y=-1, transform=ax.transData)
+		ax.set_title(title.title(), x=1, y=-1, transform=ax.transData, fontsize=9)
 
 		# layout
 		sns.despine(ax=ax, left=True, right=True)
 		sns.despine(ax=ax0, left=True, right=True)
 
 		ax.tick_params(length=0)
-		ax0.tick_params(length=0, pad=2, colors='gray')
+		ax0.tick_params(length=0, pad=2, colors=tickcolor)
 
 		ax.set_ylim(x.max()+1, x.min())
 		ax0.set_ylim(x.max()+1, x.min())
@@ -244,17 +251,19 @@ class PlotResults():
 		ax.xaxis.set_minor_locator(LogLocator(base=100, numticks=1)) #we need this because somehow they are not turned off
 		ax.xaxis.set_major_formatter(FormatStrFormatter('%.1f'))
 
-	def plot_coefficients(self, fe, figsize=(15,6), wspace=.6, xlim=(0.4, 2.1), leq=1.9, savefig=True, **kws_sub):
+	def plot_coefficients(self, fe, figsize=(6.8,5), wspace=2, xlim=(0.4, 2.1), leq=13, savefig=True, **kws_sub):
 		fig, axs = plt.subplots(1,3, figsize=figsize, sharey=True, sharex=True, gridspec_kw=dict(wspace=wspace))
 		for i, sec in enumerate(self.sections):
 			self.subplot_coefficients(self.regression.transform_fe(fe)[sec], fig, axs[i], 
 				title=sec, xlim=xlim, leq=leq, **kws_sub)
 
 		if savefig:
-			plt.savefig(f"{self.root}coefficients_{self.filename.lstrip('model_')}.pdf", bbox_inches='tight')
-			plt.savefig(f"{self.root}coefficients_{self.filename.lstrip('model_')}.png", bbox_inches='tight', dpi=1000)
+			plt.savefig(f"{self.root}coef_{self.filename[6:]}.pdf", bbox_inches='tight')
+			plt.savefig(f"{self.root}coef_{self.filename[6:]}.png", bbox_inches='tight', dpi=1000)
+		plt.show()
+		plt.close()
 
-	def plot_coefficients_env(self, co, figsize=(15,25), wspace=.7, xlim=(0.1, 10), leq=7, savefig=True, **kws_sub):
+	def plot_coefficients_env(self, co, figsize=(6.8,20), wspace=2, xlim=(0.1, 10), leq=300, savefig=True, **kws_sub):
 		cols = co.index.get_level_values(0).unique()
 		fig, axs = plt.subplots(len(cols),3, figsize=figsize, sharey=True, sharex=True, gridspec_kw=dict(wspace=wspace))
 		for n, col in enumerate(cols):
@@ -268,21 +277,27 @@ class PlotResults():
 						text.set_position((text.get_position()[0], text.get_position()[1]-0.4))
 				if n != 0:
 					axs[n,i].set_title('')
-			axs[n,0].set_ylabel(col[:18]+'\n'+col[18:])
+				if n != len(cols)-1:
+					axs[n,i].set_xlabel('')
+			axs[n,0].set_ylabel(col[:18]+'\n'+col[18:], fontsize=8)
 
 		if savefig:
-			plt.savefig(f"{self.root}coefficients_env_{self.filename.lstrip('model_')}.pdf", bbox_inches='tight')
-			plt.savefig(f"{self.root}coefficients_env_{self.filename.lstrip('model_')}.png", bbox_inches='tight', dpi=1000)
+			plt.savefig(f"{self.root}coef_env_{self.filename[6:]}.pdf", bbox_inches='tight')
+			plt.savefig(f"{self.root}coef_env_{self.filename[6:]}.png", bbox_inches='tight', dpi=1000)
+		plt.show()
+		plt.close()
 
-	def plot_coefficients_per_sec(self, fe_hypo, fe_hyper, sec, figsize=(7,5), wspace=1, xlim=(0.4, 2.1), leq=3.6, savefig=True, **kws_sub):
+	def plot_coefficients_per_sec(self, fe_hypo, fe_hyper, sec, figsize=(6.8,4.5), wspace=0.8, xlim=(0.4, 2.1), textlocs=(0, 0.6), leq=2.5, savefig=True, **kws_sub):
 		fig, axs = plt.subplots(1,2, figsize=figsize, sharey=True, sharex=True, gridspec_kw=dict(wspace=wspace))
 		self.event = 'hypo'
 		self.subplot_coefficients(self.regression.transform_fe(fe_hypo)[sec], fig, axs[0], 
-			title=sec, xlim=xlim, leq=leq, **kws_sub)
+			title=sec, xlim=xlim, leq=leq, textlocs=textlocs, **kws_sub)
 		self.event = 'hyper'
 		self.subplot_coefficients(self.regression.transform_fe(fe_hyper)[sec], fig, axs[1], 
-			title=sec, xlim=xlim, leq=leq, **kws_sub)
+			title=sec, xlim=xlim, leq=leq, textlocs=textlocs, **kws_sub)
 
 		if savefig:
-			plt.savefig(f"{self.root}coefficients_{self.filename.split('_')[2]}_{sec}.pdf", bbox_inches='tight')
-			plt.savefig(f"{self.root}coefficients_{self.filename.split('_')[2]}_{sec}.png", bbox_inches='tight', dpi=1000)
+			plt.savefig(f"{self.root}coef_{self.filename.split('_')[2]}_{sec}.pdf", bbox_inches='tight')
+			plt.savefig(f"{self.root}coef_{self.filename.split('_')[2]}_{sec}.png", bbox_inches='tight', dpi=1000)
+		plt.show()
+		plt.close()

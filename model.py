@@ -78,7 +78,7 @@ class GLMM:
 		print(base.summary(self.model))
 		base.sink()  # returns output to the console
 
-class Regress:
+class PyLME4:
 	def __init__(self, event, family='binomial', experiment='', categories={}, sorting=[], root='', verbose=0):
 		"""
 		Arguments
