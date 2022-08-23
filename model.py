@@ -9,19 +9,21 @@ from itertools import combinations
 from plot import *
 
 class GLMM:
-	def __init__(self, family='binomial', interactions=False, random_effects=None, verbose=0):
+	def __init__(self, family='binomial', interactions=False, random_slope=None, random_intercept=True, verbose=0):
 		"""
 		Generalized Linear Mixed Model using lme4 in R
 
 		Arguments
 			family - model family (link function)
 			interactions - whether to include interactions for all variables
-			random effects - list of variables for which to include a random effect
+			random slope - list of variables for which to include a random effect
+			random intercept - whether to include a random intercept
 			verbose - degree of which to display intermediate results
 		"""
 		self.family = family
 		self.interactions = interactions
-		self.random_effects = random_effects
+		self.random_slope = random_slope
+		self.random_intercept = random_intercept
 		self.verbose = verbose
 
 	def get_formula(self, X, y):
@@ -46,10 +48,18 @@ class GLMM:
 		formula_y = y.columns[0] + '~'
 		formula_fix = '1+' + '+'.join(cols_X)
 		formula_int = ''.join([f'+{col_A}*{col_B}' if self.interactions else '' for col_A, col_B in combinations(cols_X, 2)])
-		if self.random_effects:
-			formula_rnd = '+(1+' + '+'.join(self.random_effects)+f'|{groups})'
+		
+		if self.random_intercept or self.random_slope:
+			formula_rnd = '+('
+			if self.random_intercept:
+				formula_rnd += '1'
+				if self.random_slope:
+					formula_rnd += '+'
+			if self.random_slope:
+				'+'.join(self.random_slope)
+			formula_rnd += f'|{groups})'
 		else:
-			formula_rnd = f'+(1|{groups})'
+			formula_rnd = ''
 
 		self.formula = ''.join((formula_y, formula_fix, formula_int, formula_rnd))
 
@@ -186,8 +196,8 @@ class PyLME4:
 		Read the regression results, calculate 95% CI, and convert the results to the appropriate format
 					
 		Returns
+			co - fixed effects results of three sections for the variable of interest
 			fe - fixed effects results of three sections
-			co - fixed effects results of three sections for the controlling variables
 			re - random effects results of three sections
 			score - evaluation of model of three sections
 			res - residuals of three sections
@@ -248,27 +258,26 @@ class PyLME4:
 		fe = fe.replace({None:''})
 		fe = fe.replace({'.':''})
 		
-		co = fe.loc[['Intercept']+list(cols_env.values())]
-		fe = fe.drop(co.index)
-		return fe, co, re, score, res
-
-	def transform_fe(self, fe, output=''):
-		fe_new = pd.DataFrame(columns=fe.columns)
-		for cat, idx in self.categories.items():
-			if output == 'table':
-				row = pd.DataFrame(index=[r'\multicolumn{2}{@{} l}{\textit{'+cat+'}}'], columns=fe.columns)
-			else:
-				row = pd.DataFrame(index=[' ', cat], columns=fe.columns)
-			fe_new = pd.concat([fe_new, row, fe.loc[idx]])
-		#fe_new = fe_new.iloc[1:]
-		return fe_new
+		co = fe.drop(['Intercept']+list(cols_env.values()))
+		return co, fe, re, score, res
 
 	def transform_co(self, co, output=''):
-		return pd.concat([pd.DataFrame(index=[''], columns=co.columns), co])
+		co_new = pd.DataFrame(columns=co.columns)
+		for cat, idx in self.categories.items():
+			if output == 'table':
+				row = pd.DataFrame(index=[r'\multicolumn{2}{@{} l}{\textit{'+cat+'}}'], columns=co.columns)
+			else:
+				row = pd.DataFrame(index=[' ', cat], columns=co.columns)
+			co_new = pd.concat([co_new, row, co.loc[idx]])
+		#co_new = co_new.iloc[1:]
+		return co_new
 
-	def inv_transform_fe(self, fe):
-		fe = fe.dropna(how='all')
-		return fe
+	def transform_fe(self, fe, output=''):
+		return pd.concat([pd.DataFrame(index=[''], columns=fe.columns), fe])
+
+	def inv_transform_co(self, co):
+		co = co.dropna(how='all')
+		return co
 
 	def rename_time(self, x):
 		if x.startswith('Time in'):
@@ -292,28 +301,32 @@ class PyLME4:
 		self.categories = self.categories.groupby(0)['index'].apply(list).to_dict()
 
 	def read_tables(self):
-		fe = pd.read_csv(f"{self.root}{self.filename}_fe.csv", index_col=0, header=[0,1])
-		fe = self.inv_transform_fe(fe)
-		for col in np.unique(fe.columns.get_level_values(0)):
-			fe.loc[:, (col,'Pr(>|z|)')] = fe.loc[:, (col,'Pr(>|z|)')].apply(lambda x: float(x) if not str(x).startswith('<') else x)
-			fe.loc[:, (col,'Estimate')] = fe.loc[:, (col,'Estimate')].astype(float)
-			fe.loc[:, (col,'Sign')] = fe.loc[:, (col,'Sign')].replace({np.nan: ''})
+		co = pd.read_csv(f"{self.root}{self.filename}_co.csv", index_col=0, header=[0,1])
+		co = self.inv_transform_co(co)
+		for col in np.unique(co.columns.get_level_values(0)):
+			co.loc[:, (col,'Pr(>|z|)')] = co.loc[:, (col,'Pr(>|z|)')].apply(lambda x: float(x) if not str(x).startswith('<') else x)
+			co.loc[:, (col,'Estimate')] = co.loc[:, (col,'Estimate')].astype(float)
+			co.loc[:, (col,'Sign')] = co.loc[:, (col,'Sign')].replace({np.nan: ''})
 
 		re = pd.read_csv(f"{self.root}{self.filename}_re.csv", index_col=[0,1,2], header=[0,1])
 
-		# rename fe and categories for plotting
-		self.transform_cat()
-		fe = fe.rename(index=self.rename_time)
-		return fe, re
+		fe = pd.read_pickle(f"{self.root}{self.filename}_fe.pkl")
 
-	def save_tables(self, fe, re):
+		# rename co and categories for plotting
+		self.transform_cat()
+		co = co.rename(index=self.rename_time)
+		return co, fe, re
+
+	def save_tables(self, co, fe, re):
 		with open(f"{self.root}{self.filename}.tex", 'w') as file:
-			file.write(self.transform_fe(fe, output='table').to_latex(column_format='c', escape=False))
+			file.write(self.transform_co(co, output='table').to_latex(column_format='c', escape=False))
 			file.write(re.to_latex(column_format='c', escape=False))
-		self.transform_fe(fe).to_csv(f"{self.root}{self.filename}_fe.csv")
+		self.transform_co(co).to_csv(f"{self.root}{self.filename}_co.csv")
 		re.to_csv(f"{self.root}{self.filename}_re.csv")
 
-		# rename fe and categories for plotting
+		fe.to_pickle(f"{self.root}{self.filename}_fe.pkl")
+
+		# rename co and categories for plotting
 		self.transform_cat()
-		fe = fe.rename(index=self.rename_time)
-		return fe
+		co = co.rename(index=self.rename_time)
+		return co

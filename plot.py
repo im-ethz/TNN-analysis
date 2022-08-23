@@ -14,7 +14,7 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 from colorsys import rgb_to_hls, hls_to_rgb
 
 from calc import glucose_levels
-from config import SAVE_PATH, rider_mapping_inv
+from config import SAVE_PATH, ANON, rider_mapping_inv
 
 plt.style.use('./diabetes_care.mplstyle')
 
@@ -48,23 +48,24 @@ def savefig(path, i='', dtype='Dexcom', legend=None, title=None, xticks=None, yt
 		for text in legend:
 			text.set_fontsize(8)
 	
-	plt.savefig(f'{SAVE_PATH}{dtype}/{path}_{i}.pdf', bbox_inches='tight')
-	plt.savefig(f'{SAVE_PATH}{dtype}/{path}_{i}.png', dpi=1000, bbox_inches='tight')
+	plt.savefig(f'{SAVE_PATH}{dtype}/{path}_{i}.pdf')#, bbox_inches='tight')
+	plt.savefig(f'{SAVE_PATH}{dtype}/{path}_{i}.png', dpi=1000)#, bbox_inches='tight')
 	
-	if title is not None:
-		plt.title(r'$\bf{:s}$ '.format(rider_mapping_inv[i])+title, **titlekwargs)
-	if legend is not None:
-		for leg in legend:
-			text = leg.get_text().split()
-			leg.set_text(rider_mapping_inv[int(text[0])]+' '+' '.join(text[1:]))
-	if xticks is not None:
-		xticks.set_xticklabels([rider_mapping_inv[int(j.get_text())] for j in xticks.get_xticklabels()], rotation=90)
-	if yticks is not None:
-		yticks.set_yticklabels([rider_mapping_inv[int(j.get_text())] for j in yticks.get_yticklabels()], rotation=0)
-	
-	if title is not None or legend is not None or xticks is not None or yticks is not None:
-		plt.savefig(f'{SAVE_PATH}{dtype}/{path}_NAME_{i}.pdf', bbox_inches='tight')
-		plt.savefig(f'{SAVE_PATH}{dtype}/{path}_NAME_{i}.png', dpi=1000, bbox_inches='tight')
+	if not ANON:
+		if title is not None:
+			plt.title(r'$\bf{:s}$ '.format(rider_mapping_inv[i])+title, **titlekwargs)
+		if legend is not None:
+			for leg in legend:
+				text = leg.get_text().split()
+				leg.set_text(rider_mapping_inv[int(text[0])]+' '+' '.join(text[1:]))
+		if xticks is not None:
+			xticks.set_xticklabels([rider_mapping_inv[int(j.get_text())] for j in xticks.get_xticklabels()], rotation=90)
+		if yticks is not None:
+			yticks.set_yticklabels([rider_mapping_inv[int(j.get_text())] for j in yticks.get_yticklabels()], rotation=0)
+		
+		if title is not None or legend is not None or xticks is not None or yticks is not None:
+			plt.savefig(f'{SAVE_PATH}{dtype}/{path}_NAME_{i}.pdf')#, bbox_inches='tight')
+			plt.savefig(f'{SAVE_PATH}{dtype}/{path}_NAME_{i}.png', dpi=1000)#, bbox_inches='tight')
 	plt.show()
 	plt.close()
 
@@ -112,30 +113,30 @@ def plot_hist_glucose_settings(ax, ax0, col='Glucose Value (mg/dL)', xlim=(20,41
 	plt.legend(loc='upper right', bbox_to_anchor=loc_legend)
 
 def plot_glucose_levels(ax, orient='vertical', shade=False, text=False, subtext=False):
-    assert orient in ('vertical', 'horizontal'), "Please pass either horizontal or vertical"
+	assert orient in ('vertical', 'horizontal'), "Please pass either horizontal or vertical"
 
-    if shade:
-        fn = ax.axvspan if orient == 'vertical' else ax.axhspan
-        for i, (g, l) in enumerate(glucose_levels.items()):
-            fn(l[0], l[1]+0.99, alpha=.2, color=sns.diverging_palette(10, 10, s=0, n=5)[i], lw=0)
-    else:
-        fn = ax.axvline if orient == 'vertical' else ax.axhline
-        for g, l in list(glucose_levels.items())[1:]:
-            fn(l[0], color='k', linewidth=.5, zorder=1)
+	if shade:
+		fn = ax.axvspan if orient == 'vertical' else ax.axhspan
+		for i, (g, l) in enumerate(glucose_levels.items()):
+			fn(l[0], l[1]+0.99, alpha=.2, color=sns.diverging_palette(10, 10, s=0, n=5)[i], lw=0)
+	else:
+		fn = ax.axvline if orient == 'vertical' else ax.axhline
+		for g, l in list(glucose_levels.items())[1:]:
+			fn(l[0], color='k', linewidth=.5, zorder=1)
 
-    # text: hypo - target - hyper
-    if text:
-        ax.text(glucose_levels['hypo L2'][0]+25, 1.03, 'hypo')
-        ax.text(glucose_levels['hyper L1'][0]+35, 1.03, 'hyper')
-        ax.text(glucose_levels['target'][0]+25, 1.03, 'target')
+	# text: hypo - target - hyper
+	if text:
+		ax.text(glucose_levels['hypo L2'][0]+25, 1.03, 'hypo')
+		ax.text(glucose_levels['hyper L1'][0]+35, 1.03, 'hyper')
+		ax.text(glucose_levels['target'][0]+25, 1.03, 'target')
 
-    # text: L2 L1
-    if subtext:
-        ax.annotate('L2', xy=(glucose_levels['hypo L2'][0]+25, .95), fontsize=8)
-        ax.annotate('L1', xy=(glucose_levels['hypo L1'][0], .95), fontsize=8)
-        ax.annotate('L1', xy=(glucose_levels['hyper L1'][0]+25, .95), fontsize=8)
-        ax.annotate('L2', xy=(glucose_levels['hyper L2'][0]+80, .95), fontsize=8)
-    return ax
+	# text: L2 L1
+	if subtext:
+		ax.annotate('L2', xy=(glucose_levels['hypo L2'][0]+25, .95), fontsize=8)
+		ax.annotate('L1', xy=(glucose_levels['hypo L1'][0], .95), fontsize=8)
+		ax.annotate('L1', xy=(glucose_levels['hyper L1'][0]+25, .95), fontsize=8)
+		ax.annotate('L2', xy=(glucose_levels['hyper L2'][0]+80, .95), fontsize=8)
+	return ax
 
 def plot_bar(data, x, width=.8, colors=dict(h_neg=10, h_pos=10, s=0, l=50), ax=plt, plot_numbers=False, labelsize=10, unit='', duration=None):
 	hatch = ('\\\\', '\\\\', None, '//', '//')
@@ -171,7 +172,7 @@ class PlotResults():
 			return info
 
 	def subplot_coefficients(self, df, fig, ax, title='', 
-			textlocs=(-0.5, 0.7), xlim=None, leq=1.9, 
+			textx=(-0.5, 0.7), texty=0.6, xlim=None, leq=1.9, 
 			tickcolor = 'gray',
 			cmax=0.5, cmap_cut=30, categories=True):
 		#cmap = cut_cmap('Blues', 'Reds', cut=cmap_cut)#get_cmap('RdBu_r')#
@@ -223,11 +224,11 @@ class PlotResults():
 
 		# xlabel
 		ax.set_xlabel(f'Odds ratio [95% CI] of {self.event}glycemia', labelpad=30)
-		ax.text(textlocs[0], -1/ax.get_figure().get_size_inches()[1]*0.6+0.01, 
-				f'Decreased odds of\n {self.event}glycemia', 
+		ax.text(textx[0], -1/ax.get_figure().get_size_inches()[1]*texty+0.01, 
+				f'Decreased odds\nof {self.event}glycemia', 
 				color=cmap(0.01), fontsize=8, transform=ax.transAxes)
-		ax.text(textlocs[1], -1/ax.get_figure().get_size_inches()[1]*0.6+0.01, 
-				f'Increased odds of\n {self.event}glycemia', 
+		ax.text(textx[1], -1/ax.get_figure().get_size_inches()[1]*texty+0.01, 
+				f'Increased odds\nof {self.event}glycemia', 
 				color=cmap(0.99), fontsize=8, transform=ax.transAxes)
 
 		ax.set_title(title.title(), x=1, y=-1, transform=ax.transData, fontsize=9)
@@ -251,25 +252,25 @@ class PlotResults():
 		ax.xaxis.set_minor_locator(LogLocator(base=100, numticks=1)) #we need this because somehow they are not turned off
 		ax.xaxis.set_major_formatter(FormatStrFormatter('%.1f'))
 
-	def plot_coefficients(self, fe, figsize=(6.8,5), wspace=2, xlim=(0.4, 2.1), leq=13, savefig=True, **kws_sub):
+	def plot_coefficients(self, co, figsize=(6.8,5), wspace=2, xlim=(0.45, 2.2), leq=11.5, savefig=True, **kws_sub):
 		fig, axs = plt.subplots(1,3, figsize=figsize, sharey=True, sharex=True, gridspec_kw=dict(wspace=wspace))
 		for i, sec in enumerate(self.sections):
-			self.subplot_coefficients(self.regression.transform_fe(fe)[sec], fig, axs[i], 
+			self.subplot_coefficients(self.regression.transform_co(co)[sec], fig, axs[i], 
 				title=sec, xlim=xlim, leq=leq, **kws_sub)
 
 		if savefig:
 			plt.savefig(f"{self.root}coef_{self.filename[6:]}.pdf", bbox_inches='tight')
-			plt.savefig(f"{self.root}coef_{self.filename[6:]}.png", bbox_inches='tight', dpi=1000)
+			plt.savefig(f"{self.root}coef_{self.filename[6:]}.png", dpi=1000, bbox_inches='tight')
 		plt.show()
 		plt.close()
 
-	def plot_coefficients_env(self, co, figsize=(6.8,20), wspace=2, xlim=(0.1, 10), leq=300, savefig=True, **kws_sub):
-		cols = co.index.get_level_values(0).unique()
-		fig, axs = plt.subplots(len(cols),3, figsize=figsize, sharey=True, sharex=True, gridspec_kw=dict(wspace=wspace))
+	def plot_coefficients_env(self, fe, figsize=(10,20), wspace=1.2, xlim=(0.1, 10), textx=(-0.05, 0.6), leq=21, drop_minor_ticks=False, savefig=True, **kws_sub):
+		cols = fe.index.get_level_values(0).unique()
+		fig, axs = plt.subplots(len(cols),3, figsize=figsize, sharey='row', sharex=True, gridspec_kw=dict(wspace=wspace))
 		for n, col in enumerate(cols):
 			for i, sec in enumerate(self.sections):
-				self.subplot_coefficients(self.regression.transform_co(co.loc[col])[sec], fig, axs[n, i], 
-					title=sec, xlim=xlim, leq=leq, **kws_sub)
+				self.subplot_coefficients(self.regression.transform_fe(fe.loc[col])[sec], fig, axs[n, i], 
+					title=sec, xlim=xlim, leq=leq, textx=textx, **kws_sub)
 				for text in axs[n,i].texts:
 					if n != len(cols)-1:
 						text.set_visible(False)
@@ -279,25 +280,26 @@ class PlotResults():
 					axs[n,i].set_title('')
 				if n != len(cols)-1:
 					axs[n,i].set_xlabel('')
-			axs[n,0].set_ylabel(col[:18]+'\n'+col[18:], fontsize=8)
+				elif drop_minor_ticks:
+					axs[n,i].xaxis.set_tick_params(which='minor', labelbottom=False)
 
 		if savefig:
 			plt.savefig(f"{self.root}coef_env_{self.filename[6:]}.pdf", bbox_inches='tight')
-			plt.savefig(f"{self.root}coef_env_{self.filename[6:]}.png", bbox_inches='tight', dpi=1000)
+			plt.savefig(f"{self.root}coef_env_{self.filename[6:]}.png", dpi=1000, bbox_inches='tight')
 		plt.show()
 		plt.close()
 
-	def plot_coefficients_per_sec(self, fe_hypo, fe_hyper, sec, figsize=(6.8,4.5), wspace=0.8, xlim=(0.4, 2.1), textlocs=(0, 0.6), leq=2.5, savefig=True, **kws_sub):
+	def plot_coefficients_per_sec(self, co_hypo, co_hyper, sec, figsize=(6.8,4.5), wspace=0.8, xlim=(0.45, 2.2), textx=(0, 0.6), leq=2.2, savefig=True, **kws_sub):
 		fig, axs = plt.subplots(1,2, figsize=figsize, sharey=True, sharex=True, gridspec_kw=dict(wspace=wspace))
 		self.event = 'hypo'
-		self.subplot_coefficients(self.regression.transform_fe(fe_hypo)[sec], fig, axs[0], 
-			title=sec, xlim=xlim, leq=leq, textlocs=textlocs, **kws_sub)
+		self.subplot_coefficients(self.regression.transform_co(co_hypo)[sec], fig, axs[0], 
+			title=sec, xlim=xlim, leq=leq, textx=textx, **kws_sub)
 		self.event = 'hyper'
-		self.subplot_coefficients(self.regression.transform_fe(fe_hyper)[sec], fig, axs[1], 
-			title=sec, xlim=xlim, leq=leq, textlocs=textlocs, **kws_sub)
+		self.subplot_coefficients(self.regression.transform_co(co_hyper)[sec], fig, axs[1], 
+			title=sec, xlim=xlim, leq=leq, textx=textx, **kws_sub)
 
 		if savefig:
-			plt.savefig(f"{self.root}coef_{self.filename.split('_')[2]}_{sec}.pdf", bbox_inches='tight')
-			plt.savefig(f"{self.root}coef_{self.filename.split('_')[2]}_{sec}.png", bbox_inches='tight', dpi=1000)
+			plt.savefig(f"{self.root}coef_{self.filename.split('_')[2]}_{sec}.pdf")#, bbox_inches='tight')
+			plt.savefig(f"{self.root}coef_{self.filename.split('_')[2]}_{sec}.png", dpi=1000)#, bbox_inches='tight')
 		plt.show()
 		plt.close()
