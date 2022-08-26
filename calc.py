@@ -22,6 +22,10 @@ glucose_levels = {'hypo L2': (0,53),
 				  'target' : (70,180),
 				  'hyper L1': (181,250),
 				  'hyper L2': (251,10000)}
+glucose_levels_ = {level: (lmin-(1-1e-8), lmax) if level.startswith('hyper') else (
+						  (lmin, lmax+(1-1e-8)) if level.startswith('hypo') else (
+						  (lmin, lmax))) for level, (lmin, lmax) in glucose_levels.items()}
+
 
 mmoll_mgdl = 18
 mgdl_mmoll = 1/mmoll_mgdl
@@ -42,10 +46,16 @@ def HBGI(X):
 	return symmetric_scale(X).apply(lambda x: 10*x**2 if x >= 0 else 0).mean()
 
 def time_in_level(x, l):
-	levels = glucose_levels
+	levels = glucose_levels_
 	levels['hypo'] = (glucose_levels['hypo L2'][0], glucose_levels['hypo L1'][1])
 	levels['hyper'] = (glucose_levels['hyper L1'][0], glucose_levels['hyper L2'][1])
 	return ((x >= levels[l][0]) & (x <= levels[l][1])).sum()
+
+def perc_in_level(x, l):
+	levels = glucose_levels_
+	levels['hypo'] = (glucose_levels['hypo L2'][0], glucose_levels['hypo L1'][1])
+	levels['hyper'] = (glucose_levels['hyper L1'][0], glucose_levels['hyper L2'][1])
+	return ((x >= levels[l][0]) & (x <= levels[l][1])).sum() / x.count() * 100
 
 def calc_hr_zones(LTHR:float) -> list:
 	# Coggan HR zones
@@ -153,6 +163,13 @@ def stats_cgm(x, sec='', col='Glucose Value (mg/dL)'):
 			'time_in_hyper_'+sec 	: time_in_level(x[col], 'hyper'),
 			'time_in_hyperL1_'+sec 	: time_in_level(x[col], 'hyper L1'),
 			'time_in_hyperL2_'+sec 	: time_in_level(x[col], 'hyper L2'),
+			'perc_in_hypo_'+sec 	: perc_in_level(x[col], 'hypo'),
+			'perc_in_hypoL2_'+sec 	: perc_in_level(x[col], 'hypo L2'),
+			'perc_in_hypoL1_'+sec 	: perc_in_level(x[col], 'hypo L1'),
+			'perc_in_target_'+sec 	: perc_in_level(x[col], 'target'),
+			'perc_in_hyper_'+sec 	: perc_in_level(x[col], 'hyper'),
+			'perc_in_hyperL1_'+sec 	: perc_in_level(x[col], 'hyper L1'),
+			'perc_in_hyperL2_'+sec 	: perc_in_level(x[col], 'hyper L2'),
 			'glucose_mean_'+sec 	: x[col].mean(),
 			'glucose_std_'+sec 		: x[col].std(),
 			'glucose_cv_'+sec 		: x[col].std() / x[col].mean(),
