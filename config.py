@@ -5,6 +5,6 @@ with open('mapping.yml', 'r') as f:
 
 rider_mapping_inv = {v:k for k,v in rider_mapping.items()}
 
-DATA_PATH = "/local/home/evanweenen/hype-life-diabetes-athlete/data/"#'/mnt/wave/hypex/data/'
+DATA_PATH = '/wave/hypex/data/'#"/local/home/evanweenen/hype-life-diabetes-athlete/data/"#'/mnt/wave/hypex/data/'
 SAVE_PATH = 'descriptives/'
 ANON = True
