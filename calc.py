@@ -22,6 +22,8 @@ glucose_levels = {'hypo L2': (0,53),
 				  'target' : (70,180),
 				  'hyper L1': (181,250),
 				  'hyper L2': (251,10000)}
+# perform some adjustments to the glucose levels, so that floats don't fall in between glucose levels
+# e.g. 69.5 falls in between 69 and 70
 glucose_levels_ = {level: (lmin-(1-1e-8), lmax) if level.startswith('hyper') else (
 						  (lmin, lmax+(1-1e-8)) if level.startswith('hypo') else (
 						  (lmin, lmax))) for level, (lmin, lmax) in glucose_levels.items()}
