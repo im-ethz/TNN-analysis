@@ -24,12 +24,12 @@ df['date_6h'] = pd.to_datetime((df.local_timestamp - pd.to_timedelta('6h')).dt.d
 days = df[['RIDER', 'date', 'race', 'travel']].drop_duplicates()
 df = pd.merge(df, days, left_on=['RIDER', 'date_6h'], right_on=['RIDER', 'date'], how='left', suffixes=('_raw', ''))
 df = df.dropna(subset=['date'])
-df['race_day'] = df['race'].astype(bool)
-df['travel_day'] = df['travel'].astype(bool)
+df['race_day'] = df['race'].fillna(False).astype(bool)
+df['travel_day'] = df['travel'].fillna(False).astype(bool)
 df = df.drop(['date_raw', 'date_6h', 'race_raw', 'travel_raw', 'race', 'travel'], axis=1)
 
 # include exercise day
-df['exercise_day'] = df.groupby(['RIDER', 'date'])['exercise'].transform('any').astype(bool)
+df['exercise_day'] = df.groupby(['RIDER', 'date'])['exercise'].transform('any').fillna(False).astype(bool)
 
 # calculate dysglycemia events
 df['hypo'] = df.groupby('RIDER')[col].transform(lambda x: (x < glucose_levels_['target'][0]) \
@@ -40,7 +40,7 @@ df['hyper'] = df.groupby('RIDER')[col].transform(lambda x: (x > glucose_levels_[
 														 & (x.shift(2) > glucose_levels_['target'][1]))
 
 # glucose rate
-df['glucose_rate'] = df[col] / (df['timestamp'].diff()/pd.to_timedelta('5min'))
+df['glucose_rate'] = df[col].diff() / (df['timestamp'].diff()/pd.to_timedelta('5min'))
 
 # completeness
 df['completeness'] = df.groupby(['RIDER', 'date'])[col].transform('count') / df.groupby(['RIDER', 'date'])['timestamp'].transform('count')
@@ -54,15 +54,6 @@ SECTIONS = ('day', 'wake', 'exercise', 'recovery', 'sleep')
 
 # section day
 df['day'] = True
-
-# aggregate per rider 
-df_rider = pd.concat({'all': pd.concat([df[df[sec]].groupby(['RIDER'])\
-							.apply(stats_cgm, sec=sec).apply(pd.Series) for sec in SECTIONS], axis=1),
-					 'comp': pd.concat([df[df['exercise_day'] & df['race_day'] & df[sec]].groupby(['RIDER'])\
-							.apply(stats_cgm, sec=sec).apply(pd.Series) for sec in SECTIONS], axis=1),
-					'train': pd.concat([df[df['exercise_day'] & ~df['race_day'] & df[sec]].groupby(['RIDER'])\
-							.apply(stats_cgm, sec=sec).apply(pd.Series) for sec in SECTIONS], axis=1)})
-df_rider.to_csv(SAVE_PATH+'dexcom_rider.csv')
 
 # aggregate per day
 df_sec = pd.concat([df[df[sec]].groupby(['RIDER', 'date']).apply(stats_cgm, sec=sec).apply(pd.Series) for sec in SECTIONS], axis=1)
