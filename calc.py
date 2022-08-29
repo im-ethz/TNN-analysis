@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from copy import copy
 
 from flirt.stats.common import FUNCTIONS as flirt_functions
 
@@ -27,6 +28,9 @@ glucose_levels = {'hypo L2': (0,53),
 glucose_levels_ = {level: (lmin-(1-1e-8), lmax) if level.startswith('hyper') else (
 						  (lmin, lmax+(1-1e-8)) if level.startswith('hypo') else (
 						  (lmin, lmax))) for level, (lmin, lmax) in glucose_levels.items()}
+glucose_levels_ext = copy(glucose_levels_)
+glucose_levels_ext['hypo'] = (glucose_levels_['hypo L2'][0], glucose_levels_['hypo L1'][1])
+glucose_levels_ext['hyper'] = (glucose_levels_['hyper L1'][0], glucose_levels_['hyper L2'][1])
 
 mmoll_mgdl = 18
 mgdl_mmoll = 1/mmoll_mgdl
@@ -47,17 +51,17 @@ def HBGI(X):
 	return symmetric_scale(X).apply(lambda x: 10*x**2 if x >= 0 else 0).mean()
 
 def time_in_level(x, l, extend=True):
-	levels = glucose_levels_
 	if extend:
-		levels['hypo'] = (glucose_levels['hypo L2'][0], glucose_levels['hypo L1'][1])
-		levels['hyper'] = (glucose_levels['hyper L1'][0], glucose_levels['hyper L2'][1])
+		levels = glucose_levels_ext
+	else:
+		levels = glucose_levels_
 	return ((x >= levels[l][0]) & (x <= levels[l][1])).sum()
 
 def perc_in_level(x, l, extend=True):
-	levels = glucose_levels_
 	if extend:
-		levels['hypo'] = (glucose_levels['hypo L2'][0], glucose_levels['hypo L1'][1])
-		levels['hyper'] = (glucose_levels['hyper L1'][0], glucose_levels['hyper L2'][1])
+		levels = glucose_levels_ext
+	else:
+		levels = glucose_levels_
 	return ((x >= levels[l][0]) & (x <= levels[l][1])).sum() / x.count() * 100
 
 def calc_hr_zones(LTHR:float) -> list:
