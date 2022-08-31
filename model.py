@@ -56,7 +56,7 @@ class GLMM:
 				if self.random_slope:
 					formula_rnd += '+'
 			if self.random_slope:
-				'+'.join(self.random_slope)
+				formula_rnd += '+'.join(self.random_slope)
 			formula_rnd += f'|{groups})'
 		else:
 			formula_rnd = ''
@@ -232,8 +232,10 @@ class PyLME4:
 		cols_fe = ['Estimate', 'CI_lower', 'CI_upper']
 		fe[cols_fe] = fe[cols_fe].round(2)
 		fe['Pr(>|z|)'] = fe['Pr(>|z|)'].replace({' <2e-16':0.000})
-		fe['Pr(>|z|)'] = fe['Pr(>|z|)'].astype(float).round(3)
-		fe['Pr(>|z|)'] = fe['Pr(>|z|)'].replace({0.000: '<0.001'})
+		fe['Pr(>|z|)'] = fe['Pr(>|z|)'].astype(float)
+		mask = fe['Pr(>|z|)'] < 0.001
+		fe['Pr(>|z|)'] = fe['Pr(>|z|)'].round(3)
+		fe.loc[mask, 'Pr(>|z|)'] = '<0.001'
 		cols_fe += ['Pr(>|z|)']
 		
 		# convert format
