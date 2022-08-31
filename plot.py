@@ -299,7 +299,7 @@ class PlotResults():
 			title=sec, xlim=xlim, leq=leq, textx=textx, **kws_sub)
 
 		if savefig:
-			plt.savefig(f"{self.root}coef_{self.filename.split('_')[2]}_{sec}.pdf")#, bbox_inches='tight')
-			plt.savefig(f"{self.root}coef_{self.filename.split('_')[2]}_{sec}.png", dpi=1000)#, bbox_inches='tight')
+			plt.savefig(f"{self.root}coef_{self.filename.split('_')[2]}_{sec}.pdf", bbox_inches='tight')
+			plt.savefig(f"{self.root}coef_{self.filename.split('_')[2]}_{sec}.png", dpi=1000, bbox_inches='tight')
 		plt.show()
 		plt.close()
