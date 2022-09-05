@@ -171,8 +171,8 @@ class PlotResults():
 			info += r"{:s}".format(x['Sign'])
 			return info
 
-	def subplot_coefficients(self, df, fig, ax, title='', 
-			textx=(-0.5, 0.7), texty=0.6, xlim=None, leq=1.9, 
+	def subplot_coefficients(self, df, fig, ax, sec, 
+			textx=(-0.5, 0.7), texty=1.1, xlim=None, leq=1.9, 
 			tickcolor = 'gray',
 			cmax=0.5, cmap_cut=30, categories=True):
 		#cmap = cut_cmap('Blues', 'Reds', cut=cmap_cut)#get_cmap('RdBu_r')#
@@ -223,15 +223,15 @@ class PlotResults():
 		ax.plot(0, 0, marker=8, color='black', markersize=5, transform=ax.transAxes, clip_on=False)
 
 		# xlabel
-		ax.set_xlabel(f'Odds ratio [95% CI] of {self.event}glycemia', labelpad=30)
-		ax.text(textx[0], -1/ax.get_figure().get_size_inches()[1]*texty+0.01, 
-				f'Decreased odds\nof {self.event}glycemia', 
+		ax.set_xlabel(f'Odds ratio of {self.event}glycemia \nduring {sec}', labelpad=15)#30)
+		ax.text(textx[0], -1/ax.get_figure().get_size_inches()[1]*texty+0.15, 
+				f'Decreased odds',#\nof {self.event}glycemia', 
 				color=cmap(0.01), fontsize=8, transform=ax.transAxes)
-		ax.text(textx[1], -1/ax.get_figure().get_size_inches()[1]*texty+0.01, 
-				f'Increased odds\nof {self.event}glycemia', 
+		ax.text(textx[1], -1/ax.get_figure().get_size_inches()[1]*texty+0.15, 
+				f'Increased odds',#\nof {self.event}glycemia', 
 				color=cmap(0.99), fontsize=8, transform=ax.transAxes)
 
-		ax.set_title(title.title(), x=1, y=-1, transform=ax.transData, fontsize=9)
+		#ax.set_title(title.title(), x=1, y=-1, transform=ax.transData, fontsize=9)
 
 		# layout
 		sns.despine(ax=ax, left=True, right=True)
@@ -256,7 +256,7 @@ class PlotResults():
 		fig, axs = plt.subplots(1,3, figsize=figsize, sharey=True, sharex=True, gridspec_kw=dict(wspace=wspace))
 		for i, sec in enumerate(self.sections):
 			self.subplot_coefficients(self.regression.transform_co(co)[sec], fig, axs[i], 
-				title=sec, xlim=xlim, leq=leq, **kws_sub)
+				sec=sec, xlim=xlim, leq=leq, **kws_sub)
 
 		if savefig:
 			plt.savefig(f"{self.root}coef_{self.filename[6:]}.pdf", bbox_inches='tight')
@@ -270,7 +270,7 @@ class PlotResults():
 		for n, col in enumerate(cols):
 			for i, sec in enumerate(self.sections):
 				self.subplot_coefficients(self.regression.transform_fe(fe.loc[col])[sec], fig, axs[n, i], 
-					title=sec, xlim=xlim, leq=leq, textx=textx, **kws_sub)
+					sec=sec, xlim=xlim, leq=leq, textx=textx, **kws_sub)
 				for text in axs[n,i].texts:
 					if n != len(cols)-1:
 						text.set_visible(False)
@@ -289,14 +289,15 @@ class PlotResults():
 		plt.show()
 		plt.close()
 
-	def plot_coefficients_per_sec(self, co_hypo, co_hyper, sec, figsize=(6.8,4.5), wspace=0.8, xlim=(0.45, 2.2), textx=(0, 0.6), leq=2.2, savefig=True, **kws_sub):
+	def plot_coefficients_per_sec(self, co_hypo, co_hyper, sec, figsize=(6.8,4.5), wspace=0.8, xlim=(0.45, 2.2), 
+		textx=(0, 0.6), texty=1, leq=2.2, savefig=True, **kws_sub):
 		fig, axs = plt.subplots(1,2, figsize=figsize, sharey=True, sharex=True, gridspec_kw=dict(wspace=wspace))
 		self.event = 'hypo'
 		self.subplot_coefficients(self.regression.transform_co(co_hypo)[sec], fig, axs[0], 
-			title=sec, xlim=xlim, leq=leq, textx=textx, **kws_sub)
+			sec=sec, xlim=xlim, leq=leq, textx=textx, texty=texty, **kws_sub)
 		self.event = 'hyper'
 		self.subplot_coefficients(self.regression.transform_co(co_hyper)[sec], fig, axs[1], 
-			title=sec, xlim=xlim, leq=leq, textx=textx, **kws_sub)
+			sec=sec, xlim=xlim, leq=leq, textx=textx, texty=texty, **kws_sub)
 
 		if savefig:
 			plt.savefig(f"{self.root}coef_{self.filename.split('_')[2]}_{sec}.pdf", bbox_inches='tight')
