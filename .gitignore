@@ -13,7 +13,6 @@
 *.idx
 *.ilg
 *.ind
-#*.out
 *.url
 *.svn
 *.toc
@@ -23,7 +22,5 @@
 /.ipynb_checkpoints/
 
 *.yml
-
-/descriptives/
 
 /data/
