@@ -14,7 +14,7 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 from colorsys import rgb_to_hls, hls_to_rgb
 
 from calc import glucose_levels
-from config import SAVE_PATH, ANON, rider_mapping_inv
+from config import SAVE_PATH, rider_mapping_inv
 
 ANON = True
 
