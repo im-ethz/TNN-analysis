@@ -16,6 +16,8 @@ from colorsys import rgb_to_hls, hls_to_rgb
 from calc import glucose_levels
 from config import SAVE_PATH, ANON, rider_mapping_inv
 
+ANON = True
+
 plt.style.use('./diabetes_care.mplstyle')
 
 color_sec = {'wake'	: sns.color_palette("Set1")[4],#[1],
@@ -41,15 +43,15 @@ def cut_cmap(cmap_left, cmap_right, cut=10, freq=100, grey=None):
 	
 	return ListedColormap(colors, name='BluesReds')
 
-def savefig(path, i='', dtype='Dexcom', legend=None, title=None, xticks=None, yticks=None, **titlekwargs):
+def savefig(path, i='', legend=None, title=None, xticks=None, yticks=None, **titlekwargs):
 	if title is not None:
 		plt.title(r'$\bf{Participant}$ '+r'$\bf{:d}$ - '.format(i)+title, **titlekwargs)
 	if legend is not None:
 		for text in legend:
 			text.set_fontsize(8)
 	
-	plt.savefig(f'{SAVE_PATH}{dtype}/{path}_{i}.pdf')#, bbox_inches='tight')
-	plt.savefig(f'{SAVE_PATH}{dtype}/{path}_{i}.png', dpi=1000)#, bbox_inches='tight')
+	plt.savefig(f'{SAVE_PATH}/{path}_{i}.pdf')#, bbox_inches='tight')
+	plt.savefig(f'{SAVE_PATH}/{path}_{i}.png', dpi=1000)#, bbox_inches='tight')
 	
 	if not ANON:
 		if title is not None:
@@ -64,8 +66,8 @@ def savefig(path, i='', dtype='Dexcom', legend=None, title=None, xticks=None, yt
 			yticks.set_yticklabels([rider_mapping_inv[int(j.get_text())] for j in yticks.get_yticklabels()], rotation=0)
 		
 		if title is not None or legend is not None or xticks is not None or yticks is not None:
-			plt.savefig(f'{SAVE_PATH}{dtype}/{path}_NAME_{i}.pdf')#, bbox_inches='tight')
-			plt.savefig(f'{SAVE_PATH}{dtype}/{path}_NAME_{i}.png', dpi=1000)#, bbox_inches='tight')
+			plt.savefig(f'{SAVE_PATH}/{path}_NAME_{i}.pdf')#, bbox_inches='tight')
+			plt.savefig(f'{SAVE_PATH}/{path}_NAME_{i}.png', dpi=1000)#, bbox_inches='tight')
 	plt.show()
 	plt.close()
 
