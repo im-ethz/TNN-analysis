@@ -18,7 +18,7 @@ from config import SAVE_PATH, ANON, rider_mapping_inv
 
 ANON = True
 
-plt.style.use('./diabetes_care.mplstyle')
+plt.style.use('./docs/diabetes_care.mplstyle')
 
 color_sec = {'wake'	: sns.color_palette("Set1")[4],#[1],
 			 'exercise': sns.color_palette("Set1")[2],#[4],
