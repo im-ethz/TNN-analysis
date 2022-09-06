@@ -1,0 +1,8 @@
+,day,day,day,wake,wake,wake,exercise,exercise,exercise,recovery,recovery,recovery,sleep,sleep,sleep
+,t,p,sign,t,p,sign,t,p,sign,t,p,sign,t,p,sign
+perc_in_hypoL2,24.0,0.266,,37.0,0.91,,29.0,0.47,,32.0,0.622,,11.0,0.027,*
+perc_in_hypoL1,16.0,0.077,,25.0,0.301,,26.0,0.339,,33.0,0.677,,15.0,0.064,
+perc_in_target,38.0,0.97,,38.0,0.97,,34.0,0.733,,30.0,0.519,,38.0,0.97,
+perc_in_hyperL1,20.0,0.151,,24.0,0.266,,19.0,0.129,,32.0,0.622,,14.0,0.052,
+perc_in_hyperL2,32.0,0.622,,33.0,0.677,,30.0,0.519,,25.0,0.301,,34.0,0.733,
+glucose_cv,26.0,0.339,,30.0,0.519,,25.0,0.301,,37.0,0.91,,22.0,0.204,

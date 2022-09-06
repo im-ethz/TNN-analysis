@@ -1,0 +1,57 @@
+\begin{tabular}{c}
+\toprule
+{} & \multicolumn{5}{l}{exercise} & \multicolumn{5}{l}{recovery} & \multicolumn{5}{l}{sleep} \\
+{} & Estimate & CI_lower & CI_upper & Pr(>|z|) & Sign & Estimate & CI_lower & CI_upper & Pr(>|z|) & Sign & Estimate & CI_lower & CI_upper & Pr(>|z|) & Sign \\
+\midrule
+\multicolumn{2}{@{} l}{\textit{Core exercise me... &      NaN &      NaN &      NaN &      NaN &  NaN &      NaN &      NaN &      NaN &      NaN &  NaN &      NaN &      NaN &      NaN &      NaN &  NaN \\
+Duration                                           &     1.27 &     1.05 &     1.55 &    0.015 &    * &     1.02 &     0.86 &     1.19 &    0.853 &      &     1.22 &     1.00 &     1.48 &    0.052 &      \\
+Intensity factor                                   &     1.04 &     0.89 &     1.23 &    0.613 &      &     1.11 &     0.91 &     1.34 &    0.300 &      &     1.21 &     1.03 &     1.43 &    0.022 &    * \\
+Variability index                                  &     0.89 &     0.75 &     1.06 &    0.187 &      &     1.06 &     0.90 &     1.26 &    0.491 &      &     0.98 &     0.86 &     1.12 &    0.797 &      \\
+\multicolumn{2}{@{} l}{\textit{Power}}             &      NaN &      NaN &      NaN &      NaN &  NaN &      NaN &      NaN &      NaN &      NaN &  NaN &      NaN &      NaN &      NaN &      NaN &  NaN \\
+Time in power zone 1 (Active Recovery)             &     1.08 &     0.83 &     1.40 &    0.573 &      &     0.96 &     0.83 &     1.11 &    0.575 &      &     1.10 &     0.91 &     1.31 &    0.325 &      \\
+Time in power zone 2 (Endurance)                   &     1.17 &     0.94 &     1.45 &    0.166 &      &     1.01 &     0.86 &     1.18 &    0.951 &      &     1.17 &     1.01 &     1.35 &    0.033 &    * \\
+Time in power zone 3 (Tempo)                       &     1.07 &     0.85 &     1.36 &    0.546 &      &     1.07 &     0.89 &     1.27 &    0.480 &      &     1.21 &     1.00 &     1.46 &    0.048 &    * \\
+Time in power zone 4 (Lactate Threshold)           &     1.00 &     0.78 &     1.30 &    0.971 &      &     0.96 &     0.77 &     1.20 &    0.744 &      &     1.14 &     0.98 &     1.33 &    0.099 &      \\
+Time in power zone 5 (VO2max)                      &     0.92 &     0.72 &     1.18 &    0.513 &      &     0.91 &     0.73 &     1.14 &    0.428 &      &     1.10 &     0.95 &     1.27 &    0.203 &      \\
+Time in power zone 6 (Anaerobic Capacity)          &     0.95 &     0.81 &     1.13 &    0.590 &      &     0.97 &     0.82 &     1.15 &    0.741 &      &     1.08 &     0.94 &     1.24 &    0.284 &      \\
+\multicolumn{2}{@{} l}{\textit{Heart rate}}        &      NaN &      NaN &      NaN &      NaN &  NaN &      NaN &      NaN &      NaN &      NaN &  NaN &      NaN &      NaN &      NaN &      NaN &  NaN \\
+Time in HR zone 1 (Active Recovery)                &     0.93 &     0.75 &     1.16 &    0.515 &      &     1.03 &     0.88 &     1.21 &    0.700 &      &     1.02 &     0.83 &     1.26 &    0.833 &      \\
+Time in HR zone 2 (Endurance)                      &     1.25 &     0.95 &     1.66 &    0.116 &      &     1.00 &     0.80 &     1.25 &    0.997 &      &     1.17 &     1.02 &     1.33 &    0.020 &    * \\
+Time in HR zone 3 (Tempo)                          &     0.96 &     0.79 &     1.18 &    0.707 &      &     1.04 &     0.88 &     1.22 &    0.658 &      &     1.21 &     1.06 &     1.39 &    0.005 &   ** \\
+Time in HR zone 4 (Lactate Threshold)              &     0.91 &     0.70 &     1.17 &    0.455 &      &     0.97 &     0.77 &     1.22 &    0.776 &      &     1.08 &     0.88 &     1.33 &    0.461 &      \\
+\bottomrule
+\end{tabular}
+\begin{tabular}{c}
+\toprule
+                                      &       &                                       & \multicolumn{3}{l}{exercise} & \multicolumn{3}{l}{recovery} & \multicolumn{3}{l}{sleep} \\
+                                      &       &                                       &   Variance &  Std.Dev. &  Corr &  Variance & Std.Dev. &  Corr &   Variance & Std.Dev. &  Corr \\
+{} & Groups & Name &            &           &       &           &          &       &            &          &       \\
+\midrule
+Duration & RIDER & Intercept &   1.496670 &  1.223000 &   NaN &  1.545160 &  1.24300 &   NaN &   0.795850 &  0.89210 &   NaN \\
+                                      &       & Duration &    0.04204 &  0.205000 &  1.00 &   0.01468 &  0.12120 &  1.00 &    0.07121 &  0.26690 & -1.00 \\
+Intensity factor & RIDER & Intercept &   1.538105 &  1.240200 &   NaN &  1.568200 &  1.25230 &   NaN &   0.689840 &  0.83060 &   NaN \\
+                                      &       & Intensity factor &   0.001333 &  0.036510 &  1.00 &    0.0358 &  0.18920 &  1.00 &    0.02553 &  0.15980 & -1.00 \\
+Variability index & RIDER & Intercept &   1.541030 &  1.241400 &   NaN &  1.566230 &  1.25150 &   NaN &   0.719258 &  0.84809 &   NaN \\
+                                      &       & Variability index &    0.01071 &  0.103500 & -1.00 &   0.02718 &  0.16490 & -0.87 &   0.002223 &  0.04715 & -1.00 \\
+Time in power zone 1 (Active Recovery) & RIDER & Intercept &   1.538000 &  1.240100 &   NaN &  1.546800 &  1.24370 &   NaN &   0.915650 &  0.95690 &   NaN \\
+                                      &       & Time in power zone 1 (Active Recovery) &      0.125 &  0.353500 &  0.80 &   0.00207 &  0.04550 &  1.00 &    0.05296 &  0.23010 & -1.00 \\
+Time in power zone 2 (Endurance) & RIDER & Intercept &   1.542250 &  1.241900 &   NaN &  1.573660 &  1.25450 &   NaN &   0.786000 &  0.88660 &   NaN \\
+                                      &       & Time in power zone 2 (Endurance) &    0.05327 &  0.230800 &  0.64 &   0.01057 &  0.10280 &  1.00 &    0.02025 &  0.14230 & -1.00 \\
+Time in power zone 3 (Tempo) & RIDER & Intercept &   1.540850 &  1.241300 &   NaN &  1.538401 &  1.24030 &   NaN &   0.667330 &  0.81690 &   NaN \\
+                                      &       & Time in power zone 3 (Tempo) &    0.05516 &  0.234900 &  1.00 &  0.008172 &  0.09040 &  1.00 &    0.05478 &  0.23400 & -1.00 \\
+Time in power zone 4 (Lactate Threshold) & RIDER & Intercept &   1.530650 &  1.237000 &   NaN &  1.644150 &  1.28220 &   NaN &   0.697050 &  0.83490 &   NaN \\
+                                      &       & Time in power zone 4 (Lactate Threshold) &    0.06249 &  0.250000 &  0.88 &   0.05282 &  0.22980 &  1.00 &    0.02515 &  0.15860 & -1.00 \\
+Time in power zone 5 (VO2max) & RIDER & Intercept &   1.579300 &  1.256700 &   NaN &  1.692490 &  1.30100 &   NaN &   0.703730 &  0.83890 &   NaN \\
+                                      &       & Time in power zone 5 (VO2max) &    0.05537 &  0.235300 &  1.00 &   0.05036 &  0.22440 &  1.00 &    0.02195 &  0.14810 & -1.00 \\
+Time in power zone 6 (Anaerobic Capacity) & RIDER & Intercept &   1.556000 &  1.247541 &   NaN &  1.631900 &  1.27750 &   NaN &   0.697580 &  0.83520 &   NaN \\
+                                      &       & Time in power zone 6 (Anaerobic Capacity) &  1.464e-05 &  0.003826 &  1.00 &    0.0107 &  0.10340 &  1.00 &    0.02002 &  0.14150 & -1.00 \\
+Time in HR zone 1 (Active Recovery) & RIDER & Intercept &   1.428440 &  1.195200 &   NaN &  1.563495 &  1.25040 &   NaN &   0.824580 &  0.90810 &   NaN \\
+                                      &       & Time in HR zone 1 (Active Recovery) &    0.03925 &  0.198100 &  1.00 &  0.001073 &  0.03276 &  1.00 &    0.07288 &  0.27000 & -0.49 \\
+Time in HR zone 2 (Endurance) & RIDER & Intercept &   1.579500 &  1.256800 &   NaN &  1.618880 &  1.27240 &   NaN &   0.757100 &  0.87011 &   NaN \\
+                                      &       & Time in HR zone 2 (Endurance) &     0.1312 &  0.362100 &  0.79 &   0.05969 &  0.24430 &  0.73 &  4.071e-05 &  0.00638 & -1.00 \\
+Time in HR zone 3 (Tempo) & RIDER & Intercept &   1.571800 &  1.253700 &   NaN &  1.562919 &  1.25017 &   NaN &   0.704290 &  0.83920 &   NaN \\
+                                      &       & Time in HR zone 3 (Tempo) &    0.03092 &  0.175800 &  1.00 &  0.004505 &  0.06712 &  0.55 &    0.01172 &  0.10830 & -1.00 \\
+Time in HR zone 4 (Lactate Threshold) & RIDER & Intercept &   1.592340 &  1.262000 &   NaN &  1.596100 &  1.26300 &   NaN &   0.724300 &  0.85110 &   NaN \\
+                                      &       & Time in HR zone 4 (Lactate Threshold) &    0.04328 &  0.208000 &  1.00 &    0.0222 &  0.14900 &  0.70 &     0.0676 &  0.26000 & -1.00 \\
+\bottomrule
+\end{tabular}

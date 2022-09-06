@@ -1,0 +1,31 @@
+,,,exercise,exercise,exercise,recovery,recovery,recovery,sleep,sleep,sleep
+,,,Variance,Std.Dev.,Corr,Variance,Std.Dev.,Corr,Variance,Std.Dev.,Corr
+,Groups,Name,,,,,,,,,
+Competition,RIDER,Intercept,1.373169,1.17182,,1.39932,1.1829,,0.68092,0.8252,
+Competition,RIDER,Competition,0.009992,0.09996,-1.0,0.07146,0.2673,-0.68,0.07908,0.2812,-0.08
+Duration,RIDER,Intercept,1.26527,1.1248,,1.315129,1.14679,,0.74588,0.8636,
+Duration,RIDER,Duration,0.02213,0.1488,1.0,0.003736,0.06113,1.0,0.05396,0.2323,-0.82
+Intensity factor,RIDER,Intercept,1.306832,1.14317,,1.31068,1.14485,,0.69151,0.8316,
+Intensity factor,RIDER,Intensity factor,0.002159,0.04647,-1.0,0.00817,0.09039,0.3,0.02045,0.143,-0.79
+Variability index,RIDER,Intercept,1.31326,1.146,,1.33418,1.1551,,0.68319,0.8266,
+Variability index,RIDER,Variability index,0.06271,0.2504,-1.0,0.08464,0.2909,-0.71,0.03055,0.1748,0.1
+Time in power zone 1 (Active Recovery),RIDER,Intercept,1.28059,1.1316,,1.32531,1.1512,,0.74908,0.8655,
+Time in power zone 1 (Active Recovery),RIDER,Time in power zone 1 (Active Recovery),0.05737,0.2395,0.25,0.01485,0.1219,-0.11,0.05277,0.2297,-0.53
+Time in power zone 2 (Endurance),RIDER,Intercept,1.331,1.154,,1.33816,1.1568,,0.71946,0.8482,
+Time in power zone 2 (Endurance),RIDER,Time in power zone 2 (Endurance),0.1037,0.322,0.7,0.02036,0.1427,1.0,0.01407,0.1186,-1.0
+Time in power zone 3 (Tempo),RIDER,Intercept,1.32692,1.1519,,1.30412,1.142,,0.65761,0.8109,
+Time in power zone 3 (Tempo),RIDER,Time in power zone 3 (Tempo),0.08157,0.2856,0.91,0.00852,0.0923,0.85,0.03629,0.1905,-1.0
+Time in power zone 4 (Lactate Threshold),RIDER,Intercept,1.31764,1.1479,,1.3469,1.1606,,0.69727,0.835,
+Time in power zone 4 (Lactate Threshold),RIDER,Time in power zone 4 (Lactate Threshold),0.03216,0.1793,1.0,0.0207,0.1439,1.0,0.03945,0.1986,-0.65
+Time in power zone 5 (VO2max),RIDER,Intercept,1.329333,1.15297,,1.350855,1.16226,,0.69893,0.836,
+Time in power zone 5 (VO2max),RIDER,Time in power zone 5 (VO2max),0.004411,0.06642,1.0,0.002359,0.04857,1.0,0.09513,0.3084,-0.33
+Time in power zone 6 (Anaerobic Capacity),RIDER,Intercept,1.34033,1.158,,1.33233,1.1543,,0.677,0.8228,
+Time in power zone 6 (Anaerobic Capacity),RIDER,Time in power zone 6 (Anaerobic Capacity),0.03421,0.185,-1.0,0.05415,0.2327,-0.25,0.1101,0.3318,-0.07
+Time in HR zone 1 (Active Recovery),RIDER,Intercept,1.19939,1.0952,,1.38583,1.1772,,0.7231,0.8504,
+Time in HR zone 1 (Active Recovery),RIDER,Time in HR zone 1 (Active Recovery),0.01637,0.1279,1.0,0.02663,0.1632,0.23,0.04507,0.2123,-0.18
+Time in HR zone 2 (Endurance),RIDER,Intercept,1.3148,1.1467,,1.34508,1.1598,,0.719696,0.84835,
+Time in HR zone 2 (Endurance),RIDER,Time in HR zone 2 (Endurance),0.1133,0.3365,0.86,0.06421,0.2534,0.5,0.002576,0.05076,1.0
+Time in HR zone 3 (Tempo),RIDER,Intercept,1.3314,1.1539,,1.33303,1.1546,,0.689164,0.83016,
+Time in HR zone 3 (Tempo),RIDER,Time in HR zone 3 (Tempo),0.0242,0.1556,1.0,0.02643,0.1626,0.07,0.004913,0.07009,-0.84
+Time in HR zone 4 (Lactate Threshold),RIDER,Intercept,1.3402,1.1577,,1.35199,1.1628,,0.72874,0.8537,
+Time in HR zone 4 (Lactate Threshold),RIDER,Time in HR zone 4 (Lactate Threshold),0.01264,0.1124,1.0,0.04505,0.2123,0.29,0.03239,0.18,-0.87

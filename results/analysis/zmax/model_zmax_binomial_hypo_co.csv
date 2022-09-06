@@ -1,0 +1,24 @@
+,exercise,exercise,exercise,exercise,exercise,recovery,recovery,recovery,recovery,recovery,sleep,sleep,sleep,sleep,sleep
+,Estimate,CI_lower,CI_upper,Pr(>|z|),Sign,Estimate,CI_lower,CI_upper,Pr(>|z|),Sign,Estimate,CI_lower,CI_upper,Pr(>|z|),Sign
+ ,,,,,,,,,,,,,,,
+Competitive aspect,,,,,,,,,,,,,,,
+Competition,0.59,0.45,0.77,<0.001,***,0.93,0.75,1.17,0.544,,0.9,0.71,1.14,0.382,
+ ,,,,,,,,,,,,,,,
+Core exercise metrics,,,,,,,,,,,,,,,
+Duration,1.18,0.99,1.4,0.066,,1.04,0.91,1.2,0.564,,1.19,1.0,1.43,0.053,
+Intensity factor,0.95,0.8,1.11,0.504,,1.12,0.96,1.31,0.136,,1.16,0.99,1.35,0.063,
+Variability index,0.78,0.63,0.97,0.028,*,1.02,0.82,1.27,0.856,,0.99,0.84,1.16,0.874,
+ ,,,,,,,,,,,,,,,
+Power,,,,,,,,,,,,,,,
+Time in power zone 1 (Active Recovery),0.95,0.77,1.18,0.636,,0.92,0.79,1.08,0.306,,1.07,0.9,1.29,0.436,
+Time in power zone 2 (Endurance),1.18,0.91,1.52,0.217,,1.03,0.88,1.21,0.689,,1.14,1.0,1.3,0.046,*
+Time in power zone 3 (Tempo),1.04,0.81,1.34,0.766,,1.09,0.92,1.28,0.314,,1.17,0.99,1.38,0.068,
+Time in power zone 4 (Lactate Threshold),0.93,0.76,1.15,0.522,,1.01,0.85,1.19,0.954,,1.12,0.94,1.33,0.192,
+Time in power zone 5 (VO2max),0.83,0.68,1.02,0.077,,0.95,0.82,1.1,0.528,,1.04,0.84,1.3,0.719,
+Time in power zone 6 (Anaerobic Capacity),0.74,0.6,0.92,0.007,**,0.96,0.78,1.17,0.667,,0.99,0.78,1.25,0.906,
+ ,,,,,,,,,,,,,,,
+Heart rate,,,,,,,,,,,,,,,
+Time in HR zone 1 (Active Recovery),0.97,0.8,1.16,0.712,,1.09,0.92,1.3,0.324,,1.01,0.84,1.21,0.928,
+Time in HR zone 2 (Endurance),1.25,0.96,1.62,0.097,,1.03,0.83,1.29,0.768,,1.14,1.0,1.29,0.048,*
+Time in HR zone 3 (Tempo),0.92,0.76,1.12,0.412,,1.02,0.85,1.22,0.859,,1.18,1.04,1.33,0.012,*
+Time in HR zone 4 (Lactate Threshold),0.87,0.7,1.07,0.188,,0.92,0.74,1.15,0.459,,1.04,0.88,1.23,0.648,
