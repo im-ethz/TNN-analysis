@@ -20,6 +20,7 @@
 */__pycache__/
 *.pyc
 /.ipynb_checkpoints/
+docs/credentials.json
 
 *.yml
 
