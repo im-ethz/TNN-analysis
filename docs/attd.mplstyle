@@ -1,0 +1,38 @@
+axes.axisbelow : True
+axes.labelsize : 8
+axes.linewidth : .6
+axes.titlesize : 8
+figure.autolayout : True
+figure.facecolor : white
+figure.figsize : 3, 4
+font.family : sans-serif
+font.sans-serif : Latin Modern Sans
+font.size : 8
+grid.color : .8
+image.cmap : YlGnBu
+legend.edgecolor : k
+legend.fancybox : False
+legend.fontsize : 5.5
+legend.framealpha : 1
+legend.title_fontsize : 8
+lines.linewidth : .6
+lines.markersize : 4.8
+mathtext.fontset : custom
+mathtext.it : Latin Modern Sans:italic
+patch.edgecolor : w
+patch.facecolor : 0.2980392156862745, 0.4470588235294118, 0.6901960784313725
+patch.force_edgecolor : True
+patch.linewidth : .6
+savefig.dpi : 200
+xtick.bottom : False
+xtick.labelsize : 8
+xtick.major.size : 3.2
+xtick.major.width : .6
+xtick.minor.size : 2.4
+xtick.minor.width : 0.4
+ytick.labelsize : 8
+ytick.left : False
+ytick.major.size : 3.2
+ytick.major.width : .6
+ytick.minor.size : 2.4
+ytick.minor.width : 0.4

@@ -14,11 +14,14 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 from colorsys import rgb_to_hls, hls_to_rgb
 
 from calc import glucose_levels
-from config import SAVE_PATH, rider_mapping_inv
+from config import SAVE_PATH, rider_mapping_inv, OUTLET
 
 ANON = True
 
-plt.style.use('./docs/diabetes_care.mplstyle')
+if OUTLET == 'DC':
+	plt.style.use('./docs/diabetes_care.mplstyle')
+elif OUTLET == 'ATTD':
+	plt.style.use('./docs/attd.mplstyle')
 
 color_sec = {'wake'	: sns.color_palette("Set1")[4],#[1],
 			 'exercise': sns.color_palette("Set1")[2],#[4],
@@ -51,7 +54,7 @@ def savefig(path, i='', legend=None, title=None, xticks=None, yticks=None, **tit
 			text.set_fontsize(8)
 	
 	plt.savefig(f'{SAVE_PATH}/{path}_{i}.pdf')#, bbox_inches='tight')
-	plt.savefig(f'{SAVE_PATH}/{path}_{i}.png', dpi=1000)#, bbox_inches='tight')
+	plt.savefig(f'{SAVE_PATH}/{path}_{i}.png')#, bbox_inches='tight')
 	
 	if not ANON:
 		if title is not None:
@@ -67,7 +70,7 @@ def savefig(path, i='', legend=None, title=None, xticks=None, yticks=None, **tit
 		
 		if title is not None or legend is not None or xticks is not None or yticks is not None:
 			plt.savefig(f'{SAVE_PATH}/{path}_NAME_{i}.pdf')#, bbox_inches='tight')
-			plt.savefig(f'{SAVE_PATH}/{path}_NAME_{i}.png', dpi=1000)#, bbox_inches='tight')
+			plt.savefig(f'{SAVE_PATH}/{path}_NAME_{i}.png')#, bbox_inches='tight')
 	plt.show()
 	plt.close()
 
@@ -140,8 +143,9 @@ def plot_glucose_levels(ax, orient='vertical', shade=False, text=False, subtext=
 		ax.annotate('L2', xy=(glucose_levels['hyper L2'][0]+80, .95), fontsize=8)
 	return ax
 
-def plot_bar(data, x, width=.8, colors=dict(h_neg=10, h_pos=10, s=0, l=50), ax=plt, plot_numbers=False, labelsize=10, unit='', duration=None):
-	hatch = ('\\\\', '\\\\', None, '//', '//')
+def plot_bar(data, x, width=.8, colors=dict(h_neg=10, h_pos=10, s=0, l=50), ax=plt, 
+	plot_numbers=False, labelsize=10, unit='', duration=None,
+	hatch = ('\\\\', '\\\\', None, '//', '//')):
 	color_palette = sns.diverging_palette(**colors, n=5)
 	bottom = 0
 	for sec, (label, y) in enumerate(data.items()):
