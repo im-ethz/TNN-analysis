@@ -180,7 +180,7 @@ class PlotResults():
 	def subplot_coefficients(self, df, fig, ax, sec, 
 			textx=(-0.5, 0.7), texty=1.1, xlim=None, leq=1.9, 
 			tickcolor = 'gray',
-			cmax=0.5, cmap_cut=30, categories=True):
+			cmax=0.5, cmap_cut=30, rename=None, categories=True):
 		#cmap = cut_cmap('Blues', 'Reds', cut=cmap_cut)#get_cmap('RdBu_r')#
 		palette = sns.color_palette("RdBu_r", n_colors=11)
 		cmap = LinearSegmentedColormap.from_list("", [palette[0], '#CCCCCC', palette[-1]])
@@ -200,7 +200,11 @@ class PlotResults():
 			ax.plot((df['CI_lower'].iloc[n], df['CI_upper'].iloc[n]), (n,n), color=cmap(colors[n]))
 
 		# ticks on LHS
-		ax.set_yticks(x, df.index)
+		if rename:
+			ax.set_yticks(x, df.rename(index=rename).index)
+			self.categories = {(rename[k] if k in rename else k):v for k, v in self.categories.items()}
+		else:
+			ax.set_yticks(x, df.index)
 		if categories:
 			cat_list = list(self.categories.keys())
 			for n, tick in enumerate(ax.get_yticklabels()):
