@@ -53,8 +53,8 @@ def savefig(path, i='', legend=None, title=None, xticks=None, yticks=None, **tit
 		for text in legend:
 			text.set_fontsize(8)
 	
-	plt.savefig(f'{SAVE_PATH}/{path}_{i}.pdf')#, bbox_inches='tight')
-	plt.savefig(f'{SAVE_PATH}/{path}_{i}.png')#, bbox_inches='tight')
+	plt.savefig(f'{SAVE_PATH}/{path}_{i}.pdf', bbox_inches='tight')
+	plt.savefig(f'{SAVE_PATH}/{path}_{i}.png', bbox_inches='tight')
 	
 	if not ANON:
 		if title is not None:
@@ -69,8 +69,8 @@ def savefig(path, i='', legend=None, title=None, xticks=None, yticks=None, **tit
 			yticks.set_yticklabels([rider_mapping_inv[int(j.get_text())] for j in yticks.get_yticklabels()], rotation=0)
 		
 		if title is not None or legend is not None or xticks is not None or yticks is not None:
-			plt.savefig(f'{SAVE_PATH}/{path}_NAME_{i}.pdf')#, bbox_inches='tight')
-			plt.savefig(f'{SAVE_PATH}/{path}_NAME_{i}.png')#, bbox_inches='tight')
+			plt.savefig(f'{SAVE_PATH}/{path}_NAME_{i}.pdf', bbox_inches='tight')
+			plt.savefig(f'{SAVE_PATH}/{path}_NAME_{i}.png', bbox_inches='tight')
 	plt.show()
 	plt.close()
 
