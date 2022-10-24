@@ -144,12 +144,12 @@ def plot_glucose_levels(ax, orient='vertical', shade=False, text=False, subtext=
 	return ax
 
 def plot_bar(data, x, width=.8, colors=dict(h_neg=10, h_pos=10, s=0, l=50), ax=plt, 
-	plot_numbers=False, labelsize=10, unit='', duration=None,
+	plot_numbers=False, labelsize=10, unit='', duration=None, linecolor='white',
 	hatch = ('\\\\', '\\\\', None, '//', '//')):
 	color_palette = sns.diverging_palette(**colors, n=5)
 	bottom = 0
 	for sec, (label, y) in enumerate(data.items()):
-		c = ax.bar(x=x, height=y, width=width, bottom=bottom, color=color_palette[sec], hatch=hatch[sec])
+		c = ax.bar(x=x, height=y, width=width, bottom=bottom, color=color_palette[sec], hatch=hatch[sec], edgecolor=linecolor)
 		bottom += y
 		if plot_numbers and y >= 4:
 			if sec == 2:
