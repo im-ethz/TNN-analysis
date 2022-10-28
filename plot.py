@@ -280,7 +280,7 @@ class PlotResults():
 		plt.show()
 		plt.close()
 
-	def plot_coefficients_env(self, fe, figsize=(10,20), wspace=1.2, xlim=(0.1, 10), textx=(-0.05, 0.6), leq=21, drop_minor_ticks=False, savefig=True, **kws_sub):
+	def plot_coefficients_env(self, fe, figsize=(10,20), wspace=.5, xlim=(0.1, 10), textx=(-0.05, 0.6), leq=.1, drop_minor_ticks=False, savefig=True, **kws_sub):
 		cols = fe.index.get_level_values(0).unique()
 		fig, axs = plt.subplots(len(cols),3, figsize=figsize, sharey='row', sharex=True, gridspec_kw=dict(wspace=wspace))
 		for n, col in enumerate(cols):
