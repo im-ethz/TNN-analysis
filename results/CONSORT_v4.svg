@@ -44,12 +44,12 @@
      showgrid="false"
      showguides="false"
      inkscape:zoom="0.17769296"
-     inkscape:cx="1288.8588"
-     inkscape:cy="1402.1505"
-     inkscape:window-x="67"
+     inkscape:cx="1529.3279"
+     inkscape:cy="1808.7478"
+     inkscape:window-x="816"
      inkscape:window-y="1467"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g1131"
+     inkscape:current-layer="g1043"
      fit-margin-top="200"
      fit-margin-left="200"
      fit-margin-right="200"
@@ -179,7 +179,7 @@ src: url(&quot;https://www.1001fonts.com/latin-modern-sans-font.html&quot;);
            id="text1039"
            style="font-size:11.2322px"><tspan
              style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:11.2322px;font-family:'Latin Modern Sans';-inkscape-font-specification:'Latin Modern Sans'"
-             id="tspan1758">Continuous Glucose Monitoring data</tspan></text>
+             id="tspan1758">Continuous glucose monitoring data</tspan></text>
       </switch>
     </g>
     <rect
@@ -468,7 +468,7 @@ src: url(&quot;https://www.1001fonts.com/latin-modern-sans-font.html&quot;);
              id="tspan1771"
              x="350"
              y="391.69214"
-             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.2322px;font-family:'Latin Modern Sans';-inkscape-font-specification:'Latin Modern Sans Bold';fill:#ffffff;fill-opacity:1">withdysglycemia</tspan></text>
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.2322px;font-family:'Latin Modern Sans';-inkscape-font-specification:'Latin Modern Sans Bold';fill:#ffffff;fill-opacity:1">with dysglycemia</tspan></text>
       </switch>
     </g>
     <rect
