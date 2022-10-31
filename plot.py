@@ -244,7 +244,7 @@ class PlotResults():
 		ax.plot(0, 0, marker=8, color='black', markersize=5, transform=ax.transAxes, clip_on=False)
 
 		# xlabel
-		ax.set_xlabel(f'Odds ratio of {self.event}glycemia \nduring {sec}', labelpad=15)#30)
+		ax.set_xlabel(f'Odds ratio [95% CI] of \n{self.event}glycemia during {sec}', labelpad=15)#30)
 		ax.text(textx[0], -1/ax.get_figure().get_size_inches()[1]*texty+0.15, 
 				f'Decreased odds',#\nof {self.event}glycemia', 
 				color=cmap(0.01), fontsize=8, transform=ax.transAxes)
