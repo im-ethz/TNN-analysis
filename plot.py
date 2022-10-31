@@ -147,8 +147,8 @@ def plot_bar(data, x, width=.8, colors=dict(h_neg=10, h_pos=10, s=0, l=50), ax=p
 	plot_numbers=False, labelsize=10, unit='', duration=None, linecolor='white',
 	hatch = ('\\\\', '\\\\', None, '//', '//'), color_bool=None):
 	color_palette = sns.diverging_palette(**colors, n=5)
-	colors_gray = [(0, 0, 0), (.5, .5, .5), (.9, .9, .9), (.5, .5, .5), (0, 0, 0)]
-	if color_bool:
+	colors_gray = [(0.6, 0.6, 0.6), (.8, .8, .8), (.9, .9, .9), (.8, .8, .8), (0.6, 0.6, 0.6)]
+	if color_bool is not None:
 		for i, cb in enumerate(color_bool):
 			if not cb:
 				color_palette[i] = colors_gray[i]
