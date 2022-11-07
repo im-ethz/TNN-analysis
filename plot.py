@@ -169,7 +169,7 @@ class PlotResults():
 		vars(self).update(vars(regression))
 		self.regression = regression
 
-	def info_coefficients(self, x, annotate_or):
+	def info_coefficients(self, x, annotate_or, annotate_sign):
 		if pd.isnull(x['Pr(>|z|)']):
 			return None
 		else:
@@ -182,12 +182,13 @@ class PlotResults():
 			else:
 				#info += r"$<$"+r"{:s}".format(x['Pr(>|z|)'].split('<')[1])
 				info += r"{:s}".format(x['Pr(>|z|)'].split('<')[1])
-			info += r"{:s}".format(x['Sign'])
+			if annotate_sign:
+				info += r"{:s}".format(x['Sign'])
 			return info
 
 	def subplot_coefficients(self, df, fig, ax, sec, 
 			textx=(-0.5, 0.7), texty=1.1, xlim=None, leq=1.9, 
-			tickcolor = 'gray', annotate_or=True,
+			tickcolor = 'gray', annotate_or=True, annotate_sign=True,
 			cmax=0.5, cmap_cut=30, rename=None, categories=True):
 		#cmap = cut_cmap('Blues', 'Reds', cut=cmap_cut)#get_cmap('RdBu_r')#
 		palette = sns.color_palette("RdBu_r", n_colors=11)
@@ -224,7 +225,7 @@ class PlotResults():
 
 		# ticks on RHS
 		ax0 = ax.twinx()
-		info_ticks = df.apply(self.info_coefficients, annotate_or=annotate_or, axis=1)
+		info_ticks = df.apply(self.info_coefficients, annotate_or=annotate_or, annotate_sign=annotate_sign, axis=1)
 		if annotate_or:
 			info_ticks[0] = "Odds ratio [95%CI] $p$-value"
 		else:
