@@ -35,6 +35,34 @@ glucose_levels_ext['hyper'] = (glucose_levels_['hyper L1'][0], glucose_levels_['
 mmoll_mgdl = 18
 mgdl_mmoll = 1/mmoll_mgdl
 
+def hypo(X:pd.Series):
+	"""
+	Calculate hypo according to definition of https://doi.org/10.2337/dc17-1600
+	Note: make sure your data has the following shape
+	- data is sorted by timestamp
+	- data occurs at a frequency of 5 minutes (e.g. from Dexcom or Medtronic devices)
+	- missing data should still have a timestamp entry, but its associated glucose value should be NaN
+	"""
+	res = (X < glucose_levels_['target'][0]) \
+		& (X.shift(1) < glucose_levels_['target'][0]) \
+		& (X.shift(2) < glucose_levels_['target'][0])
+	res[X.isna() | X.shift(1).isna() | X.shift(2).isna()] = np.nan
+	return res
+
+def hyper(X:pd.Series):
+	"""
+	Calculate hyper according to definition of https://doi.org/10.2337/dc17-1600
+	Note: make sure your data has the following shape
+	- data is sorted by timestamp
+	- data occurs at a frequency of 5 minutes (e.g. from Dexcom or Medtronic devices)
+	- missing data should still have a timestamp entry, but its associated glucose value should be NaN
+	"""
+	res = (X > glucose_levels_['target'][1]) \
+		& (X.shift(1) > glucose_levels_['target'][1]) \
+		& (X.shift(2) > glucose_levels_['target'][1])
+	res[X.isna() | X.shift(1).isna() | X.shift(2).isna()] = np.nan
+	return res
+
 def symmetric_scale(X, unit='mgdl'):
 	# symmetric scaling for blood glucose
 	if unit == 'mgdl':

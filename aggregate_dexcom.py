@@ -6,14 +6,14 @@ import os
 import gc
 
 from config import DATA_PATH
-from calc import glucose_levels_, stats_cgm
+from calc import hypo, hyper, stats_cgm
 
 SAVE_PATH = DATA_PATH+'agg/'
 
 col = 'Glucose Value (mg/dL)'
 
 # ------------- Read data
-df = pd.read_csv(DATA_PATH+'Dexcom/clean/dexcom_clean5.csv', index_col=0, parse_dates=['timestamp', 'local_timestamp'])
+df = pd.read_csv(DATA_PATH+'source/Dexcom/clean/dexcom_clean5.csv', index_col=0, parse_dates=['timestamp', 'local_timestamp'])
 df[col] = df[col].astype(float)
 
 # ------------- Define day to be between 6am and 6am
@@ -32,12 +32,8 @@ df = df.drop(['date_raw', 'date_6h', 'race_raw', 'travel_raw', 'race', 'travel']
 df['exercise_day'] = df.groupby(['RIDER', 'date'])['exercise'].transform('any').fillna(False).astype(bool)
 
 # calculate dysglycemia events
-df['hypo'] = df.groupby('RIDER')[col].transform(lambda x: (x < glucose_levels_['target'][0]) \
-														& (x.shift(1) < glucose_levels_['target'][0]) \
-														& (x.shift(2) < glucose_levels_['target'][0]))
-df['hyper'] = df.groupby('RIDER')[col].transform(lambda x: (x > glucose_levels_['target'][1]) \
-														 & (x.shift(1) > glucose_levels_['target'][1]) \
-														 & (x.shift(2) > glucose_levels_['target'][1]))
+df['hypo'] = df.groupby('RIDER')[col].transform(hypo)
+df['hyper'] = df.groupby('RIDER')[col].transform(hyper)
 
 # glucose rate
 df['glucose_rate'] = df[col].diff() / (df['timestamp'].diff()/pd.to_timedelta('5min'))
