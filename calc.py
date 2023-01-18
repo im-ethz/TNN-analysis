@@ -32,7 +32,7 @@ glucose_levels_ext = copy(glucose_levels_)
 glucose_levels_ext['hypo'] = (glucose_levels_['hypo L2'][0], glucose_levels_['hypo L1'][1])
 glucose_levels_ext['hyper'] = (glucose_levels_['hyper L1'][0], glucose_levels_['hyper L2'][1])
 
-mmoll_mgdl = 18
+mmoll_mgdl = 18.018
 mgdl_mmoll = 1/mmoll_mgdl
 
 def hypo(X:pd.Series):
