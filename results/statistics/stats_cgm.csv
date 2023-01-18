@@ -1,6 +1,6 @@
 ,day,day,wake,wake,exercise,exercise,recovery,recovery,sleep,sleep
 ,mean,std,mean,std,mean,std,mean,std,mean,std
-All days (d=2115),,,,,,,,,,
+Overall (2115 days),,,,,,,,,,
 Mean glucose [mg/dL],145.2,18.2,147.3,18.1,145.6,19.9,153.1,23.4,138.7,24.5
 Glycemic variability [\%],38.9,8.5,38.0,8.3,39.7,9.8,36.5,7.1,40.3,9.6
 hypoglycemia (<70 mg/dL),6.4,4.7,5.4,4.4,5.3,5.5,4.4,4.6,9.6,7.2
@@ -10,7 +10,7 @@ target range (70-180 mg/dL),70.0,13.7,70.1,13.3,70.4,14.8,68.1,13.0,69.5,17.3
 hyperglycemia (>180 mg/dL),23.6,12.5,24.5,12.5,24.3,13.8,27.5,14.3,20.8,15.7
 hyperglycemia L1 (181-250 mg/dL),16.9,7.5,17.7,7.9,17.0,9.1,19.8,9.2,14.2,8.3
 hyperglycemia L2 (>250 mg/dL),6.7,5.6,6.8,5.5,7.3,5.7,7.7,6.4,6.6,7.7
-Training days (d=1536),,,,,,,,,,
+Non-competitive exercise (1536 days),,,,,,,,,,
 Mean glucose [mg/dL],142.4,17.9,144.1,17.7,140.8,20.1,151.3,23.8,137.2,24.9
 Glycemic variability [\%],38.9,8.6,38.0,8.6,39.7,10.5,36.1,7.1,40.0,9.8
 hypoglycemia (<70 mg/dL),6.9,5.0,5.9,4.9,6.1,6.4,4.5,4.9,10.1,7.4
@@ -20,7 +20,7 @@ target range (70-180 mg/dL),71.0,13.8,71.3,13.4,72.0,15.3,68.7,13.4,69.8,17.6
 hyperglycemia (>180 mg/dL),22.2,12.1,22.8,12.1,21.9,13.9,26.8,14.6,20.2,16.1
 hyperglycemia L1 (181-250 mg/dL),16.0,7.6,16.7,7.8,15.4,9.2,19.5,9.5,14.0,9.3
 hyperglycemia L2 (>250 mg/dL),6.1,5.3,6.1,5.1,6.5,5.4,7.3,6.1,6.2,7.3
-Competition days (d=256),,,,,,,,,,
+Competitive exercise (256 days),,,,,,,,,,
 Mean glucose [mg/dL],150.6,16.8,154.0,14.8,172.3,16.3,161.0,22.6,140.7,30.8
 Glycemic variability [\%],37.2,9.8,35.9,8.7,33.3,8.8,35.8,8.7,36.8,14.5
 hypoglycemia (<70 mg/dL),4.7,4.5,3.6,3.1,1.1,1.4,3.3,3.5,7.9,9.8
