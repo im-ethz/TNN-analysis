@@ -24,7 +24,7 @@ SAVE_PATH = DATA_PATH+'agg/'
 date_range = pd.date_range(start='2014-01-01', end='2021-12-31', freq='1d')
 
 # ----------------------- info
-info = pd.read_csv(DATA_PATH+'info/info.csv')
+info = pd.read_csv(DATA_PATH+'source/info/info.csv')
 
 # get age on 01-01-2019
 info['age'] = 2018 - info['birthyear']
@@ -33,7 +33,7 @@ info = info.drop(['name', 'athlete_type', 'dob', 'birthyear', 'age_diagnosis'], 
 
 # ----------------------- fitness
 # read in fit variables
-fitness = pd.read_csv(DATA_PATH+'fitness/fitness.csv', header=[0,1], index_col=[0,1])
+fitness = pd.read_csv(DATA_PATH+'source/fitness/fitness.csv', header=[0,1], index_col=[0,1])
 fitness = fitness.reset_index()
 
 # take average for beginning, mid and end of season
@@ -68,14 +68,14 @@ power_zones = info['FTP'].apply(calc_power_zones)
 
 # ----------------------- calendar
 # race
-race = pd.read_csv(DATA_PATH+'calendar/procyclingstats.csv', index_col=0)
+race = pd.read_csv(DATA_PATH+'source/calendar/procyclingstats.csv', index_col=0)
 race['date'] = pd.to_datetime(race['date'])
 race = race[['RIDER', 'date']]
 race['race'] = True
 race = race.drop_duplicates()
 
 # travel
-timezones = pd.read_csv(DATA_PATH+'timezone.csv', index_col=0)
+timezones = pd.read_csv(DATA_PATH+'source/timezone.csv', index_col=0)
 timezones['date'] = pd.to_datetime(timezones['date'])
 travel = timezones.loc[timezones['travel'], ['RIDER', 'date', 'travel']]
 
@@ -83,18 +83,18 @@ timezones = timezones[['RIDER', 'date', 'travel', 'country']]
 timezones = timezones.set_index(['RIDER', 'date'])
 
 # ----------------------- country/carbs info
-country_nutrients = pd.read_csv(DATA_PATH+'carbs/country_nutrients.csv')
+country_nutrients = pd.read_csv(DATA_PATH+'source/carbs/country_nutrients.csv')
 country_carbs = country_nutrients.set_index('code')['carbohydrates (kcal)'].to_dict()
 
 # ----------------------- aggregation
 df_agg = {}
 
-athletes = sorted([int(i) for i in os.listdir(DATA_PATH+'TrainingPeaks/clean/')])
+athletes = sorted([int(i) for i in os.listdir(DATA_PATH+'source/TrainingPeaks/clean/')])
 
 for i in athletes:
 	print("\n------------------------------- Athlete ", i)
 
-	df = pd.read_csv(DATA_PATH+f'TrainingPeaks/clean/{i}/{i}_data5.csv', index_col=0)
+	df = pd.read_csv(DATA_PATH+f'source/TrainingPeaks/clean/{i}/{i}_data5.csv', index_col=0)
 	df['timestamp'] = pd.to_datetime(df['timestamp'])
 	df['local_timestamp'] = pd.to_datetime(df['local_timestamp'])
 	df['date'] = df['local_timestamp'].dt.date
