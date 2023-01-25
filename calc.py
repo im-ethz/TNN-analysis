@@ -57,6 +57,7 @@ def hypo(X:pd.Series, mintime:str='14min45S', unit:str='mgdl'):
         res = (X * mmoll_mgdl < glucose_levels['target'][0]).astype(int)
     elif unit == 'mgdl':
         res = (X < glucose_levels['target'][0]).astype(int)
+    res.loc[X.isna()] = np.nan
     res = minimum_eventtime(res, mintime)
     return res
 
@@ -69,6 +70,7 @@ def hyper(X:pd.Series, mintime:str='14min45S', unit:str='mgdl'):
         res = (X * mmoll_mgdl > glucose_levels['target'][1]).astype(int)
     elif unit == 'mgdl':
         res = (X > glucose_levels['target'][1]).astype(int)
+    res.loc[X.isna()] = np.nan
     res = minimum_eventtime(res, mintime)
     return res
 
