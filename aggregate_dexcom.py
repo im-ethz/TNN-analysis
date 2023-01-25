@@ -32,8 +32,10 @@ df = df.drop(['date_raw', 'date_6h', 'race_raw', 'travel_raw', 'race', 'travel']
 df['exercise_day'] = df.groupby(['RIDER', 'date'])['exercise'].transform('any').fillna(False).astype(bool)
 
 # calculate dysglycemia events
-df['hypo'] = df.groupby('RIDER')[col].transform(hypo)
-df['hyper'] = df.groupby('RIDER')[col].transform(hyper)
+df = df.set_index(['RIDER', 'timestamp'])
+df['hypo'] = df.groupby(level=0, sort=False).apply(lambda x: hypo(x.reset_index().set_index('timestamp')[col]))
+df['hyper'] = df.groupby(level=0, sort=False).apply(lambda x: hyper(x.reset_index().set_index('timestamp')[col]))
+df = df.reset_index()
 
 # glucose rate
 df['glucose_rate'] = df[col].diff() / (df['timestamp'].diff()/pd.to_timedelta('5min'))
