@@ -44,7 +44,7 @@ def minimum_eventtime(X:pd.Series,  mintime:str):
     mintime - minimum even time
     """
     for start, end in zip(X[X.diff() == 1].index, X[X.diff().shift(-1) == -1].index):
-        assert start <= end
+        assert start <= end, f"Oops, there is something wrong with your event list. Start {start} is larger than end {end}."
         if end - start < pd.to_timedelta(mintime):
             X.loc[(X.index >= start) & (X.index <= end)] = 0
     return X
